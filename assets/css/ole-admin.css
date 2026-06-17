@@ -1,0 +1,26 @@
+.wp-list-table tbody tr.ole-dup td,
+.wp-list-table tbody tr.ole-dup th { background-color: var(--ole-bg) !important; }
+.wp-list-table tbody tr.ole-dup { outline: 2px solid var(--ole-bd); outline-offset: -2px; }
+.wp-list-table tbody tr.ole-dup > *:first-child { box-shadow: inset 5px 0 0 0 var(--ole-bd); }
+
+.ole-badge { display: inline-block; margin-top: 5px; padding: 1px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; line-height: 1.7; color: #fff; white-space: nowrap; }
+.ole-badge--click { cursor: pointer; }
+.ole-badge--click:hover { filter: brightness(1.08); text-decoration: underline; }
+
+.ole-modal { display: none; position: fixed; inset: 0; z-index: 100000; }
+.ole-modal.is-open { display: block; }
+.ole-modal__overlay { position: absolute; inset: 0; background: rgba(0,0,0,.5); }
+.ole-modal__card { position: relative; margin: 7vh auto 0; max-width: 560px; width: calc(100% - 32px); background: #fff; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,.3); max-height: 80vh; display: flex; flex-direction: column; }
+.ole-modal__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #dcdcde; }
+.ole-modal__title { font-size: 14px; font-weight: 600; }
+.ole-modal__close { background: none; border: 0; font-size: 16px; cursor: pointer; color: #50575e; line-height: 1; padding: 4px; }
+.ole-modal__body { padding: 8px 16px 16px; overflow-y: auto; }
+
+.ole-o { padding: 10px 0; border-bottom: 1px solid #f0f0f1; }
+.ole-o:last-child { border-bottom: 0; }
+.ole-o__head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.ole-o__num { font-weight: 600; text-decoration: none; }
+.ole-o__date { color: #50575e; font-size: 12px; }
+.ole-o__status { font-size: 11px; background: #f0f0f1; color: #3c434a; border-radius: 9px; padding: 1px 8px; }
+.ole-o__total { margin-left: auto; font-weight: 600; white-space: nowrap; }
+.ole-o__items { margin-top: 3px; color: #3c434a; font-size: 12px; line-height: 1.5; }
