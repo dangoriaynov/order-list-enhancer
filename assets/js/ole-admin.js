@@ -6,6 +6,7 @@
 	var PAL    = D.palette || [];
 	var FLAGS  = D.flags || {};
 	var I18N   = D.i18n || {};
+	var CTX    = D.context || 'list';
 
 	function fmt( tmpl, args ) {
 		var i = 0;
@@ -20,6 +21,20 @@
 		return 'rgba(' + parseInt( h.substr( 0, 2 ), 16 ) + ',' + parseInt( h.substr( 2, 2 ), 16 ) + ',' + parseInt( h.substr( 4, 2 ), 16 ) + ',' + a + ')';
 	}
 
+	// Знаходить перше правило, чиє ключове слово міститься в тексті адреси.
+	function matchShip( text ) {
+		var t = String( text || '' ).toLowerCase();
+		for ( var i = 0; i < SHIP.rules.length; i++ ) {
+			var kw = String( SHIP.rules[ i ].keyword || '' ).toLowerCase();
+			if ( kw && t.indexOf( kw ) !== -1 ) {
+				return { color: SHIP.rules[ i ].color, label: SHIP.rules[ i ].label };
+			}
+		}
+		if ( SHIP.default.color ) { return { color: SHIP.default.color, label: SHIP.default.label }; }
+		return null;
+	}
+
+	// Список замовлень: фарбує клітинку «Доставка до».
 	function colorShipping() {
 		if ( ! FLAGS.shipping ) { return; }
 		var rows = document.querySelectorAll( '.wp-list-table tbody tr' );
@@ -28,17 +43,31 @@
 			if ( ! cell || cell.getAttribute( 'data-ole-ship' ) ) { return; }
 			var raw = ( cell.textContent || '' );
 			if ( raw.replace( /\s+/g, '' ).length < 3 ) { return; }
-			var t = raw.toLowerCase();
-			var color = '', label = '';
-			for ( var i = 0; i < SHIP.rules.length; i++ ) {
-				var kw = String( SHIP.rules[ i ].keyword || '' ).toLowerCase();
-				if ( kw && t.indexOf( kw ) !== -1 ) { color = SHIP.rules[ i ].color; label = SHIP.rules[ i ].label; break; }
-			}
-			if ( ! color && SHIP.default.color ) { color = SHIP.default.color; label = SHIP.default.label; }
 			cell.setAttribute( 'data-ole-ship', '1' );
-			if ( color ) {
-				cell.style.setProperty( 'background-color', color, 'important' );
-				if ( label ) { cell.title = fmt( I18N.shipTitle, [ label ] ); }
+			var m = matchShip( raw );
+			if ( m && m.color ) {
+				cell.style.setProperty( 'background-color', m.color, 'important' );
+				if ( m.label ) { cell.title = fmt( I18N.shipTitle, [ m.label ] ); }
+			}
+		} );
+	}
+
+	// Сторінка редагування: фарбує блок(и) адреси тим самим кольором правила.
+	function colorEditAddress() {
+		if ( ! FLAGS.shipping ) { return; }
+		var blocks = document.querySelectorAll( '#order_data .address' );
+		Array.prototype.forEach.call( blocks, function ( el ) {
+			if ( el.getAttribute( 'data-ole-ship' ) ) { return; }
+			var raw = ( el.textContent || '' );
+			if ( raw.replace( /\s+/g, '' ).length < 3 ) { return; }
+			el.setAttribute( 'data-ole-ship', '1' );
+			var m = matchShip( raw );
+			if ( m && m.color ) {
+				el.style.setProperty( 'background-color', m.color, 'important' );
+				el.style.padding = '8px 10px';
+				el.style.borderRadius = '6px';
+				el.style.boxShadow = 'inset 3px 0 0 0 rgba(0,0,0,.14)';
+				if ( m.label ) { el.title = fmt( I18N.shipTitle, [ m.label ] ); }
 			}
 		} );
 	}
@@ -131,9 +160,13 @@
 	} );
 	document.addEventListener( 'keydown', function ( e ) { if ( 'Escape' === e.key ) { closeModal(); } } );
 
-	function run() { colorShipping(); markDuplicates(); }
+	function run() {
+		if ( 'edit' === CTX ) { colorEditAddress(); return; }
+		colorShipping();
+		markDuplicates();
+	}
 	run();
-	if ( window.MutationObserver ) {
+	if ( 'edit' !== CTX && window.MutationObserver ) {
 		var tbody = document.querySelector( '.wp-list-table tbody' );
 		if ( tbody ) { new MutationObserver( function () { run(); } ).observe( tbody, { childList: true } ); }
 	}

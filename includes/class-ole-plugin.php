@@ -29,31 +29,52 @@ class OLE_Plugin {
 		return $pages;
 	}
 
-	private function is_orders_screen() {
+	/**
+	 * Повертає контекст екрана: 'list' (список), 'edit' (редагування) або '' (інше).
+	 * HPOS використовує один screen id для обох — розрізняємо за ?action=edit.
+	 */
+	private function screen_context() {
 		if ( ! function_exists( 'get_current_screen' ) ) {
-			return false;
+			return '';
 		}
 		$screen = get_current_screen();
 		if ( ! $screen ) {
-			return false;
+			return '';
 		}
-		return ( 'woocommerce_page_wc-orders' === $screen->id || 'edit-shop_order' === $screen->id );
+		if ( 'woocommerce_page_wc-orders' === $screen->id ) {
+			$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return ( 'edit' === $action || 'new' === $action ) ? 'edit' : 'list';
+		}
+		if ( 'edit-shop_order' === $screen->id ) {
+			return 'list';
+		}
+		if ( 'shop_order' === $screen->id ) {
+			return 'edit';
+		}
+		return '';
 	}
 
 	public function enqueue() {
-		if ( ! $this->is_orders_screen() || ! current_user_can( 'edit_shop_orders' ) ) {
+		$context = $this->screen_context();
+		if ( '' === $context || ! current_user_can( 'edit_shop_orders' ) ) {
 			return;
 		}
 		$opts    = OLE_Settings::get();
 		$dup_on  = OLE_Settings::is_yes( $opts, 'dup_enabled' );
 		$ship_on = OLE_Settings::is_yes( $opts, 'ship_enabled' );
-		if ( ! $dup_on && ! $ship_on ) {
+
+		// На редагуванні з JS працює лише кольорування адреси (дублі — тільки в списку).
+		if ( 'edit' === $context && ! $ship_on ) {
+			return;
+		}
+		if ( 'list' === $context && ! $dup_on && ! $ship_on ) {
 			return;
 		}
 
 		$data = array(
+			'context'  => $context,
 			'flags'    => array(
-				'duplicates' => $dup_on,
+				'duplicates' => ( $dup_on && 'list' === $context ),
 				'shipping'   => $ship_on,
 			),
 			'map'      => new stdClass(),
@@ -76,7 +97,7 @@ class OLE_Plugin {
 			),
 		);
 
-		if ( $dup_on ) {
+		if ( $dup_on && 'list' === $context ) {
 			$built = OLE_Duplicates::build( $opts );
 			if ( ! empty( $built['map'] ) ) {
 				$data['map'] = $built['map'];
