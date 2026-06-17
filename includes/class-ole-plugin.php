@@ -18,15 +18,9 @@ class OLE_Plugin {
 	}
 
 	private function __construct() {
-		add_filter( 'woocommerce_get_settings_pages', array( $this, 'register_settings' ) );
+		new OLE_Settings_Page();
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( 'OLE_Order_Total', 'render' ) );
-	}
-
-	public function register_settings( $pages ) {
-		require_once OLE_DIR . 'includes/class-ole-settings-tab.php';
-		$pages[] = new OLE_Settings_Tab();
-		return $pages;
 	}
 
 	/**
@@ -59,15 +53,17 @@ class OLE_Plugin {
 		if ( '' === $context || ! current_user_can( 'edit_shop_orders' ) ) {
 			return;
 		}
-		$opts    = OLE_Settings::get();
-		$dup_on  = OLE_Settings::is_yes( $opts, 'dup_enabled' );
-		$ship_on = OLE_Settings::is_yes( $opts, 'ship_enabled' );
+		$opts        = OLE_Settings::get();
+		$dup_on      = OLE_Settings::is_yes( $opts, 'dup_enabled' );
+		$ship_active = ( 'list' === $context )
+			? OLE_Settings::is_yes( $opts, 'ship_enabled' )
+			: OLE_Settings::is_yes( $opts, 'ship_color_edit' );
 
 		// На редагуванні з JS працює лише кольорування адреси (дублі — тільки в списку).
-		if ( 'edit' === $context && ! $ship_on ) {
+		if ( 'edit' === $context && ! $ship_active ) {
 			return;
 		}
-		if ( 'list' === $context && ! $dup_on && ! $ship_on ) {
+		if ( 'list' === $context && ! $dup_on && ! $ship_active ) {
 			return;
 		}
 
@@ -75,7 +71,7 @@ class OLE_Plugin {
 			'context'  => $context,
 			'flags'    => array(
 				'duplicates' => ( $dup_on && 'list' === $context ),
-				'shipping'   => $ship_on,
+				'shipping'   => $ship_active,
 			),
 			'map'      => new stdClass(),
 			'groups'   => new stdClass(),
@@ -106,7 +102,7 @@ class OLE_Plugin {
 				$data['groups'] = $built['groups'];
 			}
 		}
-		if ( $ship_on ) {
+		if ( $ship_active ) {
 			$data['shipping'] = OLE_Shipping::for_js( $opts );
 		}
 

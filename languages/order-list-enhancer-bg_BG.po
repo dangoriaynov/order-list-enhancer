@@ -106,3 +106,45 @@ msgstr "—"
 
 msgid "Delivery: %s"
 msgstr "Доставка: %s"
+
+msgid "Outline & badge same-customer orders in the list (with details modal)."
+msgstr "Обвежда и маркира с бадж поръчките от един и същ клиент в списъка (с модал с детайли)."
+
+msgid "Match by"
+msgstr "Съвпадение по"
+
+msgid "shipping address"
+msgstr "адрес за доставка"
+
+msgid "Shipping coloring"
+msgstr "Оцветяване на доставката"
+
+msgid "Color in orders list"
+msgstr "Оцветяване в списъка с поръчки"
+
+msgid "Color the “Ship to” cell in the orders list."
+msgstr "Оцветява клетката за доставка в списъка с поръчки."
+
+msgid "Color on edit page"
+msgstr "Оцветяване на страницата за редакция"
+
+msgid "Color the address block on the single order edit screen."
+msgstr "Оцветява блока с адреса на екрана за редакция на поръчка."
+
+msgid "Enable"
+msgstr "Включи"
+
+msgid "Show the order total near the billing address on the order edit screen."
+msgstr "Показва сумата на поръчката до адреса за фактуриране на екрана за редакция."
+
+msgid "Save changes"
+msgstr "Запази промените"
+
+msgid "Saving…"
+msgstr "Запазване…"
+
+msgid "Saved."
+msgstr "Запазено."
+
+msgid "Save failed."
+msgstr "Неуспешно запазване."

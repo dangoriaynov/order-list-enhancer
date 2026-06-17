@@ -15,8 +15,10 @@ Spot repeat customers (with a details modal), color the orders-list shipping col
 Order List Enhancer improves the WooCommerce admin order screens with three tools:
 
 * **Repeat-customer highlighting.** Orders that belong to the same customer (matched by phone, e-mail, name or shipping address — transitively) are outlined and badged in the orders list, even across pagination. Matching scans all order statuses, so a returning customer is recognised even when a previous order is still pending or was never completed. Click the badge to open a modal listing that customer's orders: order number (links to the order), date, purchased items, total and status.
-* **Shipping column coloring.** Color the "Ship to" cell based on configurable keyword rules (for example courier or pickup type).
+* **Shipping coloring.** Color the "Ship to" cell in the orders list, and the address block on the single order edit screen, based on configurable keyword rules (for example courier or pickup type).
 * **Order total on the edit page.** Optionally show the order total next to the billing address on the single order edit screen.
+
+Every feature has its own toggle on the settings page (WooCommerce → Order List Enhancer), which saves via AJAX without reloading.
 
 Everything runs in the admin only and is shown to users who can edit orders. No external services, no tracking. Compatible with WooCommerce HPOS (High-Performance Order Storage) and sequential order numbers.
 
@@ -24,7 +26,7 @@ Everything runs in the admin only and is shown to users who can edit orders. No 
 
 1. Upload the plugin to `/wp-content/plugins/order-list-enhancer/` or install it via the Plugins screen.
 2. Activate it.
-3. Configure it under WooCommerce → Settings → Order List Enhancer.
+3. Configure it under WooCommerce → Order List Enhancer.
 
 == Frequently Asked Questions ==
 
@@ -46,4 +48,4 @@ No. It only reads orders in your admin and renders the UI locally.
 == Changelog ==
 
 = 1.0.0 =
-* Initial release: repeat-customer highlighting (all statuses) with a details modal, configurable shipping column coloring, order total on the edit screen, settings tab, i18n (English + Bulgarian), HPOS support.
+* Initial release: repeat-customer highlighting (all statuses) with a details modal; configurable shipping coloring in the list and on the order edit screen; order total on the edit screen; per-feature toggles on an AJAX-saving settings page; i18n (English + Bulgarian); HPOS support.

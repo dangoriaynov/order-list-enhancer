@@ -106,3 +106,45 @@ msgstr ""
 
 msgid "Delivery: %s"
 msgstr ""
+
+msgid "Outline & badge same-customer orders in the list (with details modal)."
+msgstr ""
+
+msgid "Match by"
+msgstr ""
+
+msgid "shipping address"
+msgstr ""
+
+msgid "Shipping coloring"
+msgstr ""
+
+msgid "Color in orders list"
+msgstr ""
+
+msgid "Color the “Ship to” cell in the orders list."
+msgstr ""
+
+msgid "Color on edit page"
+msgstr ""
+
+msgid "Color the address block on the single order edit screen."
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Show the order total near the billing address on the order edit screen."
+msgstr ""
+
+msgid "Save changes"
+msgstr ""
+
+msgid "Saving…"
+msgstr ""
+
+msgid "Saved."
+msgstr ""
+
+msgid "Save failed."
+msgstr ""

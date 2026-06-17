@@ -18,7 +18,8 @@ class OLE_Settings {
 			'match_name'         => 'yes',
 			'match_address'      => 'yes',
 			'scan_limit'         => 1500,
-			'ship_enabled'       => 'yes',
+			'ship_enabled'       => 'yes', // кольорування в списку замовлень
+			'ship_color_edit'    => 'yes', // кольорування блоку адреси на сторінці редагування
 			'ship_rules'         => array(), // [ ['keyword'=>..,'color'=>..,'label'=>..], ... ]
 			'ship_default_color' => '',
 			'ship_default_label' => '',

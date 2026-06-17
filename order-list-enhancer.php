@@ -28,6 +28,7 @@ define( 'OLE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'OLE_URL', plugin_dir_url( __FILE__ ) );
 
 require_once OLE_DIR . 'includes/class-ole-settings.php';
+require_once OLE_DIR . 'includes/class-ole-settings-page.php';
 require_once OLE_DIR . 'includes/class-ole-duplicates.php';
 require_once OLE_DIR . 'includes/class-ole-shipping.php';
 require_once OLE_DIR . 'includes/class-ole-order-total.php';
