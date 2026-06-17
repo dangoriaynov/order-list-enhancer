@@ -1,0 +1,108 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Order List Enhancer 1.0.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: bg_BG\n"
+
+msgid "Order List Enhancer"
+msgstr "Order List Enhancer"
+
+msgid "Repeat customer highlighting"
+msgstr "Маркиране на повтарящи се клиенти"
+
+msgid "Outline and badge orders that belong to the same customer in the orders list."
+msgstr "Обвежда и поставя бадж на поръчките от един и същ клиент в списъка."
+
+msgid "Enable highlighting"
+msgstr "Включи маркирането"
+
+msgid "Match by phone"
+msgstr "Съвпадение по телефон"
+
+msgid "Match by e-mail"
+msgstr "Съвпадение по e-mail"
+
+msgid "Match by name"
+msgstr "Съвпадение по име"
+
+msgid "Match by shipping address"
+msgstr "Съвпадение по адрес за доставка"
+
+msgid "Scan limit"
+msgstr "Лимит на сканиране"
+
+msgid "Maximum number of recent orders to scan across all statuses."
+msgstr "Максимален брой последни поръчки за сканиране по всички статуси."
+
+msgid "Shipping column coloring"
+msgstr "Оцветяване на колоната за доставка"
+
+msgid "Color the shipping cell from the rules below. The first rule whose keyword is found in the shipping address wins."
+msgstr "Оцветява клетката за доставка по правилата по-долу. Печели първото правило, чиято ключова дума се намира в адреса."
+
+msgid "Enable shipping coloring"
+msgstr "Включи оцветяването на доставката"
+
+msgid "Default color"
+msgstr "Цвят по подразбиране"
+
+msgid "Used when no rule matches. Leave empty to not color unmatched rows."
+msgstr "Използва се, когато няма съвпадение. Оставете празно, за да не оцветявате."
+
+msgid "Default label"
+msgstr "Етикет по подразбиране"
+
+msgid "Coloring rules"
+msgstr "Правила за оцветяване"
+
+msgid "Keyword (in shipping address)"
+msgstr "Ключова дума (в адреса за доставка)"
+
+msgid "Color (hex)"
+msgstr "Цвят (hex)"
+
+msgid "Label"
+msgstr "Етикет"
+
+msgid "Add rule"
+msgstr "Добави правило"
+
+msgid "Order total on edit page"
+msgstr "Сума на поръчката на страницата за редакция"
+
+msgid "Show the order total near the billing address on the single order edit screen."
+msgstr "Показва сумата на поръчката до адреса за фактуриране на екрана за редакция."
+
+msgid "Show order total on edit page"
+msgstr "Показвай сумата на поръчката при редакция"
+
+msgid "phone"
+msgstr "телефон"
+
+msgid "e-mail"
+msgstr "e-mail"
+
+msgid "name"
+msgstr "име"
+
+msgid "address"
+msgstr "адрес"
+
+msgid "customer #%1$s · %2$s orders"
+msgstr "клиент #%1$s · %2$s поръчки"
+
+msgid "Show this customer's orders. Matches: %s"
+msgstr "Покажи поръчките на този клиент. Съвпада: %s"
+
+msgid "Customer #%1$s · %2$s orders%3$s"
+msgstr "Клиент #%1$s · %2$s поръчки%3$s"
+
+msgid "Close"
+msgstr "Затвори"
+
+msgid "—"
+msgstr "—"
+
+msgid "Delivery: %s"
+msgstr "Доставка: %s"

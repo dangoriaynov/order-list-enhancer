@@ -1,0 +1,108 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Order List Enhancer 1.0.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+
+msgid "Order List Enhancer"
+msgstr ""
+
+msgid "Repeat customer highlighting"
+msgstr ""
+
+msgid "Outline and badge orders that belong to the same customer in the orders list."
+msgstr ""
+
+msgid "Enable highlighting"
+msgstr ""
+
+msgid "Match by phone"
+msgstr ""
+
+msgid "Match by e-mail"
+msgstr ""
+
+msgid "Match by name"
+msgstr ""
+
+msgid "Match by shipping address"
+msgstr ""
+
+msgid "Scan limit"
+msgstr ""
+
+msgid "Maximum number of recent orders to scan across all statuses."
+msgstr ""
+
+msgid "Shipping column coloring"
+msgstr ""
+
+msgid "Color the shipping cell from the rules below. The first rule whose keyword is found in the shipping address wins."
+msgstr ""
+
+msgid "Enable shipping coloring"
+msgstr ""
+
+msgid "Default color"
+msgstr ""
+
+msgid "Used when no rule matches. Leave empty to not color unmatched rows."
+msgstr ""
+
+msgid "Default label"
+msgstr ""
+
+msgid "Coloring rules"
+msgstr ""
+
+msgid "Keyword (in shipping address)"
+msgstr ""
+
+msgid "Color (hex)"
+msgstr ""
+
+msgid "Label"
+msgstr ""
+
+msgid "Add rule"
+msgstr ""
+
+msgid "Order total on edit page"
+msgstr ""
+
+msgid "Show the order total near the billing address on the single order edit screen."
+msgstr ""
+
+msgid "Show order total on edit page"
+msgstr ""
+
+msgid "phone"
+msgstr ""
+
+msgid "e-mail"
+msgstr ""
+
+msgid "name"
+msgstr ""
+
+msgid "address"
+msgstr ""
+
+msgid "customer #%1$s · %2$s orders"
+msgstr ""
+
+msgid "Show this customer's orders. Matches: %s"
+msgstr ""
+
+msgid "Customer #%1$s · %2$s orders%3$s"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "—"
+msgstr ""
+
+msgid "Delivery: %s"
+msgstr ""
