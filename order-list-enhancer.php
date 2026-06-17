@@ -30,6 +30,7 @@ define( 'OLE_URL', plugin_dir_url( __FILE__ ) );
 require_once OLE_DIR . 'includes/class-ole-settings.php';
 require_once OLE_DIR . 'includes/class-ole-duplicates.php';
 require_once OLE_DIR . 'includes/class-ole-shipping.php';
+require_once OLE_DIR . 'includes/class-ole-order-total.php';
 require_once OLE_DIR . 'includes/class-ole-plugin.php';
 
 // Declare HPOS (custom order tables) compatibility.
