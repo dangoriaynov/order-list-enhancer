@@ -22,6 +22,17 @@ class OLE_Plugin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( 'OLE_Order_Total', 'render' ) );
 		add_action( 'wp_ajax_ole_group_details', array( $this, 'ajax_group_details' ) );
+
+		// Нормализация на телефон — само за показване (view context); БД не се пипа.
+		$opts = OLE_Settings::get();
+		if ( OLE_Settings::is_yes( $opts, 'normalize_phone' ) ) {
+			$cc   = preg_replace( '/\D+/', '', (string) $opts['phone_cc'] );
+			$norm = function ( $v ) use ( $cc ) {
+				return OLE_Phone::normalize( $v, $cc );
+			};
+			add_filter( 'woocommerce_order_get_billing_phone', $norm, 20 );
+			add_filter( 'woocommerce_order_get_shipping_phone', $norm, 20 );
+		}
 	}
 
 	/**
@@ -84,7 +95,8 @@ class OLE_Plugin {
 		}
 
 		$data = array(
-			'context'  => $context,
+			'context'    => $context,
+			'decimalSep' => ( ',' === $opts['total_decimal_sep'] || '.' === $opts['total_decimal_sep'] ) ? $opts['total_decimal_sep'] : ',',
 			'flags'    => array(
 				'duplicates' => ( $dup_on && 'list' === $context ),
 				'shipping'   => $ship_active,

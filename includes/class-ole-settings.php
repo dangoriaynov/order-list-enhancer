@@ -22,7 +22,10 @@ class OLE_Settings {
 			'ship_default_color' => '',
 			'ship_default_label' => '',
 			'total_on_edit'      => 'yes',
+			'total_decimal_sep'  => ',', // ',' or '.' for the order total under the address
 			'copy_buttons'       => 'yes', // copy name/phone/total on edit page
+			'normalize_phone'    => 'no', // display-only phone normalization
+			'phone_cc'           => '', // default country dial code (digits, e.g. 359)
 		);
 	}
 
@@ -34,6 +37,10 @@ class OLE_Settings {
 		$opts               = array_merge( self::defaults(), $saved );
 		$opts['scan_limit']      = max( 100, min( 5000, (int) $opts['scan_limit'] ) );
 		$opts['dup_window_days'] = max( 1, min( 60, (int) $opts['dup_window_days'] ) );
+		if ( '.' !== $opts['total_decimal_sep'] ) {
+			$opts['total_decimal_sep'] = ',';
+		}
+		$opts['phone_cc'] = preg_replace( '/\D+/', '', (string) $opts['phone_cc'] );
 		if ( ! is_array( $opts['ship_rules'] ) ) {
 			$opts['ship_rules'] = array();
 		}

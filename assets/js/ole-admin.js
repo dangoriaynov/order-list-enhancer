@@ -8,6 +8,7 @@
 	var I18N   = D.i18n || {};
 	var CTX    = D.context || 'list';
 	var AJAX   = D.ajax || {};
+	var DEC    = D.decimalSep || ',';
 	var detailsCache = {};
 
 	function fmt( tmpl, args ) {
@@ -278,8 +279,18 @@
 			tot.setAttribute( 'data-ole-copy', '1' );
 			var tb = copyBtn( function () {
 				var a = tot.querySelector( '.woocommerce-Price-amount' );
-				var s = ( a ? a.textContent : tot.textContent ) || '';
-				return s.replace( /[^\d.,]/g, '' ).trim();
+				var s;
+				if ( a ) {
+					var c   = a.cloneNode( true );
+					var sym = c.querySelector( '.woocommerce-Price-currencySymbol' );
+					if ( sym && sym.parentNode ) { sym.parentNode.removeChild( sym ); }
+					s = c.textContent || '';
+				} else {
+					s = tot.textContent || '';
+				}
+				s = s.replace( /[\s ]/g, '' ).replace( /[^\d.,]/g, '' ).replace( /[.,]+$/, '' );
+				var m = s.match( /^(\d+)(?:[.,](\d+))?$/ );
+				return m ? ( m[1] + ( null != m[2] ? DEC + m[2] : '' ) ) : s.replace( /[.,]/g, DEC );
 			} );
 			tot.appendChild( tb );
 		}

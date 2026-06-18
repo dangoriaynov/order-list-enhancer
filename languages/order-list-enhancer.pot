@@ -217,3 +217,30 @@ msgstr ""
 
 msgid "How to decide two orders are from the same customer. Name + phone matches only when both the phone and the name match."
 msgstr ""
+
+msgid "Decimal separator"
+msgstr ""
+
+msgid "Comma (,)"
+msgstr ""
+
+msgid "Dot (.)"
+msgstr ""
+
+msgid "Decimal separator for the order total shown under the address (and its copy button)."
+msgstr ""
+
+msgid "Phone numbers"
+msgstr ""
+
+msgid "Normalize phone (display only)"
+msgstr ""
+
+msgid "Tidy phone numbers for display: leading 00 → +, add the country code when missing. Never changes the database."
+msgstr ""
+
+msgid "Default country code"
+msgstr ""
+
+msgid "Digits only, e.g. 359. Added to numbers that have no country code."
+msgstr ""
