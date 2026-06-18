@@ -155,11 +155,11 @@ msgstr "дубликат"
 msgid "%s orders"
 msgstr "%s поръчки"
 
-msgid "since %s"
-msgstr "от %s"
+msgid "first on %s"
+msgstr "първа на %s"
 
-msgid "~ every %d days"
-msgstr "средно на %d дни"
+msgid "once every %d days"
+msgstr "веднъж на %d дни"
 
 msgid "same day"
 msgstr "същия ден"
