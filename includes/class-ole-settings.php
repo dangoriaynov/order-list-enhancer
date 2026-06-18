@@ -22,6 +22,7 @@ class OLE_Settings {
 			'ship_default_color' => '',
 			'ship_default_label' => '',
 			'total_on_edit'      => 'yes',
+			'copy_buttons'       => 'yes', // copy name/phone/total on edit page
 		);
 	}
 

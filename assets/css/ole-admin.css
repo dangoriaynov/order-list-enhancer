@@ -46,3 +46,10 @@
 @keyframes ole-pop { from { opacity: 0; transform: translateY( 10px ) scale( .98 ); } to { opacity: 1; transform: none; } }
 .ole-o { animation: ole-rowin .22s ease both; }
 @keyframes ole-rowin { from { opacity: 0; transform: translateY( 4px ); } to { opacity: 1; transform: none; } }
+
+/* Copy-to-clipboard buttons (order edit page) */
+.ole-copy { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; margin-left: 6px; padding: 0; border: 1px solid #c3c4c7; border-radius: 5px; background: #fff; color: #50575e; cursor: pointer; vertical-align: middle; line-height: 0; transition: background .12s, color .12s, border-color .12s, transform .08s; }
+.ole-copy:hover { background: #f0f6fc; color: #2271b1; border-color: #2271b1; }
+.ole-copy:active { transform: scale( .92 ); }
+.ole-copy svg { display: block; }
+.ole-copy.is-copied { background: #1a7a3c; border-color: #1a7a3c; color: #fff; }

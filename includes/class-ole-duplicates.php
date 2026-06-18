@@ -125,32 +125,36 @@ class OLE_Duplicates {
 	}
 
 	private static function keys( $r, $opts ) {
-		$mode      = isset( $opts['match_mode'] ) ? $opts['match_mode'] : 'phone';
-		$use_phone = ( 'phone' === $mode || 'name_phone' === $mode );
-		$use_name  = ( 'names' === $mode || 'name_phone' === $mode );
+		$mode = isset( $opts['match_mode'] ) ? $opts['match_mode'] : 'phone';
+
+		$raw    = ! empty( $r['b_phone'] ) ? $r['b_phone'] : ( $r['s_phone'] ?? '' );
+		$digits = preg_replace( '/\D+/', '', (string) $raw );
+		$phone  = strlen( $digits ) >= 9 ? substr( $digits, -9 ) : '';
+
+		$name = trim( ( $r['b_first'] ?? '' ) . ' ' . ( $r['b_last'] ?? '' ) );
+		if ( '' === $name ) {
+			$name = trim( ( $r['s_first'] ?? '' ) . ' ' . ( $r['s_last'] ?? '' ) );
+		}
+		$nn = self::norm( $name );
+		if ( mb_strlen( $nn ) < 4 ) {
+			$nn = '';
+		}
 
 		$keys = array();
-
-		if ( $use_phone ) {
-			$phone  = ! empty( $r['b_phone'] ) ? $r['b_phone'] : ( isset( $r['s_phone'] ) ? $r['s_phone'] : '' );
-			$digits = preg_replace( '/\D+/', '', (string) $phone );
-			if ( strlen( $digits ) >= 9 ) {
-				$keys[] = 'p:' . substr( $digits, -9 );
+		if ( 'phone' === $mode ) {
+			if ( '' !== $phone ) {
+				$keys[] = 'p:' . $phone;
 			}
-		}
-
-		if ( $use_name ) {
-			$name = trim( ( $r['b_first'] ?? '' ) . ' ' . ( $r['b_last'] ?? '' ) );
-			if ( '' === $name ) {
-				$name = trim( ( $r['s_first'] ?? '' ) . ' ' . ( $r['s_last'] ?? '' ) );
-			}
-			$nn = self::norm( $name );
-			if ( '' !== $nn && mb_strlen( $nn ) >= 4 ) {
+		} elseif ( 'names' === $mode ) {
+			if ( '' !== $nn ) {
 				$keys[] = 'n:' . $nn;
 			}
+		} else { // name_phone — изисква И телефон, И име (AND).
+			if ( '' !== $phone && '' !== $nn ) {
+				$keys[] = 'c:' . $phone . '|' . $nn;
+			}
 		}
-
-		return array_values( array_unique( $keys ) );
+		return $keys;
 	}
 
 	private static function hpos() {
@@ -302,6 +306,7 @@ class OLE_Duplicates {
 			'e' => __( 'e-mail', 'order-list-enhancer' ),
 			'n' => __( 'name', 'order-list-enhancer' ),
 			'a' => __( 'address', 'order-list-enhancer' ),
+			'c' => __( 'phone + name', 'order-list-enhancer' ),
 		);
 
 		$map  = array();

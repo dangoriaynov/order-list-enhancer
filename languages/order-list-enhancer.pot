@@ -199,3 +199,21 @@ msgstr ""
 
 msgid "How to decide two orders are from the same customer. Name + phone matches when either the phone or the name matches."
 msgstr ""
+
+msgid "phone + name"
+msgstr ""
+
+msgid "Copy buttons"
+msgstr ""
+
+msgid "Show copy-to-clipboard buttons for name, phone and total on the order edit screen."
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "Copied"
+msgstr ""
+
+msgid "How to decide two orders are from the same customer. Name + phone matches only when both the phone and the name match."
+msgstr ""
