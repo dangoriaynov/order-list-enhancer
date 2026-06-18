@@ -172,3 +172,6 @@ msgstr "Зареждане…"
 
 msgid "Failed to load."
 msgstr "Грешка при зареждане."
+
+msgid "duplicate %s orders"
+msgstr "дубликат %s поръчки"
