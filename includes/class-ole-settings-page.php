@@ -152,8 +152,32 @@ class OLE_Settings_Page {
 						<td><label><input type="checkbox" name="total_on_edit" <?php echo $cb( 'total_on_edit' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Show the order total near the billing address on the order edit screen.', 'order-list-enhancer' ); ?></label></td>
 					</tr>
 					<tr>
+						<th scope="row"><?php esc_html_e( 'Decimal separator', 'order-list-enhancer' ); ?></th>
+						<td>
+							<?php $dsep = $o['total_decimal_sep']; ?>
+							<select name="total_decimal_sep">
+								<option value="," <?php selected( $dsep, ',' ); ?>><?php esc_html_e( 'Comma (,)', 'order-list-enhancer' ); ?></option>
+								<option value="." <?php selected( $dsep, '.' ); ?>><?php esc_html_e( 'Dot (.)', 'order-list-enhancer' ); ?></option>
+							</select>
+							<p class="description"><?php esc_html_e( 'Decimal separator for the order total shown under the address (and its copy button).', 'order-list-enhancer' ); ?></p>
+						</td>
+					</tr>
+					<tr>
 						<th scope="row"><?php esc_html_e( 'Copy buttons', 'order-list-enhancer' ); ?></th>
 						<td><label><input type="checkbox" name="copy_buttons" <?php echo $cb( 'copy_buttons' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Show copy-to-clipboard buttons for name, phone and total on the order edit screen.', 'order-list-enhancer' ); ?></label></td>
+					</tr>
+				</tbody></table>
+
+				<h2><?php esc_html_e( 'Phone numbers', 'order-list-enhancer' ); ?></h2>
+				<table class="form-table"><tbody>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Normalize phone (display only)', 'order-list-enhancer' ); ?></th>
+						<td><label><input type="checkbox" name="normalize_phone" <?php echo $cb( 'normalize_phone' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Tidy phone numbers for display: leading 00 → +, add the country code when missing. Never changes the database.', 'order-list-enhancer' ); ?></label></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Default country code', 'order-list-enhancer' ); ?></th>
+						<td><input type="text" name="phone_cc" value="<?php echo esc_attr( $o['phone_cc'] ); ?>" placeholder="359" style="max-width:120px"/>
+						<p class="description"><?php esc_html_e( 'Digits only, e.g. 359. Added to numbers that have no country code.', 'order-list-enhancer' ); ?></p></td>
 					</tr>
 				</tbody></table>
 
@@ -204,7 +228,10 @@ class OLE_Settings_Page {
 			'ship_default_color' => isset( $in['ship_default_color'] ) ? (string) sanitize_hex_color( $in['ship_default_color'] ) : '',
 			'ship_default_label' => isset( $in['ship_default_label'] ) ? sanitize_text_field( $in['ship_default_label'] ) : '',
 			'total_on_edit'      => $bool( 'total_on_edit' ),
+			'total_decimal_sep'  => ( isset( $in['total_decimal_sep'] ) && '.' === $in['total_decimal_sep'] ) ? '.' : ',',
 			'copy_buttons'       => $bool( 'copy_buttons' ),
+			'normalize_phone'    => $bool( 'normalize_phone' ),
+			'phone_cc'           => isset( $in['phone_cc'] ) ? preg_replace( '/\D+/', '', (string) $in['phone_cc'] ) : '',
 		);
 		update_option( OLE_Settings::OPTION, $opts );
 		wp_send_json_success( array( 'message' => 'saved' ) );
