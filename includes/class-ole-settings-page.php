@@ -48,7 +48,8 @@ class OLE_Settings_Page {
 		if ( ! $this->is_settings_screen() ) {
 			return;
 		}
-		wp_enqueue_script( 'ole-settings', OLE_URL . 'assets/js/ole-settings.js', array( 'jquery' ), OLE_VERSION, true );
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_script( 'ole-settings', OLE_URL . 'assets/js/ole-settings.js', array( 'jquery', 'wp-color-picker' ), OLE_VERSION, true );
 		wp_localize_script(
 			'ole-settings',
 			'OLE_SETTINGS',
@@ -128,15 +129,15 @@ class OLE_Settings_Page {
 						<th scope="row"><?php esc_html_e( 'Coloring rules', 'order-list-enhancer' ); ?></th>
 						<td>
 							<table class="widefat ole-rules" style="max-width:680px"><thead><tr>
-								<th><?php esc_html_e( 'Keyword (in shipping address)', 'order-list-enhancer' ); ?></th>
-								<th><?php esc_html_e( 'Color (hex)', 'order-list-enhancer' ); ?></th>
-								<th><?php esc_html_e( 'Label', 'order-list-enhancer' ); ?></th>
+								<th style="text-align:center"><?php esc_html_e( 'Keyword (in shipping address)', 'order-list-enhancer' ); ?></th>
+								<th style="text-align:center"><?php esc_html_e( 'Color', 'order-list-enhancer' ); ?></th>
+								<th style="text-align:center"><?php esc_html_e( 'Label', 'order-list-enhancer' ); ?></th>
 								<th></th>
 							</tr></thead><tbody>
 							<?php foreach ( $rules as $r ) : ?>
 								<tr>
 									<td><input type="text" name="rule_keyword[]" value="<?php echo esc_attr( $r['keyword'] ); ?>" class="regular-text"/></td>
-									<td><input type="text" name="rule_color[]" value="<?php echo esc_attr( $r['color'] ); ?>" placeholder="#dcefd2"/></td>
+									<td><input type="text" name="rule_color[]" value="<?php echo esc_attr( $r['color'] ); ?>" class="ole-color" placeholder="#dcefd2"/></td>
 									<td><input type="text" name="rule_label[]" value="<?php echo esc_attr( $r['label'] ); ?>" class="regular-text"/></td>
 									<td><button type="button" class="button ole-rule-remove">&times;</button></td>
 								</tr>
@@ -147,7 +148,7 @@ class OLE_Settings_Page {
 					</tr>
 					<tr>
 						<th scope="row"><?php esc_html_e( 'Default color', 'order-list-enhancer' ); ?></th>
-						<td><input type="text" name="ship_default_color" value="<?php echo esc_attr( $o['ship_default_color'] ); ?>" placeholder="#f7eec6"/>
+						<td><input type="text" name="ship_default_color" value="<?php echo esc_attr( $o['ship_default_color'] ); ?>" class="ole-color" placeholder="#f7eec6"/>
 						<p class="description"><?php esc_html_e( 'Used when no rule matches. Leave empty to not color unmatched rows.', 'order-list-enhancer' ); ?></p></td>
 					</tr>
 					<tr>

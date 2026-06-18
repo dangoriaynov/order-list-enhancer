@@ -247,3 +247,6 @@ msgstr "Само цифри, напр. 359. Добавя се към номер�
 
 msgid "Settings"
 msgstr "Настройки"
+
+msgid "Color"
+msgstr "Цвят"

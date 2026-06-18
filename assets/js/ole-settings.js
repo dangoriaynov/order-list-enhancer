@@ -4,11 +4,27 @@ jQuery( function ( $ ) {
 	if ( ! $form.length ) { return; }
 	var $tbody = $form.find( '.ole-rules tbody' );
 
+	// Visual color pickers for every hex field.
+	function initColorPickers( $scope ) {
+		if ( ! $.fn.wpColorPicker ) { return; }
+		( $scope || $form ).find( '.ole-color' ).not( '.wp-color-picker' ).wpColorPicker();
+	}
+	initColorPickers();
+
+	function ruleRowHtml() {
+		return '<tr>' +
+			'<td><input type="text" name="rule_keyword[]" value="" class="regular-text"/></td>' +
+			'<td><input type="text" name="rule_color[]" value="" class="ole-color" placeholder="#dcefd2"/></td>' +
+			'<td><input type="text" name="rule_label[]" value="" class="regular-text"/></td>' +
+			'<td><button type="button" class="button ole-rule-remove">&times;</button></td>' +
+			'</tr>';
+	}
+
 	// Repeatable shipping rules.
 	$form.on( 'click', '.ole-rule-add', function () {
-		var $tr = $tbody.find( 'tr' ).first().clone();
-		$tr.find( 'input' ).val( '' );
+		var $tr = $( ruleRowHtml() );
 		$tbody.append( $tr );
+		initColorPickers( $tr );
 	} );
 	$form.on( 'click', '.ole-rule-remove', function () {
 		if ( $tbody.find( 'tr' ).length > 1 ) {
