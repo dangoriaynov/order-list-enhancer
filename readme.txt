@@ -2,21 +2,24 @@
 Contributors: dangoriaynov
 Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
-Tested up to: 6.6
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Spot repeat customers (with a details modal), color the orders-list shipping column by rules, and show the order total on the edit screen — for WooCommerce.
+Spot repeat customers, flag likely duplicates, color the shipping column and show the order total — right in the WooCommerce orders admin.
 
 == Description ==
 
-Order List Enhancer improves the WooCommerce admin order screens with three tools:
+Order List Enhancer improves the WooCommerce admin order screens:
 
-* **Repeat-customer highlighting.** Orders that belong to the same customer (matched by phone, e-mail, name or shipping address — transitively) are outlined and badged in the orders list, even across pagination. Matching scans all order statuses, so a returning customer is recognised even when a previous order is still pending or was never completed. Click the badge to open a modal listing that customer's orders: order number (links to the order), date, purchased items, total and status.
-* **Shipping coloring.** Color the "Ship to" cell in the orders list, and the address block on the single order edit screen, based on configurable keyword rules (for example courier or pickup type).
-* **Order total on the edit page.** Optionally show the order total next to the billing address on the single order edit screen.
+* **Repeat-customer highlighting.** Orders from the same customer (matched by phone, name, or both) are outlined and badged in the orders list, across pagination and all order statuses, so returning customers are recognised even when a previous order is still pending. Click the badge to open a modal with that customer's orders: number (links to the order), date, items, total and status, plus a summary (first order, frequency). The same popup is available from inside an order.
+* **Likely-duplicate flag.** Orders placed close together (configurable window) or several in processing get a clear red "duplicate" flag.
+* **Shipping coloring.** Color the "Ship to" cell in the orders list and the address block on the order edit screen, by configurable keyword rules (e.g. courier or pickup type).
+* **Order total on the edit page.** Optionally show the order total next to the billing address, with a configurable decimal separator.
+* **Copy buttons.** One-click copy of the customer name, phone and total on the order edit screen.
+* **Phone normalization (display only).** Tidy phone numbers for display (leading 00 → +, add the country code when missing) without ever changing the database.
 
 Every feature has its own toggle on the settings page (WooCommerce → Order List Enhancer), which saves via AJAX without reloading.
 
@@ -46,6 +49,13 @@ No. It only reads orders in your admin and renders the UI locally.
 3. The order total shown next to the billing address on the edit screen.
 
 == Changelog ==
+
+= 1.0.8 =
+* Repeat-customer popup is now also available from inside an order (edit screen).
+* Configurable match mode (phone / name / name + phone), duplicate window, and total decimal separator.
+* Copy-to-clipboard buttons for name, phone and total; display-only phone normalization.
+* Details modal loads on demand (AJAX) with a loading animation; duplicate flag is evaluated per order.
+* WordPress.org readiness: translators comments, headers, i18n loading and packaging cleanups.
 
 = 1.0.0 =
 * Initial release: repeat-customer highlighting (all statuses) with a details modal; configurable shipping coloring in the list and on the order edit screen; order total on the edit screen; per-feature toggles on an AJAX-saving settings page; i18n (English + Bulgarian); HPOS support.

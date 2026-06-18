@@ -86,8 +86,24 @@ class OLE_Plugin {
 			: OLE_Settings::is_yes( $opts, 'ship_color_edit' );
 		$copy_on     = OLE_Settings::is_yes( $opts, 'copy_buttons' );
 
-		// На редагуванні JS прави: оцветяване на адреса и/или копи-бутони.
-		if ( 'edit' === $context && ! $ship_active && ! $copy_on ) {
+		// На екрана за редакция: групата на текущата поръчка (за да отворим същия модал).
+		$edit_group = null;
+		if ( 'edit' === $context && $dup_on ) {
+			$oid = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : ( isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( $oid ) {
+				$built = OLE_Duplicates::build( $opts );
+				$key   = (string) $oid;
+				if ( isset( $built['map'][ $key ] ) ) {
+					$g = (int) $built['map'][ $key ]['g'];
+					if ( isset( $built['groups'][ $g ] ) ) {
+						$edit_group = $built['groups'][ $g ];
+					}
+				}
+			}
+		}
+
+		// На редагуванні JS прави: оцветяване на адреса, копи-бутони и/или попъп.
+		if ( 'edit' === $context && ! $ship_active && ! $copy_on && ! $edit_group ) {
 			return;
 		}
 		if ( 'list' === $context && ! $dup_on && ! $ship_active ) {
@@ -117,13 +133,19 @@ class OLE_Plugin {
 				'nonce' => wp_create_nonce( 'ole_group_details' ),
 			),
 			'i18n'     => array(
+				/* translators: 1: customer group number, 2: number of orders. */
 				'badge'       => __( 'customer #%1$s · %2$s orders', 'order-list-enhancer' ),
+				/* translators: %s: matching criteria (phone, name, etc.). */
 				'badgeTitle'  => __( "Show this customer's orders. Matches: %s", 'order-list-enhancer' ),
+				/* translators: 1: customer group number, 2: number of orders. */
 				'dupBadge'    => __( 'duplicate #%1$s · %2$s orders', 'order-list-enhancer' ),
+				/* translators: %s: number of orders. */
 				'ordersCount' => __( '%s orders', 'order-list-enhancer' ),
+				/* translators: %s: date of the first order. */
 				'since'       => __( 'first on %s', 'order-list-enhancer' ),
 				'close'       => __( 'Close', 'order-list-enhancer' ),
 				'noItems'     => __( '—', 'order-list-enhancer' ),
+				/* translators: %s: delivery method label. */
 				'shipTitle'   => __( 'Delivery: %s', 'order-list-enhancer' ),
 				'loading'     => __( 'Loading…', 'order-list-enhancer' ),
 				'error'       => __( 'Failed to load.', 'order-list-enhancer' ),
@@ -143,6 +165,9 @@ class OLE_Plugin {
 		}
 		if ( $ship_active ) {
 			$data['shipping'] = OLE_Shipping::for_js( $opts );
+		}
+		if ( $edit_group ) {
+			$data['editGroup'] = $edit_group;
 		}
 
 		wp_enqueue_style( 'ole-admin', OLE_URL . 'assets/css/ole-admin.css', array(), OLE_VERSION );
