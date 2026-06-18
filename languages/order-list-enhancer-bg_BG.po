@@ -175,3 +175,6 @@ msgstr "Грешка при зареждане."
 
 msgid "duplicate %s orders"
 msgstr "дубликат %s поръчки"
+
+msgid "duplicate #%1$s · %2$s orders"
+msgstr "дубликат #%1$s · %2$s поръчки"
