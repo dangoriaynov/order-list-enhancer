@@ -199,3 +199,21 @@ msgstr "По име + телефон"
 
 msgid "How to decide two orders are from the same customer. Name + phone matches when either the phone or the name matches."
 msgstr "Как се определя, че две поръчки са от един и същ клиент. Име + телефон съвпада при съвпадение на телефона или името."
+
+msgid "phone + name"
+msgstr "телефон + име"
+
+msgid "Copy buttons"
+msgstr "Бутони за копиране"
+
+msgid "Show copy-to-clipboard buttons for name, phone and total on the order edit screen."
+msgstr "Показва бутони за копиране на име, телефон и сума на екрана за редакция."
+
+msgid "Copy"
+msgstr "Копирай"
+
+msgid "Copied"
+msgstr "Копирано"
+
+msgid "How to decide two orders are from the same customer. Name + phone matches only when both the phone and the name match."
+msgstr "Как се определя, че две поръчки са от един и същ клиент. Име + телефон съвпада само когато съвпадат и телефонът, и името."

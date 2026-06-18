@@ -88,7 +88,7 @@ class OLE_Settings_Page {
 								<option value="names" <?php selected( $mode, 'names' ); ?>><?php esc_html_e( 'By name', 'order-list-enhancer' ); ?></option>
 								<option value="name_phone" <?php selected( $mode, 'name_phone' ); ?>><?php esc_html_e( 'By name + phone', 'order-list-enhancer' ); ?></option>
 							</select>
-							<p class="description"><?php esc_html_e( 'How to decide two orders are from the same customer. Name + phone matches when either the phone or the name matches.', 'order-list-enhancer' ); ?></p>
+							<p class="description"><?php esc_html_e( 'How to decide two orders are from the same customer. Name + phone matches only when both the phone and the name match.', 'order-list-enhancer' ); ?></p>
 						</td>
 					</tr>
 					<tr>
@@ -151,6 +151,10 @@ class OLE_Settings_Page {
 						<th scope="row"><?php esc_html_e( 'Enable', 'order-list-enhancer' ); ?></th>
 						<td><label><input type="checkbox" name="total_on_edit" <?php echo $cb( 'total_on_edit' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Show the order total near the billing address on the order edit screen.', 'order-list-enhancer' ); ?></label></td>
 					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Copy buttons', 'order-list-enhancer' ); ?></th>
+						<td><label><input type="checkbox" name="copy_buttons" <?php echo $cb( 'copy_buttons' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Show copy-to-clipboard buttons for name, phone and total on the order edit screen.', 'order-list-enhancer' ); ?></label></td>
+					</tr>
 				</tbody></table>
 
 				<p class="submit">
@@ -200,6 +204,7 @@ class OLE_Settings_Page {
 			'ship_default_color' => isset( $in['ship_default_color'] ) ? (string) sanitize_hex_color( $in['ship_default_color'] ) : '',
 			'ship_default_label' => isset( $in['ship_default_label'] ) ? sanitize_text_field( $in['ship_default_label'] ) : '',
 			'total_on_edit'      => $bool( 'total_on_edit' ),
+			'copy_buttons'       => $bool( 'copy_buttons' ),
 		);
 		update_option( OLE_Settings::OPTION, $opts );
 		wp_send_json_success( array( 'message' => 'saved' ) );

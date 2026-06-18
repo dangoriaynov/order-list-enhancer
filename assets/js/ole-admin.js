@@ -210,8 +210,83 @@
 	}, true );
 	document.addEventListener( 'keydown', function ( e ) { if ( 'Escape' === e.key ) { closeModal(); } } );
 
+	// Copy-to-clipboard buttons (order edit page).
+	var ICON_COPY = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+	var ICON_OK   = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+	function fallbackCopy( text ) {
+		var ta = document.createElement( 'textarea' );
+		ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+		document.body.appendChild( ta ); ta.focus(); ta.select();
+		try { document.execCommand( 'copy' ); } catch ( e ) {}
+		document.body.removeChild( ta );
+	}
+	function doCopy( text, btn ) {
+		function ok() {
+			btn.classList.add( 'is-copied' );
+			btn.innerHTML = ICON_OK;
+			btn.title = I18N.copied || 'Copied';
+			setTimeout( function () {
+				btn.classList.remove( 'is-copied' );
+				btn.innerHTML = ICON_COPY;
+				btn.title = I18N.copy || 'Copy';
+			}, 1200 );
+		}
+		if ( navigator.clipboard && navigator.clipboard.writeText ) {
+			navigator.clipboard.writeText( text ).then( ok, function () { fallbackCopy( text ); ok(); } );
+		} else { fallbackCopy( text ); ok(); }
+	}
+	function copyBtn( getText ) {
+		var b = document.createElement( 'button' );
+		b.type = 'button'; b.className = 'ole-copy'; b.title = I18N.copy || 'Copy';
+		b.innerHTML = ICON_COPY;
+		b.addEventListener( 'click', function ( e ) {
+			e.preventDefault(); e.stopPropagation();
+			var t = getText(); if ( t ) { doCopy( t, b ); }
+		} );
+		return b;
+	}
+	function addCopyButtons() {
+		if ( ! FLAGS.copy ) { return; }
+		// Full name — first line of the first address block.
+		var addr = document.querySelector( '#order_data .address' );
+		if ( addr && ! addr.getAttribute( 'data-ole-copy' ) ) {
+			addr.setAttribute( 'data-ole-copy', '1' );
+			var p = addr.querySelector( 'p' );
+			if ( p ) {
+				var name = ( p.innerText || p.textContent || '' ).split( '\n' )[0].trim();
+				if ( name ) {
+					var br = p.querySelector( 'br' );
+					var nb = copyBtn( function () { return name; } );
+					if ( br ) { p.insertBefore( nb, br ); } else { p.appendChild( nb ); }
+				}
+			}
+		}
+		// Phone — the tel: link.
+		var tel = document.querySelector( '#order_data a[href^="tel:"]' );
+		if ( tel && ! tel.getAttribute( 'data-ole-copy' ) ) {
+			tel.setAttribute( 'data-ole-copy', '1' );
+			var phone = ( tel.textContent || '' ).trim();
+			if ( phone ) {
+				var pb = copyBtn( function () { return phone; } );
+				tel.parentNode.insertBefore( pb, tel.nextSibling );
+			}
+		}
+		// Order total — the numeric amount.
+		var tot = document.querySelector( '.ole-order-total' );
+		if ( tot && ! tot.getAttribute( 'data-ole-copy' ) ) {
+			tot.setAttribute( 'data-ole-copy', '1' );
+			var tb = copyBtn( function () {
+				var a = tot.querySelector( '.woocommerce-Price-amount' );
+				var s = ( a ? a.textContent : tot.textContent ) || '';
+				return s.replace( /[^\d.,]/g, '' ).trim();
+			} );
+			tot.appendChild( tb );
+		}
+	}
+
 	function run() {
-		if ( 'edit' === CTX ) { colorEditAddress(); return; }
+		if ( 'edit' === CTX ) { colorEditAddress(); addCopyButtons(); return; }
 		colorShipping();
 		markDuplicates();
 	}

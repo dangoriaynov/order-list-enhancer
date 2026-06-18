@@ -73,9 +73,10 @@ class OLE_Plugin {
 		$ship_active = ( 'list' === $context )
 			? OLE_Settings::is_yes( $opts, 'ship_enabled' )
 			: OLE_Settings::is_yes( $opts, 'ship_color_edit' );
+		$copy_on     = OLE_Settings::is_yes( $opts, 'copy_buttons' );
 
-		// На редагуванні з JS працює лише кольорування адреси (дублі — тільки в списку).
-		if ( 'edit' === $context && ! $ship_active ) {
+		// На редагуванні JS прави: оцветяване на адреса и/или копи-бутони.
+		if ( 'edit' === $context && ! $ship_active && ! $copy_on ) {
 			return;
 		}
 		if ( 'list' === $context && ! $dup_on && ! $ship_active ) {
@@ -87,6 +88,7 @@ class OLE_Plugin {
 			'flags'    => array(
 				'duplicates' => ( $dup_on && 'list' === $context ),
 				'shipping'   => $ship_active,
+				'copy'       => ( $copy_on && 'edit' === $context ),
 			),
 			'map'      => new stdClass(),
 			'groups'   => new stdClass(),
@@ -113,6 +115,8 @@ class OLE_Plugin {
 				'shipTitle'   => __( 'Delivery: %s', 'order-list-enhancer' ),
 				'loading'     => __( 'Loading…', 'order-list-enhancer' ),
 				'error'       => __( 'Failed to load.', 'order-list-enhancer' ),
+				'copy'        => __( 'Copy', 'order-list-enhancer' ),
+				'copied'      => __( 'Copied', 'order-list-enhancer' ),
 			),
 		);
 
