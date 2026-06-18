@@ -107,7 +107,7 @@ class OLE_Plugin {
 				'badgeTitle'  => __( "Show this customer's orders. Matches: %s", 'order-list-enhancer' ),
 				'dupBadge'    => __( 'duplicate #%1$s · %2$s orders', 'order-list-enhancer' ),
 				'ordersCount' => __( '%s orders', 'order-list-enhancer' ),
-				'since'       => __( 'since %s', 'order-list-enhancer' ),
+				'since'       => __( 'first on %s', 'order-list-enhancer' ),
 				'close'       => __( 'Close', 'order-list-enhancer' ),
 				'noItems'     => __( '—', 'order-list-enhancer' ),
 				'shipTitle'   => __( 'Delivery: %s', 'order-list-enhancer' ),

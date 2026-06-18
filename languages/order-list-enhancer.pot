@@ -155,10 +155,10 @@ msgstr ""
 msgid "%s orders"
 msgstr ""
 
-msgid "since %s"
+msgid "first on %s"
 msgstr ""
 
-msgid "~ every %d days"
+msgid "once every %d days"
 msgstr ""
 
 msgid "same day"

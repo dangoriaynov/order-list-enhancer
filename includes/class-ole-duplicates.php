@@ -90,7 +90,7 @@ class OLE_Duplicates {
 					$interval = 1;
 				}
 				/* translators: %d: average number of days between orders. */
-				$freq = sprintf( __( '~ every %d days', 'order-list-enhancer' ), $interval );
+				$freq = sprintf( __( 'once every %d days', 'order-list-enhancer' ), $interval );
 			} elseif ( $first && $last <= $first ) {
 				$freq = __( 'same day', 'order-list-enhancer' );
 			}
