@@ -93,6 +93,11 @@ class OLE_Settings_Page {
 						<td><input type="number" name="scan_limit" min="100" max="5000" step="100" value="<?php echo esc_attr( $o['scan_limit'] ); ?>"/>
 						<p class="description"><?php esc_html_e( 'Maximum number of recent orders to scan across all statuses.', 'order-list-enhancer' ); ?></p></td>
 					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Duplicate window (days)', 'order-list-enhancer' ); ?></th>
+						<td><input type="number" name="dup_window_days" min="1" max="60" step="1" value="<?php echo esc_attr( $o['dup_window_days'] ); ?>"/>
+						<p class="description"><?php esc_html_e( 'Two orders from the same customer within this many days (or 2+ in processing) are flagged as a likely duplicate.', 'order-list-enhancer' ); ?></p></td>
+					</tr>
 				</tbody></table>
 
 				<h2><?php esc_html_e( 'Shipping coloring', 'order-list-enhancer' ); ?></h2>
@@ -188,6 +193,7 @@ class OLE_Settings_Page {
 			'match_name'         => $bool( 'match_name' ),
 			'match_address'      => $bool( 'match_address' ),
 			'scan_limit'         => isset( $in['scan_limit'] ) ? max( 100, min( 5000, (int) $in['scan_limit'] ) ) : 1500,
+			'dup_window_days'    => isset( $in['dup_window_days'] ) ? max( 1, min( 60, (int) $in['dup_window_days'] ) ) : 3,
 			'ship_enabled'       => $bool( 'ship_enabled' ),
 			'ship_color_edit'    => $bool( 'ship_color_edit' ),
 			'ship_rules'         => $rules,

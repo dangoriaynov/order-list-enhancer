@@ -18,6 +18,7 @@ class OLE_Settings {
 			'match_name'         => 'yes',
 			'match_address'      => 'yes',
 			'scan_limit'         => 1500,
+			'dup_window_days'    => 3, // поръчки в рамките на N дни → флаг „дубликат"
 			'ship_enabled'       => 'yes', // кольорування в списку замовлень
 			'ship_color_edit'    => 'yes', // кольорування блоку адреси на сторінці редагування
 			'ship_rules'         => array(), // [ ['keyword'=>..,'color'=>..,'label'=>..], ... ]
@@ -33,7 +34,8 @@ class OLE_Settings {
 			$saved = array();
 		}
 		$opts               = array_merge( self::defaults(), $saved );
-		$opts['scan_limit'] = max( 100, min( 5000, (int) $opts['scan_limit'] ) );
+		$opts['scan_limit']      = max( 100, min( 5000, (int) $opts['scan_limit'] ) );
+		$opts['dup_window_days'] = max( 1, min( 60, (int) $opts['dup_window_days'] ) );
 		if ( ! is_array( $opts['ship_rules'] ) ) {
 			$opts['ship_rules'] = array();
 		}

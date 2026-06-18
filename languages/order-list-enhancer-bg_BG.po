@@ -178,3 +178,9 @@ msgstr "дубликат %s поръчки"
 
 msgid "duplicate #%1$s · %2$s orders"
 msgstr "дубликат #%1$s · %2$s поръчки"
+
+msgid "Duplicate window (days)"
+msgstr "Прозорец за дубликат (дни)"
+
+msgid "Two orders from the same customer within this many days (or 2+ in processing) are flagged as a likely duplicate."
+msgstr "Две поръчки от един и същ клиент в рамките на толкова дни (или 2+ в обработка) се маркират като вероятен дубликат."
