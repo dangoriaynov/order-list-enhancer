@@ -244,3 +244,6 @@ msgstr ""
 
 msgid "Digits only, e.g. 359. Added to numbers that have no country code."
 msgstr ""
+
+msgid "Settings"
+msgstr ""
