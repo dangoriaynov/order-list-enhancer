@@ -167,8 +167,7 @@
 		w.appendChild( sp ); w.appendChild( tx ); body.appendChild( w );
 	}
 
-	function openModal( g ) {
-		var meta = GROUPS[ String( g ) ];
+	function openModalMeta( meta ) {
 		if ( ! meta ) { return; }
 		var m = ensureModal();
 
@@ -182,20 +181,40 @@
 		var body = m.querySelector( '.ole-modal__body' );
 		m.classList.add( 'is-open' );
 
-		if ( detailsCache[ g ] ) { renderOrders( body, detailsCache[ g ] ); return; }
+		var key = ( meta.ids || [] ).join( ',' );
+		if ( detailsCache[ key ] ) { renderOrders( body, detailsCache[ key ] ); return; }
 		showLoading( body );
 
 		var fd = new FormData();
 		fd.append( 'action', 'ole_group_details' );
 		fd.append( 'nonce', AJAX.nonce || '' );
-		fd.append( 'ids', ( meta.ids || [] ).join( ',' ) );
+		fd.append( 'ids', key );
 		fetch( AJAX.url, { method: 'POST', body: fd, credentials: 'same-origin' } )
 			.then( function ( r ) { return r.json(); } )
 			.then( function ( res ) {
-				if ( res && res.success ) { detailsCache[ g ] = res.data; renderOrders( body, res.data ); }
+				if ( res && res.success ) { detailsCache[ key ] = res.data; renderOrders( body, res.data ); }
 				else { body.textContent = I18N.error || 'Failed to load.'; }
 			} )
 			.catch( function () { body.textContent = I18N.error || 'Failed to load.'; } );
+	}
+	function openModal( g ) { openModalMeta( GROUPS[ String( g ) ] ); }
+
+	// Order edit page: badge that opens the same customer-orders modal.
+	function addEditGroupBadge() {
+		var meta = D.editGroup;
+		if ( ! meta ) { return; }
+		var addr = document.querySelector( '#order_data .address' );
+		if ( ! addr || addr.getAttribute( 'data-ole-eg' ) ) { return; }
+		addr.setAttribute( 'data-ole-eg', '1' );
+		var b = document.createElement( 'span' );
+		b.className = 'ole-badge ole-badge--click' + ( meta.dup ? ' ole-badge--dup' : '' );
+		b.style.background = meta.dup ? '#d63638' : ( PAL[0] || '#2271b1' );
+		b.style.display = 'inline-block';
+		b.style.marginTop = '6px';
+		b.setAttribute( 'data-ole-editgroup', '1' );
+		b.textContent = ( meta.dup ? '⚠️ ' : '👥 ' ) + fmt( I18N.ordersCount, [ meta.n ] ) + ' 🔍';
+		addr.appendChild( document.createElement( 'br' ) );
+		addr.appendChild( b );
 	}
 
 	// Capture phase + stopPropagation: the WC orders row is itself clickable
@@ -207,6 +226,7 @@
 		e.preventDefault();
 		e.stopPropagation();
 		if ( e.stopImmediatePropagation ) { e.stopImmediatePropagation(); }
+		if ( badge.getAttribute( 'data-ole-editgroup' ) ) { openModalMeta( D.editGroup ); return; }
 		openModal( badge.getAttribute( 'data-ole-group' ) );
 	}, true );
 	document.addEventListener( 'keydown', function ( e ) { if ( 'Escape' === e.key ) { closeModal(); } } );
@@ -297,7 +317,7 @@
 	}
 
 	function run() {
-		if ( 'edit' === CTX ) { colorEditAddress(); addCopyButtons(); return; }
+		if ( 'edit' === CTX ) { colorEditAddress(); addCopyButtons(); addEditGroupBadge(); return; }
 		colorShipping();
 		markDuplicates();
 	}

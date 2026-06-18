@@ -173,7 +173,8 @@ class OLE_Duplicates {
 		if ( self::hpos() ) {
 			$ot = $wpdb->prefix . 'wc_orders';
 			$at = $wpdb->prefix . 'wc_order_addresses';
-			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery
+			// Table names come from $wpdb->prefix; the only user value (LIMIT) is bound via prepare().
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$sql  = $wpdb->prepare(
 				"SELECT o.id, o.date_created_gmt, o.status,
 				        ba.first_name b_first, ba.last_name b_last, ba.phone b_phone, ba.email b_email,
