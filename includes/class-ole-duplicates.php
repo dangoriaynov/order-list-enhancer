@@ -12,59 +12,76 @@ class OLE_Duplicates {
 		$orders = self::fetch( $opts );
 		$map    = self::group( $orders );
 
-		// Прозорец за „вероятен дубликат" (поръчки близо във времето), в дни.
-		$win_days = (int) apply_filters( 'ole_duplicate_window_days', 4 );
-		$win      = $win_days * DAY_IN_SECONDS;
+		// Прозорец за „дубликат" (поръчки близо във времето), в дни — от настройките.
+		$win_days = isset( $opts['dup_window_days'] ) ? (int) $opts['dup_window_days'] : 3;
+		$win_days = (int) apply_filters( 'ole_duplicate_window_days', $win_days );
+		$win      = max( 1, $win_days ) * DAY_IN_SECONDS;
 
-		// Лека метадата на групите (без зареждане на поръчки) — детайлите се
-		// дозареждат по AJAX при клик върху баджа. Тук смятаме и: име, първа
-		// поръчка, честота и флаг „дубликат".
-		$acc = array(); // g => ['ts'=>[], 'proc'=>int, 'name'=>str, 'maxts'=>int]
+		// Събиране на членовете на всяка група (id, ts, статус, име).
+		$members = array();
 		foreach ( $map as $id => $info ) {
 			$g = (int) $info['g'];
 			$o = isset( $orders[ $id ] ) ? $orders[ $id ] : array();
-			if ( ! isset( $acc[ $g ] ) ) {
-				$acc[ $g ] = array(
+			if ( ! isset( $members[ $g ] ) ) {
+				$members[ $g ] = array(
 					'reason' => (string) $info['r'],
 					'n'      => (int) $info['n'],
-					'ids'    => array(),
-					'ts'     => array(),
-					'proc'   => 0,
-					'name'   => '',
-					'maxts'  => -1,
+					'list'   => array(),
 				);
 			}
-			$acc[ $g ]['ids'][] = (int) $id;
-			$ts = isset( $o['ts'] ) ? (int) $o['ts'] : 0;
-			if ( $ts ) {
-				$acc[ $g ]['ts'][] = $ts;
-			}
-			if ( isset( $o['status'] ) && 'processing' === $o['status'] ) {
-				++$acc[ $g ]['proc'];
-			}
-			if ( $ts >= $acc[ $g ]['maxts'] ) {
-				$acc[ $g ]['maxts'] = $ts;
-				$acc[ $g ]['name']  = isset( $o['name'] ) ? (string) $o['name'] : '';
-			}
+			$members[ $g ]['list'][] = array(
+				'id'     => (int) $id,
+				'ts'     => isset( $o['ts'] ) ? (int) $o['ts'] : 0,
+				'status' => isset( $o['status'] ) ? (string) $o['status'] : '',
+				'name'   => isset( $o['name'] ) ? (string) $o['name'] : '',
+			);
 		}
 
 		$groups = array();
-		foreach ( $acc as $g => $m ) {
-			$ts = $m['ts'];
-			sort( $ts );
-			$first = ! empty( $ts ) ? $ts[0] : 0;
-			$last  = ! empty( $ts ) ? end( $ts ) : 0;
-			$count = $m['n'];
-
-			// Близо във времето: има ли двойка с разлика <= прозореца.
-			$close = false;
-			for ( $i = 1, $c = count( $ts ); $i < $c; $i++ ) {
-				if ( $ts[ $i ] - $ts[ $i - 1 ] <= $win ) {
-					$close = true;
-					break;
+		foreach ( $members as $g => $m ) {
+			$list  = $m['list'];
+			$tsAll = array();
+			$proc  = 0;
+			$name  = '';
+			$maxts = -1;
+			foreach ( $list as $it ) {
+				if ( $it['ts'] ) {
+					$tsAll[] = $it['ts'];
+				}
+				if ( 'processing' === $it['status'] ) {
+					++$proc;
+				}
+				if ( $it['ts'] >= $maxts ) {
+					$maxts = $it['ts'];
+					$name  = $it['name'];
 				}
 			}
-			$dup = ( $close || $m['proc'] >= 2 );
+			sort( $tsAll );
+			$first = ! empty( $tsAll ) ? $tsAll[0] : 0;
+			$last  = ! empty( $tsAll ) ? end( $tsAll ) : 0;
+			$count = $m['n'];
+
+			// Флаг „дубликат" — за всяка поръчка поотделно: има ли ДРУГА поръчка
+			// на същия клиент в рамките на прозореца (или 2+ в обработка).
+			$any_dup = false;
+			foreach ( $list as $it ) {
+				$is_dup = ( 'processing' === $it['status'] && $proc >= 2 );
+				if ( ! $is_dup && $it['ts'] ) {
+					foreach ( $list as $other ) {
+						if ( $other['id'] === $it['id'] || ! $other['ts'] ) {
+							continue;
+						}
+						if ( abs( $it['ts'] - $other['ts'] ) <= $win ) {
+							$is_dup = true;
+							break;
+						}
+					}
+				}
+				if ( $is_dup ) {
+					$map[ (string) $it['id'] ]['dup'] = 1;
+					$any_dup                            = true;
+				}
+			}
 
 			$freq = '';
 			if ( $first && $last > $first && $count >= 2 ) {
@@ -78,23 +95,20 @@ class OLE_Duplicates {
 				$freq = __( 'same day', 'order-list-enhancer' );
 			}
 
+			$ids = array();
+			foreach ( $list as $it ) {
+				$ids[] = $it['id'];
+			}
+
 			$groups[ $g ] = array(
-				'name'   => '' !== $m['name'] ? $m['name'] : __( 'Customer', 'order-list-enhancer' ),
+				'name'   => '' !== $name ? $name : __( 'Customer', 'order-list-enhancer' ),
 				'n'      => $count,
 				'reason' => $m['reason'],
 				'first'  => $first ? wp_date( 'd.m.Y', $first ) : '',
 				'freq'   => $freq,
-				'dup'    => $dup,
-				'ids'    => $m['ids'],
+				'dup'    => $any_dup,
+				'ids'    => $ids,
 			);
-
-			if ( $dup ) {
-				foreach ( $m['ids'] as $oid ) {
-					if ( isset( $map[ (string) $oid ] ) ) {
-						$map[ (string) $oid ]['dup'] = 1;
-					}
-				}
-			}
 		}
 
 		return array(
