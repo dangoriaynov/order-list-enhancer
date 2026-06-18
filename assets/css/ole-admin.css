@@ -35,3 +35,14 @@
 /* Likely-duplicate flag (close in time or 2+ processing) */
 .ole-badge--dup { background: #d63638 !important; }
 .ole-modal__title--dup { color: #d63638; }
+
+/* Loading spinner + open/content animations */
+.ole-loading { display: flex; align-items: center; gap: 10px; padding: 22px 4px; color: #50575e; font-size: 13px; }
+.ole-spinner { width: 18px; height: 18px; border: 2px solid #dcdcde; border-top-color: #2271b1; border-radius: 50%; animation: ole-spin .7s linear infinite; flex: 0 0 auto; }
+@keyframes ole-spin { to { transform: rotate( 360deg ); } }
+.ole-modal.is-open .ole-modal__overlay { animation: ole-fade .18s ease-out; }
+.ole-modal.is-open .ole-modal__card { animation: ole-pop .2s cubic-bezier( .2, .7, .3, 1 ); }
+@keyframes ole-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ole-pop { from { opacity: 0; transform: translateY( 10px ) scale( .98 ); } to { opacity: 1; transform: none; } }
+.ole-o { animation: ole-rowin .22s ease both; }
+@keyframes ole-rowin { from { opacity: 0; transform: translateY( 4px ); } to { opacity: 1; transform: none; } }

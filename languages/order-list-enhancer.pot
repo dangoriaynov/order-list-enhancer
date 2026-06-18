@@ -172,3 +172,6 @@ msgstr ""
 
 msgid "Failed to load."
 msgstr ""
+
+msgid "duplicate %s orders"
+msgstr ""

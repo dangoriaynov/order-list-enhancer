@@ -105,7 +105,7 @@ class OLE_Plugin {
 			'i18n'     => array(
 				'badge'       => __( 'customer #%1$s · %2$s orders', 'order-list-enhancer' ),
 				'badgeTitle'  => __( "Show this customer's orders. Matches: %s", 'order-list-enhancer' ),
-				'duplicate'   => __( 'duplicate', 'order-list-enhancer' ),
+				'dupBadge'    => __( 'duplicate %s orders', 'order-list-enhancer' ),
 				'ordersCount' => __( '%s orders', 'order-list-enhancer' ),
 				'since'       => __( 'since %s', 'order-list-enhancer' ),
 				'close'       => __( 'Close', 'order-list-enhancer' ),

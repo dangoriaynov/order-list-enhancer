@@ -98,7 +98,7 @@
 			b.style.background = color;
 			b.setAttribute( 'data-ole-group', info.g );
 			b.textContent = isDup
-				? ( '⚠️ ' + ( I18N.duplicate || 'duplicate' ) + ' · ' + info.n + ' 🔍' )
+				? ( '⚠️ ' + fmt( I18N.dupBadge, [ info.n ] ) + ' 🔍' )
 				: ( '👥 ' + fmt( I18N.badge, [ info.g, info.n ] ) + ' 🔍' );
 			b.title = fmt( I18N.badgeTitle, [ info.r || '—' ] );
 			cell.appendChild( document.createElement( 'br' ) );
@@ -158,6 +158,14 @@
 		} );
 	}
 
+	function showLoading( body ) {
+		body.innerHTML = '';
+		var w  = document.createElement( 'div' ); w.className = 'ole-loading';
+		var sp = document.createElement( 'span' ); sp.className = 'ole-spinner';
+		var tx = document.createElement( 'span' ); tx.textContent = I18N.loading || 'Loading…';
+		w.appendChild( sp ); w.appendChild( tx ); body.appendChild( w );
+	}
+
 	function openModal( g ) {
 		var meta = GROUPS[ String( g ) ];
 		if ( ! meta ) { return; }
@@ -174,7 +182,7 @@
 		m.classList.add( 'is-open' );
 
 		if ( detailsCache[ g ] ) { renderOrders( body, detailsCache[ g ] ); return; }
-		body.textContent = I18N.loading || 'Loading…';
+		showLoading( body );
 
 		var fd = new FormData();
 		fd.append( 'action', 'ole_group_details' );
