@@ -125,43 +125,31 @@ class OLE_Duplicates {
 	}
 
 	private static function keys( $r, $opts ) {
+		$mode      = isset( $opts['match_mode'] ) ? $opts['match_mode'] : 'phone';
+		$use_phone = ( 'phone' === $mode || 'name_phone' === $mode );
+		$use_name  = ( 'names' === $mode || 'name_phone' === $mode );
+
 		$keys = array();
 
-		if ( OLE_Settings::is_yes( $opts, 'match_phone' ) ) {
+		if ( $use_phone ) {
 			$phone  = ! empty( $r['b_phone'] ) ? $r['b_phone'] : ( isset( $r['s_phone'] ) ? $r['s_phone'] : '' );
 			$digits = preg_replace( '/\D+/', '', (string) $phone );
 			if ( strlen( $digits ) >= 9 ) {
 				$keys[] = 'p:' . substr( $digits, -9 );
 			}
 		}
-		if ( OLE_Settings::is_yes( $opts, 'match_email' ) ) {
-			$email = strtolower( trim( (string) ( $r['b_email'] ?? '' ) ) );
-			if ( '' !== $email && false !== strpos( $email, '@' ) ) {
-				$keys[] = 'e:' . $email;
-			}
-		}
 
-		$name = trim( ( $r['b_first'] ?? '' ) . ' ' . ( $r['b_last'] ?? '' ) );
-		if ( '' === $name ) {
-			$name = trim( ( $r['s_first'] ?? '' ) . ' ' . ( $r['s_last'] ?? '' ) );
-		}
-		if ( OLE_Settings::is_yes( $opts, 'match_name' ) ) {
+		if ( $use_name ) {
+			$name = trim( ( $r['b_first'] ?? '' ) . ' ' . ( $r['b_last'] ?? '' ) );
+			if ( '' === $name ) {
+				$name = trim( ( $r['s_first'] ?? '' ) . ' ' . ( $r['s_last'] ?? '' ) );
+			}
 			$nn = self::norm( $name );
 			if ( '' !== $nn && mb_strlen( $nn ) >= 4 ) {
 				$keys[] = 'n:' . $nn;
 			}
 		}
-		if ( OLE_Settings::is_yes( $opts, 'match_address' ) ) {
-			$sname = trim( ( $r['s_first'] ?? '' ) . ' ' . ( $r['s_last'] ?? '' ) );
-			if ( '' === $sname ) {
-				$sname = $name;
-			}
-			$parts = array( $sname, $r['s_a1'] ?? '', $r['s_a2'] ?? '', $r['s_city'] ?? '', $r['s_post'] ?? '' );
-			$addr  = self::norm( implode( ' ', array_filter( $parts ) ) );
-			if ( '' !== $addr && mb_strlen( $addr ) >= 10 ) {
-				$keys[] = 'a:' . $addr;
-			}
-		}
+
 		return array_values( array_unique( $keys ) );
 	}
 

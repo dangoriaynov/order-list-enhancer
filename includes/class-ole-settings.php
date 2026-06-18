@@ -13,10 +13,7 @@ class OLE_Settings {
 	public static function defaults() {
 		return array(
 			'dup_enabled'        => 'yes',
-			'match_phone'        => 'yes',
-			'match_email'        => 'yes',
-			'match_name'         => 'yes',
-			'match_address'      => 'yes',
+			'match_mode'         => 'phone', // phone | names | name_phone
 			'scan_limit'         => 1500,
 			'dup_window_days'    => 3, // поръчки в рамките на N дни → флаг „дубликат"
 			'ship_enabled'       => 'yes', // кольорування в списку замовлень

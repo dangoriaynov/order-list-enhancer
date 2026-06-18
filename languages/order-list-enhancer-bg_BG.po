@@ -184,3 +184,18 @@ msgstr "Прозорец за дубликат (дни)"
 
 msgid "Two orders from the same customer within this many days (or 2+ in processing) are flagged as a likely duplicate."
 msgstr "Две поръчки от един и същ клиент в рамките на толкова дни (или 2+ в обработка) се маркират като вероятен дубликат."
+
+msgid "Match mode"
+msgstr "Режим на съвпадение"
+
+msgid "By phone"
+msgstr "По телефон"
+
+msgid "By name"
+msgstr "По име"
+
+msgid "By name + phone"
+msgstr "По име + телефон"
+
+msgid "How to decide two orders are from the same customer. Name + phone matches when either the phone or the name matches."
+msgstr "Как се определя, че две поръчки са от един и същ клиент. Име + телефон съвпада при съвпадение на телефона или името."
