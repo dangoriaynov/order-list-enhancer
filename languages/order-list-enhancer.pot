@@ -175,3 +175,6 @@ msgstr ""
 
 msgid "duplicate %s orders"
 msgstr ""
+
+msgid "duplicate #%1$s · %2$s orders"
+msgstr ""
