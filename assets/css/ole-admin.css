@@ -7,7 +7,7 @@
 .ole-badge--click { cursor: pointer; }
 .ole-badge--click:hover { filter: brightness(1.08); text-decoration: underline; }
 
-.ole-modal { display: none; position: fixed; inset: 0; z-index: 100000; }
+.ole-modal { display: none; position: fixed; inset: 0; z-index: 1000001; }
 .ole-modal.is-open { display: block; }
 .ole-modal__overlay { position: absolute; inset: 0; background: rgba(0,0,0,.5); }
 .ole-modal__card { position: relative; margin: 7vh auto 0; max-width: 560px; width: calc(100% - 32px); background: #fff; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,.3); max-height: 80vh; display: flex; flex-direction: column; }
