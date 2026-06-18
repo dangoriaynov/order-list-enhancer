@@ -184,3 +184,18 @@ msgstr ""
 
 msgid "Two orders from the same customer within this many days (or 2+ in processing) are flagged as a likely duplicate."
 msgstr ""
+
+msgid "Match mode"
+msgstr ""
+
+msgid "By phone"
+msgstr ""
+
+msgid "By name"
+msgstr ""
+
+msgid "By name + phone"
+msgstr ""
+
+msgid "How to decide two orders are from the same customer. Name + phone matches when either the phone or the name matches."
+msgstr ""

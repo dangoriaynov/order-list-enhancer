@@ -80,12 +80,15 @@ class OLE_Settings_Page {
 						<td><label><input type="checkbox" name="dup_enabled" <?php echo $cb( 'dup_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Outline & badge same-customer orders in the list (with details modal).', 'order-list-enhancer' ); ?></label></td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Match by', 'order-list-enhancer' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Match mode', 'order-list-enhancer' ); ?></th>
 						<td>
-							<label><input type="checkbox" name="match_phone" <?php echo $cb( 'match_phone' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'phone', 'order-list-enhancer' ); ?></label><br>
-							<label><input type="checkbox" name="match_email" <?php echo $cb( 'match_email' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'e-mail', 'order-list-enhancer' ); ?></label><br>
-							<label><input type="checkbox" name="match_name" <?php echo $cb( 'match_name' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'name', 'order-list-enhancer' ); ?></label><br>
-							<label><input type="checkbox" name="match_address" <?php echo $cb( 'match_address' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'shipping address', 'order-list-enhancer' ); ?></label>
+							<?php $mode = $o['match_mode']; ?>
+							<select name="match_mode">
+								<option value="phone" <?php selected( $mode, 'phone' ); ?>><?php esc_html_e( 'By phone', 'order-list-enhancer' ); ?></option>
+								<option value="names" <?php selected( $mode, 'names' ); ?>><?php esc_html_e( 'By name', 'order-list-enhancer' ); ?></option>
+								<option value="name_phone" <?php selected( $mode, 'name_phone' ); ?>><?php esc_html_e( 'By name + phone', 'order-list-enhancer' ); ?></option>
+							</select>
+							<p class="description"><?php esc_html_e( 'How to decide two orders are from the same customer. Name + phone matches when either the phone or the name matches.', 'order-list-enhancer' ); ?></p>
 						</td>
 					</tr>
 					<tr>
@@ -188,10 +191,7 @@ class OLE_Settings_Page {
 
 		$opts = array(
 			'dup_enabled'        => $bool( 'dup_enabled' ),
-			'match_phone'        => $bool( 'match_phone' ),
-			'match_email'        => $bool( 'match_email' ),
-			'match_name'         => $bool( 'match_name' ),
-			'match_address'      => $bool( 'match_address' ),
+			'match_mode'         => ( isset( $in['match_mode'] ) && in_array( $in['match_mode'], array( 'phone', 'names', 'name_phone' ), true ) ) ? $in['match_mode'] : 'phone',
 			'scan_limit'         => isset( $in['scan_limit'] ) ? max( 100, min( 5000, (int) $in['scan_limit'] ) ) : 1500,
 			'dup_window_days'    => isset( $in['dup_window_days'] ) ? max( 1, min( 60, (int) $in['dup_window_days'] ) ) : 3,
 			'ship_enabled'       => $bool( 'ship_enabled' ),
