@@ -199,22 +199,23 @@
 	}
 	function openModal( g ) { openModalMeta( GROUPS[ String( g ) ] ); }
 
-	// Order edit page: badge that opens the same customer-orders modal.
+	// Order edit page: badge in the order title that opens the customer-orders modal.
 	function addEditGroupBadge() {
 		var meta = D.editGroup;
 		if ( ! meta ) { return; }
-		var addr = document.querySelector( '#order_data .address' );
-		if ( ! addr || addr.getAttribute( 'data-ole-eg' ) ) { return; }
-		addr.setAttribute( 'data-ole-eg', '1' );
+		var host = document.querySelector( '.woocommerce-order-data__heading' ) || document.querySelector( '#order_data .address' );
+		if ( ! host || host.getAttribute( 'data-ole-eg' ) ) { return; }
+		host.setAttribute( 'data-ole-eg', '1' );
 		var b = document.createElement( 'span' );
 		b.className = 'ole-badge ole-badge--click' + ( meta.dup ? ' ole-badge--dup' : '' );
 		b.style.background = meta.dup ? '#d63638' : ( PAL[0] || '#2271b1' );
 		b.style.display = 'inline-block';
-		b.style.marginTop = '6px';
+		b.style.marginLeft = '10px';
+		b.style.verticalAlign = 'middle';
+		b.style.textShadow = 'none';
 		b.setAttribute( 'data-ole-editgroup', '1' );
 		b.textContent = ( meta.dup ? '⚠️ ' : '👥 ' ) + fmt( I18N.ordersCount, [ meta.n ] ) + ' 🔍';
-		addr.appendChild( document.createElement( 'br' ) );
-		addr.appendChild( b );
+		host.appendChild( b );
 	}
 
 	// Capture phase + stopPropagation: the WC orders row is itself clickable
