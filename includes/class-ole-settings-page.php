@@ -15,6 +15,17 @@ class OLE_Settings_Page {
 		add_action( 'admin_menu', array( $this, 'menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'assets' ) );
 		add_action( 'wp_ajax_ole_save_settings', array( $this, 'ajax_save' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( OLE_FILE ), array( $this, 'action_links' ) );
+	}
+
+	/**
+	 * Бърза връзка „Настройки" на екрана с плъгините.
+	 */
+	public function action_links( $links ) {
+		$url      = admin_url( 'admin.php?page=' . self::SLUG );
+		$settings = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Settings', 'order-list-enhancer' ) . '</a>';
+		array_unshift( $links, $settings );
+		return $links;
 	}
 
 	public function menu() {

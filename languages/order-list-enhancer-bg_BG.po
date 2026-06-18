@@ -244,3 +244,6 @@ msgstr "Код на държавата по подразбиране"
 
 msgid "Digits only, e.g. 359. Added to numbers that have no country code."
 msgstr "Само цифри, напр. 359. Добавя се към номера без код на държавата."
+
+msgid "Settings"
+msgstr "Настройки"
