@@ -11,7 +11,92 @@ class OLE_Duplicates {
 	public static function build( $opts ) {
 		$orders = self::fetch( $opts );
 		$map    = self::group( $orders );
-		$groups = self::group_details( $map );
+
+		// Прозорец за „вероятен дубликат" (поръчки близо във времето), в дни.
+		$win_days = (int) apply_filters( 'ole_duplicate_window_days', 4 );
+		$win      = $win_days * DAY_IN_SECONDS;
+
+		// Лека метадата на групите (без зареждане на поръчки) — детайлите се
+		// дозареждат по AJAX при клик върху баджа. Тук смятаме и: име, първа
+		// поръчка, честота и флаг „дубликат".
+		$acc = array(); // g => ['ts'=>[], 'proc'=>int, 'name'=>str, 'maxts'=>int]
+		foreach ( $map as $id => $info ) {
+			$g = (int) $info['g'];
+			$o = isset( $orders[ $id ] ) ? $orders[ $id ] : array();
+			if ( ! isset( $acc[ $g ] ) ) {
+				$acc[ $g ] = array(
+					'reason' => (string) $info['r'],
+					'n'      => (int) $info['n'],
+					'ids'    => array(),
+					'ts'     => array(),
+					'proc'   => 0,
+					'name'   => '',
+					'maxts'  => -1,
+				);
+			}
+			$acc[ $g ]['ids'][] = (int) $id;
+			$ts = isset( $o['ts'] ) ? (int) $o['ts'] : 0;
+			if ( $ts ) {
+				$acc[ $g ]['ts'][] = $ts;
+			}
+			if ( isset( $o['status'] ) && 'processing' === $o['status'] ) {
+				++$acc[ $g ]['proc'];
+			}
+			if ( $ts >= $acc[ $g ]['maxts'] ) {
+				$acc[ $g ]['maxts'] = $ts;
+				$acc[ $g ]['name']  = isset( $o['name'] ) ? (string) $o['name'] : '';
+			}
+		}
+
+		$groups = array();
+		foreach ( $acc as $g => $m ) {
+			$ts = $m['ts'];
+			sort( $ts );
+			$first = ! empty( $ts ) ? $ts[0] : 0;
+			$last  = ! empty( $ts ) ? end( $ts ) : 0;
+			$count = $m['n'];
+
+			// Близо във времето: има ли двойка с разлика <= прозореца.
+			$close = false;
+			for ( $i = 1, $c = count( $ts ); $i < $c; $i++ ) {
+				if ( $ts[ $i ] - $ts[ $i - 1 ] <= $win ) {
+					$close = true;
+					break;
+				}
+			}
+			$dup = ( $close || $m['proc'] >= 2 );
+
+			$freq = '';
+			if ( $first && $last > $first && $count >= 2 ) {
+				$interval = (int) round( ( $last - $first ) / DAY_IN_SECONDS / ( $count - 1 ) );
+				if ( $interval < 1 ) {
+					$interval = 1;
+				}
+				/* translators: %d: average number of days between orders. */
+				$freq = sprintf( __( '~ every %d days', 'order-list-enhancer' ), $interval );
+			} elseif ( $first && $last <= $first ) {
+				$freq = __( 'same day', 'order-list-enhancer' );
+			}
+
+			$groups[ $g ] = array(
+				'name'   => '' !== $m['name'] ? $m['name'] : __( 'Customer', 'order-list-enhancer' ),
+				'n'      => $count,
+				'reason' => $m['reason'],
+				'first'  => $first ? wp_date( 'd.m.Y', $first ) : '',
+				'freq'   => $freq,
+				'dup'    => $dup,
+				'ids'    => $m['ids'],
+			);
+
+			if ( $dup ) {
+				foreach ( $m['ids'] as $oid ) {
+					if ( isset( $map[ (string) $oid ] ) ) {
+						$map[ (string) $oid ]['dup'] = 1;
+					}
+				}
+			}
+		}
+
 		return array(
 			'map'    => $map,
 			'groups' => $groups,
@@ -84,7 +169,7 @@ class OLE_Duplicates {
 			$at = $wpdb->prefix . 'wc_order_addresses';
 			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery
 			$sql  = $wpdb->prepare(
-				"SELECT o.id,
+				"SELECT o.id, o.date_created_gmt, o.status,
 				        ba.first_name b_first, ba.last_name b_last, ba.phone b_phone, ba.email b_email,
 				        sa.first_name s_first, sa.last_name s_last, sa.phone s_phone,
 				        sa.address_1 s_a1, sa.address_2 s_a2, sa.city s_city, sa.postcode s_post
@@ -111,18 +196,20 @@ class OLE_Duplicates {
 			$objs = function_exists( 'wc_get_orders' ) ? wc_get_orders( $q ) : array();
 			foreach ( $objs as $o ) {
 				$rows[] = array(
-					'id'      => $o->get_id(),
-					'b_first' => $o->get_billing_first_name(),
-					'b_last'  => $o->get_billing_last_name(),
-					'b_phone' => $o->get_billing_phone(),
-					'b_email' => $o->get_billing_email(),
-					's_first' => $o->get_shipping_first_name(),
-					's_last'  => $o->get_shipping_last_name(),
-					's_phone' => '',
-					's_a1'    => $o->get_shipping_address_1(),
-					's_a2'    => $o->get_shipping_address_2(),
-					's_city'  => $o->get_shipping_city(),
-					's_post'  => $o->get_shipping_postcode(),
+					'id'              => $o->get_id(),
+					'date_created_gmt' => ( $o->get_date_created() ? gmdate( 'Y-m-d H:i:s', $o->get_date_created()->getTimestamp() ) : '' ),
+					'status'          => $o->get_status(),
+					'b_first'         => $o->get_billing_first_name(),
+					'b_last'          => $o->get_billing_last_name(),
+					'b_phone'         => $o->get_billing_phone(),
+					'b_email'         => $o->get_billing_email(),
+					's_first'         => $o->get_shipping_first_name(),
+					's_last'          => $o->get_shipping_last_name(),
+					's_phone'         => '',
+					's_a1'            => $o->get_shipping_address_1(),
+					's_a2'            => $o->get_shipping_address_2(),
+					's_city'          => $o->get_shipping_city(),
+					's_post'          => $o->get_shipping_postcode(),
 				);
 			}
 		}
@@ -137,7 +224,19 @@ class OLE_Duplicates {
 			if ( empty( $keys ) ) {
 				continue;
 			}
-			$orders[ $id ] = array( 'keys' => $keys );
+			$name = trim( ( $r['b_first'] ?? '' ) . ' ' . ( $r['b_last'] ?? '' ) );
+			if ( '' === $name ) {
+				$name = trim( ( $r['s_first'] ?? '' ) . ' ' . ( $r['s_last'] ?? '' ) );
+			}
+			$ts     = ! empty( $r['date_created_gmt'] ) ? (int) strtotime( $r['date_created_gmt'] . ' UTC' ) : 0;
+			$status = isset( $r['status'] ) ? preg_replace( '/^wc-/', '', (string) $r['status'] ) : '';
+
+			$orders[ $id ] = array(
+				'keys'   => $keys,
+				'name'   => $name,
+				'ts'     => $ts,
+				'status' => $status,
+			);
 		}
 		return $orders;
 	}
@@ -240,61 +339,54 @@ class OLE_Duplicates {
 		return $url ? $url : admin_url( 'post.php?post=' . (int) $id . '&action=edit' );
 	}
 
-	private static function group_details( $map ) {
-		if ( empty( $map ) || ! function_exists( 'wc_get_order' ) ) {
+	/**
+	 * Детайли за конкретни поръчки (за AJAX дозареждане на модала).
+	 * Зарежда само подадените ID-та, подредени по дата (най-новата отгоре).
+	 * Артикулите се връщат като списък { name, qty } за таблица.
+	 */
+	public static function details_for_ids( $ids ) {
+		if ( empty( $ids ) || ! function_exists( 'wc_get_order' ) ) {
 			return array();
 		}
-		$groups = array();
-		foreach ( $map as $id => $info ) {
-			$g = (int) $info['g'];
-			if ( ! isset( $groups[ $g ] ) ) {
-				$groups[ $g ] = array(
-					'reason' => (string) $info['r'],
-					'ids'    => array(),
+		$hpos   = self::hpos();
+		$orders = array();
+		foreach ( $ids as $oid ) {
+			$oid = (int) $oid;
+			if ( ! $oid ) {
+				continue;
+			}
+			$o = wc_get_order( $oid );
+			if ( ! $o ) {
+				continue;
+			}
+			$items = array();
+			foreach ( $o->get_items() as $item ) {
+				$items[] = array(
+					'name' => $item->get_name(),
+					'qty'  => $item->get_quantity(),
 				);
 			}
-			$groups[ $g ]['ids'][] = (int) $id;
-		}
-		$hpos = self::hpos();
-
-		$out = array();
-		foreach ( $groups as $g => $grp ) {
-			$orders = array();
-			foreach ( $grp['ids'] as $oid ) {
-				$o = wc_get_order( $oid );
-				if ( ! $o ) {
-					continue;
-				}
-				$items = array();
-				foreach ( $o->get_items() as $item ) {
-					$items[] = $item->get_name() . ' ×' . $item->get_quantity();
-				}
-				$date     = $o->get_date_created();
-				$orders[] = array(
-					'num'    => (string) $o->get_order_number(),
-					'url'    => self::order_edit_url( $oid, $hpos ),
-					'date'   => $date ? $date->date_i18n( 'd.m.Y' ) : '',
-					'ts'     => $date ? $date->getTimestamp() : 0,
-					'items'  => implode( ', ', $items ),
-					'total'  => html_entity_decode( wp_strip_all_tags( $o->get_formatted_order_total() ), ENT_QUOTES, 'UTF-8' ),
-					'status' => wc_get_order_status_name( $o->get_status() ),
-				);
-			}
-			usort(
-				$orders,
-				function ( $a, $b ) {
-					return $b['ts'] <=> $a['ts'];
-				}
-			);
-			foreach ( $orders as &$ord ) {
-				unset( $ord['ts'] );
-			}
-			unset( $ord );
-			$out[ $g ] = array(
-				'reason' => $grp['reason'],
-				'orders' => $orders,
+			$date     = $o->get_date_created();
+			$orders[] = array(
+				'num'    => (string) $o->get_order_number(),
+				'url'    => self::order_edit_url( $oid, $hpos ),
+				'date'   => $date ? $date->date_i18n( 'd.m.Y' ) : '',
+				'ts'     => $date ? $date->getTimestamp() : 0,
+				'items'  => $items,
+				'total'  => html_entity_decode( wp_strip_all_tags( $o->get_formatted_order_total() ), ENT_QUOTES, 'UTF-8' ),
+				'status' => wc_get_order_status_name( $o->get_status() ),
 			);
 		}
-		return $out;
+		usort(
+			$orders,
+			function ( $a, $b ) {
+				return $b['ts'] <=> $a['ts'];
+			}
+		);
+		foreach ( $orders as &$ord ) {
+			unset( $ord['ts'] );
+		}
+		unset( $ord );
+		return $orders;
 	}
 }

@@ -148,3 +148,27 @@ msgstr ""
 
 msgid "Save failed."
 msgstr ""
+
+msgid "duplicate"
+msgstr ""
+
+msgid "%s orders"
+msgstr ""
+
+msgid "since %s"
+msgstr ""
+
+msgid "~ every %d days"
+msgstr ""
+
+msgid "same day"
+msgstr ""
+
+msgid "Customer"
+msgstr ""
+
+msgid "Loading…"
+msgstr ""
+
+msgid "Failed to load."
+msgstr ""

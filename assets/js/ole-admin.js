@@ -7,6 +7,8 @@
 	var FLAGS  = D.flags || {};
 	var I18N   = D.i18n || {};
 	var CTX    = D.context || 'list';
+	var AJAX   = D.ajax || {};
+	var detailsCache = {};
 
 	function fmt( tmpl, args ) {
 		var i = 0;
@@ -82,18 +84,22 @@
 			var info = MAP[ String( cb.value ) ];
 			if ( ! info ) { return; }
 			tr.setAttribute( 'data-ole-dup', '1' );
-			var color = PAL[ ( info.g - 1 ) % PAL.length ];
+			var isDup = !! info.dup;
+			var color = isDup ? '#d63638' : PAL[ ( info.g - 1 ) % PAL.length ];
 			tr.classList.add( 'ole-dup' );
+			if ( isDup ) { tr.classList.add( 'ole-dup--flag' ); }
 			tr.style.setProperty( '--ole-bd', color );
-			tr.style.setProperty( '--ole-bg', rgba( color, 0.09 ) );
+			tr.style.setProperty( '--ole-bg', rgba( color, isDup ? 0.14 : 0.09 ) );
 
 			var cell = tr.querySelector( 'td.column-order_number, td.order_number' ) || tr.querySelectorAll( 'td' )[0];
 			if ( ! cell ) { return; }
 			var b = document.createElement( 'span' );
-			b.className = 'ole-badge ole-badge--click';
+			b.className = 'ole-badge ole-badge--click' + ( isDup ? ' ole-badge--dup' : '' );
 			b.style.background = color;
 			b.setAttribute( 'data-ole-group', info.g );
-			b.textContent = '👥 ' + fmt( I18N.badge, [ info.g, info.n ] ) + ' 🔍';
+			b.textContent = isDup
+				? ( '⚠️ ' + ( I18N.duplicate || 'duplicate' ) + ' · ' + info.n + ' 🔍' )
+				: ( '👥 ' + fmt( I18N.badge, [ info.g, info.n ] ) + ' 🔍' );
 			b.title = fmt( I18N.badgeTitle, [ info.r || '—' ] );
 			cell.appendChild( document.createElement( 'br' ) );
 			cell.appendChild( b );
@@ -121,43 +127,79 @@
 
 	function closeModal() { if ( modalEl ) { modalEl.classList.remove( 'is-open' ); } }
 
-	function openModal( g ) {
-		var data = GROUPS[ String( g ) ];
-		if ( ! data ) { return; }
-		var m = ensureModal();
-		var reason = data.reason ? ' (' + data.reason + ')' : '';
-		m.querySelector( '.ole-modal__title' ).textContent = fmt( I18N.modalTitle, [ g, data.orders.length, reason ] );
-		var body = m.querySelector( '.ole-modal__body' );
+	function renderOrders( body, orders ) {
 		body.innerHTML = '';
-		data.orders.forEach( function ( o ) {
+		if ( ! orders || ! orders.length ) { body.textContent = I18N.noItems || '—'; return; }
+		orders.forEach( function ( o ) {
 			var row = document.createElement( 'div' ); row.className = 'ole-o';
 			var head = document.createElement( 'div' ); head.className = 'ole-o__head';
 
 			var a = document.createElement( 'a' );
 			a.className = 'ole-o__num'; a.href = o.url; a.target = '_blank'; a.rel = 'noopener';
 			a.textContent = '#' + o.num;
-
 			var date = document.createElement( 'span' ); date.className = 'ole-o__date'; date.textContent = o.date;
 			var st = document.createElement( 'span' ); st.className = 'ole-o__status'; st.textContent = o.status;
 			var total = document.createElement( 'span' ); total.className = 'ole-o__total'; total.textContent = o.total;
-
 			head.appendChild( a ); head.appendChild( date ); head.appendChild( st ); head.appendChild( total );
+			row.appendChild( head );
 
-			var items = document.createElement( 'div' ); items.className = 'ole-o__items';
-			items.textContent = o.items || ( I18N.noItems || '—' );
-
-			row.appendChild( head ); row.appendChild( items );
+			var items = o.items || [];
+			if ( items.length ) {
+				var tbl = document.createElement( 'table' ); tbl.className = 'ole-items';
+				items.forEach( function ( it ) {
+					var tr = document.createElement( 'tr' );
+					var tdn = document.createElement( 'td' ); tdn.className = 'ole-items__name'; tdn.textContent = it.name;
+					var tdq = document.createElement( 'td' ); tdq.className = 'ole-items__qty'; tdq.textContent = '×' + it.qty;
+					tr.appendChild( tdn ); tr.appendChild( tdq ); tbl.appendChild( tr );
+				} );
+				row.appendChild( tbl );
+			}
 			body.appendChild( row );
 		} );
-		m.classList.add( 'is-open' );
 	}
 
+	function openModal( g ) {
+		var meta = GROUPS[ String( g ) ];
+		if ( ! meta ) { return; }
+		var m = ensureModal();
+
+		var parts = [ meta.name, fmt( I18N.ordersCount, [ meta.n ] ) ];
+		if ( meta.first ) { parts.push( fmt( I18N.since, [ meta.first ] ) ); }
+		if ( meta.freq ) { parts.push( meta.freq ); }
+		var titleEl = m.querySelector( '.ole-modal__title' );
+		titleEl.textContent = ( meta.dup ? '⚠️ ' : '' ) + parts.join( ' · ' );
+		titleEl.className = 'ole-modal__title' + ( meta.dup ? ' ole-modal__title--dup' : '' );
+
+		var body = m.querySelector( '.ole-modal__body' );
+		m.classList.add( 'is-open' );
+
+		if ( detailsCache[ g ] ) { renderOrders( body, detailsCache[ g ] ); return; }
+		body.textContent = I18N.loading || 'Loading…';
+
+		var fd = new FormData();
+		fd.append( 'action', 'ole_group_details' );
+		fd.append( 'nonce', AJAX.nonce || '' );
+		fd.append( 'ids', ( meta.ids || [] ).join( ',' ) );
+		fetch( AJAX.url, { method: 'POST', body: fd, credentials: 'same-origin' } )
+			.then( function ( r ) { return r.json(); } )
+			.then( function ( res ) {
+				if ( res && res.success ) { detailsCache[ g ] = res.data; renderOrders( body, res.data ); }
+				else { body.textContent = I18N.error || 'Failed to load.'; }
+			} )
+			.catch( function () { body.textContent = I18N.error || 'Failed to load.'; } );
+	}
+
+	// Capture phase + stopPropagation: the WC orders row is itself clickable
+	// (navigates to the order), so we must intercept the badge click before it
+	// reaches the row handler.
 	document.addEventListener( 'click', function ( e ) {
 		var badge = e.target && e.target.closest ? e.target.closest( '.ole-badge--click' ) : null;
 		if ( ! badge ) { return; }
 		e.preventDefault();
+		e.stopPropagation();
+		if ( e.stopImmediatePropagation ) { e.stopImmediatePropagation(); }
 		openModal( badge.getAttribute( 'data-ole-group' ) );
-	} );
+	}, true );
 	document.addEventListener( 'keydown', function ( e ) { if ( 'Escape' === e.key ) { closeModal(); } } );
 
 	function run() {
