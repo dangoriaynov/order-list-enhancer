@@ -21,6 +21,21 @@ class OLE_Plugin {
 		new OLE_Settings_Page();
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( 'OLE_Order_Total', 'render' ) );
+		add_action( 'wp_ajax_ole_group_details', array( $this, 'ajax_group_details' ) );
+	}
+
+	/**
+	 * AJAX: връща детайлите на поръчките от една група (по подадени ID-та).
+	 */
+	public function ajax_group_details() {
+		check_ajax_referer( 'ole_group_details', 'nonce' );
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
+		}
+		$raw = isset( $_POST['ids'] ) ? sanitize_text_field( wp_unslash( $_POST['ids'] ) ) : '';
+		$ids = array_filter( array_map( 'intval', explode( ',', $raw ) ) );
+		$ids = array_slice( $ids, 0, 200 );
+		wp_send_json_success( OLE_Duplicates::details_for_ids( $ids ) );
 	}
 
 	/**
@@ -83,13 +98,21 @@ class OLE_Plugin {
 				),
 			),
 			'palette'  => array( '#d63638', '#b26a00', '#7a4ce0', '#1a7a3c', '#0a6b9c', '#c2185b', '#00796b', '#5d4037' ),
+			'ajax'     => array(
+				'url'   => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'ole_group_details' ),
+			),
 			'i18n'     => array(
-				'badge'      => __( 'customer #%1$s · %2$s orders', 'order-list-enhancer' ),
-				'badgeTitle' => __( "Show this customer's orders. Matches: %s", 'order-list-enhancer' ),
-				'modalTitle' => __( 'Customer #%1$s · %2$s orders%3$s', 'order-list-enhancer' ),
-				'close'      => __( 'Close', 'order-list-enhancer' ),
-				'noItems'    => __( '—', 'order-list-enhancer' ),
-				'shipTitle'  => __( 'Delivery: %s', 'order-list-enhancer' ),
+				'badge'       => __( 'customer #%1$s · %2$s orders', 'order-list-enhancer' ),
+				'badgeTitle'  => __( "Show this customer's orders. Matches: %s", 'order-list-enhancer' ),
+				'duplicate'   => __( 'duplicate', 'order-list-enhancer' ),
+				'ordersCount' => __( '%s orders', 'order-list-enhancer' ),
+				'since'       => __( 'since %s', 'order-list-enhancer' ),
+				'close'       => __( 'Close', 'order-list-enhancer' ),
+				'noItems'     => __( '—', 'order-list-enhancer' ),
+				'shipTitle'   => __( 'Delivery: %s', 'order-list-enhancer' ),
+				'loading'     => __( 'Loading…', 'order-list-enhancer' ),
+				'error'       => __( 'Failed to load.', 'order-list-enhancer' ),
 			),
 		);
 

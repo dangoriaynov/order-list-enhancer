@@ -24,3 +24,14 @@
 .ole-o__status { font-size: 11px; background: #f0f0f1; color: #3c434a; border-radius: 9px; padding: 1px 8px; }
 .ole-o__total { margin-left: auto; font-weight: 600; white-space: nowrap; }
 .ole-o__items { margin-top: 3px; color: #3c434a; font-size: 12px; line-height: 1.5; }
+
+/* Items table inside the modal */
+.ole-items { width: 100%; border-collapse: collapse; margin-top: 6px; }
+.ole-items td { padding: 3px 0; font-size: 12px; color: #3c434a; border-bottom: 1px solid #f0f0f1; vertical-align: top; }
+.ole-items tr:last-child td { border-bottom: 0; }
+.ole-items__name { padding-right: 12px; }
+.ole-items__qty { text-align: right; white-space: nowrap; font-weight: 600; color: #1d2327; }
+
+/* Likely-duplicate flag (close in time or 2+ processing) */
+.ole-badge--dup { background: #d63638 !important; }
+.ole-modal__title--dup { color: #d63638; }

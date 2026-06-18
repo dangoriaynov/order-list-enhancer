@@ -148,3 +148,27 @@ msgstr "Запазено."
 
 msgid "Save failed."
 msgstr "Неуспешно запазване."
+
+msgid "duplicate"
+msgstr "дубликат"
+
+msgid "%s orders"
+msgstr "%s поръчки"
+
+msgid "since %s"
+msgstr "от %s"
+
+msgid "~ every %d days"
+msgstr "средно на %d дни"
+
+msgid "same day"
+msgstr "същия ден"
+
+msgid "Customer"
+msgstr "Клиент"
+
+msgid "Loading…"
+msgstr "Зареждане…"
+
+msgid "Failed to load."
+msgstr "Грешка при зареждане."
