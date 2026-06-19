@@ -89,8 +89,8 @@ msgstr "име"
 msgid "address"
 msgstr "адрес"
 
-msgid "customer #%1$s · %2$s orders"
-msgstr "клиент #%1$s · %2$s поръчки"
+msgid "customer · %s orders"
+msgstr "клиент · %s поръчки"
 
 msgid "Show this customer's orders. Matches: %s"
 msgstr "Покажи поръчките на този клиент. Съвпада: %s"
@@ -176,8 +176,8 @@ msgstr "Грешка при зареждане."
 msgid "duplicate %s orders"
 msgstr "дубликат %s поръчки"
 
-msgid "duplicate #%1$s · %2$s orders"
-msgstr "дубликат #%1$s · %2$s поръчки"
+msgid "duplicate · %s orders"
+msgstr "дубликат · %s поръчки"
 
 msgid "Duplicate window (days)"
 msgstr "Прозорец за дубликат (дни)"

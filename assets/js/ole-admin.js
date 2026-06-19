@@ -99,8 +99,8 @@
 			b.style.background = color;
 			b.setAttribute( 'data-ole-group', info.g );
 			b.textContent = isDup
-				? ( '⚠️ ' + fmt( I18N.dupBadge, [ info.g, info.n ] ) + ' 🔍' )
-				: ( '👥 ' + fmt( I18N.badge, [ info.g, info.n ] ) + ' 🔍' );
+				? ( '⚠️ ' + fmt( I18N.dupBadge, [ info.n ] ) + ' 🔍' )
+				: ( '👥 ' + fmt( I18N.badge, [ info.n ] ) + ' 🔍' );
 			b.title = fmt( I18N.badgeTitle, [ info.r || '—' ] );
 			cell.appendChild( document.createElement( 'br' ) );
 			cell.appendChild( b );
