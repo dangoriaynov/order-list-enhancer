@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.8
+Stable tag: 1.0.13
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,13 @@ No. It only reads orders in your admin and renders the UI locally.
 3. The order total shown next to the billing address on the edit screen.
 
 == Changelog ==
+
+= 1.0.13 =
+* Customer popup also opens from inside an order (badge in the order title).
+* Visual color picker for all color fields; centered rule-table headers.
+* Match mode (phone / name / name + phone); configurable duplicate window and total decimal separator.
+* Display-only phone normalization; copy-to-clipboard buttons for name, phone and total.
+* Settings link on the Plugins screen; passes Plugin Check with no errors/warnings.
 
 = 1.0.8 =
 * Repeat-customer popup is now also available from inside an order (edit screen).
