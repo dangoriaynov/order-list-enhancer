@@ -89,7 +89,7 @@ msgstr ""
 msgid "address"
 msgstr ""
 
-msgid "customer #%1$s · %2$s orders"
+msgid "customer · %s orders"
 msgstr ""
 
 msgid "Show this customer's orders. Matches: %s"
@@ -176,7 +176,7 @@ msgstr ""
 msgid "duplicate %s orders"
 msgstr ""
 
-msgid "duplicate #%1$s · %2$s orders"
+msgid "duplicate · %s orders"
 msgstr ""
 
 msgid "Duplicate window (days)"

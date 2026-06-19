@@ -137,12 +137,12 @@ class OLE_Plugin {
 				'nonce' => wp_create_nonce( 'ole_group_details' ),
 			),
 			'i18n'     => array(
-				/* translators: 1: customer group number, 2: number of orders. */
-				'badge'       => __( 'customer #%1$s · %2$s orders', 'order-list-enhancer' ),
+				/* translators: %s: number of orders. */
+				'badge'       => __( 'customer · %s orders', 'order-list-enhancer' ),
 				/* translators: %s: matching criteria (phone, name, etc.). */
 				'badgeTitle'  => __( "Show this customer's orders. Matches: %s", 'order-list-enhancer' ),
-				/* translators: 1: customer group number, 2: number of orders. */
-				'dupBadge'    => __( 'duplicate #%1$s · %2$s orders', 'order-list-enhancer' ),
+				/* translators: %s: number of orders. */
+				'dupBadge'    => __( 'duplicate · %s orders', 'order-list-enhancer' ),
 				/* translators: %s: number of orders. */
 				'ordersCount' => __( '%s orders', 'order-list-enhancer' ),
 				/* translators: %s: date of the first order. */
