@@ -113,6 +113,10 @@ class OLE_Plugin {
 		$data = array(
 			'context'    => $context,
 			'decimalSep' => ( ',' === $opts['total_decimal_sep'] || '.' === $opts['total_decimal_sep'] ) ? $opts['total_decimal_sep'] : ',',
+			'phone'      => array(
+				'on' => OLE_Settings::is_yes( $opts, 'normalize_phone' ),
+				'cc' => preg_replace( '/\D+/', '', (string) $opts['phone_cc'] ),
+			),
 			'flags'    => array(
 				'duplicates' => ( $dup_on && 'list' === $context ),
 				'shipping'   => $ship_active,
