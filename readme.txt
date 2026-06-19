@@ -12,18 +12,19 @@ Spot repeat customers, flag likely duplicates, color the shipping column and sho
 
 == Description ==
 
-Order List Enhancer improves the WooCommerce admin order screens:
+Order List Enhancer adds the order insights you actually need to the WooCommerce admin — right where you manage orders, without opening each one.
 
-* **Repeat-customer highlighting.** Orders from the same customer (matched by phone, name, or both) are outlined and badged in the orders list, across pagination and all order statuses, so returning customers are recognised even when a previous order is still pending. Click the badge to open a modal with that customer's orders: number (links to the order), date, items, total and status, plus a summary (first order, frequency). The same popup is available from inside an order.
-* **Likely-duplicate flag.** Orders placed close together (configurable window) or several in processing get a clear red "duplicate" flag.
-* **Shipping coloring.** Color the "Ship to" cell in the orders list and the address block on the order edit screen, by configurable keyword rules (e.g. courier or pickup type).
-* **Order total on the edit page.** Optionally show the order total next to the billing address, with a configurable decimal separator.
-* **Copy buttons.** One-click copy of the customer name, phone and total on the order edit screen.
-* **Phone normalization (display only).** Tidy phone numbers for display (leading 00 → +, add the country code when missing) without ever changing the database.
+**Spot returning customers and accidental duplicates.**
+As you browse the orders list, orders that belong to the same customer (matched by phone, by name, or by both) are outlined in a shared color and marked with a badge. Matching looks across every order status, so a repeat customer is recognised even if their previous order is still processing or was never completed. Click the badge — on the list or from inside an order — to open a popup with that customer's history: each order links to itself and shows its date, items, total and status, plus a quick summary (first order date and how often they buy). Orders placed within a few days of each other, or several still in processing, are flagged in red as likely duplicates, so you can catch double orders before you ship them.
 
-Every feature has its own toggle on the settings page (WooCommerce → Order List Enhancer), which saves via AJAX without reloading.
+**Color your delivery column.**
+Define simple "keyword → color" rules (for example your couriers, or pickup vs. delivery to address) and the "Ship to" cell in the list — and the address block on the order screen — is colored automatically, so you can scan deliveries at a glance.
 
-Everything runs in the admin only and is shown to users who can edit orders. No external services, no tracking. Compatible with WooCommerce HPOS (High-Performance Order Storage) and sequential order numbers.
+**Work faster inside an order.**
+Show the order total next to the billing address, copy the customer's name, phone or total to the clipboard with one click, and tidy phone numbers for display (leading 00 → +, add the country code when it is missing) — all without ever changing what is stored in the database.
+
+**Built to fit in.**
+Every feature has its own on/off switch on a single settings page that saves instantly, with no page reload, a color picker for every color, and a Settings link right on the Plugins screen. Everything runs in the admin only, for users who can edit orders — no external services and no tracking. Compatible with WooCommerce HPOS (High-Performance Order Storage) and sequential order numbers, and fully translatable (English and Bulgarian included).
 
 == Installation ==
 
@@ -44,9 +45,10 @@ No. It only reads orders in your admin and renders the UI locally.
 
 == Screenshots ==
 
-1. Repeat-customer orders outlined with a badge in the orders list.
-2. The details modal with order numbers, dates, items, totals and statuses.
-3. The order total shown next to the billing address on the edit screen.
+1. Repeat customers and likely duplicates highlighted right in the orders list.
+2. The customer popup — every order with date, items, total and status, plus a summary.
+3. The order screen: colored delivery, order total and one-click copy buttons.
+4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
 
