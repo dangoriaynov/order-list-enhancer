@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3a72e8"/>
+      <stop offset="1" stop-color="#7a4ce0"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#bg)"/>
+
+  <!-- orders list rows; middle one highlighted -->
+  <rect x="50" y="72" width="120" height="24" rx="7" fill="#ffffff" opacity="0.92"/>
+  <rect x="50" y="116" width="120" height="24" rx="7" fill="#ffd166"/>
+  <rect x="50" y="160" width="120" height="24" rx="7" fill="#ffffff" opacity="0.92"/>
+
+  <!-- people badge over the highlighted row -->
+  <circle cx="190" cy="128" r="32" fill="#e8493f" stroke="#ffffff" stroke-width="6"/>
+  <g fill="#ffffff">
+    <circle cx="182" cy="121" r="7"/>
+    <circle cx="198" cy="121" r="7"/>
+    <path d="M170 144 a12 12 0 0 1 24 0 z"/>
+    <path d="M186 144 a12 12 0 0 1 24 0 z"/>
+  </g>
+</svg>
