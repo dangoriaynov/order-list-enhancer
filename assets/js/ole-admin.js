@@ -317,8 +317,46 @@
 		}
 	}
 
+	// Display-only phone normalization (the WC meta box renders the raw phone via
+	// the 'edit' context, bypassing the server view filter — so we tidy the text here).
+	function normalizePhone( raw, cc ) {
+		raw = String( raw == null ? '' : raw );
+		var s = raw.trim();
+		if ( ! s ) { return raw; }
+		cc = String( cc || '' ).replace( /\D+/g, '' );
+		if ( 0 === s.indexOf( '00' ) ) { s = '+' + s.slice( 2 ); }
+		if ( 0 === s.indexOf( '+0' ) ) { s = s.slice( 2 ); }
+		var result;
+		if ( 0 === s.indexOf( '+' ) ) {
+			result = '+' + s.slice( 1 ).replace( /\D+/g, '' );
+		} else {
+			var d = s.replace( /\D+/g, '' ).replace( /^0+/, '' );
+			if ( cc && 0 === d.indexOf( cc ) ) { result = '+' + d; }
+			else if ( cc ) { result = '+' + cc + d; }
+			else { result = '+' + d; }
+		}
+		var dc = result.replace( /\D+/g, '' );
+		if ( dc.length < 8 || dc.length > 15 ) { return raw; }
+		return result;
+	}
+	function normalizePhones() {
+		var ph = D.phone || {};
+		if ( ! ph.on ) { return; }
+		var links = document.querySelectorAll( '#order_data a[href^="tel:"]' );
+		Array.prototype.forEach.call( links, function ( a ) {
+			if ( a.getAttribute( 'data-ole-ph' ) ) { return; }
+			a.setAttribute( 'data-ole-ph', '1' );
+			var cur  = ( a.textContent || '' ).trim();
+			var norm = normalizePhone( cur, ph.cc );
+			if ( norm && norm !== cur ) {
+				a.textContent = norm;
+				a.href = 'tel:' + norm.replace( /[^\d+]/g, '' );
+			}
+		} );
+	}
+
 	function run() {
-		if ( 'edit' === CTX ) { colorEditAddress(); addCopyButtons(); addEditGroupBadge(); return; }
+		if ( 'edit' === CTX ) { normalizePhones(); colorEditAddress(); addCopyButtons(); addEditGroupBadge(); return; }
 		colorShipping();
 		markDuplicates();
 	}
