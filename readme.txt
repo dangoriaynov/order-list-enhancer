@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.13
+Stable tag: 1.0.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,12 @@ Define simple "keyword → color" rules (for example your couriers, or pickup vs
 
 **Work faster inside an order.**
 Show the order total next to the billing address, copy the customer's name, phone or total to the clipboard with one click, and tidy phone numbers for display (leading 00 → +, add the country code when it is missing) — all without ever changing what is stored in the database.
+
+**Convert order "extras" into real products.**
+If you sell add-ons through Product Add-Ons or Checkout Add-Ons, map each extra to a product and Order List Enhancer turns it into a real line item the moment the order is created — priced at exactly what the customer paid (the order total never changes), counted in stock, with an admin-only note showing which extra it came from (never printed on invoices). No more moving an order to an editable status and rebuilding it by hand. Off by default.
+
+**Pick a default bulk action.**
+Choose which entry is pre-selected in the orders-list bulk-actions menu; the list of choices fills itself from your own orders screen.
 
 **Built to fit in.**
 Every feature has its own on/off switch on a single settings page that saves instantly, with no page reload, a color picker for every color, and a Settings link right on the Plugins screen. Everything runs in the admin only, for users who can edit orders — no external services and no tracking. Compatible with WooCommerce HPOS (High-Performance Order Storage) and sequential order numbers, and fully translatable (English and Bulgarian included).
@@ -51,6 +57,11 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.16 =
+* New: convert add-on "extras" (Product Add-Ons & Checkout Add-Ons) into real product line items at order creation, priced at what the customer paid — net-zero (order total unchanged), idempotent, with admin-only provenance under each converted line that never reaches the invoice. Off by default; map each extra to a product in Settings.
+* New: "default bulk action" setting that pre-selects an action in the orders-list bulk menu, self-populated from your orders screen.
+* Details popup: the "first order · frequency" summary now wraps to its own line, and the loading spinner is centered.
 
 = 1.0.13 =
 * Customer popup also opens from inside an order (badge in the order title).
