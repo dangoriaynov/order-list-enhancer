@@ -37,6 +37,9 @@ class OLE_Plugin {
 		if ( OLE_Settings::is_yes( $opts, 'extras_enabled' ) ) {
 			OLE_Extras::init();
 		}
+		if ( OLE_Settings::is_yes( $opts, 'phone_validate_enabled' ) ) {
+			OLE_Phone_Checkout::init();
+		}
 	}
 
 	/**
