@@ -252,6 +252,25 @@ class OLE_Settings_Page {
 					</tr>
 				</tbody></table>
 
+				<h2><?php esc_html_e( 'Checkout phone validation', 'order-list-enhancer' ); ?></h2>
+				<table class="form-table"><tbody>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Validate at checkout', 'order-list-enhancer' ); ?></th>
+						<td><label><input type="checkbox" name="phone_validate_enabled" <?php echo $cb( 'phone_validate_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Validate the billing phone number on the checkout (Bulgarian numbers) and flag invalid numbers in the admin.', 'order-list-enhancer' ); ?></label></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'When invalid', 'order-list-enhancer' ); ?></th>
+						<td>
+							<?php $pmode = $o['phone_validate_mode']; ?>
+							<select name="phone_validate_mode">
+								<option value="warn" <?php selected( $pmode, 'warn' ); ?>><?php esc_html_e( 'Warn only (allow the order, flag it)', 'order-list-enhancer' ); ?></option>
+								<option value="block" <?php selected( $pmode, 'block' ); ?>><?php esc_html_e( 'Block the order until fixed', 'order-list-enhancer' ); ?></option>
+							</select>
+							<p class="description"><?php esc_html_e( 'Country code comes from "Default country code" below (default 359). Invalid orders are flagged on the order page and in the orders list regardless of mode.', 'order-list-enhancer' ); ?></p>
+						</td>
+					</tr>
+				</tbody></table>
+
 				<h2><?php esc_html_e( 'Phone numbers', 'order-list-enhancer' ); ?></h2>
 				<table class="form-table"><tbody>
 					<tr>
@@ -314,23 +333,25 @@ class OLE_Settings_Page {
 		$extras_map = OLE_Settings::clean_extras_map( $extras_map );
 
 		$opts = array(
-			'extras_enabled'      => $bool( 'extras_enabled' ),
-			'extras_map'          => $extras_map,
-			'dup_enabled'        => $bool( 'dup_enabled' ),
-			'match_mode'         => ( isset( $in['match_mode'] ) && in_array( $in['match_mode'], array( 'phone', 'names', 'name_phone' ), true ) ) ? $in['match_mode'] : 'phone',
-			'scan_limit'         => isset( $in['scan_limit'] ) ? max( 100, min( 5000, (int) $in['scan_limit'] ) ) : 1500,
-			'dup_window_days'    => isset( $in['dup_window_days'] ) ? max( 1, min( 60, (int) $in['dup_window_days'] ) ) : 3,
-			'ship_enabled'       => $bool( 'ship_enabled' ),
-			'ship_color_edit'    => $bool( 'ship_color_edit' ),
-			'ship_rules'         => $rules,
-			'ship_default_color' => isset( $in['ship_default_color'] ) ? (string) sanitize_hex_color( $in['ship_default_color'] ) : '',
-			'ship_default_label' => isset( $in['ship_default_label'] ) ? sanitize_text_field( $in['ship_default_label'] ) : '',
-			'total_on_edit'      => $bool( 'total_on_edit' ),
-			'total_decimal_sep'  => ( isset( $in['total_decimal_sep'] ) && '.' === $in['total_decimal_sep'] ) ? '.' : ',',
-			'copy_buttons'       => $bool( 'copy_buttons' ),
-			'normalize_phone'    => $bool( 'normalize_phone' ),
-			'phone_cc'           => isset( $in['phone_cc'] ) ? preg_replace( '/\D+/', '', (string) $in['phone_cc'] ) : '',
-			'bulk_default_action' => isset( $in['bulk_default_action'] ) ? sanitize_text_field( (string) $in['bulk_default_action'] ) : '',
+			'extras_enabled'         => $bool( 'extras_enabled' ),
+			'extras_map'             => $extras_map,
+			'dup_enabled'           => $bool( 'dup_enabled' ),
+			'match_mode'            => ( isset( $in['match_mode'] ) && in_array( $in['match_mode'], array( 'phone', 'names', 'name_phone' ), true ) ) ? $in['match_mode'] : 'phone',
+			'scan_limit'            => isset( $in['scan_limit'] ) ? max( 100, min( 5000, (int) $in['scan_limit'] ) ) : 1500,
+			'dup_window_days'       => isset( $in['dup_window_days'] ) ? max( 1, min( 60, (int) $in['dup_window_days'] ) ) : 3,
+			'ship_enabled'          => $bool( 'ship_enabled' ),
+			'ship_color_edit'       => $bool( 'ship_color_edit' ),
+			'ship_rules'            => $rules,
+			'ship_default_color'    => isset( $in['ship_default_color'] ) ? (string) sanitize_hex_color( $in['ship_default_color'] ) : '',
+			'ship_default_label'    => isset( $in['ship_default_label'] ) ? sanitize_text_field( $in['ship_default_label'] ) : '',
+			'total_on_edit'         => $bool( 'total_on_edit' ),
+			'total_decimal_sep'     => ( isset( $in['total_decimal_sep'] ) && '.' === $in['total_decimal_sep'] ) ? '.' : ',',
+			'copy_buttons'          => $bool( 'copy_buttons' ),
+			'normalize_phone'       => $bool( 'normalize_phone' ),
+			'phone_cc'              => isset( $in['phone_cc'] ) ? preg_replace( '/\D+/', '', (string) $in['phone_cc'] ) : '',
+			'phone_validate_enabled' => $bool( 'phone_validate_enabled' ),
+			'phone_validate_mode'    => ( isset( $in['phone_validate_mode'] ) && 'block' === $in['phone_validate_mode'] ) ? 'block' : 'warn',
+			'bulk_default_action'    => isset( $in['bulk_default_action'] ) ? sanitize_text_field( (string) $in['bulk_default_action'] ) : '',
 		);
 		update_option( OLE_Settings::OPTION, $opts );
 		wp_send_json_success( array( 'message' => 'saved' ) );
