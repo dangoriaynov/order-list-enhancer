@@ -13,6 +13,8 @@ class OLE_Extras {
 	public static function init() {
 		add_action( 'woocommerce_checkout_order_processed', array( __CLASS__, 'on_order_processed' ), 20, 1 );
 		add_action( 'woocommerce_store_api_checkout_order_processed', array( __CLASS__, 'on_order_processed' ), 20, 1 );
+		add_action( 'woocommerce_after_order_itemmeta', array( __CLASS__, 'render_item_provenance' ), 10, 2 );
+		add_filter( 'woocommerce_hidden_order_itemmeta', array( __CLASS__, 'hidden_itemmeta' ) );
 	}
 
 	public static function on_order_processed( $order ) {
@@ -166,6 +168,39 @@ class OLE_Extras {
 
 	private static function money( $amount, WC_Order $order ) {
 		return html_entity_decode( wp_strip_all_tags( wc_price( $amount, array( 'currency' => $order->get_currency() ) ) ) );
+	}
+
+	/** Ховає сирі _ole_* ключі зі стандартного відображення метаданих рядка. */
+	public static function hidden_itemmeta( $keys ) {
+		$keys[] = '_ole_addon_origin';
+		$keys[] = '_ole_extra_moved';
+		return $keys;
+	}
+
+	/** Адмін-підказка під рядком: звідки сконвертовано / що винесено. Лише в адмінці. */
+	public static function render_item_provenance( $item_id, $item ) {
+		if ( ! is_a( $item, 'WC_Order_Item' ) ) {
+			return;
+		}
+		$origin = $item->get_meta( '_ole_addon_origin' );
+		if ( is_array( $origin ) && ! empty( $origin['label'] ) ) {
+			printf(
+				'<div class="ole-prov ole-prov--from">↩ %s</div>',
+				esc_html( sprintf( __( 'Converted from extra: «%1$s» (was %2$s)', 'order-list-enhancer' ), $origin['label'], wc_format_localized_price( isset( $origin['price'] ) ? $origin['price'] : 0 ) ) )
+			);
+		}
+		$moved = $item->get_meta( '_ole_extra_moved' );
+		if ( is_array( $moved ) ) {
+			foreach ( $moved as $m ) {
+				if ( empty( $m['label'] ) ) {
+					continue;
+				}
+				printf(
+					'<div class="ole-prov ole-prov--moved">➡ %s</div>',
+					esc_html( sprintf( __( 'Extra «%s» moved to its own line', 'order-list-enhancer' ), $m['label'] ) )
+				);
+			}
+		}
 	}
 
 	/** Конвертує Checkout Add-Ons (fee-рядки). */
