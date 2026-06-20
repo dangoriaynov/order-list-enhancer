@@ -141,7 +141,7 @@ class OLE_Plugin {
 		if ( 'edit' === $context && ! $ship_active && ! $copy_on && ! $edit_group ) {
 			return;
 		}
-		if ( 'list' === $context && ! $dup_on && ! $ship_active && '' === $bulk_def ) {
+		if ( 'list' === $context && ! $dup_on && ! $ship_active && '' === $bulk_def && ! OLE_Settings::is_yes( $opts, 'phone_validate_enabled' ) ) {
 			return;
 		}
 
@@ -190,6 +190,7 @@ class OLE_Plugin {
 				'error'       => __( 'Failed to load.', 'order-list-enhancer' ),
 				'copy'        => __( 'Copy', 'order-list-enhancer' ),
 				'copied'      => __( 'Copied', 'order-list-enhancer' ),
+				'phoneBadge'  => __( 'invalid phone', 'order-list-enhancer' ),
 			),
 		);
 
@@ -212,6 +213,9 @@ class OLE_Plugin {
 			$data['bulkDefault'] = $bulk_def;
 			$data['bulkCache']   = (object) OLE_Settings::bulk_actions();
 			$data['bulkNonce']   = wp_create_nonce( 'ole_bulk_actions' );
+		}
+		if ( 'list' === $context && OLE_Settings::is_yes( $opts, 'phone_validate_enabled' ) ) {
+			$data['phoneInvalid'] = array_map( 'strval', OLE_Phone_Checkout::invalid_order_ids() );
 		}
 
 		wp_enqueue_style( 'ole-admin', OLE_URL . 'assets/css/ole-admin.css', array(), OLE_VERSION );
