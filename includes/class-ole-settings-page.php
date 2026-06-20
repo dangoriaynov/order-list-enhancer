@@ -50,6 +50,8 @@ class OLE_Settings_Page {
 		}
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script( 'ole-settings', OLE_URL . 'assets/js/ole-settings.js', array( 'jquery', 'wp-color-picker' ), OLE_VERSION, true );
+		wp_enqueue_script( 'wc-enhanced-select' );
+		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_localize_script(
 			'ole-settings',
 			'OLE_SETTINGS',
@@ -204,6 +206,50 @@ class OLE_Settings_Page {
 					</tr>
 				</tbody></table>
 
+				<h2><?php esc_html_e( 'Extras → products', 'order-list-enhancer' ); ?></h2>
+				<table class="form-table"><tbody>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Enable conversion', 'order-list-enhancer' ); ?></th>
+						<td><label><input type="checkbox" name="extras_enabled" <?php echo $cb( 'extras_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'At order creation, turn each mapped add-on extra into a real product line at the price the customer paid. Order total is unchanged.', 'order-list-enhancer' ); ?></label></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Mapping (extra → product)', 'order-list-enhancer' ); ?></th>
+						<td>
+							<?php
+							$emap = $o['extras_map'];
+							if ( empty( $emap ) ) {
+								$emap = array( array( 'match' => '', 'product' => 0 ) );
+							}
+							?>
+							<table class="widefat ole-extras" style="max-width:680px"><thead><tr>
+								<th style="text-align:center"><?php esc_html_e( 'Extra text (as shown on the order)', 'order-list-enhancer' ); ?></th>
+								<th style="text-align:center"><?php esc_html_e( 'Product', 'order-list-enhancer' ); ?></th>
+								<th></th>
+							</tr></thead><tbody>
+							<?php
+							foreach ( $emap as $row ) :
+								$pid     = isset( $row['product'] ) ? (int) $row['product'] : 0;
+								$product = $pid ? wc_get_product( $pid ) : null;
+								?>
+								<tr>
+									<td><input type="text" name="extra_match[]" value="<?php echo esc_attr( $row['match'] ); ?>" class="regular-text" placeholder="+ 500 г янтарна киселина"/></td>
+									<td>
+										<select class="wc-product-search ole-extra-product" name="extra_product[]" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:320px">
+											<?php if ( $product ) : ?>
+												<option value="<?php echo esc_attr( $pid ); ?>" selected><?php echo esc_html( wp_strip_all_tags( $product->get_formatted_name() ) ); ?></option>
+											<?php endif; ?>
+										</select>
+									</td>
+									<td><button type="button" class="button ole-extra-remove">&times;</button></td>
+								</tr>
+							<?php endforeach; ?>
+							</tbody></table>
+							<p><button type="button" class="button ole-extra-add"><?php esc_html_e( 'Add row', 'order-list-enhancer' ); ?></button></p>
+							<p class="description"><?php esc_html_e( 'Match is the exact extra label as it appears on the order/checkout (Product Add-On label like "+ 500 г …", or the Checkout Add-On name). The product line will be priced at what the customer paid for that extra.', 'order-list-enhancer' ); ?></p>
+						</td>
+					</tr>
+				</tbody></table>
+
 				<h2><?php esc_html_e( 'Phone numbers', 'order-list-enhancer' ); ?></h2>
 				<table class="form-table"><tbody>
 					<tr>
@@ -253,7 +299,21 @@ class OLE_Settings_Page {
 			}
 		}
 
+		$extras_map = array();
+		if ( isset( $in['extra_match'] ) && is_array( $in['extra_match'] ) ) {
+			$eprod = isset( $in['extra_product'] ) ? (array) $in['extra_product'] : array();
+			foreach ( $in['extra_match'] as $i => $mtext ) {
+				$extras_map[] = array(
+					'match'   => $mtext,
+					'product' => isset( $eprod[ $i ] ) ? $eprod[ $i ] : 0,
+				);
+			}
+		}
+		$extras_map = OLE_Settings::clean_extras_map( $extras_map );
+
 		$opts = array(
+			'extras_enabled'      => $bool( 'extras_enabled' ),
+			'extras_map'          => $extras_map,
 			'dup_enabled'        => $bool( 'dup_enabled' ),
 			'match_mode'         => ( isset( $in['match_mode'] ) && in_array( $in['match_mode'], array( 'phone', 'names', 'name_phone' ), true ) ) ? $in['match_mode'] : 'phone',
 			'scan_limit'         => isset( $in['scan_limit'] ) ? max( 100, min( 5000, (int) $in['scan_limit'] ) ) : 1500,
