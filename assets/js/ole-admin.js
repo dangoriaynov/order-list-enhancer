@@ -367,6 +367,28 @@
 		} );
 	}
 
+	var phoneDone = false;
+	function markPhoneInvalid() {
+		if ( phoneDone ) { return; }
+		var set = D.phoneInvalid;
+		if ( ! set || ! set.length ) { return; }
+		phoneDone = true;
+		var ids = {};
+		set.forEach( function ( id ) { ids[ String( id ) ] = 1; } );
+		var rows = document.querySelectorAll( '.wp-list-table tbody tr' );
+		Array.prototype.forEach.call( rows, function ( tr ) {
+			var cb = tr.querySelector( '.check-column input[type=checkbox]' );
+			if ( ! cb || ! cb.value || ! ids[ String( cb.value ) ] ) { return; }
+			var cell = tr.querySelector( 'td.column-order_number, td.order_number' ) || tr.querySelectorAll( 'td' )[0];
+			if ( ! cell || cell.querySelector( '.ole-phone-badge' ) ) { return; }
+			var b = document.createElement( 'span' );
+			b.className = 'ole-phone-badge';
+			b.textContent = '⚠ ' + ( ( I18N && I18N.phoneBadge ) || 'phone?' );
+			cell.appendChild( document.createElement( 'br' ) );
+			cell.appendChild( b );
+		} );
+	}
+
 	// Orders list bulk-actions menu: capture its entries (for the settings dropdown)
 	// and pre-select the configured default. Runs once — re-applying on every tbody
 	// mutation would overwrite a selection the user made by hand.
@@ -422,6 +444,7 @@
 		colorShipping();
 		markDuplicates();
 		setupBulkActions();
+		markPhoneInvalid();
 	}
 	run();
 	if ( 'edit' !== CTX && window.MutationObserver ) {
