@@ -22,6 +22,7 @@ class OLE_Plugin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( 'OLE_Order_Total', 'render' ) );
 		add_action( 'wp_ajax_ole_group_details', array( $this, 'ajax_group_details' ) );
+		add_action( 'wp_ajax_ole_save_bulk_actions', array( $this, 'ajax_save_bulk_actions' ) );
 
 		// Нормализация на телефон — само за показване (view context); БД не се пипа.
 		$opts = OLE_Settings::get();
@@ -47,6 +48,36 @@ class OLE_Plugin {
 		$ids = array_filter( array_map( 'intval', explode( ',', $raw ) ) );
 		$ids = array_slice( $ids, 0, 200 );
 		wp_send_json_success( OLE_Duplicates::details_for_ids( $ids ) );
+	}
+
+	/**
+	 * AJAX: зберігає список групових дій (value=>label), зібраний JS-ом з екрана замовлень,
+	 * щоб сторінка налаштувань могла показати їх у випадаючому списку.
+	 */
+	public function ajax_save_bulk_actions() {
+		check_ajax_referer( 'ole_bulk_actions', 'nonce' );
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
+		}
+		$raw = isset( $_POST['actions'] ) ? sanitize_textarea_field( wp_unslash( $_POST['actions'] ) ) : '';
+		$map = json_decode( $raw, true );
+		if ( ! is_array( $map ) ) {
+			wp_send_json_error( array( 'message' => 'bad' ), 400 );
+		}
+		$clean = array();
+		$i     = 0;
+		foreach ( $map as $val => $label ) {
+			if ( ++$i > 100 ) {
+				break;
+			}
+			$val = sanitize_text_field( (string) $val );
+			if ( '' === $val || '-1' === $val ) {
+				continue;
+			}
+			$clean[ $val ] = sanitize_text_field( (string) $label );
+		}
+		update_option( OLE_Settings::BULK_ACTIONS, $clean, false );
+		wp_send_json_success();
 	}
 
 	/**
@@ -85,6 +116,7 @@ class OLE_Plugin {
 			? OLE_Settings::is_yes( $opts, 'ship_enabled' )
 			: OLE_Settings::is_yes( $opts, 'ship_color_edit' );
 		$copy_on     = OLE_Settings::is_yes( $opts, 'copy_buttons' );
+		$bulk_def    = ( 'list' === $context ) ? (string) $opts['bulk_default_action'] : '';
 
 		// На екрана за редакция: групата на текущата поръчка (за да отворим същия модал).
 		$edit_group = null;
@@ -106,7 +138,7 @@ class OLE_Plugin {
 		if ( 'edit' === $context && ! $ship_active && ! $copy_on && ! $edit_group ) {
 			return;
 		}
-		if ( 'list' === $context && ! $dup_on && ! $ship_active ) {
+		if ( 'list' === $context && ! $dup_on && ! $ship_active && '' === $bulk_def ) {
 			return;
 		}
 
@@ -172,6 +204,11 @@ class OLE_Plugin {
 		}
 		if ( $edit_group ) {
 			$data['editGroup'] = $edit_group;
+		}
+		if ( 'list' === $context ) {
+			$data['bulkDefault'] = $bulk_def;
+			$data['bulkCache']   = (object) OLE_Settings::bulk_actions();
+			$data['bulkNonce']   = wp_create_nonce( 'ole_bulk_actions' );
 		}
 
 		wp_enqueue_style( 'ole-admin', OLE_URL . 'assets/css/ole-admin.css', array(), OLE_VERSION );
