@@ -40,7 +40,7 @@ class OLE_Extras {
 
 		$notes = array();
 		$count = self::convert_product_addons( $order, $index, $notes );
-		// (Checkout Add-Ons handled in Task 5: $count += self::convert_checkout_addons(...).)
+		$count += self::convert_checkout_addons( $order, $index, $notes );
 
 		if ( $count > 0 ) {
 			$order->add_order_note( __( 'OLE — extras converted to product lines:', 'order-list-enhancer' ) . "\n" . implode( "\n", $notes ) );
@@ -166,5 +166,30 @@ class OLE_Extras {
 
 	private static function money( $amount, WC_Order $order ) {
 		return html_entity_decode( wp_strip_all_tags( wc_price( $amount, array( 'currency' => $order->get_currency() ) ) ) );
+	}
+
+	/** Конвертує Checkout Add-Ons (fee-рядки). */
+	private static function convert_checkout_addons( WC_Order $order, $index, &$notes ) {
+		$count = 0;
+		foreach ( $order->get_items( 'fee' ) as $fee_id => $fee ) {
+			$pid = OLE_Extras_Matcher::match( $index, $fee->get_name() );
+			if ( ! $pid ) {
+				continue;
+			}
+			$price  = (float) $fee->get_total();
+			$new_id = self::add_product_line( $order, $pid, $price, array(
+				'source'   => 'ca',
+				'label'    => $fee->get_name(),
+				'price'    => $price,
+				'src_item' => $fee->get_name(),
+			) );
+			if ( 0 === $new_id ) {
+				continue;
+			}
+			$order->remove_item( $fee_id );
+			$notes[] = sprintf( '«%s» → %s (%s)', $fee->get_name(), self::product_name( $pid ), self::money( $price, $order ) );
+			++$count;
+		}
+		return $count;
 	}
 }

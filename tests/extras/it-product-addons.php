@@ -1,7 +1,7 @@
 <?php
 // Integration test: a synthetic order with a Product Add-On is converted.
 // Run: $WP eval-file wp-content/plugins/order-list-enhancer/tests/extras/it-product-addons.php
-$fails = 0;
+$GLOBALS['fails'] = 0; // $GLOBALS so the counter survives WP-CLI eval-file include scope
 function ck( $c, $m ) { global $fails; echo ( $c ? "ok   - " : "FAIL - " ) . "$m\n"; if ( ! $c ) { $fails++; } }
 
 // Pick a real published product to map to.
@@ -77,4 +77,4 @@ $only = array_values( $o2->get_items( 'line_item' ) )[0];
 ck( abs( (float) $only->get_total() - 7.50 ) < 0.001, 'product-not-found: parent total untouched' );
 $o2->delete( true );
 
-echo $fails ? "\n$fails FAILED\n" : "\nALL PASS\n";
+$f = (int) $GLOBALS['fails']; echo $f ? "\n{$f} FAILED\n" : "\nALL PASS\n";
