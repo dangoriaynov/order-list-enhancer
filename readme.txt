@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.16
+Stable tag: 1.0.17
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,6 +28,9 @@ If you sell add-ons through Product Add-Ons or Checkout Add-Ons, map each extra 
 
 **Pick a default bulk action.**
 Choose which entry is pre-selected in the orders-list bulk-actions menu; the list of choices fills itself from your own orders screen.
+
+**Validate phone numbers at checkout.**
+Turn on checkout phone validation and customers get instant, clear feedback on whether their Bulgarian number is valid — and why — as they type, backed by server-side enforcement you can set to *warn* (let the order through but flag it) or *block* (stop it until fixed). Orders with an unusable number are flagged on the order screen and with a badge in the list, so you catch them before you ship. Off by default.
 
 **Built to fit in.**
 Every feature has its own on/off switch on a single settings page that saves instantly, with no page reload, a color picker for every color, and a Settings link right on the Plugins screen. Everything runs in the admin only, for users who can edit orders — no external services and no tracking. Compatible with WooCommerce HPOS (High-Performance Order Storage) and sequential order numbers, and fully translatable (English and Bulgarian included).
@@ -57,6 +60,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.17 =
+* New: optional checkout phone-number validation (Bulgarian numbers). Live ✓/✗ feedback under the phone field as the customer types, plus server-side enforcement — choose "warn" (allow the order, flag it) or "block" (stop it until fixed). Invalid numbers are flagged on the order page and with a badge in the orders list. Off by default.
 
 = 1.0.16 =
 * New: convert add-on "extras" (Product Add-Ons & Checkout Add-Ons) into real product line items at order creation, priced at what the customer paid — net-zero (order total unchanged), idempotent, with admin-only provenance under each converted line that never reaches the invoice. Off by default; map each extra to a product in Settings.
