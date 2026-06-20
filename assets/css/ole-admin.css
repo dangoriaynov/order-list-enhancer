@@ -12,7 +12,8 @@
 .ole-modal__overlay { position: absolute; inset: 0; background: rgba(0,0,0,.5); }
 .ole-modal__card { position: relative; margin: 7vh auto 0; max-width: 560px; width: calc(100% - 32px); background: #fff; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,.3); max-height: 80vh; display: flex; flex-direction: column; }
 .ole-modal__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #dcdcde; }
-.ole-modal__title { font-size: 14px; font-weight: 600; }
+.ole-modal__title { display: flex; flex-direction: column; gap: 2px; font-size: 14px; font-weight: 600; }
+.ole-modal__title-sub { font-size: 12px; font-weight: 400; color: #50575e; }
 .ole-modal__close { background: none; border: 0; font-size: 16px; cursor: pointer; color: #50575e; line-height: 1; padding: 4px; }
 .ole-modal__body { padding: 8px 16px 16px; overflow-y: auto; }
 
@@ -37,7 +38,7 @@
 .ole-modal__title--dup { color: #d63638; }
 
 /* Loading spinner + open/content animations */
-.ole-loading { display: flex; align-items: center; gap: 10px; padding: 22px 4px; color: #50575e; font-size: 13px; }
+.ole-loading { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 180px; padding: 22px 4px; color: #50575e; font-size: 13px; }
 .ole-spinner { width: 18px; height: 18px; border: 2px solid #dcdcde; border-top-color: #2271b1; border-radius: 50%; animation: ole-spin .7s linear infinite; flex: 0 0 auto; }
 @keyframes ole-spin { to { transform: rotate( 360deg ); } }
 .ole-modal.is-open .ole-modal__overlay { animation: ole-fade .18s ease-out; }

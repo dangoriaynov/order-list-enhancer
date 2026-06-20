@@ -8,25 +8,35 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class OLE_Settings {
 
-	const OPTION = 'ole_settings';
+	const OPTION       = 'ole_settings';
+	const BULK_ACTIONS = 'ole_bulk_actions'; // cached value=>label map captured from the orders screen
 
 	public static function defaults() {
 		return array(
-			'dup_enabled'        => 'yes',
-			'match_mode'         => 'phone', // phone | names | name_phone
-			'scan_limit'         => 1500,
-			'dup_window_days'    => 3, // поръчки в рамките на N дни → флаг „дубликат"
-			'ship_enabled'       => 'yes', // кольорування в списку замовлень
-			'ship_color_edit'    => 'yes', // кольорування блоку адреси на сторінці редагування
-			'ship_rules'         => array(), // [ ['keyword'=>..,'color'=>..,'label'=>..], ... ]
-			'ship_default_color' => '',
-			'ship_default_label' => '',
-			'total_on_edit'      => 'yes',
-			'total_decimal_sep'  => ',', // ',' or '.' for the order total under the address
-			'copy_buttons'       => 'yes', // copy name/phone/total on edit page
-			'normalize_phone'    => 'no', // display-only phone normalization
-			'phone_cc'           => '', // default country dial code (digits, e.g. 359)
+			'dup_enabled'         => 'yes',
+			'match_mode'          => 'phone', // phone | names | name_phone
+			'scan_limit'          => 1500,
+			'dup_window_days'     => 3, // поръчки в рамките на N дни → флаг „дубликат"
+			'ship_enabled'        => 'yes', // кольорування в списку замовлень
+			'ship_color_edit'     => 'yes', // кольорування блоку адреси на сторінці редагування
+			'ship_rules'          => array(), // [ ['keyword'=>..,'color'=>..,'label'=>..], ... ]
+			'ship_default_color'  => '',
+			'ship_default_label'  => '',
+			'total_on_edit'       => 'yes',
+			'total_decimal_sep'   => ',', // ',' or '.' for the order total under the address
+			'copy_buttons'        => 'yes', // copy name/phone/total on edit page
+			'normalize_phone'     => 'no', // display-only phone normalization
+			'phone_cc'            => '', // default country dial code (digits, e.g. 359)
+			'bulk_default_action' => '', // pre-selected entry in the orders-list bulk-actions menu ('' = none)
 		);
+	}
+
+	/**
+	 * Кешований список групових дій (value=>label), зібраний JS-ом з екрана замовлень.
+	 */
+	public static function bulk_actions() {
+		$a = get_option( self::BULK_ACTIONS, array() );
+		return is_array( $a ) ? $a : array();
 	}
 
 	public static function get() {
@@ -41,6 +51,7 @@ class OLE_Settings {
 			$opts['total_decimal_sep'] = ',';
 		}
 		$opts['phone_cc'] = preg_replace( '/\D+/', '', (string) $opts['phone_cc'] );
+		$opts['bulk_default_action'] = sanitize_text_field( (string) $opts['bulk_default_action'] );
 		if ( ! is_array( $opts['ship_rules'] ) ) {
 			$opts['ship_rules'] = array();
 		}

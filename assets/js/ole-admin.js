@@ -171,12 +171,24 @@
 		if ( ! meta ) { return; }
 		var m = ensureModal();
 
-		var parts = [ meta.name, fmt( I18N.ordersCount, [ meta.n ] ) ];
-		if ( meta.first ) { parts.push( fmt( I18N.since, [ meta.first ] ) ); }
-		if ( meta.freq ) { parts.push( meta.freq ); }
+		// First line: name · orders count. Second line: "first on … · once every … days".
+		var line1 = [ meta.name, fmt( I18N.ordersCount, [ meta.n ] ) ];
+		var line2 = [];
+		if ( meta.first ) { line2.push( fmt( I18N.since, [ meta.first ] ) ); }
+		if ( meta.freq ) { line2.push( meta.freq ); }
 		var titleEl = m.querySelector( '.ole-modal__title' );
-		titleEl.textContent = ( meta.dup ? '⚠️ ' : '' ) + parts.join( ' · ' );
 		titleEl.className = 'ole-modal__title' + ( meta.dup ? ' ole-modal__title--dup' : '' );
+		titleEl.textContent = '';
+		var main = document.createElement( 'span' );
+		main.className = 'ole-modal__title-main';
+		main.textContent = ( meta.dup ? '⚠️ ' : '' ) + line1.join( ' · ' );
+		titleEl.appendChild( main );
+		if ( line2.length ) {
+			var sub = document.createElement( 'span' );
+			sub.className = 'ole-modal__title-sub';
+			sub.textContent = line2.join( ' · ' );
+			titleEl.appendChild( sub );
+		}
 
 		var body = m.querySelector( '.ole-modal__body' );
 		m.classList.add( 'is-open' );
@@ -355,10 +367,61 @@
 		} );
 	}
 
+	// Orders list bulk-actions menu: capture its entries (for the settings dropdown)
+	// and pre-select the configured default. Runs once — re-applying on every tbody
+	// mutation would overwrite a selection the user made by hand.
+	var bulkDone = false;
+	function captureBulkActions( sel ) {
+		var map = {};
+		Array.prototype.forEach.call( sel.options, function ( op ) {
+			if ( ! op.value || '-1' === op.value ) { return; }
+			map[ op.value ] = ( op.textContent || '' ).trim();
+		} );
+		return map;
+	}
+	function sameMap( a, b ) {
+		a = a || {}; b = b || {};
+		var ka = Object.keys( a ), kb = Object.keys( b );
+		if ( ka.length !== kb.length ) { return false; }
+		for ( var i = 0; i < ka.length; i++ ) {
+			if ( a[ ka[ i ] ] !== b[ ka[ i ] ] ) { return false; }
+		}
+		return true;
+	}
+	function setupBulkActions() {
+		if ( bulkDone ) { return; }
+		var top = document.getElementById( 'bulk-action-selector-top' );
+		if ( ! top ) { return; }
+		bulkDone = true;
+
+		// Cache the menu for the settings page (only when it changed).
+		if ( D.bulkNonce ) {
+			var map = captureBulkActions( top );
+			if ( ! sameMap( map, D.bulkCache || {} ) ) {
+				var fd = new FormData();
+				fd.append( 'action', 'ole_save_bulk_actions' );
+				fd.append( 'nonce', D.bulkNonce );
+				fd.append( 'actions', JSON.stringify( map ) );
+				fetch( AJAX.url, { method: 'POST', body: fd, credentials: 'same-origin' } ).catch( function () {} );
+			}
+		}
+
+		// Pre-select the configured default in both selects (only if the option exists).
+		var val = D.bulkDefault || '';
+		if ( ! val ) { return; }
+		[ 'bulk-action-selector-top', 'bulk-action-selector-bottom' ].forEach( function ( id ) {
+			var sel = document.getElementById( id );
+			if ( ! sel ) { return; }
+			var has = Array.prototype.some.call( sel.options, function ( op ) { return op.value === val; } );
+			if ( has ) { sel.value = val; }
+		} );
+	}
+
 	function run() {
 		if ( 'edit' === CTX ) { normalizePhones(); colorEditAddress(); addCopyButtons(); addEditGroupBadge(); return; }
 		colorShipping();
 		markDuplicates();
+		setupBulkActions();
 	}
 	run();
 	if ( 'edit' !== CTX && window.MutationObserver ) {

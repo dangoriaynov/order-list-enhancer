@@ -180,6 +180,30 @@ class OLE_Settings_Page {
 					</tr>
 				</tbody></table>
 
+				<h2><?php esc_html_e( 'Orders list — default bulk action', 'order-list-enhancer' ); ?></h2>
+				<table class="form-table"><tbody>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Pre-selected action', 'order-list-enhancer' ); ?></th>
+						<td>
+							<?php
+							$bulk_actions = OLE_Settings::bulk_actions();
+							$bulk_cur     = $o['bulk_default_action'];
+							// Keep the saved value selectable even before the menu has been captured.
+							if ( '' !== $bulk_cur && ! isset( $bulk_actions[ $bulk_cur ] ) ) {
+								$bulk_actions[ $bulk_cur ] = $bulk_cur;
+							}
+							?>
+							<select name="bulk_default_action">
+								<option value="" <?php selected( $bulk_cur, '' ); ?>><?php esc_html_e( '— (none)', 'order-list-enhancer' ); ?></option>
+								<?php foreach ( $bulk_actions as $val => $label ) : ?>
+									<option value="<?php echo esc_attr( $val ); ?>" <?php selected( $bulk_cur, (string) $val ); ?>><?php echo esc_html( '' !== $label ? $label : $val ); ?></option>
+								<?php endforeach; ?>
+							</select>
+							<p class="description"><?php esc_html_e( 'Pre-selects this entry in the orders-list bulk-actions menu on page load. The list is filled from your Orders screen — open the Orders list once if it looks empty.', 'order-list-enhancer' ); ?></p>
+						</td>
+					</tr>
+				</tbody></table>
+
 				<h2><?php esc_html_e( 'Phone numbers', 'order-list-enhancer' ); ?></h2>
 				<table class="form-table"><tbody>
 					<tr>
@@ -244,6 +268,7 @@ class OLE_Settings_Page {
 			'copy_buttons'       => $bool( 'copy_buttons' ),
 			'normalize_phone'    => $bool( 'normalize_phone' ),
 			'phone_cc'           => isset( $in['phone_cc'] ) ? preg_replace( '/\D+/', '', (string) $in['phone_cc'] ) : '',
+			'bulk_default_action' => isset( $in['bulk_default_action'] ) ? sanitize_text_field( (string) $in['bulk_default_action'] ) : '',
 		);
 		update_option( OLE_Settings::OPTION, $opts );
 		wp_send_json_success( array( 'message' => 'saved' ) );
