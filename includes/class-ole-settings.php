@@ -28,6 +28,8 @@ class OLE_Settings {
 			'normalize_phone'     => 'no', // display-only phone normalization
 			'phone_cc'            => '', // default country dial code (digits, e.g. 359)
 			'bulk_default_action' => '', // pre-selected entry in the orders-list bulk-actions menu ('' = none)
+			'extras_enabled'      => 'no', // convert mapped add-on extras into real product lines at order creation
+			'extras_map'          => array(), // [ ['match'=>'<extra label>','product'=>123], ... ]
 		);
 	}
 
@@ -37,6 +39,30 @@ class OLE_Settings {
 	public static function bulk_actions() {
 		$a = get_option( self::BULK_ACTIONS, array() );
 		return is_array( $a ) ? $a : array();
+	}
+
+	/**
+	 * Нормалізує таблицю відповідності екстра→товар: лишає лише рядки з текстом і product id > 0.
+	 */
+	public static function clean_extras_map( $rows ) {
+		$out = array();
+		if ( ! is_array( $rows ) ) {
+			return $out;
+		}
+		foreach ( $rows as $r ) {
+			if ( ! is_array( $r ) ) {
+				continue;
+			}
+			$match   = isset( $r['match'] ) ? sanitize_text_field( (string) $r['match'] ) : '';
+			$product = isset( $r['product'] ) ? absint( $r['product'] ) : 0;
+			if ( '' !== $match && $product > 0 ) {
+				$out[] = array(
+					'match'   => $match,
+					'product' => $product,
+				);
+			}
+		}
+		return $out;
 	}
 
 	public static function get() {
@@ -52,6 +78,7 @@ class OLE_Settings {
 		}
 		$opts['phone_cc'] = preg_replace( '/\D+/', '', (string) $opts['phone_cc'] );
 		$opts['bulk_default_action'] = sanitize_text_field( (string) $opts['bulk_default_action'] );
+		$opts['extras_map'] = self::clean_extras_map( $opts['extras_map'] );
 		if ( ! is_array( $opts['ship_rules'] ) ) {
 			$opts['ship_rules'] = array();
 		}
