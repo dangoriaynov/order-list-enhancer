@@ -237,6 +237,8 @@ class OLE_Settings_Page {
 										<select class="wc-product-search ole-extra-product" name="extra_product[]" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:320px">
 											<?php if ( $product ) : ?>
 												<option value="<?php echo esc_attr( $pid ); ?>" selected><?php echo esc_html( wp_strip_all_tags( $product->get_formatted_name() ) ); ?></option>
+											<?php else : ?>
+												<option value="" selected></option>
 											<?php endif; ?>
 										</select>
 									</td>
