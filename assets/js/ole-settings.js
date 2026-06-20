@@ -60,4 +60,47 @@ jQuery( function ( $ ) {
 				setTimeout( function () { $status.text( '' ); }, 2500 );
 			} );
 	} );
+
+	// Extras mapping: add/remove rows + (re)init WC product search.
+	function oleInitProductSearch( $scope ) {
+		( $scope || jQuery( '.ole-extras' ) ).find( 'select.wc-product-search' ).each( function () {
+			var $s = jQuery( this );
+			if ( $s.data( 'select2' ) ) { return; }
+			if ( jQuery.fn.selectWoo ) {
+				$s.selectWoo( {
+					ajax: {
+						url: ( window.wc_enhanced_select_params && window.wc_enhanced_select_params.ajax_url ) || window.ajaxurl,
+						dataType: 'json',
+						delay: 250,
+						data: function ( params ) {
+							return { term: params.term, action: 'woocommerce_json_search_products_and_variations', security: ( window.wc_enhanced_select_params || {} ).search_products_nonce };
+						},
+						processResults: function ( data ) {
+							var out = [];
+							jQuery.each( data, function ( id, text ) { out.push( { id: id, text: text } ); } );
+							return { results: out };
+						}
+					},
+					minimumInputLength: 2,
+					width: '320px'
+				} );
+			}
+		} );
+	}
+	oleInitProductSearch();
+	jQuery( document ).on( 'click', '.ole-extra-add', function ( e ) {
+		e.preventDefault();
+		var $tbody = jQuery( '.ole-extras tbody' );
+		var $row = $tbody.find( 'tr' ).first().clone();
+		$row.find( 'input' ).val( '' );
+		$row.find( 'select' ).val( null ).empty();
+		$tbody.append( $row );
+		oleInitProductSearch( $row );
+	} );
+	jQuery( document ).on( 'click', '.ole-extra-remove', function ( e ) {
+		e.preventDefault();
+		var $rows = jQuery( '.ole-extras tbody tr' );
+		if ( $rows.length > 1 ) { jQuery( this ).closest( 'tr' ).remove(); }
+		else { jQuery( this ).closest( 'tr' ).find( 'input' ).val( '' ); jQuery( this ).closest( 'tr' ).find( 'select' ).val( null ); }
+	} );
 } );
