@@ -54,3 +54,9 @@
 .ole-copy:active { transform: scale( .92 ); }
 .ole-copy svg { display: block; }
 .ole-copy.is-copied { background: #1a7a3c; border-color: #1a7a3c; color: #fff; }
+
+/* Extras → products provenance (admin order screen, admin-only) */
+.ole-prov { margin-top: 4px; font-size: 11px; line-height: 1.5; }
+.ole-prov--from { color: #1a7a3c; }
+.ole-prov--moved { color: #8a6d00; }
+.woocommerce_order_items tr:has(.ole-prov--from) td { background: rgba(26,122,60,.06); }
