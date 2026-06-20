@@ -30,6 +30,8 @@ class OLE_Settings {
 			'bulk_default_action' => '', // pre-selected entry in the orders-list bulk-actions menu ('' = none)
 			'extras_enabled'      => 'no', // convert mapped add-on extras into real product lines at order creation
 			'extras_map'          => array(), // [ ['match'=>'<extra label>','product'=>123], ... ]
+			'phone_validate_enabled' => 'no', // checkout phone-number validation
+			'phone_validate_mode'    => 'warn', // 'warn' (allow + flag) | 'block' (stop order)
 		);
 	}
 
@@ -79,6 +81,7 @@ class OLE_Settings {
 		$opts['phone_cc'] = preg_replace( '/\D+/', '', (string) $opts['phone_cc'] );
 		$opts['bulk_default_action'] = sanitize_text_field( (string) $opts['bulk_default_action'] );
 		$opts['extras_map'] = self::clean_extras_map( $opts['extras_map'] );
+		$opts['phone_validate_mode'] = ( 'block' === $opts['phone_validate_mode'] ) ? 'block' : 'warn';
 		if ( ! is_array( $opts['ship_rules'] ) ) {
 			$opts['ship_rules'] = array();
 		}
