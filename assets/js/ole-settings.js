@@ -93,7 +93,7 @@ jQuery( function ( $ ) {
 		var $tbody = jQuery( '.ole-extras tbody' );
 		var $row = $tbody.find( 'tr' ).first().clone();
 		$row.find( 'input' ).val( '' );
-		$row.find( 'select' ).val( null ).empty();
+		$row.find( 'select' ).empty().append( '<option value="" selected></option>' ).val( '' );
 		$tbody.append( $row );
 		oleInitProductSearch( $row );
 	} );
