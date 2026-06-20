@@ -34,6 +34,9 @@ class OLE_Plugin {
 			add_filter( 'woocommerce_order_get_billing_phone', $norm, 20 );
 			add_filter( 'woocommerce_order_get_shipping_phone', $norm, 20 );
 		}
+		if ( OLE_Settings::is_yes( $opts, 'extras_enabled' ) ) {
+			OLE_Extras::init();
+		}
 	}
 
 	/**
