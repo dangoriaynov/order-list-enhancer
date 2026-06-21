@@ -82,7 +82,8 @@ jQuery( function ( $ ) {
 						}
 					},
 					minimumInputLength: 2,
-					width: '320px'
+					width: '100%',
+					dropdownAutoWidth: true
 				} );
 			}
 		} );
