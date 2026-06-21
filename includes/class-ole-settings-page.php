@@ -97,6 +97,15 @@ class OLE_Settings_Page {
 		}
 		?>
 		<div class="wrap">
+			<style>
+				#ole-settings-form { max-width: 1000px; }
+				#ole-settings-form .form-table { width: 100%; }
+				#ole-settings-form .ole-rules,
+				#ole-settings-form .ole-extras { width: 100%; max-width: 100% !important; }
+				#ole-settings-form .ole-extras td input[type=text],
+				#ole-settings-form .ole-extras td .wc-product-search,
+				#ole-settings-form .ole-extras td .select2-container { width: 100% !important; }
+			</style>
 			<h1><?php esc_html_e( 'Order List Enhancer', 'order-list-enhancer' ); ?></h1>
 			<form id="ole-settings-form">
 
