@@ -83,7 +83,14 @@ jQuery( function ( $ ) {
 					},
 					minimumInputLength: 2,
 					width: '100%',
-					dropdownAutoWidth: true
+					dropdownAutoWidth: true,
+					// Lead the selected label with the size ("… - 500 г" -> "500 г — …")
+					// so variations stay distinguishable when the box truncates.
+					templateSelection: function ( data ) {
+						var t = ( data && data.text ) || '';
+						var i = t.lastIndexOf( ' - ' );
+						return i > -1 ? ( t.slice( i + 3 ) + ' — ' + t.slice( 0, i ) ) : t;
+					}
 				} );
 			}
 		} );

@@ -67,6 +67,19 @@ class OLE_Settings_Page {
 		);
 	}
 
+	/**
+	 * Короткий ярлик товару для мапінгу: для варіацій — спершу розмір (щоб було видно,
+	 * який обрано, навіть коли довгу назву обрізає; напр. «500 г — Янтарна …»).
+	 */
+	private static function extra_product_label( $product ) {
+		if ( $product->is_type( 'variation' ) ) {
+			$size   = wc_get_formatted_variation( $product, true, false );
+			$parent = wp_strip_all_tags( get_the_title( $product->get_parent_id() ) );
+			return ( '' !== $size ? $size . ' — ' : '' ) . $parent;
+		}
+		return wp_strip_all_tags( $product->get_name() );
+	}
+
 	public function render() {
 		$o  = OLE_Settings::get();
 		$cb = function ( $key ) use ( $o ) {
@@ -236,7 +249,8 @@ class OLE_Settings_Page {
 									<td>
 										<select class="wc-product-search ole-extra-product" name="extra_product[]" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%">
 											<?php if ( $product ) : ?>
-												<option value="<?php echo esc_attr( $pid ); ?>" selected><?php echo esc_html( wp_strip_all_tags( $product->get_formatted_name() ) ); ?></option>
+												<?php $plabel = self::extra_product_label( $product ); ?>
+												<option value="<?php echo esc_attr( $pid ); ?>" selected title="<?php echo esc_attr( $plabel ); ?>"><?php echo esc_html( $plabel ); ?></option>
 											<?php else : ?>
 												<option value="" selected></option>
 											<?php endif; ?>
