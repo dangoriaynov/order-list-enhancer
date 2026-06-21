@@ -221,10 +221,10 @@ class OLE_Settings_Page {
 								$emap = array( array( 'match' => '', 'product' => 0 ) );
 							}
 							?>
-							<table class="widefat ole-extras" style="max-width:680px"><thead><tr>
-								<th style="text-align:center"><?php esc_html_e( 'Extra text (as shown on the order)', 'order-list-enhancer' ); ?></th>
-								<th style="text-align:center"><?php esc_html_e( 'Product', 'order-list-enhancer' ); ?></th>
-								<th></th>
+							<table class="widefat ole-extras" style="width:100%;max-width:1000px"><thead><tr>
+								<th style="text-align:center;width:38%"><?php esc_html_e( 'Extra text (as shown on the order)', 'order-list-enhancer' ); ?></th>
+								<th style="text-align:center;width:54%"><?php esc_html_e( 'Product', 'order-list-enhancer' ); ?></th>
+								<th style="width:1%"></th>
 							</tr></thead><tbody>
 							<?php
 							foreach ( $emap as $row ) :
@@ -232,9 +232,9 @@ class OLE_Settings_Page {
 								$product = $pid ? wc_get_product( $pid ) : null;
 								?>
 								<tr>
-									<td><input type="text" name="extra_match[]" value="<?php echo esc_attr( $row['match'] ); ?>" class="regular-text" placeholder="+ 500 г янтарна киселина"/></td>
+									<td><input type="text" name="extra_match[]" value="<?php echo esc_attr( $row['match'] ); ?>" class="regular-text" placeholder="+ 500 г янтарна киселина" style="width:100%"/></td>
 									<td>
-										<select class="wc-product-search ole-extra-product" name="extra_product[]" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:320px">
+										<select class="wc-product-search ole-extra-product" name="extra_product[]" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%">
 											<?php if ( $product ) : ?>
 												<option value="<?php echo esc_attr( $pid ); ?>" selected><?php echo esc_html( wp_strip_all_tags( $product->get_formatted_name() ) ); ?></option>
 											<?php else : ?>
