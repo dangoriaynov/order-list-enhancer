@@ -1,0 +1,16 @@
+/* Order List Enhancer — checkout phone validation feedback */
+.ole-phone-msg {
+	display: none;
+	margin-top: .5em;
+	color: #cc1818;
+	font-size: 0.9em;
+	line-height: 1.4;
+}
+/* Reinforce the native red invalid border on the phone field, in case the theme
+   keeps a "validated" green style around. */
+.woocommerce form .form-row.woocommerce-invalid input#billing_phone,
+.woocommerce-checkout .form-row.woocommerce-invalid input#billing_phone,
+.form-row.woocommerce-invalid input#billing_phone {
+	border-color: #cc1818;
+	box-shadow: 0 0 0 1px #cc1818 inset;
+}
