@@ -77,4 +77,24 @@ $only = array_values( $o2->get_items( 'line_item' ) )[0];
 ck( abs( (float) $only->get_total() - 7.50 ) < 0.001, 'product-not-found: parent total untouched' );
 $o2->delete( true );
 
+// Quantity: a "N бр" add-on converts to a line with qty N (total = paid).
+$opts3 = OLE_Settings::get();
+$opts3['extras_enabled'] = 'yes';
+$opts3['extras_map']     = array( array( 'match' => '+ 2 бр TEST', 'product' => $target_id ) );
+update_option( OLE_Settings::OPTION, $opts3 );
+$o3  = wc_create_order();
+$it3 = new WC_Order_Item_Product();
+$it3->set_product( $prod ); $it3->set_quantity( 1 ); $it3->set_subtotal( 13.0 ); $it3->set_total( 13.0 );
+$it3->add_meta_data( 'Екстри', '+ 2 бр TEST', true );
+$it3->add_meta_data( '_pao_ids', array( array( 'key' => 'Екстри', 'value' => '+ 2 бр TEST', 'id' => '3', 'raw_value' => '+ 2 бр TEST', 'raw_price' => 3, 'price_type' => 'flat_fee' ) ), true );
+$it3->add_meta_data( '_pao_total', 3, true );
+$o3->add_item( $it3 ); $o3->set_total( 13.0 ); $o3->save();
+OLE_Extras::convert( $o3 );
+$o3 = wc_get_order( $o3->get_id() );
+$child3 = null;
+foreach ( $o3->get_items( 'line_item' ) as $li ) { if ( $li->get_meta( '_ole_addon_origin' ) ) { $child3 = $li; } }
+ck( $child3 && (int) $child3->get_quantity() === 2, 'qty: «+ 2 бр» -> line qty 2' );
+ck( $child3 && abs( (float) $child3->get_total() - 3.0 ) < 0.001, 'qty: line total = paid 3.00' );
+$o3->delete( true );
+
 $f = (int) $GLOBALS['fails']; echo $f ? "\n{$f} FAILED\n" : "\nALL PASS\n";

@@ -72,4 +72,25 @@ ck( abs( (float) $order2->get_total() - 15.5 ) < 0.001, 'ghost: order total unch
 
 $order2->delete( true );
 
+// Quantity: a checkout fee with _wc_checkout_add_on_label "2 бр" -> line qty 2.
+update_option( OLE_Settings::OPTION, array(
+	'extras_enabled' => 'yes',
+	'extras_map'     => array( array( 'match' => 'QTY FEE', 'product' => $target_id ) ),
+) );
+$order3 = wc_create_order();
+$item3  = new WC_Order_Item_Product();
+$item3->set_product( $prod ); $item3->set_quantity( 1 ); $item3->set_subtotal( 10.0 ); $item3->set_total( 10.0 );
+$order3->add_item( $item3 );
+$fee3 = new WC_Order_Item_Fee();
+$fee3->set_name( 'QTY FEE' ); $fee3->set_amount( 9.0 ); $fee3->set_total( 9.0 ); $fee3->set_tax_status( 'none' );
+$fee3->add_meta_data( '_wc_checkout_add_on_label', '2 бр', true );
+$order3->add_item( $fee3 ); $order3->set_total( 19.0 ); $order3->save();
+OLE_Extras::convert( $order3 );
+$order3 = wc_get_order( $order3->get_id() );
+$child3 = null;
+foreach ( $order3->get_items( 'line_item' ) as $li ) { if ( $li->get_meta( '_ole_addon_origin' ) ) { $child3 = $li; } }
+ck( $child3 && (int) $child3->get_quantity() === 2, 'qty: checkout «2 бр» -> line qty 2' );
+ck( $child3 && abs( (float) $child3->get_total() - 9.0 ) < 0.001, 'qty: line total = paid 9.00' );
+$order3->delete( true );
+
 $f = (int) $GLOBALS['fails']; echo $f ? "\n{$f} FAILED\n" : "\nALL PASS\n";

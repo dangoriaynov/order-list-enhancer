@@ -80,12 +80,13 @@ class OLE_Extras {
 					continue;
 				}
 				$price   = (float) $a['price'];
+				$qty     = OLE_Extras_Matcher::parse_qty( $a['label'] );
 				$new_id  = self::add_product_line( $order, $pid, $price, array(
 					'source'   => 'pa',
 					'label'    => $a['label'],
 					'price'    => $price,
 					'src_item' => $item_id,
-				) );
+				), $qty );
 				if ( 0 === $new_id ) {
 					$keep_pao[] = $pao[ $idx ];
 					continue;
@@ -138,14 +139,15 @@ class OLE_Extras {
 	}
 
 	/** Додає новий товарний рядок із заданою ціною та provenance-метою. */
-	public static function add_product_line( WC_Order $order, $product_id, $price, $origin ) {
+	public static function add_product_line( WC_Order $order, $product_id, $price, $origin, $qty = 1 ) {
 		$product = wc_get_product( $product_id );
 		if ( ! $product ) {
 			return 0;
 		}
+		$qty  = max( 1, (int) $qty );
 		$line = new WC_Order_Item_Product();
 		$line->set_product( $product );
-		$line->set_quantity( 1 );
+		$line->set_quantity( $qty );
 		$line->set_subtotal( (float) $price );
 		$line->set_total( (float) $price );
 		$line->set_subtotal_tax( 0 );
@@ -156,7 +158,7 @@ class OLE_Extras {
 
 		// If stock was already reduced for this order, reduce the new product manually.
 		if ( 'yes' === $order->get_meta( '_order_stock_reduced' ) && $product->managing_stock() ) {
-			wc_update_product_stock( $product, 1, 'decrease' );
+			wc_update_product_stock( $product, $qty, 'decrease' );
 		}
 		return $line->get_id();
 	}
@@ -212,12 +214,13 @@ class OLE_Extras {
 				continue;
 			}
 			$price  = (float) $fee->get_total();
+			$qty    = OLE_Extras_Matcher::parse_qty( (string) $fee->get_meta( '_wc_checkout_add_on_label' ) );
 			$new_id = self::add_product_line( $order, $pid, $price, array(
 				'source'   => 'ca',
 				'label'    => $fee->get_name(),
 				'price'    => $price,
 				'src_item' => $fee->get_name(),
-			) );
+			), $qty );
 			if ( 0 === $new_id ) {
 				continue;
 			}

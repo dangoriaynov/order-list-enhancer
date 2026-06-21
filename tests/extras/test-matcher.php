@@ -43,5 +43,14 @@ check( OLE_Extras_Matcher::prices_balance( $parsed, 2.0 ) === false, 'prices_bal
 check( OLE_Extras_Matcher::prices_balance( $parsed, 1.005, 0.001 ) === false, 'prices_balance custom epsilon 0.001 rejects 0.005 diff' );
 check( OLE_Extras_Matcher::prices_balance( $parsed, 1.005, 0.01 ) === true, 'prices_balance custom epsilon 0.01 accepts 0.005 diff' );
 
+// parse_qty.
+check( OLE_Extras_Matcher::parse_qty( '+ 2 бр фолиамин (аминокиселини)' ) === 2, 'parse_qty 2 бр' );
+check( OLE_Extras_Matcher::parse_qty( '+ 5 бр цитокининова паста' ) === 5, 'parse_qty 5 бр' );
+check( OLE_Extras_Matcher::parse_qty( '+ 1 бр Валтан' ) === 1, 'parse_qty 1 бр' );
+check( OLE_Extras_Matcher::parse_qty( '3 бройки' ) === 3, 'parse_qty 3 бройки' );
+check( OLE_Extras_Matcher::parse_qty( '+ 500 г янтарна киселина' ) === 1, 'parse_qty grams -> 1' );
+check( OLE_Extras_Matcher::parse_qty( '' ) === 1, 'parse_qty empty -> 1' );
+check( OLE_Extras_Matcher::parse_qty( '+ 16 бр pH тест ленти (5 мм х 50 мм)' ) === 16, 'parse_qty picks the бр count, not the мм' );
+
 echo $fails ? "\n$fails FAILED\n" : "\nALL PASS\n";
 exit( $fails ? 1 : 0 );

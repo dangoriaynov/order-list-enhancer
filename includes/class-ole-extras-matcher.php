@@ -69,4 +69,15 @@ class OLE_Extras_Matcher {
 		}
 		return abs( $sum - (float) $pao_total ) <= $epsilon;
 	}
+
+	/** Витягує кількість «N бр»/«N бройки» з тексту екстри; типово 1 (межі 1–99). */
+	public static function parse_qty( $text ) {
+		if ( preg_match( '/(\d+)\s*(?:бр|бройк)/u', (string) $text, $m ) ) {
+			$q = (int) $m[1];
+			if ( $q >= 1 && $q <= 99 ) {
+				return $q;
+			}
+		}
+		return 1;
+	}
 }
