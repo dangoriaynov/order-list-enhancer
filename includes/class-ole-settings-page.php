@@ -98,7 +98,8 @@ class OLE_Settings_Page {
 		?>
 		<div class="wrap">
 			<style>
-				#ole-settings-form { max-width: 1000px; }
+				/* Make every settings table fill the same (full) content width, and the
+				   mapping fields fill their cells so long product names are visible. */
 				#ole-settings-form .form-table { width: 100%; }
 				#ole-settings-form .ole-rules,
 				#ole-settings-form .ole-extras { width: 100%; max-width: 100% !important; }
