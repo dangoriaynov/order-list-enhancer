@@ -144,6 +144,7 @@ class OLE_Phone_Checkout {
 		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 			return;
 		}
+		wp_enqueue_style( 'ole-phone-checkout', OLE_URL . 'assets/css/ole-phone-checkout.css', array(), OLE_VERSION );
 		wp_enqueue_script( 'ole-phone-checkout', OLE_URL . 'assets/js/ole-phone-checkout.js', array(), OLE_VERSION, true );
 		wp_localize_script(
 			'ole-phone-checkout',

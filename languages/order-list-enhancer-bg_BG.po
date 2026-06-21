@@ -250,3 +250,28 @@ msgstr "Настройки"
 
 msgid "Color"
 msgstr "Цвят"
+
+# Checkout phone validation
+msgid "Looks valid"
+msgstr "Изглежда валиден"
+
+msgid "Please enter a phone number."
+msgstr "Моля, въведете телефонен номер."
+
+msgid "The phone number looks too short. Example: 0888 123 456."
+msgstr "Телефонният номер изглежда твърде къс. Пример: 0888 123 456."
+
+msgid "The phone number looks too long. Example: 0888 123 456."
+msgstr "Телефонният номер изглежда твърде дълъг. Пример: 0888 123 456."
+
+msgid "Please enter a Bulgarian number (e.g. 0888 123 456)."
+msgstr "Моля, въведете български номер (напр. 0888 123 456)."
+
+msgid "Invalid phone number. Example: 0888 123 456 or +359 888 123 456."
+msgstr "Невалиден телефонен номер. Пример: 0888 123 456 или +359 888 123 456."
+
+msgid "Phone may be invalid — please verify."
+msgstr "Телефонът може да е невалиден — моля, проверете."
+
+msgid "invalid phone"
+msgstr "невалиден телефон"

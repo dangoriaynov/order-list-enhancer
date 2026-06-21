@@ -34,28 +34,44 @@
 	if ( ! D ) { return; }
 
 	function fieldEl() { return document.getElementById( 'billing_phone' ); }
+	function rowEl( field ) { return ( field.closest && field.closest( '.form-row' ) ) || field.parentNode; }
 	function ensureMsg( field ) {
-		var wrap = field.closest( '.form-row' ) || field.parentNode;
+		var wrap = rowEl( field );
 		var el = wrap.querySelector( '.ole-phone-msg' );
 		if ( ! el ) { el = document.createElement( 'span' ); el.className = 'ole-phone-msg'; wrap.appendChild( el ); }
 		return el;
 	}
+	// Drive WooCommerce's own field state classes so the field gets the theme's
+	// native red (invalid) / green (validated) styling — the standard checkout look.
+	function setRowState( field, state ) {
+		var row = rowEl( field );
+		if ( ! row || ! row.classList ) { return; }
+		row.classList.remove( 'woocommerce-invalid', 'woocommerce-invalid-required-field', 'woocommerce-validated' );
+		if ( 'invalid' === state ) { row.classList.add( 'woocommerce-invalid' ); }
+		else if ( 'valid' === state ) { row.classList.add( 'woocommerce-validated' ); }
+	}
 	function check( field ) {
 		var raw = field.value || '';
 		var msg = ensureMsg( field );
-		if ( raw.replace( /\s+/g, '' ) === '' ) { msg.textContent = ''; msg.className = 'ole-phone-msg'; return; }
+		if ( raw.replace( /\s+/g, '' ) === '' ) { msg.textContent = ''; msg.style.display = 'none'; setRowState( field, '' ); return; }
 		var r = validate( raw, D.cc );
-		if ( r.valid ) { msg.textContent = '✓ ' + ( D.i18n.ok || '' ); msg.className = 'ole-phone-msg is-ok'; }
-		else { msg.textContent = '✗ ' + ( D.i18n[ r.reason ] || D.i18n.invalid ); msg.className = 'ole-phone-msg is-bad'; }
+		if ( r.valid ) {
+			msg.textContent = ''; msg.style.display = 'none';
+			setRowState( field, 'valid' );
+		} else {
+			msg.textContent = ( D.i18n[ r.reason ] || D.i18n.invalid );
+			msg.style.display = 'block';
+			setRowState( field, 'invalid' );
+		}
 	}
 	function bind() {
 		var f = fieldEl(); if ( ! f || f.getAttribute( 'data-ole-phone' ) ) { return; }
 		f.setAttribute( 'data-ole-phone', '1' );
 		f.addEventListener( 'input', function () { check( f ); } );
-		f.addEventListener( 'blur', function () { check( f ); } );
+		// Defer the blur check so our state wins over WooCommerce's own blur validation.
+		f.addEventListener( 'blur', function () { setTimeout( function () { check( f ); }, 0 ); } );
 	}
 	bind();
-	// Block checkout re-renders the form; rebind on updates.
-	document.body && document.body.addEventListener( 'updated_checkout', bind );
+	// The checkout form re-renders on updates; rebind via the jQuery event WooCommerce fires.
 	if ( window.jQuery ) { window.jQuery( document.body ).on( 'updated_checkout', bind ); }
 } )();
