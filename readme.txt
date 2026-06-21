@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.18
+Stable tag: 1.0.19
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.19 =
+* Extras → products: a quantity extra such as “2 бр …” now converts to a product line with quantity N (price unchanged), so the picked quantity is correct.
 
 = 1.0.18 =
 * Checkout phone validation: the phone field now shows the standard WooCommerce red "invalid" state (green when valid), the message is clearly styled, and all validation messages are translated to Bulgarian.
