@@ -32,6 +32,8 @@ class OLE_Settings {
 			'extras_map'          => array(), // [ ['match'=>'<extra label>','product'=>123], ... ]
 			'phone_validate_enabled' => 'no', // checkout phone-number validation
 			'phone_validate_mode'    => 'warn', // 'warn' (allow + flag) | 'block' (stop order)
+			'total_color_enabled' => 'no', // ring orders whose total reaches a threshold
+			'total_color_rules'   => array(), // [ ['threshold'=>float,'color'=>'#hex','label'=>''], ... ]
 		);
 	}
 
@@ -67,6 +69,32 @@ class OLE_Settings {
 		return $out;
 	}
 
+	/**
+	 * Нормалізує правила кольорування за сумою: лишає рядки з порогом > 0 і валідним кольором.
+	 */
+	public static function clean_total_color_rules( $rows ) {
+		$out = array();
+		if ( ! is_array( $rows ) ) {
+			return $out;
+		}
+		foreach ( $rows as $r ) {
+			if ( ! is_array( $r ) ) {
+				continue;
+			}
+			$threshold = isset( $r['threshold'] ) ? (float) $r['threshold'] : 0;
+			$color     = isset( $r['color'] ) ? (string) sanitize_hex_color( $r['color'] ) : '';
+			$label     = isset( $r['label'] ) ? sanitize_text_field( (string) $r['label'] ) : '';
+			if ( $threshold > 0 && '' !== $color ) {
+				$out[] = array(
+					'threshold' => $threshold,
+					'color'     => $color,
+					'label'     => $label,
+				);
+			}
+		}
+		return $out;
+	}
+
 	public static function get() {
 		$saved = get_option( self::OPTION, array() );
 		if ( ! is_array( $saved ) ) {
@@ -81,6 +109,7 @@ class OLE_Settings {
 		$opts['phone_cc'] = preg_replace( '/\D+/', '', (string) $opts['phone_cc'] );
 		$opts['bulk_default_action'] = sanitize_text_field( (string) $opts['bulk_default_action'] );
 		$opts['extras_map'] = self::clean_extras_map( $opts['extras_map'] );
+		$opts['total_color_rules'] = self::clean_total_color_rules( $opts['total_color_rules'] );
 		$opts['phone_validate_mode'] = ( 'block' === $opts['phone_validate_mode'] ) ? 'block' : 'warn';
 		if ( ! is_array( $opts['ship_rules'] ) ) {
 			$opts['ship_rules'] = array();
