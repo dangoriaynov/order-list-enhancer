@@ -17,6 +17,7 @@
 - Follow existing patterns: inline styles applied via JS (like `OLE_Shipping`/`colorShipping`), settings saved through the existing `ole_save_settings` AJAX action, color fields use the `.ole-color` class + wp-color-picker.
 - Feature is **off by default** (`total_color_enabled = 'no'`).
 - Coloring is **additive**: never change the shipping background fill, the duplicate row tinting, or any other existing behavior. The ring is the only new visual.
+- **i18n (Bulgarian):** every user-facing admin string uses `__()`/`esc_html_e()` etc. with domain `order-list-enhancer`. The `bg_BG` translation must cover **all** admin options and their value-labels — backfilling pre-existing gaps (e.g. the Extras and default-bulk-action sections), not only this feature — and the compiled `.mo` is rebuilt. Preserve `%s`/`%1$s` placeholders and HTML entities verbatim in translations.
 
 ---
 
@@ -716,11 +717,85 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 
 ---
 
+### Task 7: Bulgarian translation backfill + `.mo` rebuild
+
+**Files:**
+- Modify: `languages/order-list-enhancer.pot` (regenerate from source)
+- Modify: `languages/order-list-enhancer-bg_BG.po` (merge + translate every empty/fuzzy entry)
+- Modify: `languages/order-list-enhancer-bg_BG.mo` (recompile)
+
+**Interfaces:** none (translation assets). Runs last, after all admin UI strings exist (Tasks 2 + 6).
+
+**Context:** Recent features added English admin strings that were never translated — e.g. the Extras section ("Extras → products", "Enable conversion", "Mapping (extra → product)", …) and the default-bulk-action section ("Orders list — default bulk action", "Pre-selected action", "— (none)") are missing from `bg_BG`, and the new "Order total coloring" strings don't exist yet. The store admin is Bulgarian; fill the gaps and rebuild the compiled catalog. Use the existing `bg_BG.po` as the terminology/style reference (formal imperative, e.g. "Включи маркирането"). `xgettext`, `msgmerge`, `msgfmt` are installed (Homebrew gettext); `wp-cli` is NOT available — use gettext directly.
+
+> No automated unit test — verification is `msgfmt --statistics` reporting **0 untranslated, 0 fuzzy**, plus a spot-check of a few entries.
+
+- [ ] **Step 1: Regenerate the `.pot` from all plugin PHP**
+
+Run (from repo root):
+
+```bash
+xgettext --default-domain=order-list-enhancer --language=PHP --from-code=UTF-8 \
+  --add-comments=translators --no-wrap \
+  -k__ -k_e -k_x:1,2c -kesc_html__ -kesc_html_e -kesc_html_x:1,2c \
+  -kesc_attr__ -kesc_attr_e -kesc_attr_x:1,2c -k_n:1,2 -k_nx:1,2,4c \
+  -o languages/order-list-enhancer.pot \
+  order-list-enhancer.php $(find includes -name '*.php')
+# xgettext writes "charset=CHARSET"; fix it to UTF-8 (macOS sed needs the '' arg).
+sed -i '' 's/charset=CHARSET/charset=UTF-8/' languages/order-list-enhancer.pot
+```
+
+Expected: `order-list-enhancer.pot` now contains every translatable admin string (including the new "Order total coloring" ones).
+
+- [ ] **Step 2: Merge new strings into the Bulgarian catalog**
+
+```bash
+msgmerge --update --no-fuzzy-matching --no-wrap --backup=none \
+  languages/order-list-enhancer-bg_BG.po languages/order-list-enhancer.pot
+```
+
+(`--no-fuzzy-matching` so newly added strings arrive as empty rather than guessed; existing translations are preserved.) Then update the header `Project-Id-Version` to `Order List Enhancer 1.0.24`.
+
+- [ ] **Step 3: Translate every untranslated entry to Bulgarian**
+
+List what still needs translating:
+
+```bash
+msgattrib --untranslated languages/order-list-enhancer-bg_BG.po | grep -c '^msgid '
+msgattrib --untranslated languages/order-list-enhancer-bg_BG.po | grep '^msgid '
+```
+
+Translate each empty `msgstr` to idiomatic Bulgarian, matching the tone and terminology already in the file. Rules:
+- Keep `%s`, `%1$s`, `%2$s`, `→`, `≥`, `—`, and any HTML entities (`&times;`, `&nbsp;`) **verbatim** in the translation.
+- Keep proper nouns as-is where the existing file does (e.g. "Order List Enhancer", "WooCommerce", "Product Add-Ons").
+- Cover the new "Order total coloring" section strings AND the pre-existing untranslated ones (Extras, default-bulk-action, any phone-validation leftovers) — i.e. **all** options and their value-labels.
+
+- [ ] **Step 4: Compile and verify**
+
+```bash
+msgfmt --check --statistics -o languages/order-list-enhancer-bg_BG.mo languages/order-list-enhancer-bg_BG.po
+msgattrib --untranslated languages/order-list-enhancer-bg_BG.po | grep -c '^msgid '   # expect 0
+```
+
+Expected: `msgfmt` prints "N translated messages" with **no** "untranslated" or "fuzzy" counts; the `msgattrib` count is `0`; `--check` passes (placeholder consistency OK).
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add languages/order-list-enhancer.pot languages/order-list-enhancer-bg_BG.po languages/order-list-enhancer-bg_BG.mo
+git commit -m "i18n(bg_BG): translate all admin options + values; rebuild catalog
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
+```
+
+---
+
 ## Verification (whole feature)
 
 - **Automated:** `php tests/order-color/test-rules.php` and `node tests/order-color/test-order-color-js.cjs` both `ALL PASS`.
 - **Manual smoke (see Task 5 Step 4):** rings appear on qualifying list rows and the edit panel; highest threshold wins; fill + ring coexist; feature off = zero visual change.
 - **Regression:** existing phone tests still pass; shipping fill, duplicate tinting, copy buttons, and the default-bulk-action feature behave exactly as before.
+- **i18n:** `msgattrib --untranslated languages/order-list-enhancer-bg_BG.po` reports 0 strings; `msgfmt --check` passes; the new "Order total coloring" section renders in Bulgarian.
 
 ## Notes / decisions captured from the spec
 
