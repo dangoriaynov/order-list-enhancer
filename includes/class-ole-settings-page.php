@@ -182,6 +182,48 @@ class OLE_Settings_Page {
 					</tr>
 				</tbody></table>
 
+				<h2><?php esc_html_e( 'Order total coloring', 'order-list-enhancer' ); ?></h2>
+				<table class="form-table"><tbody>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Enable', 'order-list-enhancer' ); ?></th>
+						<td><label><input type="checkbox" name="total_color_enabled" <?php echo $cb( 'total_color_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Ring the order\'s row in the list — and its address panel on the order screen — when the total reaches a threshold below. Independent of the shipping color; the highest matched threshold wins.', 'order-list-enhancer' ); ?></label></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Threshold rules', 'order-list-enhancer' ); ?></th>
+						<td>
+							<?php
+							$trules = $o['total_color_rules'];
+							if ( empty( $trules ) ) {
+								$trules = array(
+									array(
+										'threshold' => '',
+										'color'     => '',
+										'label'     => '',
+									),
+								);
+							}
+							?>
+							<table class="widefat ole-rules" style="max-width:680px"><thead><tr>
+								<th style="text-align:center"><?php esc_html_e( 'Order total ≥', 'order-list-enhancer' ); ?></th>
+								<th style="text-align:center"><?php esc_html_e( 'Color', 'order-list-enhancer' ); ?></th>
+								<th style="text-align:center"><?php esc_html_e( 'Label', 'order-list-enhancer' ); ?></th>
+								<th></th>
+							</tr></thead><tbody>
+							<?php foreach ( $trules as $r ) : ?>
+								<tr>
+									<td><input type="number" step="0.01" min="0" name="total_threshold[]" value="<?php echo esc_attr( '' === $r['threshold'] ? '' : $r['threshold'] ); ?>" class="regular-text" placeholder="100"/></td>
+									<td><input type="text" name="total_color[]" value="<?php echo esc_attr( $r['color'] ); ?>" class="ole-color" placeholder="#d63638"/></td>
+									<td><input type="text" name="total_label[]" value="<?php echo esc_attr( $r['label'] ); ?>" class="regular-text"/></td>
+									<td><button type="button" class="button ole-rule-remove">&times;</button></td>
+								</tr>
+							<?php endforeach; ?>
+							</tbody></table>
+							<p><button type="button" class="button ole-rule-add"><?php esc_html_e( 'Add rule', 'order-list-enhancer' ); ?></button></p>
+							<p class="description"><?php esc_html_e( 'When an order\'s total is at or above a threshold it gets a ring in that color. If several apply, the highest threshold wins. The ring is drawn on top of any shipping color — both stay visible.', 'order-list-enhancer' ); ?></p>
+						</td>
+					</tr>
+				</tbody></table>
+
 				<h2><?php esc_html_e( 'Order total on edit page', 'order-list-enhancer' ); ?></h2>
 				<table class="form-table"><tbody>
 					<tr>
@@ -356,6 +398,20 @@ class OLE_Settings_Page {
 		}
 		$extras_map = OLE_Settings::clean_extras_map( $extras_map );
 
+		$total_color_rules = array();
+		if ( isset( $in['total_threshold'] ) && is_array( $in['total_threshold'] ) ) {
+			$tc = isset( $in['total_color'] ) ? (array) $in['total_color'] : array();
+			$tl = isset( $in['total_label'] ) ? (array) $in['total_label'] : array();
+			foreach ( $in['total_threshold'] as $i => $th ) {
+				$total_color_rules[] = array(
+					'threshold' => $th,
+					'color'     => isset( $tc[ $i ] ) ? $tc[ $i ] : '',
+					'label'     => isset( $tl[ $i ] ) ? $tl[ $i ] : '',
+				);
+			}
+		}
+		$total_color_rules = OLE_Settings::clean_total_color_rules( $total_color_rules );
+
 		$opts = array(
 			'extras_enabled'         => $bool( 'extras_enabled' ),
 			'extras_map'             => $extras_map,
@@ -376,6 +432,8 @@ class OLE_Settings_Page {
 			'phone_validate_enabled' => $bool( 'phone_validate_enabled' ),
 			'phone_validate_mode'    => ( isset( $in['phone_validate_mode'] ) && 'block' === $in['phone_validate_mode'] ) ? 'block' : 'warn',
 			'bulk_default_action'    => isset( $in['bulk_default_action'] ) ? sanitize_text_field( (string) $in['bulk_default_action'] ) : '',
+			'total_color_enabled'    => $bool( 'total_color_enabled' ),
+			'total_color_rules'      => $total_color_rules,
 		);
 		update_option( OLE_Settings::OPTION, $opts );
 		wp_send_json_success( array( 'message' => 'saved' ) );
