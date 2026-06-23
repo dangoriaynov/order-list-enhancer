@@ -124,6 +124,7 @@ class OLE_Plugin {
 		$copy_on     = OLE_Settings::is_yes( $opts, 'copy_buttons' );
 		$total_color_active = OLE_Settings::is_yes( $opts, 'total_color_enabled' );
 		$bulk_def    = ( 'list' === $context ) ? (string) $opts['bulk_default_action'] : '';
+		$seq_open    = ( 'list' === $context ) && OLE_Settings::is_yes( $opts, 'seq_open_enabled' );
 
 		// На екрана за редакция: групата на текущата поръчка (за да отворим същия модал).
 		$edit_group = null;
@@ -145,7 +146,7 @@ class OLE_Plugin {
 		if ( 'edit' === $context && ! $ship_active && ! $copy_on && ! $edit_group && ! $total_color_active ) {
 			return;
 		}
-		if ( 'list' === $context && ! $dup_on && ! $ship_active && '' === $bulk_def && ! OLE_Settings::is_yes( $opts, 'phone_validate_enabled' ) && ! $total_color_active ) {
+		if ( 'list' === $context && ! $dup_on && ! $ship_active && '' === $bulk_def && ! OLE_Settings::is_yes( $opts, 'phone_validate_enabled' ) && ! $total_color_active && ! $seq_open ) {
 			return;
 		}
 
@@ -195,6 +196,16 @@ class OLE_Plugin {
 				'copy'        => __( 'Copy', 'order-list-enhancer' ),
 				'copied'      => __( 'Copied', 'order-list-enhancer' ),
 				'phoneBadge'  => __( 'invalid phone', 'order-list-enhancer' ),
+				/* translators: %s: number of selected orders. */
+				'seqOpen'     => __( 'Open selected (%s)', 'order-list-enhancer' ),
+				'seqStop'     => __( 'Stop', 'order-list-enhancer' ),
+				'seqSec'      => __( 'sec', 'order-list-enhancer' ),
+				/* translators: %1$s: current number, %2$s: total. */
+				'seqProgress' => __( 'Opening %1$s / %2$s…', 'order-list-enhancer' ),
+				/* translators: %s: number of orders opened. */
+				'seqDone'     => __( 'Done (%s)', 'order-list-enhancer' ),
+				'seqNone'     => __( 'Select some orders first.', 'order-list-enhancer' ),
+				'seqBlocked'  => __( 'Pop-ups are blocked — allow them for this site, then try again.', 'order-list-enhancer' ),
 			),
 		);
 
@@ -217,6 +228,10 @@ class OLE_Plugin {
 			$data['bulkDefault'] = $bulk_def;
 			$data['bulkCache']   = (object) OLE_Settings::bulk_actions();
 			$data['bulkNonce']   = wp_create_nonce( 'ole_bulk_actions' );
+			$data['seqOpen']     = array(
+				'enabled'  => $seq_open,
+				'interval' => (int) $opts['seq_open_interval'],
+			);
 		}
 		if ( 'list' === $context && OLE_Settings::is_yes( $opts, 'phone_validate_enabled' ) ) {
 			$data['phoneInvalid'] = array_map( 'strval', OLE_Phone_Checkout::invalid_order_ids() );
