@@ -486,6 +486,83 @@
 		} );
 	}
 
+	// Sequential order opener: open each checkbox-selected order in its own tab,
+	// one every N seconds, so the server never loads more than one order at a time.
+	var seqInit = false, seqTimers = [], seqRunning = false;
+	function seqSelectedUrls() {
+		var urls = [];
+		var boxes = document.querySelectorAll( '.wp-list-table tbody .check-column input[type=checkbox]:checked' );
+		Array.prototype.forEach.call( boxes, function ( cb ) {
+			var tr = cb.closest ? cb.closest( 'tr' ) : null;
+			if ( ! tr ) { return; }
+			var a = tr.querySelector( 'a[href*="action=edit"], td.column-order_number a, td.order_number a, a.order-view' );
+			if ( a && a.href ) { urls.push( a.href ); }
+		} );
+		return urls;
+	}
+	function seqCount() {
+		return document.querySelectorAll( '.wp-list-table tbody .check-column input[type=checkbox]:checked' ).length;
+	}
+	function setupSeqOpen() {
+		if ( seqInit || ! D.seqOpen || ! D.seqOpen.enabled ) { return; }
+		var anchor = document.querySelector( '.tablenav.top' ) || document.querySelector( '.wp-list-table' );
+		if ( ! anchor || ! anchor.parentNode ) { return; }
+		seqInit = true;
+
+		var bar = document.createElement( 'div' );
+		bar.className = 'ole-seq';
+		var btn = document.createElement( 'button' );
+		btn.type = 'button';
+		btn.className = 'button button-primary ole-seq__go';
+		var sec = document.createElement( 'input' );
+		sec.type = 'number'; sec.min = '1'; sec.max = '300'; sec.className = 'ole-seq__sec';
+		sec.value = String( D.seqOpen.interval || 20 );
+		var secLbl = document.createElement( 'span' );
+		secLbl.className = 'ole-seq__lbl'; secLbl.textContent = ( I18N.seqSec || 'sec' );
+		var stop = document.createElement( 'button' );
+		stop.type = 'button'; stop.className = 'button ole-seq__stop'; stop.textContent = ( I18N.seqStop || 'Stop' ); stop.style.display = 'none';
+		var info = document.createElement( 'span' );
+		info.className = 'ole-seq__info';
+		bar.appendChild( btn ); bar.appendChild( sec ); bar.appendChild( secLbl ); bar.appendChild( stop ); bar.appendChild( info );
+		anchor.parentNode.insertBefore( bar, anchor );
+
+		function refresh() { btn.textContent = '▶ ' + fmt( I18N.seqOpen || 'Open selected (%s)', [ seqCount() ] ); }
+		function setRunning( r ) { seqRunning = r; stop.style.display = r ? '' : 'none'; btn.disabled = r; sec.disabled = r; }
+		function stopSeq() { seqTimers.forEach( function ( t ) { clearTimeout( t ); } ); seqTimers = []; setRunning( false ); }
+		function openUrl( url, idx, total ) {
+			var w = window.open( url, '_blank' );
+			if ( ! w ) { info.textContent = ( I18N.seqBlocked || 'Pop-ups are blocked — allow them for this site, then try again.' ); stopSeq(); return false; }
+			info.textContent = fmt( I18N.seqProgress || 'Opening %1$s / %2$s…', [ idx + 1, total ] );
+			return true;
+		}
+		function start() {
+			if ( seqRunning ) { return; }
+			var urls = seqSelectedUrls();
+			if ( ! urls.length ) { window.alert( I18N.seqNone || 'Select some orders first.' ); return; }
+			var interval = Math.max( 1, Math.min( 300, parseInt( sec.value, 10 ) || 20 ) );
+			var n = urls.length;
+			setRunning( true );
+			// First opens within the click gesture (never blocked); the rest are timed.
+			if ( ! openUrl( urls[ 0 ], 0, n ) ) { return; }
+			if ( n === 1 ) { info.textContent = fmt( I18N.seqDone || 'Done (%s)', [ n ] ); setRunning( false ); return; }
+			for ( var i = 1; i < n; i++ ) {
+				( function ( idx ) {
+					seqTimers.push( setTimeout( function () {
+						if ( ! seqRunning ) { return; }
+						if ( ! openUrl( urls[ idx ], idx, n ) ) { return; }
+						if ( idx === n - 1 ) { info.textContent = fmt( I18N.seqDone || 'Done (%s)', [ n ] ); setRunning( false ); }
+					}, idx * interval * 1000 ) );
+				} )( i );
+			}
+		}
+		btn.addEventListener( 'click', start );
+		stop.addEventListener( 'click', stopSeq );
+		document.addEventListener( 'change', function ( e ) {
+			if ( e.target && e.target.matches && e.target.matches( '.wp-list-table .check-column input[type=checkbox]' ) ) { setTimeout( refresh, 0 ); }
+		} );
+		refresh();
+	}
+
 	function run() {
 		if ( 'edit' === CTX ) { normalizePhones(); colorEditAddress(); colorTotalRingEdit(); addCopyButtons(); addEditGroupBadge(); return; }
 		colorShipping();
@@ -493,6 +570,7 @@
 		markDuplicates();
 		setupBulkActions();
 		markPhoneInvalid();
+		setupSeqOpen();
 	}
 	run();
 	if ( 'edit' !== CTX && window.MutationObserver ) {

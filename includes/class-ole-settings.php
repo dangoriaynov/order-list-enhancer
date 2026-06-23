@@ -34,6 +34,8 @@ class OLE_Settings {
 			'phone_validate_mode'    => 'warn', // 'warn' (allow + flag) | 'block' (stop order)
 			'total_color_enabled' => 'no', // ring orders whose total reaches a threshold
 			'total_color_rules'   => array(), // [ ['threshold'=>float,'color'=>'#hex','label'=>''], ... ]
+			'seq_open_enabled'    => 'yes', // "open selected one-by-one" button on the orders list
+			'seq_open_interval'   => 20, // default seconds between opened tabs
 		);
 	}
 
@@ -111,6 +113,7 @@ class OLE_Settings {
 		$opts['extras_map'] = self::clean_extras_map( $opts['extras_map'] );
 		$opts['total_color_rules'] = self::clean_total_color_rules( $opts['total_color_rules'] );
 		$opts['phone_validate_mode'] = ( 'block' === $opts['phone_validate_mode'] ) ? 'block' : 'warn';
+		$opts['seq_open_interval'] = max( 1, min( 300, (int) $opts['seq_open_interval'] ) );
 		if ( ! is_array( $opts['ship_rules'] ) ) {
 			$opts['ship_rules'] = array();
 		}

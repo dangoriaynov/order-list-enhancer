@@ -271,6 +271,19 @@ class OLE_Settings_Page {
 					</tr>
 				</tbody></table>
 
+				<h2><?php esc_html_e( 'Open selected orders one-by-one', 'order-list-enhancer' ); ?></h2>
+				<table class="form-table"><tbody>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Enable button', 'order-list-enhancer' ); ?></th>
+						<td><label><input type="checkbox" name="seq_open_enabled" <?php echo $cb( 'seq_open_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Add a button to the orders list that opens each checkbox-selected order in its own tab, one at a time, so the server never loads more than one at once.', 'order-list-enhancer' ); ?></label></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Default interval (seconds)', 'order-list-enhancer' ); ?></th>
+						<td><input type="number" name="seq_open_interval" min="1" max="300" step="1" value="<?php echo esc_attr( $o['seq_open_interval'] ); ?>"/>
+						<p class="description"><?php esc_html_e( 'Seconds to wait between opening tabs (editable on the button too). Tip: your browser must allow pop-ups for this site, or only the first tab opens.', 'order-list-enhancer' ); ?></p></td>
+					</tr>
+				</tbody></table>
+
 				<h2><?php esc_html_e( 'Extras → products', 'order-list-enhancer' ); ?></h2>
 				<table class="form-table"><tbody>
 					<tr>
@@ -434,6 +447,8 @@ class OLE_Settings_Page {
 			'bulk_default_action'    => isset( $in['bulk_default_action'] ) ? sanitize_text_field( (string) $in['bulk_default_action'] ) : '',
 			'total_color_enabled'    => $bool( 'total_color_enabled' ),
 			'total_color_rules'      => $total_color_rules,
+			'seq_open_enabled'       => $bool( 'seq_open_enabled' ),
+			'seq_open_interval'      => isset( $in['seq_open_interval'] ) ? max( 1, min( 300, (int) $in['seq_open_interval'] ) ) : 20,
 		);
 		update_option( OLE_Settings::OPTION, $opts );
 		wp_send_json_success( array( 'message' => 'saved' ) );

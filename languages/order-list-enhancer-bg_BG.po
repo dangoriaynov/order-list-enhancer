@@ -484,3 +484,44 @@ msgstr "Телефонът може да е невалиден — моля, п�
 
 #~ msgid "How to decide two orders are from the same customer. Name + phone matches when either the phone or the name matches."
 #~ msgstr "Как се определя, че две поръчки са от един и същ клиент. Име + телефон съвпада при съвпадение на телефона или името."
+
+#: includes/class-ole-plugin.php
+#, php-format
+msgid "Open selected (%s)"
+msgstr "Отвори избраните (%s)"
+
+msgid "Stop"
+msgstr "Спри"
+
+msgid "sec"
+msgstr "сек"
+
+#, php-format
+msgid "Opening %1$s / %2$s…"
+msgstr "Отваряне %1$s / %2$s…"
+
+#, php-format
+msgid "Done (%s)"
+msgstr "Готово (%s)"
+
+msgid "Select some orders first."
+msgstr "Първо изберете поръчки."
+
+msgid "Pop-ups are blocked — allow them for this site, then try again."
+msgstr "Изскачащите прозорци са блокирани — разрешете ги за този сайт и опитайте пак."
+
+#: includes/class-ole-settings-page.php
+msgid "Open selected orders one-by-one"
+msgstr "Отваряй избраните поръчки една по една"
+
+msgid "Enable button"
+msgstr "Включи бутона"
+
+msgid "Add a button to the orders list that opens each checkbox-selected order in its own tab, one at a time, so the server never loads more than one at once."
+msgstr "Добавя бутон в списъка с поръчки, който отваря всяка избрана поръчка в собствен раздел, една по една, така че сървърът да не зарежда повече от една наведнъж."
+
+msgid "Default interval (seconds)"
+msgstr "Интервал по подразбиране (секунди)"
+
+msgid "Seconds to wait between opening tabs (editable on the button too). Tip: your browser must allow pop-ups for this site, or only the first tab opens."
+msgstr "Секунди между отварянето на разделите (може да се промени и на бутона). Съвет: браузърът трябва да разрешава изскачащи прозорци за този сайт, иначе се отваря само първият раздел."
