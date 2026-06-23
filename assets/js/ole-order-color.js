@@ -6,7 +6,7 @@
 		fmt = fmt || {};
 		var dec = fmt.decimal || '.';
 		var tho = fmt.thousand || '';
-		var s = String( text == null ? '' : text ).replace( / /g, ' ' ); // normalize nbsp -> space
+		var s = String( text == null ? '' : text ).replace( /\u00a0/g, ' ' ); // normalize nbsp -> space
 		if ( tho ) { s = s.split( tho ).join( '' ); }
 		if ( dec && dec !== '.' ) { s = s.split( dec ).join( '.' ); }
 		s = s.replace( /[^0-9.\-]/g, '' );

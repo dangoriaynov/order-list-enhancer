@@ -18,7 +18,7 @@ ck( OC.matchTotal( null, rules ) === null, 'null total -> no match' );
 ck( OC.matchTotal( 250, [] ) === null, 'no rules -> no match' );
 
 // parseAmount: handles the separator combinations WooCommerce can render.
-ck( OC.parseAmount( '1 234,50 лв.', { decimal: ',', thousand: ' ' } ) === 1234.5, 'space-thousand, comma-decimal (nbsp)' );
+ck( OC.parseAmount( '1\u00a0234,50 лв.', { decimal: ',', thousand: ' ' } ) === 1234.5, 'space-thousand, comma-decimal (nbsp)' );
 ck( OC.parseAmount( '$1,234.50', { decimal: '.', thousand: ',' } ) === 1234.5, 'comma-thousand, dot-decimal' );
 ck( OC.parseAmount( '1.234,50 лв.', { decimal: ',', thousand: '.' } ) === 1234.5, 'dot-thousand, comma-decimal' );
 ck( OC.parseAmount( '49,00 лв.', { decimal: ',', thousand: ' ' } ) === 49, 'plain comma-decimal' );
