@@ -491,12 +491,27 @@
 	var seqInit = false, seqTimers = [], seqRunning = false;
 	function seqSelectedUrls() {
 		var urls = [];
+		var hpos = /[?&]page=wc-orders/.test( window.location.search );
 		var boxes = document.querySelectorAll( '.wp-list-table tbody .check-column input[type=checkbox]:checked' );
 		Array.prototype.forEach.call( boxes, function ( cb ) {
+			var id = ( cb.value || '' ).trim();
+			if ( ! /^\d+$/.test( id ) ) { return; } // skip non-order checkboxes (e.g. select-all)
 			var tr = cb.closest ? cb.closest( 'tr' ) : null;
-			if ( ! tr ) { return; }
-			var a = tr.querySelector( 'a[href*="action=edit"], td.column-order_number a, td.order_number a, a.order-view' );
-			if ( a && a.href ) { urls.push( a.href ); }
+			var href = '';
+			if ( tr ) {
+				// Only the real edit link — never the "#"-href preview eye (whose
+				// .href resolves to the current orders-list page).
+				var a = tr.querySelector( 'a[href*="action=edit"], a[href*="post.php?post="]' );
+				if ( a ) { href = a.href; }
+			}
+			if ( ! href ) {
+				// Build the edit URL from the order id (HPOS vs legacy posts table).
+				var loc = window.location;
+				href = hpos
+					? loc.origin + loc.pathname + '?page=wc-orders&action=edit&id=' + id
+					: loc.origin + loc.pathname.replace( /[^/]*$/, 'post.php' ) + '?post=' + id + '&action=edit';
+			}
+			urls.push( href );
 		} );
 		return urls;
 	}
