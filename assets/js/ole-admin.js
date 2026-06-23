@@ -9,6 +9,9 @@
 	var CTX    = D.context || 'list';
 	var AJAX   = D.ajax || {};
 	var DEC    = D.decimalSep || ',';
+	var TC  = D.totalColor || { on: false, rules: [] };
+	var PF  = D.priceFormat || { decimal: '.', thousand: ',' };
+	var OC  = ( typeof window !== 'undefined' && window.OLE_OrderColor ) ? window.OLE_OrderColor : null;
 	var detailsCache = {};
 
 	function fmt( tmpl, args ) {
@@ -72,6 +75,50 @@
 				el.style.boxShadow = 'inset 3px 0 0 0 rgba(0,0,0,.14)';
 				if ( m.label ) { el.title = fmt( I18N.shipTitle, [ m.label ] ); }
 			}
+		} );
+	}
+
+	// Append a ring label to whatever tooltip the shipping fill may have set.
+	function ringTitle( el, label ) {
+		if ( ! label ) { return; }
+		el.title = el.title ? ( el.title + ' · ' + label ) : label;
+	}
+
+	// Orders list: ring the "Ship to" cell when the row's total meets a threshold.
+	function colorTotalRingsList() {
+		if ( ! TC.on || ! OC ) { return; }
+		var rows = document.querySelectorAll( '.wp-list-table tbody tr' );
+		Array.prototype.forEach.call( rows, function ( tr ) {
+			var cell = tr.querySelector( 'td.column-shipping_address' );
+			if ( ! cell || cell.getAttribute( 'data-ole-ring' ) ) { return; }
+			var amtEl = tr.querySelector( 'td.column-order_total .woocommerce-Price-amount' )
+				|| tr.querySelector( 'td.order_total .woocommerce-Price-amount' );
+			if ( ! amtEl ) { return; }
+			cell.setAttribute( 'data-ole-ring', '1' );
+			var total = OC.parseAmount( amtEl.textContent || '', PF );
+			var m = OC.matchTotal( total, TC.rules );
+			if ( m && m.color ) {
+				cell.style.setProperty( 'box-shadow', 'inset 0 0 0 3px ' + m.color, 'important' );
+				cell.style.borderRadius = '8px';
+				ringTitle( cell, m.label );
+			}
+		} );
+	}
+
+	// Edit screen: ring the address panel(s), composed with the shipping shadow.
+	function colorTotalRingEdit() {
+		if ( ! TC.on || ! OC || TC.orderTotal == null ) { return; }
+		var m = OC.matchTotal( TC.orderTotal, TC.rules );
+		if ( ! m || ! m.color ) { return; }
+		var blocks = document.querySelectorAll( '#order_data .address' );
+		Array.prototype.forEach.call( blocks, function ( el ) {
+			if ( el.getAttribute( 'data-ole-ring' ) ) { return; }
+			el.setAttribute( 'data-ole-ring', '1' );
+			var existing = el.style.boxShadow;
+			el.style.boxShadow = 'inset 0 0 0 3px ' + m.color + ( existing ? ', ' + existing : '' );
+			if ( ! el.style.borderRadius ) { el.style.borderRadius = '6px'; }
+			if ( ! el.style.padding ) { el.style.padding = '8px 10px'; }
+			ringTitle( el, m.label );
 		} );
 	}
 
@@ -440,8 +487,9 @@
 	}
 
 	function run() {
-		if ( 'edit' === CTX ) { normalizePhones(); colorEditAddress(); addCopyButtons(); addEditGroupBadge(); return; }
+		if ( 'edit' === CTX ) { normalizePhones(); colorEditAddress(); colorTotalRingEdit(); addCopyButtons(); addEditGroupBadge(); return; }
 		colorShipping();
+		colorTotalRingsList();
 		markDuplicates();
 		setupBulkActions();
 		markPhoneInvalid();
