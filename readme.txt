@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.19
+Stable tag: 1.0.24
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,6 +28,9 @@ If you sell add-ons through Product Add-Ons or Checkout Add-Ons, map each extra 
 
 **Pick a default bulk action.**
 Choose which entry is pre-selected in the orders-list bulk-actions menu; the list of choices fills itself from your own orders screen.
+
+**Flag high-value orders.**
+Set order-total thresholds, each with its own color. When an order's total reaches a threshold, its row in the list — and its address panel on the order screen — gets a colored ring, so big orders stand out at a glance. The ring is independent of the shipping color (both show at once), and when several thresholds apply the highest one wins. Off by default.
 
 **Validate phone numbers at checkout.**
 Turn on checkout phone validation and customers get instant, clear feedback on whether their Bulgarian number is valid — and why — as they type, backed by server-side enforcement you can set to *warn* (let the order through but flag it) or *block* (stop it until fixed). Orders with an unusable number are flagged on the order screen and with a badge in the list, so you catch them before you ship. Off by default.
@@ -60,6 +63,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.24 =
+* New: optional order-total coloring — set value thresholds, each with a color; an order whose total reaches a threshold gets a colored ring on its list row and its order-screen address panel (highest threshold wins). Drawn on top of the shipping color, so both stay visible. Off by default.
 
 = 1.0.19 =
 * Extras → products: a quantity extra such as “2 бр …” now converts to a product line with quantity N (price unchanged), so the picked quantity is correct.
