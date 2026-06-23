@@ -505,7 +505,9 @@
 	}
 	function setupSeqOpen() {
 		if ( seqInit || ! D.seqOpen || ! D.seqOpen.enabled ) { return; }
-		var anchor = document.querySelector( '.tablenav.top' ) || document.querySelector( '.wp-list-table' );
+		// Insert as a clean full-width band right above the orders table (below the
+		// floated toolbar/search), so it never overlaps WordPress's filter row.
+		var anchor = document.querySelector( '.wp-list-table' ) || document.querySelector( '.tablenav.top' );
 		if ( ! anchor || ! anchor.parentNode ) { return; }
 		seqInit = true;
 
