@@ -2,32 +2,37 @@
 jQuery( function ( $ ) {
 	var $form = $( '#ole-settings-form' );
 	if ( ! $form.length ) { return; }
-	var $tbody = $form.find( '.ole-rules tbody' );
-
 	// Visual color pickers for every hex field.
 	function initColorPickers( $scope ) {
 		if ( ! $.fn.wpColorPicker ) { return; }
 		( $scope || $form ).find( '.ole-color' ).not( '.wp-color-picker' ).wpColorPicker();
 	}
+
+	// Capture a clean blank-row template for EACH repeatable table BEFORE the
+	// pickers wrap the inputs. Several tables share the .ole-rules / .ole-rule-add
+	// classes (shipping rules, order-total rules), so add/remove must scope to the
+	// table the clicked button belongs to and rebuild that table's own row shape.
+	$form.find( 'table.ole-rules' ).each( function () {
+		var $first = $( this ).find( 'tbody tr' ).first();
+		if ( ! $first.length ) { return; }
+		var $blank = $first.clone();
+		$blank.find( 'input' ).val( '' );
+		$( this ).data( 'oleBlankRow', $blank.prop( 'outerHTML' ) );
+	} );
+
 	initColorPickers();
 
-	function ruleRowHtml() {
-		return '<tr>' +
-			'<td><input type="text" name="rule_keyword[]" value="" class="regular-text"/></td>' +
-			'<td><input type="text" name="rule_color[]" value="" class="ole-color" placeholder="#dcefd2"/></td>' +
-			'<td><input type="text" name="rule_label[]" value="" class="regular-text"/></td>' +
-			'<td><button type="button" class="button ole-rule-remove">&times;</button></td>' +
-			'</tr>';
-	}
-
-	// Repeatable shipping rules.
 	$form.on( 'click', '.ole-rule-add', function () {
-		var $tr = $( ruleRowHtml() );
-		$tbody.append( $tr );
+		var $t  = $( this ).closest( 'td' ).find( 'table.ole-rules' ).first();
+		var tpl = $t.data( 'oleBlankRow' );
+		if ( ! tpl ) { return; }
+		var $tr = $( tpl );
+		$t.find( 'tbody' ).first().append( $tr );
 		initColorPickers( $tr );
 	} );
 	$form.on( 'click', '.ole-rule-remove', function () {
-		if ( $tbody.find( 'tr' ).length > 1 ) {
+		var $tb = $( this ).closest( 'table.ole-rules' ).find( 'tbody' ).first();
+		if ( $tb.find( 'tr' ).length > 1 ) {
 			$( this ).closest( 'tr' ).remove();
 		}
 	} );

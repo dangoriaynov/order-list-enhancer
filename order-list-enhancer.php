@@ -3,7 +3,7 @@
  * Plugin Name:       Order List Enhancer
  * Plugin URI:        https://github.com/dangoriaynov/order-list-enhancer
  * Description:       Highlights repeat-customer orders (same phone, e-mail, name or address) with a click-to-open details modal, and colors the shipping column by configurable rules — right in the WooCommerce orders list.
- * Version:           1.0.26
+ * Version:           1.0.27
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Dan Goriaynov
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'OLE_VERSION', '1.0.26' );
+define( 'OLE_VERSION', '1.0.27' );
 define( 'OLE_FILE', __FILE__ );
 define( 'OLE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'OLE_URL', plugin_dir_url( __FILE__ ) );
