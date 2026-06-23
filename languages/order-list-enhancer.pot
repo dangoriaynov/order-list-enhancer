@@ -1,252 +1,444 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Order List Enhancer 1.0.0\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-23 22:05+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 
-msgid "Order List Enhancer"
-msgstr ""
-
-msgid "Repeat customer highlighting"
-msgstr ""
-
-msgid "Outline and badge orders that belong to the same customer in the orders list."
-msgstr ""
-
-msgid "Enable highlighting"
-msgstr ""
-
-msgid "Match by phone"
-msgstr ""
-
-msgid "Match by e-mail"
-msgstr ""
-
-msgid "Match by name"
-msgstr ""
-
-msgid "Match by shipping address"
-msgstr ""
-
-msgid "Scan limit"
-msgstr ""
-
-msgid "Maximum number of recent orders to scan across all statuses."
-msgstr ""
-
-msgid "Shipping column coloring"
-msgstr ""
-
-msgid "Color the shipping cell from the rules below. The first rule whose keyword is found in the shipping address wins."
-msgstr ""
-
-msgid "Enable shipping coloring"
-msgstr ""
-
-msgid "Default color"
-msgstr ""
-
-msgid "Used when no rule matches. Leave empty to not color unmatched rows."
-msgstr ""
-
-msgid "Default label"
-msgstr ""
-
-msgid "Coloring rules"
-msgstr ""
-
-msgid "Keyword (in shipping address)"
-msgstr ""
-
-msgid "Color (hex)"
-msgstr ""
-
-msgid "Label"
-msgstr ""
-
-msgid "Add rule"
-msgstr ""
-
-msgid "Order total on edit page"
-msgstr ""
-
-msgid "Show the order total near the billing address on the single order edit screen."
-msgstr ""
-
-msgid "Show order total on edit page"
-msgstr ""
-
-msgid "phone"
-msgstr ""
-
-msgid "e-mail"
-msgstr ""
-
-msgid "name"
-msgstr ""
-
-msgid "address"
-msgstr ""
-
+#. translators: %s: number of orders.
+#: includes/class-ole-plugin.php:180
+#, php-format
 msgid "customer · %s orders"
 msgstr ""
 
+#. translators: %s: matching criteria (phone, name, etc.).
+#: includes/class-ole-plugin.php:182
+#, php-format
 msgid "Show this customer's orders. Matches: %s"
 msgstr ""
 
-msgid "Customer #%1$s · %2$s orders%3$s"
-msgstr ""
-
-msgid "Close"
-msgstr ""
-
-msgid "—"
-msgstr ""
-
-msgid "Delivery: %s"
-msgstr ""
-
-msgid "Outline & badge same-customer orders in the list (with details modal)."
-msgstr ""
-
-msgid "Match by"
-msgstr ""
-
-msgid "shipping address"
-msgstr ""
-
-msgid "Shipping coloring"
-msgstr ""
-
-msgid "Color in orders list"
-msgstr ""
-
-msgid "Color the “Ship to” cell in the orders list."
-msgstr ""
-
-msgid "Color on edit page"
-msgstr ""
-
-msgid "Color the address block on the single order edit screen."
-msgstr ""
-
-msgid "Enable"
-msgstr ""
-
-msgid "Show the order total near the billing address on the order edit screen."
-msgstr ""
-
-msgid "Save changes"
-msgstr ""
-
-msgid "Saving…"
-msgstr ""
-
-msgid "Saved."
-msgstr ""
-
-msgid "Save failed."
-msgstr ""
-
-msgid "duplicate"
-msgstr ""
-
-msgid "%s orders"
-msgstr ""
-
-msgid "first on %s"
-msgstr ""
-
-msgid "once every %d days"
-msgstr ""
-
-msgid "same day"
-msgstr ""
-
-msgid "Customer"
-msgstr ""
-
-msgid "Loading…"
-msgstr ""
-
-msgid "Failed to load."
-msgstr ""
-
-msgid "duplicate %s orders"
-msgstr ""
-
+#. translators: %s: number of orders.
+#: includes/class-ole-plugin.php:184
+#, php-format
 msgid "duplicate · %s orders"
 msgstr ""
 
-msgid "Duplicate window (days)"
+#. translators: %s: number of orders.
+#: includes/class-ole-plugin.php:186
+#, php-format
+msgid "%s orders"
 msgstr ""
 
-msgid "Two orders from the same customer within this many days (or 2+ in processing) are flagged as a likely duplicate."
+#. translators: %s: date of the first order.
+#: includes/class-ole-plugin.php:188
+#, php-format
+msgid "first on %s"
 msgstr ""
 
-msgid "Match mode"
+#: includes/class-ole-plugin.php:189
+msgid "Close"
 msgstr ""
 
-msgid "By phone"
+#: includes/class-ole-plugin.php:190
+msgid "—"
 msgstr ""
 
-msgid "By name"
+#. translators: %s: delivery method label.
+#: includes/class-ole-plugin.php:192
+#, php-format
+msgid "Delivery: %s"
 msgstr ""
 
-msgid "By name + phone"
+#: includes/class-ole-plugin.php:193
+msgid "Loading…"
 msgstr ""
 
-msgid "How to decide two orders are from the same customer. Name + phone matches when either the phone or the name matches."
+#: includes/class-ole-plugin.php:194
+msgid "Failed to load."
 msgstr ""
 
-msgid "phone + name"
-msgstr ""
-
-msgid "Copy buttons"
-msgstr ""
-
-msgid "Show copy-to-clipboard buttons for name, phone and total on the order edit screen."
-msgstr ""
-
+#: includes/class-ole-plugin.php:195
 msgid "Copy"
 msgstr ""
 
+#: includes/class-ole-plugin.php:196
 msgid "Copied"
 msgstr ""
 
-msgid "How to decide two orders are from the same customer. Name + phone matches only when both the phone and the name match."
+#: includes/class-ole-plugin.php:197
+msgid "invalid phone"
 msgstr ""
 
-msgid "Decimal separator"
+#: includes/class-ole-extras.php:48
+msgid "OLE — extras converted to product lines:"
 msgstr ""
 
-msgid "Comma (,)"
+#: includes/class-ole-extras.php:191
+#, php-format
+msgid "Converted from extra: «%1$s» (was %2$s)"
 msgstr ""
 
-msgid "Dot (.)"
+#: includes/class-ole-extras.php:202
+#, php-format
+msgid "Extra «%s» moved to its own line"
 msgstr ""
 
-msgid "Decimal separator for the order total shown under the address (and its copy button)."
+#. translators: %d: average number of days between orders.
+#: includes/class-ole-duplicates.php:93
+#, php-format
+msgid "once every %d days"
 msgstr ""
 
-msgid "Phone numbers"
+#: includes/class-ole-duplicates.php:95
+msgid "same day"
 msgstr ""
 
-msgid "Normalize phone (display only)"
+#: includes/class-ole-duplicates.php:104
+msgid "Customer"
 msgstr ""
 
-msgid "Tidy phone numbers for display: leading 00 → +, add the country code when missing. Never changes the database."
+#: includes/class-ole-duplicates.php:306
+msgid "phone"
 msgstr ""
 
-msgid "Default country code"
+#: includes/class-ole-duplicates.php:307
+msgid "e-mail"
 msgstr ""
 
-msgid "Digits only, e.g. 359. Added to numbers that have no country code."
+#: includes/class-ole-duplicates.php:308
+msgid "name"
 msgstr ""
 
+#: includes/class-ole-duplicates.php:309
+msgid "address"
+msgstr ""
+
+#: includes/class-ole-duplicates.php:310
+msgid "phone + name"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:26
 msgid "Settings"
 msgstr ""
 
+#: includes/class-ole-settings-page.php:34
+#: includes/class-ole-settings-page.php:35
+#: includes/class-ole-settings-page.php:110
+msgid "Order List Enhancer"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:62
+msgid "Saving…"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:63
+msgid "Saved."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:64
+msgid "Save failed."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:113
+msgid "Repeat customer highlighting"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:116
+msgid "Enable highlighting"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:117
+msgid "Outline & badge same-customer orders in the list (with details modal)."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:120
+msgid "Match mode"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:124
+msgid "By phone"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:125
+msgid "By name"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:126
+msgid "By name + phone"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:128
+msgid "How to decide two orders are from the same customer. Name + phone matches only when both the phone and the name match."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:132
+msgid "Scan limit"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:134
+msgid "Maximum number of recent orders to scan across all statuses."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:137
+msgid "Duplicate window (days)"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:139
+msgid "Two orders from the same customer within this many days (or 2+ in processing) are flagged as a likely duplicate."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:143
+msgid "Shipping coloring"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:146
+msgid "Color in orders list"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:147
+msgid "Color the “Ship to” cell in the orders list."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:150
+msgid "Color on edit page"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:151
+msgid "Color the address block on the single order edit screen."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:154
+msgid "Coloring rules"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:157
+msgid "Keyword (in shipping address)"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:158
+#: includes/class-ole-settings-page.php:208
 msgid "Color"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:159
+#: includes/class-ole-settings-page.php:209
+msgid "Label"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:171
+#: includes/class-ole-settings-page.php:221
+msgid "Add rule"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:175
+msgid "Default color"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:177
+msgid "Used when no rule matches. Leave empty to not color unmatched rows."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:180
+msgid "Default label"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:185
+msgid "Order total coloring"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:188
+#: includes/class-ole-settings-page.php:230
+msgid "Enable"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:189
+msgid "Ring the order's row in the list — and its address panel on the order screen — when the total reaches a threshold below. Independent of the shipping color; the highest matched threshold wins."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:192
+msgid "Threshold rules"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:207
+msgid "Order total ≥"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:222
+msgid "When an order's total is at or above a threshold it gets a ring in that color. If several apply, the highest threshold wins. The ring is drawn on top of any shipping color — both stay visible."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:227
+msgid "Order total on edit page"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:231
+msgid "Show the order total near the billing address on the order edit screen."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:234
+msgid "Decimal separator"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:238
+msgid "Comma (,)"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:239
+msgid "Dot (.)"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:241
+msgid "Decimal separator for the order total shown under the address (and its copy button)."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:245
+msgid "Copy buttons"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:246
+msgid "Show copy-to-clipboard buttons for name, phone and total on the order edit screen."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:250
+msgid "Orders list — default bulk action"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:253
+msgid "Pre-selected action"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:264
+msgid "— (none)"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:269
+msgid "Pre-selects this entry in the orders-list bulk-actions menu on page load. The list is filled from your Orders screen — open the Orders list once if it looks empty."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:274
+msgid "Extras → products"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:277
+msgid "Enable conversion"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:278
+msgid "At order creation, turn each mapped add-on extra into a real product line at the price the customer paid. Order total is unchanged."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:281
+msgid "Mapping (extra → product)"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:290
+msgid "Extra text (as shown on the order)"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:291
+msgid "Product"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:302
+msgid "Search for a product…"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:315
+msgid "Add row"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:316
+msgid "Match is the exact extra label as it appears on the order/checkout (Product Add-On label like \"+ 500 г …\", or the Checkout Add-On name). The product line will be priced at what the customer paid for that extra."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:321
+msgid "Checkout phone validation"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:324
+msgid "Validate at checkout"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:325
+msgid "Validate the billing phone number on the checkout (Bulgarian numbers) and flag invalid numbers in the admin."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:328
+msgid "When invalid"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:332
+msgid "Warn only (allow the order, flag it)"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:333
+msgid "Block the order until fixed"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:335
+msgid "Country code comes from \"Default country code\" below (default 359). Invalid orders are flagged on the order page and in the orders list regardless of mode."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:340
+msgid "Phone numbers"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:343
+msgid "Normalize phone (display only)"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:344
+msgid "Tidy phone numbers for display: leading 00 → +, add the country code when missing. Never changes the database."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:347
+msgid "Default country code"
+msgstr ""
+
+#: includes/class-ole-settings-page.php:349
+msgid "Digits only, e.g. 359. Added to numbers that have no country code."
+msgstr ""
+
+#: includes/class-ole-settings-page.php:354
+msgid "Save changes"
+msgstr ""
+
+#: includes/class-ole-phone-checkout.php:27
+msgid "Looks valid"
+msgstr ""
+
+#: includes/class-ole-phone-checkout.php:28
+msgid "Please enter a phone number."
+msgstr ""
+
+#: includes/class-ole-phone-checkout.php:29
+msgid "The phone number looks too short. Example: 0888 123 456."
+msgstr ""
+
+#: includes/class-ole-phone-checkout.php:30
+msgid "The phone number looks too long. Example: 0888 123 456."
+msgstr ""
+
+#: includes/class-ole-phone-checkout.php:31
+msgid "Please enter a Bulgarian number (e.g. 0888 123 456)."
+msgstr ""
+
+#: includes/class-ole-phone-checkout.php:32
+msgid "Invalid phone number. Example: 0888 123 456 or +359 888 123 456."
+msgstr ""
+
+#: includes/class-ole-phone-checkout.php:97
+msgid "Phone may be invalid — please verify."
 msgstr ""
