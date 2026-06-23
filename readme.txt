@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.24
+Stable tag: 1.0.28
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,9 @@ Set order-total thresholds, each with its own color. When an order's total reach
 **Validate phone numbers at checkout.**
 Turn on checkout phone validation and customers get instant, clear feedback on whether their Bulgarian number is valid — and why — as they type, backed by server-side enforcement you can set to *warn* (let the order through but flag it) or *block* (stop it until fixed). Orders with an unusable number are flagged on the order screen and with a badge in the list, so you catch them before you ship. Off by default.
 
+**Open many orders without crashing your shop.**
+Tick the orders you want to review and click "Open selected" — each one opens in its own tab, one every few seconds (you set the interval), so only a single order ever loads at a time. A Stop button and a live "3 / 12" counter keep you in control. Handy when opening many orders at once would overwhelm the server. (Your browser must allow pop-ups for the admin site.)
+
 **Built to fit in.**
 Every feature has its own on/off switch on a single settings page that saves instantly, with no page reload, a color picker for every color, and a Settings link right on the Plugins screen. Everything runs in the admin only, for users who can edit orders — no external services and no tracking. Compatible with WooCommerce HPOS (High-Performance Order Storage) and sequential order numbers, and fully translatable (English and Bulgarian included).
 
@@ -63,6 +66,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.28 =
+* New: "Open selected one-by-one" button on the orders list — opens each checkbox-selected order's edit page in its own tab, one every N seconds (editable, default 20), with a Stop button and a progress counter, so the server never loads more than one order at a time. Needs pop-ups allowed for the site. On by default.
 
 = 1.0.24 =
 * New: optional order-total coloring — set value thresholds, each with a color; an order whose total reaches a threshold gets a colored ring on its list row and its order-screen address panel (highest threshold wins). Drawn on top of the shipping color, so both stay visible. Off by default.
