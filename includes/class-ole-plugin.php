@@ -122,6 +122,7 @@ class OLE_Plugin {
 			? OLE_Settings::is_yes( $opts, 'ship_enabled' )
 			: OLE_Settings::is_yes( $opts, 'ship_color_edit' );
 		$copy_on     = OLE_Settings::is_yes( $opts, 'copy_buttons' );
+		$total_color_active = OLE_Settings::is_yes( $opts, 'total_color_enabled' );
 		$bulk_def    = ( 'list' === $context ) ? (string) $opts['bulk_default_action'] : '';
 
 		// На екрана за редакция: групата на текущата поръчка (за да отворим същия модал).
@@ -141,10 +142,10 @@ class OLE_Plugin {
 		}
 
 		// На редагуванні JS прави: оцветяване на адреса, копи-бутони и/или попъп.
-		if ( 'edit' === $context && ! $ship_active && ! $copy_on && ! $edit_group ) {
+		if ( 'edit' === $context && ! $ship_active && ! $copy_on && ! $edit_group && ! $total_color_active ) {
 			return;
 		}
-		if ( 'list' === $context && ! $dup_on && ! $ship_active && '' === $bulk_def && ! OLE_Settings::is_yes( $opts, 'phone_validate_enabled' ) ) {
+		if ( 'list' === $context && ! $dup_on && ! $ship_active && '' === $bulk_def && ! OLE_Settings::is_yes( $opts, 'phone_validate_enabled' ) && ! $total_color_active ) {
 			return;
 		}
 
@@ -221,8 +222,31 @@ class OLE_Plugin {
 			$data['phoneInvalid'] = array_map( 'strval', OLE_Phone_Checkout::invalid_order_ids() );
 		}
 
+		$data['totalColor'] = array(
+			'on'    => $total_color_active,
+			'rules' => $total_color_active ? OLE_Order_Color::for_js( $opts )['rules'] : array(),
+		);
+		$data['priceFormat'] = array(
+			'decimal'  => function_exists( 'wc_get_price_decimal_separator' ) ? wc_get_price_decimal_separator() : '.',
+			'thousand' => function_exists( 'wc_get_price_thousand_separator' ) ? wc_get_price_thousand_separator() : ',',
+		);
+		if ( 'edit' === $context && $total_color_active ) {
+			$oid_tc = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : ( isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( $oid_tc ) {
+				$ord_tc = wc_get_order( $oid_tc );
+				if ( $ord_tc ) {
+					$data['totalColor']['orderTotal'] = (float) $ord_tc->get_total();
+				}
+			}
+		}
+
 		wp_enqueue_style( 'ole-admin', OLE_URL . 'assets/css/ole-admin.css', array(), OLE_VERSION );
-		wp_enqueue_script( 'ole-admin', OLE_URL . 'assets/js/ole-admin.js', array(), OLE_VERSION, true );
+		$admin_deps = array();
+		if ( $total_color_active ) {
+			wp_enqueue_script( 'ole-order-color', OLE_URL . 'assets/js/ole-order-color.js', array(), OLE_VERSION, true );
+			$admin_deps[] = 'ole-order-color';
+		}
+		wp_enqueue_script( 'ole-admin', OLE_URL . 'assets/js/ole-admin.js', $admin_deps, OLE_VERSION, true );
 		wp_localize_script( 'ole-admin', 'OLE_DATA', $data );
 	}
 }
