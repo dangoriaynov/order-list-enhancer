@@ -36,6 +36,12 @@ class OLE_Settings {
 			'total_color_rules'   => array(), // [ ['threshold'=>float,'color'=>'#hex','label'=>''], ... ]
 			'seq_open_enabled'    => 'yes', // "open selected one-by-one" button on the orders list
 			'seq_open_interval'   => 20, // default seconds between opened tabs
+			'delivery_notice_enabled'   => 'no',  // highlight the orddd delivery-date field at checkout
+			'delivery_notice_title'     => '',     // empty → translatable default
+			'delivery_notice_body'      => '',     // empty → translatable default
+			'delivery_vacation_enabled' => 'no',  // show the "we are away" banner
+			'delivery_vacation_until'   => '',     // YYYY-MM-DD; empty/past → banner hidden
+			'delivery_vacation_text'    => '',     // empty → translatable default; supports one %s (date)
 		);
 	}
 
@@ -114,6 +120,12 @@ class OLE_Settings {
 		$opts['total_color_rules'] = self::clean_total_color_rules( $opts['total_color_rules'] );
 		$opts['phone_validate_mode'] = ( 'block' === $opts['phone_validate_mode'] ) ? 'block' : 'warn';
 		$opts['seq_open_interval'] = max( 1, min( 300, (int) $opts['seq_open_interval'] ) );
+		$opts['delivery_notice_title']  = sanitize_text_field( (string) $opts['delivery_notice_title'] );
+		$opts['delivery_notice_body']   = sanitize_textarea_field( (string) $opts['delivery_notice_body'] );
+		$opts['delivery_vacation_text'] = sanitize_textarea_field( (string) $opts['delivery_vacation_text'] );
+		$opts['delivery_vacation_until'] = ( 1 === preg_match( '/^\d{4}-\d{2}-\d{2}$/', (string) $opts['delivery_vacation_until'] ) )
+			? (string) $opts['delivery_vacation_until']
+			: '';
 		if ( ! is_array( $opts['ship_rules'] ) ) {
 			$opts['ship_rules'] = array();
 		}
