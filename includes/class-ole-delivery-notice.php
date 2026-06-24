@@ -26,4 +26,51 @@ class OLE_Delivery_Notice {
 		}
 		return strcmp( (string) $today, $until ) <= 0;
 	}
+
+	public static function init() {
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue' ) );
+	}
+
+	/** Перекладні дефолти текстів (фолбек, коли налаштування порожні). */
+	public static function defaults_copy() {
+		return array(
+			'title'    => __( '📦 This is the SHIPPING date', 'order-list-enhancer' ),
+			'body'     => __( 'Not the date you receive it. Delivery to the courier office usually takes about 1 working day.', 'order-list-enhancer' ),
+			/* translators: %s: vacation end date. */
+			'vacation' => __( '🌴 We are on vacation until %s. Orders placed now will be shipped after that date.', 'order-list-enhancer' ),
+		);
+	}
+
+	/** Дані для фронтенду: тексти + (опційно) банер відпустки. */
+	public static function payload() {
+		$o   = OLE_Settings::get();
+		$def = self::defaults_copy();
+
+		$title = '' !== trim( (string) $o['delivery_notice_title'] ) ? (string) $o['delivery_notice_title'] : $def['title'];
+		$body  = '' !== trim( (string) $o['delivery_notice_body'] ) ? (string) $o['delivery_notice_body'] : $def['body'];
+
+		$vacation = null;
+		if ( OLE_Settings::is_yes( $o, 'delivery_vacation_enabled' )
+			&& self::vacation_active( (string) $o['delivery_vacation_until'], current_time( 'Y-m-d' ) ) ) {
+			$tpl  = '' !== trim( (string) $o['delivery_vacation_text'] ) ? (string) $o['delivery_vacation_text'] : $def['vacation'];
+			$date = date_i18n( get_option( 'date_format' ), strtotime( (string) $o['delivery_vacation_until'] . ' 12:00:00' ) );
+			// str_replace (not sprintf) so stray % in the owner's text can't break it.
+			$vacation = array( 'text' => str_replace( '%s', $date, $tpl ) );
+		}
+
+		return array(
+			'title'    => $title,
+			'body'     => $body,
+			'vacation' => $vacation,
+		);
+	}
+
+	public static function enqueue() {
+		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+			return;
+		}
+		wp_enqueue_style( 'ole-delivery-notice', OLE_URL . 'assets/css/ole-delivery-notice.css', array(), OLE_VERSION );
+		wp_enqueue_script( 'ole-delivery-notice', OLE_URL . 'assets/js/ole-delivery-notice.js', array(), OLE_VERSION, true );
+		wp_localize_script( 'ole-delivery-notice', 'OLE_DELIVERY', self::payload() );
+	}
 }
