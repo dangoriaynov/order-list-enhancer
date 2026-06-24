@@ -40,6 +40,9 @@ class OLE_Plugin {
 		if ( OLE_Settings::is_yes( $opts, 'phone_validate_enabled' ) ) {
 			OLE_Phone_Checkout::init();
 		}
+		if ( OLE_Settings::is_yes( $opts, 'delivery_notice_enabled' ) ) {
+			OLE_Delivery_Notice::init();
+		}
 	}
 
 	/**
