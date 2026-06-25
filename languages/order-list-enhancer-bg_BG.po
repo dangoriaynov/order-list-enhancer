@@ -525,3 +525,69 @@ msgstr "Интервал по подразбиране (секунди)"
 
 msgid "Seconds to wait between opening tabs (editable on the button too). Tip: your browser must allow pop-ups for this site, or only the first tab opens."
 msgstr "Секунди между отварянето на разделите (може да се промени и на бутона). Съвет: браузърът трябва да разрешава изскачащи прозорци за този сайт, иначе се отваря само първият раздел."
+
+#. translators: %s: vacation end date.
+#: includes/class-ole-delivery-notice.php
+#, php-format
+msgid "🌴 We are on vacation until %s. Orders placed now will be shipped after that date."
+msgstr "🌴 В момента сме в отпуск до %s. Поръчките, направени сега, ще бъдат изпратени след тази дата."
+
+#: includes/class-ole-delivery-notice.php
+msgid "📦 This is the SHIPPING date"
+msgstr "📦 Това е датата на ИЗПРАЩАНЕ"
+
+#: includes/class-ole-delivery-notice.php
+msgid "Not the date you receive it. Delivery to the courier office usually takes about 1 working day."
+msgstr "Не е датата на получаване. Обикновено доставката до офис на куриера отнема около 1 работен ден."
+
+#: includes/class-ole-settings-page.php
+msgid "Delivery-date notice (checkout)"
+msgstr "Бележка за датата на доставка (каса)"
+
+#: includes/class-ole-settings-page.php
+msgid "Show notice"
+msgstr "Показвай бележката"
+
+#: includes/class-ole-settings-page.php
+msgid "When the delivery-date field (Order Delivery Date plugin) is on the checkout, show a highlighted note above it. Does nothing if that field is absent."
+msgstr "Когато на касата има поле за дата на доставка (плъгин Order Delivery Date), показва подчертана бележка над него. Не прави нищо, ако полето липсва."
+
+#: includes/class-ole-settings-page.php
+msgid "Notice title"
+msgstr "Заглавие на бележката"
+
+#: includes/class-ole-settings-page.php
+msgid "Bold first line. Leave empty for the default."
+msgstr "Удебелен първи ред. Оставете празно за стойността по подразбиране."
+
+#: includes/class-ole-settings-page.php
+msgid "Notice text"
+msgstr "Текст на бележката"
+
+#: includes/class-ole-settings-page.php
+msgid "Explanation under the title. Leave empty for the default."
+msgstr "Пояснение под заглавието. Оставете празно за стойността по подразбиране."
+
+#: includes/class-ole-settings-page.php
+msgid "Vacation banner"
+msgstr "Банер за отпуск"
+
+#: includes/class-ole-settings-page.php
+msgid "Also show a red “we are away” banner above the notice, until the date below."
+msgstr "Показвай и червен банер „в отпуск сме“ над бележката, до посочената по-долу дата."
+
+#: includes/class-ole-settings-page.php
+msgid "Away until"
+msgstr "Отсъстваме до"
+
+#: includes/class-ole-settings-page.php
+msgid "The banner hides automatically after this date."
+msgstr "Банерът се скрива автоматично след тази дата."
+
+#: includes/class-ole-settings-page.php
+msgid "Vacation text"
+msgstr "Текст за отпуск"
+
+#: includes/class-ole-settings-page.php
+msgid "Use %s where the date should appear. Leave empty for the default."
+msgstr "Използвайте %s там, където трябва да се покаже датата. Оставете празно за стойността по подразбиране."
