@@ -2,11 +2,15 @@
 .ole-deliv {
 	box-sizing: border-box;
 	width: 100%;
-	margin: 0 0 .75em;
+	margin: .4em 0 .75em;
 	padding: .7em .9em;
 	border: 1px solid transparent;
 	border-radius: 6px;
 	line-height: 1.45;
+}
+/* Приховуємо рідну примітку поля orddd ("Ще направим всичко…"), щоб лишилась лише наша. */
+.orddd_field_note {
+	display: none !important;
 }
 .ole-deliv-title {
 	font-weight: 700;
