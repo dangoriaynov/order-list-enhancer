@@ -573,7 +573,7 @@ msgid "Vacation banner"
 msgstr "Банер за отпуск"
 
 #: includes/class-ole-settings-page.php
-msgid "Also show a red “we are away” banner above the notice, until the date below."
+msgid "Also show a red \"we are away\" banner above the notice, until the date below."
 msgstr "Показвай и червен банер „в отпуск сме“ над бележката, до посочената по-долу дата."
 
 #: includes/class-ole-settings-page.php
