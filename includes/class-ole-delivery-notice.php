@@ -18,7 +18,7 @@ class OLE_Delivery_Notice {
 	 * @param string $today Поточна дата у форматі YYYY-MM-DD.
 	 * @return bool true, якщо $until — реальна дата і $today <= $until.
 	 */
-	public static function vacation_active( $until, $today ) {
+	public static function vacation_active( string $until, string $today ) : bool {
 		$until = trim( (string) $until );
 		$d     = DateTime::createFromFormat( 'Y-m-d', $until );
 		if ( ! $d || $d->format( 'Y-m-d' ) !== $until ) {
@@ -46,8 +46,10 @@ class OLE_Delivery_Notice {
 		$o   = OLE_Settings::get();
 		$def = self::defaults_copy();
 
-		$title = '' !== trim( (string) $o['delivery_notice_title'] ) ? (string) $o['delivery_notice_title'] : $def['title'];
-		$body  = '' !== trim( (string) $o['delivery_notice_body'] ) ? (string) $o['delivery_notice_body'] : $def['body'];
+		$title = trim( (string) $o['delivery_notice_title'] );
+		$title = '' !== $title ? $title : $def['title'];
+		$body  = trim( (string) $o['delivery_notice_body'] );
+		$body  = '' !== $body ? $body : $def['body'];
 
 		$vacation = null;
 		if ( OLE_Settings::is_yes( $o, 'delivery_vacation_enabled' )
