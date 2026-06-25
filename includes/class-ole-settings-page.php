@@ -350,6 +350,38 @@ class OLE_Settings_Page {
 					</tr>
 				</tbody></table>
 
+				<h2><?php esc_html_e( 'Delivery-date notice (checkout)', 'order-list-enhancer' ); ?></h2>
+				<table class="form-table"><tbody>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Show notice', 'order-list-enhancer' ); ?></th>
+						<td><label><input type="checkbox" name="delivery_notice_enabled" <?php echo $cb( 'delivery_notice_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'When the delivery-date field (Order Delivery Date plugin) is on the checkout, show a highlighted note above it. Does nothing if that field is absent.', 'order-list-enhancer' ); ?></label></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Notice title', 'order-list-enhancer' ); ?></th>
+						<td><input type="text" name="delivery_notice_title" value="<?php echo esc_attr( $o['delivery_notice_title'] ); ?>" class="regular-text" style="width:100%;max-width:680px"/>
+						<p class="description"><?php esc_html_e( 'Bold first line. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Notice text', 'order-list-enhancer' ); ?></th>
+						<td><textarea name="delivery_notice_body" rows="2" class="large-text" style="max-width:680px"><?php echo esc_textarea( $o['delivery_notice_body'] ); ?></textarea>
+						<p class="description"><?php esc_html_e( 'Explanation under the title. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Vacation banner', 'order-list-enhancer' ); ?></th>
+						<td><label><input type="checkbox" name="delivery_vacation_enabled" <?php echo $cb( 'delivery_vacation_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Also show a red "we are away" banner above the notice, until the date below.', 'order-list-enhancer' ); ?></label></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Away until', 'order-list-enhancer' ); ?></th>
+						<td><input type="date" name="delivery_vacation_until" value="<?php echo esc_attr( $o['delivery_vacation_until'] ); ?>"/>
+						<p class="description"><?php esc_html_e( 'The banner hides automatically after this date.', 'order-list-enhancer' ); ?></p></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Vacation text', 'order-list-enhancer' ); ?></th>
+						<td><textarea name="delivery_vacation_text" rows="2" class="large-text" style="max-width:680px"><?php echo esc_textarea( $o['delivery_vacation_text'] ); ?></textarea>
+						<p class="description"><?php esc_html_e( 'Use %s where the date should appear. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
+					</tr>
+				</tbody></table>
+
 				<h2><?php esc_html_e( 'Phone numbers', 'order-list-enhancer' ); ?></h2>
 				<table class="form-table"><tbody>
 					<tr>
@@ -449,6 +481,12 @@ class OLE_Settings_Page {
 			'total_color_rules'      => $total_color_rules,
 			'seq_open_enabled'       => $bool( 'seq_open_enabled' ),
 			'seq_open_interval'      => isset( $in['seq_open_interval'] ) ? max( 1, min( 300, (int) $in['seq_open_interval'] ) ) : 20,
+			'delivery_notice_enabled'   => $bool( 'delivery_notice_enabled' ),
+			'delivery_notice_title'     => isset( $in['delivery_notice_title'] ) ? sanitize_text_field( (string) $in['delivery_notice_title'] ) : '',
+			'delivery_notice_body'      => isset( $in['delivery_notice_body'] ) ? sanitize_textarea_field( (string) $in['delivery_notice_body'] ) : '',
+			'delivery_vacation_enabled' => $bool( 'delivery_vacation_enabled' ),
+			'delivery_vacation_until'   => ( isset( $in['delivery_vacation_until'] ) && 1 === preg_match( '/^\d{4}-\d{2}-\d{2}$/', (string) $in['delivery_vacation_until'] ) ) ? (string) $in['delivery_vacation_until'] : '',
+			'delivery_vacation_text'    => isset( $in['delivery_vacation_text'] ) ? sanitize_textarea_field( (string) $in['delivery_vacation_text'] ) : '',
 		);
 		update_option( OLE_Settings::OPTION, $opts );
 		wp_send_json_success( array( 'message' => 'saved' ) );
