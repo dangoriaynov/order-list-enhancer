@@ -38,7 +38,8 @@
 				frag.appendChild( buildBlock( 'ole-deliv-vacation', '', D.vacation.text ) );
 			}
 			frag.appendChild( buildBlock( 'ole-deliv-ship', D.title || '', D.body || '' ) );
-			wrap.insertBefore( frag, wrap.firstChild );
+			// Під полем (після інпута), а не над лейблом.
+			wrap.appendChild( frag );
 		}
 	}
 
