@@ -32,6 +32,9 @@ class OLE_Settings {
 			'extras_map'          => array(), // [ ['match'=>'<extra label>','product'=>123], ... ]
 			'phone_validate_enabled' => 'no', // checkout phone-number validation
 			'phone_validate_mode'    => 'warn', // 'warn' (allow + flag) | 'block' (stop order)
+			'dup_guard_enabled'      => 'no', // checkout duplicate-order guard
+			'dup_guard_mode'         => 'confirm', // 'confirm' (ask in modal) | 'block' (hard stop)
+			'dup_guard_window_min'   => 5, // minutes window for "identical recent order"
 			'total_color_enabled' => 'no', // ring orders whose total reaches a threshold
 			'total_color_rules'   => array(), // [ ['threshold'=>float,'color'=>'#hex','label'=>''], ... ]
 			'seq_open_enabled'    => 'yes', // "open selected one-by-one" button on the orders list
@@ -119,6 +122,8 @@ class OLE_Settings {
 		$opts['extras_map'] = self::clean_extras_map( $opts['extras_map'] );
 		$opts['total_color_rules'] = self::clean_total_color_rules( $opts['total_color_rules'] );
 		$opts['phone_validate_mode'] = ( 'block' === $opts['phone_validate_mode'] ) ? 'block' : 'warn';
+		$opts['dup_guard_mode']       = ( 'block' === $opts['dup_guard_mode'] ) ? 'block' : 'confirm';
+		$opts['dup_guard_window_min'] = max( 1, min( 120, (int) $opts['dup_guard_window_min'] ) );
 		$opts['seq_open_interval'] = max( 1, min( 300, (int) $opts['seq_open_interval'] ) );
 		$opts['delivery_notice_title']  = sanitize_text_field( (string) $opts['delivery_notice_title'] );
 		$opts['delivery_notice_body']   = sanitize_textarea_field( (string) $opts['delivery_notice_body'] );
