@@ -43,6 +43,9 @@ class OLE_Plugin {
 		if ( OLE_Settings::is_yes( $opts, 'delivery_notice_enabled' ) ) {
 			OLE_Delivery_Notice::init();
 		}
+		if ( OLE_Settings::is_yes( $opts, 'dup_guard_enabled' ) ) {
+			OLE_Dup_Guard::init();
+		}
 	}
 
 	/**
