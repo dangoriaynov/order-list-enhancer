@@ -1,0 +1,17 @@
+.ole-dup-overlay {
+	position: fixed; inset: 0; z-index: 2147483600;
+	background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center;
+	padding: 16px;
+}
+.ole-dup-card {
+	background: #fff; border-radius: 12px; max-width: 420px; width: 100%;
+	padding: 22px 22px 18px; box-shadow: 0 10px 40px rgba(0,0,0,.3);
+	font: 15px/1.5 system-ui, sans-serif; color: #2a2a2a; text-align: center;
+}
+.ole-dup-text { margin: 0 0 18px; }
+.ole-dup-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.ole-dup-actions button { border: 0; border-radius: 8px; padding: 11px 18px; font-size: 15px; cursor: pointer; }
+.ole-dup-cancel { background: #ececec; color: #333; }
+.ole-dup-ok { background: #c62828; color: #fff; font-weight: 600; }
+.ole-dup-ok:hover { background: #b71c1c; }
+button.ole-dup-disabled { opacity: .6; pointer-events: none; }
