@@ -350,6 +350,31 @@ class OLE_Settings_Page {
 					</tr>
 				</tbody></table>
 
+				<h2><?php esc_html_e( 'Duplicate-order guard (checkout)', 'order-list-enhancer' ); ?></h2>
+				<table class="form-table"><tbody>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Guard at checkout', 'order-list-enhancer' ); ?></th>
+						<td><label><input type="checkbox" name="dup_guard_enabled" <?php echo $cb( 'dup_guard_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Detect an identical recent order (same phone + cart) at checkout and disable the place-order button after the first tap.', 'order-list-enhancer' ); ?></label></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'When a duplicate is found', 'order-list-enhancer' ); ?></th>
+						<td>
+							<?php $dgmode = $o['dup_guard_mode']; ?>
+							<select name="dup_guard_mode">
+								<option value="confirm" <?php selected( $dgmode, 'confirm' ); ?>><?php esc_html_e( 'Ask the customer to confirm in a popup', 'order-list-enhancer' ); ?></option>
+								<option value="block" <?php selected( $dgmode, 'block' ); ?>><?php esc_html_e( 'Block the duplicate order', 'order-list-enhancer' ); ?></option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Window (minutes)', 'order-list-enhancer' ); ?></th>
+						<td>
+							<input type="number" name="dup_guard_window_min" min="1" max="120" step="1" value="<?php echo esc_attr( (string) $o['dup_guard_window_min'] ); ?>" />
+							<p class="description"><?php esc_html_e( 'Treat an order from the same phone with the same cart created within this many minutes as a duplicate.', 'order-list-enhancer' ); ?></p>
+						</td>
+					</tr>
+				</tbody></table>
+
 				<h2><?php esc_html_e( 'Delivery-date notice (checkout)', 'order-list-enhancer' ); ?></h2>
 				<table class="form-table"><tbody>
 					<tr>
@@ -476,6 +501,9 @@ class OLE_Settings_Page {
 			'phone_cc'              => isset( $in['phone_cc'] ) ? preg_replace( '/\D+/', '', (string) $in['phone_cc'] ) : '',
 			'phone_validate_enabled' => $bool( 'phone_validate_enabled' ),
 			'phone_validate_mode'    => ( isset( $in['phone_validate_mode'] ) && 'block' === $in['phone_validate_mode'] ) ? 'block' : 'warn',
+			'dup_guard_enabled'      => $bool( 'dup_guard_enabled' ),
+			'dup_guard_mode'         => ( isset( $in['dup_guard_mode'] ) && 'block' === $in['dup_guard_mode'] ) ? 'block' : 'confirm',
+			'dup_guard_window_min'   => isset( $in['dup_guard_window_min'] ) ? max( 1, min( 120, (int) $in['dup_guard_window_min'] ) ) : 5,
 			'bulk_default_action'    => isset( $in['bulk_default_action'] ) ? sanitize_text_field( (string) $in['bulk_default_action'] ) : '',
 			'total_color_enabled'    => $bool( 'total_color_enabled' ),
 			'total_color_rules'      => $total_color_rules,
