@@ -44,5 +44,18 @@ ck( null === $r, "fallback total mismatch -> no match" );
 $r = OLE_Dup_Guard::find_match( $cur2, array( cand( array( 'cart_hash' => '', 'items_sig' => '99:0:1', 'created_ts' => $now - 60 ) ) ), 5, $now );
 ck( null === $r, "fallback items mismatch -> no match" );
 
+// Asymmetric cart_hash — current empty, candidate has a hash -> fallback by items_sig+total.
+$cur3 = array( 'phone' => '+359888123456', 'cart_hash' => '', 'items_sig' => '12:0:5', 'total' => '15.35' );
+$r = OLE_Dup_Guard::find_match( $cur3, array( cand( array( 'cart_hash' => 'H', 'created_ts' => $now - 60 ) ) ), 5, $now );
+ck( null !== $r, "current empty hash, candidate has hash -> fallback match" );
+
+// Asymmetric — current has a hash, candidate empty -> fallback by items_sig+total.
+$r = OLE_Dup_Guard::find_match( $cur, array( cand( array( 'cart_hash' => '', 'created_ts' => $now - 60 ) ) ), 5, $now );
+ck( null !== $r, "current has hash, candidate empty -> fallback match" );
+
+// Two different NON-empty hashes -> no match (fallback must not fire).
+$r = OLE_Dup_Guard::find_match( $cur, array( cand( array( 'cart_hash' => 'OTHER', 'created_ts' => $now - 60 ) ) ), 5, $now );
+ck( null === $r, "different non-empty cart_hash -> no match" );
+
 echo $fails ? "\n$fails FAILED\n" : "\nALL PASS\n";
 exit( $fails ? 1 : 0 );

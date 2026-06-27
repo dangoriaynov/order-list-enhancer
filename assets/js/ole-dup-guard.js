@@ -36,6 +36,8 @@
 	$( document.body ).on( 'checkout_error', function () {
 		reenable();
 		var body = null;
+		// Assumes the dup notice isn't the first <li> in a multi-error list (phone-checkout
+		// registers before dup-guard, so its error is added first). Safe given that ordering.
 		$( '.woocommerce-error li, .woocommerce-error' ).each( function () {
 			if ( body ) { return; }
 			var hit = stripMarker( $( this ).text() );

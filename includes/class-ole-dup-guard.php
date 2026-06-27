@@ -39,12 +39,12 @@ class OLE_Dup_Guard {
 			if ( trim( (string) ( $c['phone'] ?? '' ) ) !== $phone ) {
 				continue;
 			}
-			$cur_hash  = (string) $current['cart_hash'];
+			$cur_hash  = (string) ( $current['cart_hash'] ?? '' );
 			$cand_hash = (string) ( $c['cart_hash'] ?? '' );
 			$by_hash   = ( '' !== $cur_hash && $cur_hash === $cand_hash );
 			$by_items  = ( '' === $cur_hash || '' === $cand_hash )
-				&& (string) $current['items_sig'] === (string) ( $c['items_sig'] ?? '' )
-				&& (string) $current['total'] === (string) ( $c['total'] ?? '' );
+				&& (string) ( $current['items_sig'] ?? '' ) === (string) ( $c['items_sig'] ?? '' )
+				&& (string) ( $current['total'] ?? '' ) === (string) ( $c['total'] ?? '' );
 			if ( $by_hash || $by_items ) {
 				return array(
 					'number' => (string) ( $c['number'] ?? '' ),
@@ -168,6 +168,22 @@ class OLE_Dup_Guard {
 			return;
 		}
 
+		// Block mode: hard stop, no confirm round-trip / no modal (plain error, no OLEDUP| marker).
+		if ( 'block' === OLE_Settings::get()['dup_guard_mode'] ) {
+			$msg = sprintf(
+				/* translators: 1: order number, 2: minutes ago */
+				__( 'Вече направихте подобна поръчка преди %2$d мин. (№%1$s). За нова поръчка, моля свържете се с нас.', 'order-list-enhancer' ),
+				$match['number'],
+				$match['mins']
+			);
+			if ( $errors instanceof WP_Error ) {
+				$errors->add( 'ole_dup_guard', $msg );
+			} else {
+				wc_add_notice( $msg, 'error' );
+			}
+			return;
+		}
+
 		// Прив'язуємо очікуване підтвердження до поточного хешу кошика (AJAX його зчитає).
 		WC()->session->set( self::SESS_PENDING, $current['cart_hash'] );
 
@@ -189,6 +205,7 @@ class OLE_Dup_Guard {
 		check_ajax_referer( 'ole_dup_confirm', 'nonce' );
 		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
 			wp_send_json_error( array( 'message' => 'no_session' ), 400 );
+			return;
 		}
 		$pending = (string) WC()->session->get( self::SESS_PENDING, '' );
 		WC()->session->set( self::SESS_CONFIRMED, $pending );
