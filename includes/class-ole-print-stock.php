@@ -30,6 +30,14 @@ class OLE_Print_Stock {
 
 		OLE_Print_Stock_Admin::init();
 
+		// Банер «пора друкувати».
+		add_action( 'admin_notices', array( __CLASS__, 'low_banner' ) );
+		// Значок у списку замовлень (HPOS + legacy).
+		add_filter( 'manage_woocommerce_page_wc-orders_columns', array( __CLASS__, 'add_order_column' ) );
+		add_action( 'woocommerce_shop_order_list_table_custom_column', array( __CLASS__, 'render_order_column' ), 10, 2 );
+		add_filter( 'manage_edit-shop_order_columns', array( __CLASS__, 'add_order_column' ) );
+		add_action( 'manage_shop_order_posts_custom_column', array( __CLASS__, 'render_order_column_legacy' ), 10, 2 );
+
 		// Адмін-UI реєструється в своїх задачах (поля товару — Task 5; сторінка — Task 6;
 		// банер/значок — Task 7). Тут лише споживання/повернення + email.
 	}
@@ -229,5 +237,64 @@ class OLE_Print_Stock {
 		$variation = wc_get_product( $variation_id );
 		$name      = $variation ? wp_strip_all_tags( $variation->get_name() ) : ( '#' . (int) $variation_id );
 		OLE_Print_Stock_Store::upsert_sticker( (int) $variation_id, $name, (int) $raw );
+	}
+
+	public static function low_banner() {
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			return;
+		}
+		$o     = OLE_Settings::get();
+		$count = OLE_Print_Stock_Store::low_count(
+			(int) $o['print_stock_threshold_sticker'],
+			(int) $o['print_stock_threshold_instruction']
+		);
+		if ( $count < 1 ) {
+			return;
+		}
+		$url = admin_url( 'admin.php?page=' . OLE_Print_Stock_Admin::SLUG );
+		printf(
+			'<div class="notice notice-warning"><p>%s <a href="%s">%s</a></p></div>',
+			esc_html( sprintf( /* translators: %d: number of low items. */ _n( '%d print consumable is low — time to print more.', '%d print consumables are low — time to print more.', $count, 'order-list-enhancer' ), $count ) ),
+			esc_url( $url ),
+			esc_html__( 'Open stock', 'order-list-enhancer' )
+		);
+	}
+
+	public static function add_order_column( $columns ) {
+		$columns['ole_depleted'] = __( 'Print', 'order-list-enhancer' );
+		return $columns;
+	}
+
+	private static function badge_html( $depleted ) {
+		if ( ! is_array( $depleted ) || empty( $depleted ) ) {
+			return '';
+		}
+		$names = array();
+		$neg   = false;
+		foreach ( $depleted as $d ) {
+			$stock   = (int) ( $d['stock'] ?? 0 );
+			$neg     = $neg || $stock < 0;
+			$names[] = ( $d['name'] ?? '' ) . ': ' . $stock;
+		}
+		$title = esc_attr( implode( ' | ', $names ) );
+		$style = $neg ? 'background:#d63638' : 'background:#b26a00';
+		return '<span title="' . $title . '" style="display:inline-block;padding:1px 7px;border-radius:9px;color:#fff;font-size:11px;' . $style . '">🖨️ ' . count( $names ) . '</span>';
+	}
+
+	public static function render_order_column( $column, $order ) {
+		if ( 'ole_depleted' !== $column ) {
+			return;
+		}
+		echo self::badge_html( $order->get_meta( self::DEPLETED_META ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	public static function render_order_column_legacy( $column, $post_id ) {
+		if ( 'ole_depleted' !== $column ) {
+			return;
+		}
+		$order = wc_get_order( $post_id );
+		if ( $order ) {
+			echo self::badge_html( $order->get_meta( self::DEPLETED_META ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
 	}
 }
