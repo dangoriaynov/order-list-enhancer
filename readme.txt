@@ -67,6 +67,9 @@ No. It only reads orders in your admin and renders the UI locally.
 
 == Changelog ==
 
+= 1.0.32 =
+* New: Print consumables — track sticker + instruction-sheet stock, auto-decrement at order placement with restore, per-type low thresholds, stock page, admin banner, order-list badge and email.
+
 = 1.0.28 =
 * New: "Open selected one-by-one" button on the orders list — opens each checkbox-selected order's edit page in its own tab, one every N seconds (editable, default 20), with a Stop button and a progress counter, so the server never loads more than one order at a time. Needs pop-ups allowed for the site. On by default.
 
