@@ -41,6 +41,10 @@ require_once OLE_DIR . 'includes/class-ole-phone-validator.php';
 require_once OLE_DIR . 'includes/class-ole-phone-checkout.php';
 require_once OLE_DIR . 'includes/class-ole-delivery-notice.php';
 require_once OLE_DIR . 'includes/class-ole-dup-guard.php';
+require_once OLE_DIR . 'includes/class-ole-print-stock-calc.php';
+require_once OLE_DIR . 'includes/class-ole-print-stock-store.php';
+require_once OLE_DIR . 'includes/class-ole-print-stock.php';
+require_once OLE_DIR . 'includes/class-ole-print-stock-admin.php';
 require_once OLE_DIR . 'includes/class-ole-plugin.php';
 
 // Declare HPOS (custom order tables) compatibility.
