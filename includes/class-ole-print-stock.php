@@ -28,6 +28,8 @@ class OLE_Print_Stock {
 		add_action( 'woocommerce_variation_options_inventory', array( __CLASS__, 'render_variation_field' ), 10, 3 );
 		add_action( 'woocommerce_save_product_variation', array( __CLASS__, 'save_variation_field' ), 20, 2 );
 
+		OLE_Print_Stock_Admin::init();
+
 		// Адмін-UI реєструється в своїх задачах (поля товару — Task 5; сторінка — Task 6;
 		// банер/значок — Task 7). Тут лише споживання/повернення + email.
 	}
