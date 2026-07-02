@@ -45,6 +45,9 @@ class OLE_Settings {
 			'delivery_vacation_enabled' => 'no',  // show the "we are away" banner
 			'delivery_vacation_until'   => '',     // YYYY-MM-DD; empty/past → banner hidden
 			'delivery_vacation_text'    => '',     // empty → translatable default; supports one %s (date)
+			'print_stock_enabled'                => 'no',  // track printed stickers + instruction sheets
+			'print_stock_threshold_sticker'      => 20,    // low threshold for stickers
+			'print_stock_threshold_instruction'  => 5,     // low threshold for instruction sheets
 		);
 	}
 
@@ -131,6 +134,8 @@ class OLE_Settings {
 		$opts['delivery_vacation_until'] = ( 1 === preg_match( '/^\d{4}-\d{2}-\d{2}$/', (string) $opts['delivery_vacation_until'] ) )
 			? (string) $opts['delivery_vacation_until']
 			: '';
+		$opts['print_stock_threshold_sticker']     = max( 0, min( 100000, (int) $opts['print_stock_threshold_sticker'] ) );
+		$opts['print_stock_threshold_instruction'] = max( 0, min( 100000, (int) $opts['print_stock_threshold_instruction'] ) );
 		if ( ! is_array( $opts['ship_rules'] ) ) {
 			$opts['ship_rules'] = array();
 		}
