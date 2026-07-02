@@ -6,6 +6,7 @@ msgstr ""
 "Language: bg_BG\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. translators: %s: number of orders.
 #: includes/class-ole-plugin.php:180
@@ -591,3 +592,162 @@ msgstr "Текст за отпуск"
 #: includes/class-ole-settings-page.php
 msgid "Use %s where the date should appear. Leave empty for the default."
 msgstr "Използвайте %s там, където трябва да се покаже датата. Оставете празно за стойността по подразбиране."
+
+#: includes/class-ole-settings-page.php
+msgid "Print consumables (stickers & instructions)"
+msgstr "Консумативи за печат (стикери и инструкции)"
+
+#: includes/class-ole-settings-page.php
+msgid "Enable tracking"
+msgstr "Включи проследяване"
+
+#: includes/class-ole-settings-page.php
+msgid "Count printed stickers (per product/variation, by quantity) and instruction sheets (one per order) as orders come in, and warn when they run low."
+msgstr "Отчитай печатните стикери (за продукт/вариация, по количество) и листовките с инструкции (по една на поръчка) при постъпване на поръчки и предупреждавай, когато свършват."
+
+#: includes/class-ole-settings-page.php
+msgid "Sticker low threshold"
+msgstr "Праг за стикери"
+
+#: includes/class-ole-settings-page.php
+msgid "Warn (\"time to print\") when a sticker stock drops to this or below."
+msgstr "Предупреди („време е за печат“), когато наличността от стикери падне до тази стойност или под нея."
+
+#: includes/class-ole-settings-page.php
+msgid "Instruction low threshold"
+msgstr "Праг за инструкции"
+
+#: includes/class-ole-settings-page.php
+msgid "Warn when an instruction sheet stock drops to this or below."
+msgstr "Предупреди, когато наличността от листовка падне до тази стойност или под нея."
+
+#: includes/class-ole-settings-page.php
+msgid "Stock page"
+msgstr "Страница с наличности"
+
+#: includes/class-ole-settings-page.php
+msgid "Open consumables stock"
+msgstr "Отвори наличностите"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Print consumables"
+msgstr "Консумативи за печат"
+
+#: includes/class-ole-print-stock.php
+msgid "Sticker stock"
+msgstr "Наличност стикери"
+
+#: includes/class-ole-print-stock.php
+msgid "Printed stickers on hand for this product. Decreases by the quantity ordered. Leave blank to not track."
+msgstr "Налични печатни стикери за този продукт. Намалява с поръчаното количество. Оставете празно, за да не се проследява."
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Current stock"
+msgstr "Текуща наличност"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Name"
+msgstr "Име"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Type"
+msgstr "Тип"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Stock"
+msgstr "Наличност"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Actions"
+msgstr "Действия"
+
+#: includes/class-ole-print-stock.php
+#: includes/class-ole-print-stock-admin.php
+msgid "Instruction"
+msgstr "Инструкция"
+
+#: includes/class-ole-print-stock.php
+#: includes/class-ole-print-stock-admin.php
+msgid "Sticker"
+msgstr "Стикер"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "No consumables yet. Set a product's \"Sticker stock\" or create an instruction sheet below."
+msgstr "Все още няма консумативи. Задайте „Наличност стикери“ на продукт или създайте листовка по-долу."
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Set"
+msgstr "Задай"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "+ printed"
+msgstr "+ отпечатани"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Instruction sheets"
+msgstr "Листовки с инструкции"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "One sheet can cover several products. Each order containing any of its products consumes one copy."
+msgstr "Една листовка може да покрива няколко продукта. Всяка поръчка, съдържаща някой от тях, изразходва едно копие."
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Products"
+msgstr "Продукти"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Search for products…"
+msgstr "Търсене на продукти…"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "New sheet name"
+msgstr "Име на нова листовка"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Add"
+msgstr "Добави"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Save"
+msgstr "Запази"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Failed."
+msgstr "Неуспешно."
+
+#: includes/class-ole-print-stock-admin.php
+msgid "Delete this instruction sheet?"
+msgstr "Да изтрия ли тази листовка?"
+
+#: includes/class-ole-print-stock-admin.php
+msgid "How many printed copies to add?"
+msgstr "Колко отпечатани копия да добавя?"
+
+#. translators: %d: number of low items.
+#: includes/class-ole-print-stock.php
+#, php-format
+msgid "%d print consumable is low — time to print more."
+msgid_plural "%d print consumables are low — time to print more."
+msgstr[0] "%d консуматив за печат е на изчерпване — време е за печат."
+msgstr[1] "%d консуматива за печат са на изчерпване — време е за печат."
+
+#: includes/class-ole-print-stock.php
+msgid "Open stock"
+msgstr "Отвори наличностите"
+
+#: includes/class-ole-print-stock.php
+msgid "Print"
+msgstr "Печат"
+
+#: includes/class-ole-print-stock.php
+msgid "OLE — time to print more consumables"
+msgstr "OLE — време е за печат на консумативи"
+
+#: includes/class-ole-print-stock.php
+msgid "These items dropped to their low threshold:"
+msgstr "Тези артикули достигнаха ниския си праг:"
+
+#: includes/class-ole-print-stock.php
+#, php-format
+msgid "%1$s \"%2$s\" — %3$d left"
+msgstr "%1$s „%2$s“ — остават %3$d"
