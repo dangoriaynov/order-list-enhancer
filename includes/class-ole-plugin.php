@@ -46,6 +46,9 @@ class OLE_Plugin {
 		if ( OLE_Settings::is_yes( $opts, 'dup_guard_enabled' ) ) {
 			OLE_Dup_Guard::init();
 		}
+		if ( OLE_Settings::is_yes( $opts, 'print_stock_enabled' ) ) {
+			OLE_Print_Stock::init();
+		}
 	}
 
 	/**
