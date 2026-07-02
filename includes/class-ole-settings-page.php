@@ -407,6 +407,28 @@ class OLE_Settings_Page {
 					</tr>
 				</tbody></table>
 
+				<h2><?php esc_html_e( 'Print consumables (stickers & instructions)', 'order-list-enhancer' ); ?></h2>
+				<table class="form-table"><tbody>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Enable tracking', 'order-list-enhancer' ); ?></th>
+						<td><label><input type="checkbox" name="print_stock_enabled" <?php echo $cb( 'print_stock_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Count printed stickers (per product/variation, by quantity) and instruction sheets (one per order) as orders come in, and warn when they run low.', 'order-list-enhancer' ); ?></label></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Sticker low threshold', 'order-list-enhancer' ); ?></th>
+						<td><input type="number" name="print_stock_threshold_sticker" min="0" max="100000" step="1" value="<?php echo esc_attr( (string) $o['print_stock_threshold_sticker'] ); ?>"/>
+						<p class="description"><?php esc_html_e( 'Warn ("time to print") when a sticker stock drops to this or below.', 'order-list-enhancer' ); ?></p></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Instruction low threshold', 'order-list-enhancer' ); ?></th>
+						<td><input type="number" name="print_stock_threshold_instruction" min="0" max="100000" step="1" value="<?php echo esc_attr( (string) $o['print_stock_threshold_instruction'] ); ?>"/>
+						<p class="description"><?php esc_html_e( 'Warn when an instruction sheet stock drops to this or below.', 'order-list-enhancer' ); ?></p></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Stock page', 'order-list-enhancer' ); ?></th>
+						<td><a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=ole-print-stock' ) ); ?>"><?php esc_html_e( 'Open consumables stock', 'order-list-enhancer' ); ?></a></td>
+					</tr>
+				</tbody></table>
+
 				<h2><?php esc_html_e( 'Phone numbers', 'order-list-enhancer' ); ?></h2>
 				<table class="form-table"><tbody>
 					<tr>
@@ -515,6 +537,9 @@ class OLE_Settings_Page {
 			'delivery_vacation_enabled' => $bool( 'delivery_vacation_enabled' ),
 			'delivery_vacation_until'   => ( isset( $in['delivery_vacation_until'] ) && 1 === preg_match( '/^\d{4}-\d{2}-\d{2}$/', (string) $in['delivery_vacation_until'] ) ) ? (string) $in['delivery_vacation_until'] : '',
 			'delivery_vacation_text'    => isset( $in['delivery_vacation_text'] ) ? sanitize_textarea_field( (string) $in['delivery_vacation_text'] ) : '',
+			'print_stock_enabled'               => $bool( 'print_stock_enabled' ),
+			'print_stock_threshold_sticker'     => isset( $in['print_stock_threshold_sticker'] ) ? max( 0, min( 100000, (int) $in['print_stock_threshold_sticker'] ) ) : 20,
+			'print_stock_threshold_instruction' => isset( $in['print_stock_threshold_instruction'] ) ? max( 0, min( 100000, (int) $in['print_stock_threshold_instruction'] ) ) : 5,
 		);
 		update_option( OLE_Settings::OPTION, $opts );
 		wp_send_json_success( array( 'message' => 'saved' ) );
