@@ -78,6 +78,14 @@ class OLE_Print_Stock {
 	}
 
 	private static function consume( WC_Order $order ) {
+		// Бекстоп ідемпотентності: якщо журнал уже має списання цього замовлення
+		// (напр. мета-прапорець не зберігся через збій) — не списувати вдруге.
+		if ( OLE_Print_Stock_Store::is_consumed( $order->get_id() ) ) {
+			$order->update_meta_data( self::STATE_META, 'consumed' );
+			$order->save();
+			return;
+		}
+
 		$config = self::build_config();
 		$deltas = OLE_Print_Stock_Calc::compute( self::lines_from_order( $order ), $config );
 		if ( empty( $deltas ) ) {
@@ -183,6 +191,10 @@ class OLE_Print_Stock {
 
 	public static function render_simple_field() {
 		global $post;
+		$product = $post ? wc_get_product( $post->ID ) : null;
+		if ( $product && $product->is_type( 'variable' ) ) {
+			return; // variations carry their own sticker field (per-variation tracking)
+		}
 		$val = self::sticker_stock_value( (int) $post->ID );
 		woocommerce_wp_text_input(
 			array(

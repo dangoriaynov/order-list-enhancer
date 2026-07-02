@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class OLE_Print_Stock_Calc {
 
 	/** Статуси, за яких замовлення НЕ споживає витратні (можна повернути). */
-	const DEAD_STATUSES = array( 'cancelled', 'failed', 'refunded', 'trash' );
+	const DEAD_STATUSES = array( 'cancelled', 'failed', 'refunded', 'trash', 'auto-draft', 'checkout-draft', 'draft' );
 
 	/**
 	 * Дельти списання по витратних для позицій замовлення.

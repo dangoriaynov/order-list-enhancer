@@ -230,6 +230,16 @@ class OLE_Print_Stock_Store {
 		return $out;
 	}
 
+	/** Чи вже списане замовлення за журналом (є витратний із сумарною дельтою < 0). */
+	public static function is_consumed( $order_id ) {
+		foreach ( self::ledger_net( (int) $order_id ) as $net ) {
+			if ( (int) $net < 0 ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static function set_low_notified( $id, $flag ) {
 		global $wpdb;
 		$wpdb->update( self::table_consumable(), array( 'low_notified' => (int) $flag ), array( 'id' => (int) $id ), array( '%d' ), array( '%d' ) );

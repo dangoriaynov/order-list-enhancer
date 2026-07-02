@@ -63,6 +63,9 @@ check( OLE_Print_Stock_Calc::is_live( 'cancelled' ) === false,  'cancelled is de
 check( OLE_Print_Stock_Calc::is_live( 'failed' ) === false,     'failed is dead' );
 check( OLE_Print_Stock_Calc::is_live( 'refunded' ) === false,   'refunded is dead' );
 check( OLE_Print_Stock_Calc::is_live( 'trash' ) === false,      'trash is dead' );
+check( OLE_Print_Stock_Calc::is_live( 'checkout-draft' ) === false, 'checkout-draft is not live' );
+check( OLE_Print_Stock_Calc::is_live( 'auto-draft' ) === false, 'auto-draft is not live' );
+check( OLE_Print_Stock_Calc::is_live( 'draft' ) === false, 'draft is not live' );
 
 echo $fails ? "\n$fails FAILED\n" : "\nALL PASS\n";
 exit( $fails ? 1 : 0 );
