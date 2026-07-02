@@ -22,6 +22,12 @@ class OLE_Print_Stock {
 		add_action( 'woocommerce_trash_order', array( __CLASS__, 'on_order' ), 30, 1 );
 		add_action( 'woocommerce_untrash_order', array( __CLASS__, 'on_order' ), 30, 1 );
 
+		// Поле «Запас наліпок» на простому товарі та на кожній варіації.
+		add_action( 'woocommerce_product_options_inventory_product_data', array( __CLASS__, 'render_simple_field' ) );
+		add_action( 'woocommerce_process_product_meta', array( __CLASS__, 'save_simple_field' ), 20, 1 );
+		add_action( 'woocommerce_variation_options_inventory', array( __CLASS__, 'render_variation_field' ), 10, 3 );
+		add_action( 'woocommerce_save_product_variation', array( __CLASS__, 'save_variation_field' ), 20, 2 );
+
 		// Адмін-UI реєструється в своїх задачах (поля товару — Task 5; сторінка — Task 6;
 		// банер/значок — Task 7). Тут лише споживання/повернення + email.
 	}
@@ -157,5 +163,69 @@ class OLE_Print_Stock {
 			$lines[] = sprintf( __( '%1$s "%2$s" — %3$d left', 'order-list-enhancer' ), $label, $c['name'], (int) $c['stock'] );
 		}
 		wp_mail( $to, $subject, implode( "\n", $lines ) );
+	}
+
+	/** Поточний запас наліпки товару/варіації (для відображення в полі). */
+	private static function sticker_stock_value( $ref_id ) {
+		$row = OLE_Print_Stock_Store::get_sticker( (int) $ref_id );
+		return $row ? (string) (int) $row['stock'] : '';
+	}
+
+	public static function render_simple_field() {
+		global $post;
+		$val = self::sticker_stock_value( (int) $post->ID );
+		woocommerce_wp_text_input(
+			array(
+				'id'                => '_ole_sticker_stock',
+				'label'             => __( 'Sticker stock', 'order-list-enhancer' ),
+				'desc_tip'          => true,
+				'description'       => __( 'Printed stickers on hand for this product. Decreases by the quantity ordered. Leave blank to not track.', 'order-list-enhancer' ),
+				'type'              => 'number',
+				'custom_attributes' => array( 'step' => '1' ),
+				'value'             => $val,
+			)
+		);
+	}
+
+	public static function save_simple_field( $post_id ) {
+		if ( ! isset( $_POST['_ole_sticker_stock'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return;
+		}
+		$raw = wp_unslash( $_POST['_ole_sticker_stock'] ); // phpcs:ignore WordPress.Security
+		if ( '' === trim( (string) $raw ) ) {
+			return; // не трекаємо / не чіпаємо існуючий запас
+		}
+		$product = wc_get_product( $post_id );
+		$name    = $product ? wp_strip_all_tags( $product->get_name() ) : ( '#' . (int) $post_id );
+		OLE_Print_Stock_Store::upsert_sticker( (int) $post_id, $name, (int) $raw );
+	}
+
+	public static function render_variation_field( $loop, $variation_data, $variation ) {
+		$vid = (int) $variation->ID;
+		$val = self::sticker_stock_value( $vid );
+		woocommerce_wp_text_input(
+			array(
+				'id'                => '_ole_sticker_stock_' . $loop,
+				'name'              => '_ole_sticker_stock_var[' . $loop . ']',
+				'label'             => __( 'Sticker stock', 'order-list-enhancer' ),
+				'wrapper_class'     => 'form-row form-row-first',
+				'type'              => 'number',
+				'custom_attributes' => array( 'step' => '1' ),
+				'value'             => $val,
+			)
+		);
+	}
+
+	public static function save_variation_field( $variation_id, $i ) {
+		if ( ! isset( $_POST['_ole_sticker_stock_var'][ $i ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return;
+		}
+		$raw = wp_unslash( $_POST['_ole_sticker_stock_var'][ $i ] ); // phpcs:ignore WordPress.Security
+		if ( '' === trim( (string) $raw ) ) {
+			return;
+		}
+		$variation = wc_get_product( $variation_id );
+		$name      = $variation ? wp_strip_all_tags( $variation->get_name() ) : ( '#' . (int) $variation_id );
+		OLE_Print_Stock_Store::upsert_sticker( (int) $variation_id, $name, (int) $raw );
 	}
 }
