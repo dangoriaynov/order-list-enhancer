@@ -89,7 +89,7 @@ class OLE_Print_Stock_Admin {
 		}
 		OLE_Print_Stock_Store::add_stock( $id, $amount );
 		$fresh = OLE_Print_Stock_Store::get_consumable( $id );
-		wp_send_json_success( array( 'stock' => (int) $fresh['stock'] ) );
+		wp_send_json_success( array( 'stock' => $fresh ? (int) $fresh['stock'] : 0 ) );
 	}
 
 	public static function ajax_save_sheet() {
@@ -98,6 +98,16 @@ class OLE_Print_Stock_Admin {
 		$name     = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
 		$stock    = isset( $_POST['stock'] ) ? (int) $_POST['stock'] : 0;
 		$products = isset( $_POST['products'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['products'] ) ) : array();
+		$products = array_values( array_unique( array_filter( array_map(
+			function ( $pid ) {
+				$p = wc_get_product( (int) $pid );
+				if ( $p && $p->is_type( 'variation' ) ) {
+					return (int) $p->get_parent_id();
+				}
+				return (int) $pid;
+			},
+			$products
+		) ) ) );
 		if ( '' === $name ) {
 			wp_send_json_error( array( 'message' => 'name_required' ), 400 );
 		}
@@ -177,7 +187,7 @@ class OLE_Print_Stock_Admin {
 					<tr class="ole-ps-sheet" data-id="<?php echo esc_attr( $s['id'] ); ?>">
 						<td><input type="text" class="ole-ps-sheet-name regular-text" value="<?php echo esc_attr( $s['name'] ); ?>"/></td>
 						<td>
-							<select multiple class="wc-product-search ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%">
+							<select multiple class="wc-product-search ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products" style="width:100%">
 								<?php foreach ( $s['product_ids'] as $pid ) : ?>
 									<?php $p = wc_get_product( $pid ); if ( ! $p ) { continue; } ?>
 									<option value="<?php echo esc_attr( $pid ); ?>" selected><?php echo esc_html( wp_strip_all_tags( $p->get_formatted_name() ) ); ?></option>
@@ -194,7 +204,7 @@ class OLE_Print_Stock_Admin {
 					<tr class="ole-ps-sheet ole-ps-sheet-new" data-id="0">
 						<td><input type="text" class="ole-ps-sheet-name regular-text" placeholder="<?php esc_attr_e( 'New sheet name', 'order-list-enhancer' ); ?>"/></td>
 						<td>
-							<select multiple class="wc-product-search ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%"></select>
+							<select multiple class="wc-product-search ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products" style="width:100%"></select>
 						</td>
 						<td><input type="number" step="1" class="ole-ps-sheet-stock" value="0" style="width:80px"/></td>
 						<td><button type="button" class="button button-primary ole-ps-sheet-save"><?php esc_html_e( 'Add', 'order-list-enhancer' ); ?></button></td>
