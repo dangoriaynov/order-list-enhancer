@@ -184,181 +184,203 @@ class OLE_Settings_Page {
 				),
 			);
 		}
+
+		self::card_open(
+			__( 'Repeat customers', 'order-list-enhancer' ),
+			__( 'Outline & badge orders from the same customer in the list, with a details modal. Choose how a match is decided and how far back to scan.', 'order-list-enhancer' ),
+			array( 'name' => 'dup_enabled', 'checked' => OLE_Settings::is_yes( $o, 'dup_enabled' ) )
+		);
 		?>
-				<h2><?php esc_html_e( 'Repeat customer highlighting', 'order-list-enhancer' ); ?></h2>
-				<table class="form-table"><tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Enable highlighting', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="dup_enabled" <?php echo $cb( 'dup_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Outline & badge same-customer orders in the list (with details modal).', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Match mode', 'order-list-enhancer' ); ?></th>
-						<td>
-							<?php $mode = $o['match_mode']; ?>
-							<select name="match_mode">
-								<option value="phone" <?php selected( $mode, 'phone' ); ?>><?php esc_html_e( 'By phone', 'order-list-enhancer' ); ?></option>
-								<option value="names" <?php selected( $mode, 'names' ); ?>><?php esc_html_e( 'By name', 'order-list-enhancer' ); ?></option>
-								<option value="name_phone" <?php selected( $mode, 'name_phone' ); ?>><?php esc_html_e( 'By name + phone', 'order-list-enhancer' ); ?></option>
-							</select>
-							<p class="description"><?php esc_html_e( 'How to decide two orders are from the same customer. Name + phone matches only when both the phone and the name match.', 'order-list-enhancer' ); ?></p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Scan limit', 'order-list-enhancer' ); ?></th>
-						<td><input type="number" name="scan_limit" min="100" max="5000" step="100" value="<?php echo esc_attr( $o['scan_limit'] ); ?>"/>
-						<p class="description"><?php esc_html_e( 'Maximum number of recent orders to scan across all statuses.', 'order-list-enhancer' ); ?></p></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Duplicate window (days)', 'order-list-enhancer' ); ?></th>
-						<td><input type="number" name="dup_window_days" min="1" max="60" step="1" value="<?php echo esc_attr( $o['dup_window_days'] ); ?>"/>
-						<p class="description"><?php esc_html_e( 'Two orders from the same customer within this many days (or 2+ in processing) are flagged as a likely duplicate.', 'order-list-enhancer' ); ?></p></td>
-					</tr>
-				</tbody></table>
-
-				<h2><?php esc_html_e( 'Shipping coloring', 'order-list-enhancer' ); ?></h2>
-				<table class="form-table"><tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Color in orders list', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="ship_enabled" <?php echo $cb( 'ship_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Color the “Ship to” cell in the orders list.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Color on edit page', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="ship_color_edit" <?php echo $cb( 'ship_color_edit' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Color the address block on the single order edit screen.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Coloring rules', 'order-list-enhancer' ); ?></th>
-						<td>
-							<table class="widefat ole-rules" style="max-width:680px"><thead><tr>
-								<th style="text-align:center"><?php esc_html_e( 'Keyword (in shipping address)', 'order-list-enhancer' ); ?></th>
-								<th style="text-align:center"><?php esc_html_e( 'Color', 'order-list-enhancer' ); ?></th>
-								<th style="text-align:center"><?php esc_html_e( 'Label', 'order-list-enhancer' ); ?></th>
-								<th></th>
-							</tr></thead><tbody>
-							<?php foreach ( $rules as $r ) : ?>
-								<tr>
-									<td><input type="text" name="rule_keyword[]" value="<?php echo esc_attr( $r['keyword'] ); ?>" class="regular-text"/></td>
-									<td><input type="text" name="rule_color[]" value="<?php echo esc_attr( $r['color'] ); ?>" class="ole-color" placeholder="#dcefd2"/></td>
-									<td><input type="text" name="rule_label[]" value="<?php echo esc_attr( $r['label'] ); ?>" class="regular-text"/></td>
-									<td><button type="button" class="button ole-rule-remove">&times;</button></td>
-								</tr>
-							<?php endforeach; ?>
-							</tbody></table>
-							<p><button type="button" class="button ole-rule-add"><?php esc_html_e( 'Add rule', 'order-list-enhancer' ); ?></button></p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Default color', 'order-list-enhancer' ); ?></th>
-						<td><input type="text" name="ship_default_color" value="<?php echo esc_attr( $o['ship_default_color'] ); ?>" class="ole-color" placeholder="#f7eec6"/>
-						<p class="description"><?php esc_html_e( 'Used when no rule matches. Leave empty to not color unmatched rows.', 'order-list-enhancer' ); ?></p></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Default label', 'order-list-enhancer' ); ?></th>
-						<td><input type="text" name="ship_default_label" value="<?php echo esc_attr( $o['ship_default_label'] ); ?>" class="regular-text"/></td>
-					</tr>
-				</tbody></table>
-
-				<h2><?php esc_html_e( 'Order total coloring', 'order-list-enhancer' ); ?></h2>
-				<table class="form-table"><tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Enable', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="total_color_enabled" <?php echo $cb( 'total_color_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Ring the order\'s row in the list — and its address panel on the order screen — when the total reaches a threshold below. Independent of the shipping color; the highest matched threshold wins.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Threshold rules', 'order-list-enhancer' ); ?></th>
-						<td>
-							<?php
-							$trules = $o['total_color_rules'];
-							if ( empty( $trules ) ) {
-								$trules = array(
-									array(
-										'threshold' => '',
-										'color'     => '',
-										'label'     => '',
-									),
-								);
-							}
-							?>
-							<table class="widefat ole-rules" style="max-width:680px"><thead><tr>
-								<th style="text-align:center"><?php esc_html_e( 'Order total ≥', 'order-list-enhancer' ); ?></th>
-								<th style="text-align:center"><?php esc_html_e( 'Color', 'order-list-enhancer' ); ?></th>
-								<th style="text-align:center"><?php esc_html_e( 'Label', 'order-list-enhancer' ); ?></th>
-								<th></th>
-							</tr></thead><tbody>
-							<?php foreach ( $trules as $r ) : ?>
-								<tr>
-									<td><input type="number" step="0.01" min="0" name="total_threshold[]" value="<?php echo esc_attr( '' === $r['threshold'] ? '' : $r['threshold'] ); ?>" class="regular-text" placeholder="100"/></td>
-									<td><input type="text" name="total_color[]" value="<?php echo esc_attr( $r['color'] ); ?>" class="ole-color" placeholder="#d63638"/></td>
-									<td><input type="text" name="total_label[]" value="<?php echo esc_attr( $r['label'] ); ?>" class="regular-text"/></td>
-									<td><button type="button" class="button ole-rule-remove">&times;</button></td>
-								</tr>
-							<?php endforeach; ?>
-							</tbody></table>
-							<p><button type="button" class="button ole-rule-add"><?php esc_html_e( 'Add rule', 'order-list-enhancer' ); ?></button></p>
-							<p class="description"><?php esc_html_e( 'When an order\'s total is at or above a threshold it gets a ring in that color. If several apply, the highest threshold wins. The ring is drawn on top of any shipping color — both stay visible.', 'order-list-enhancer' ); ?></p>
-						</td>
-					</tr>
-				</tbody></table>
-
-				<h2><?php esc_html_e( 'Order total on edit page', 'order-list-enhancer' ); ?></h2>
-				<table class="form-table"><tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Enable', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="total_on_edit" <?php echo $cb( 'total_on_edit' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Show the order total near the billing address on the order edit screen.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Decimal separator', 'order-list-enhancer' ); ?></th>
-						<td>
-							<?php $dsep = $o['total_decimal_sep']; ?>
-							<select name="total_decimal_sep">
-								<option value="," <?php selected( $dsep, ',' ); ?>><?php esc_html_e( 'Comma (,)', 'order-list-enhancer' ); ?></option>
-								<option value="." <?php selected( $dsep, '.' ); ?>><?php esc_html_e( 'Dot (.)', 'order-list-enhancer' ); ?></option>
-							</select>
-							<p class="description"><?php esc_html_e( 'Decimal separator for the order total shown under the address (and its copy button).', 'order-list-enhancer' ); ?></p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Copy buttons', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="copy_buttons" <?php echo $cb( 'copy_buttons' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Show copy-to-clipboard buttons for name, phone and total on the order edit screen.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-				</tbody></table>
-
-				<h2><?php esc_html_e( 'Orders list — default bulk action', 'order-list-enhancer' ); ?></h2>
-				<table class="form-table"><tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Pre-selected action', 'order-list-enhancer' ); ?></th>
-						<td>
-							<?php
-							$bulk_actions = OLE_Settings::bulk_actions();
-							$bulk_cur     = $o['bulk_default_action'];
-							// Keep the saved value selectable even before the menu has been captured.
-							if ( '' !== $bulk_cur && ! isset( $bulk_actions[ $bulk_cur ] ) ) {
-								$bulk_actions[ $bulk_cur ] = $bulk_cur;
-							}
-							?>
-							<select name="bulk_default_action">
-								<option value="" <?php selected( $bulk_cur, '' ); ?>><?php esc_html_e( '— (none)', 'order-list-enhancer' ); ?></option>
-								<?php foreach ( $bulk_actions as $val => $label ) : ?>
-									<option value="<?php echo esc_attr( $val ); ?>" <?php selected( $bulk_cur, (string) $val ); ?>><?php echo esc_html( '' !== $label ? $label : $val ); ?></option>
-								<?php endforeach; ?>
-							</select>
-							<p class="description"><?php esc_html_e( 'Pre-selects this entry in the orders-list bulk-actions menu on page load. The list is filled from your Orders screen — open the Orders list once if it looks empty.', 'order-list-enhancer' ); ?></p>
-						</td>
-					</tr>
-				</tbody></table>
-
-				<h2><?php esc_html_e( 'Open selected orders one-by-one', 'order-list-enhancer' ); ?></h2>
-				<table class="form-table"><tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Enable button', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="seq_open_enabled" <?php echo $cb( 'seq_open_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Add a button to the orders list that opens each checkbox-selected order in its own tab, one at a time, so the server never loads more than one at once.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Default interval (seconds)', 'order-list-enhancer' ); ?></th>
-						<td><input type="number" name="seq_open_interval" min="1" max="300" step="1" value="<?php echo esc_attr( $o['seq_open_interval'] ); ?>"/>
-						<p class="description"><?php esc_html_e( 'Seconds to wait between opening tabs (editable on the button too). Tip: your browser must allow pop-ups for this site, or only the first tab opens.', 'order-list-enhancer' ); ?></p></td>
-					</tr>
-				</tbody></table>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Match mode', 'order-list-enhancer' ); ?></th>
+				<td>
+					<?php $mode = $o['match_mode']; ?>
+					<select name="match_mode">
+						<option value="phone" <?php selected( $mode, 'phone' ); ?>><?php esc_html_e( 'By phone', 'order-list-enhancer' ); ?></option>
+						<option value="names" <?php selected( $mode, 'names' ); ?>><?php esc_html_e( 'By name', 'order-list-enhancer' ); ?></option>
+						<option value="name_phone" <?php selected( $mode, 'name_phone' ); ?>><?php esc_html_e( 'By name + phone', 'order-list-enhancer' ); ?></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Scan limit', 'order-list-enhancer' ); ?></th>
+				<td><input type="number" name="scan_limit" min="100" max="5000" step="100" value="<?php echo esc_attr( $o['scan_limit'] ); ?>"/></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Duplicate window (days)', 'order-list-enhancer' ); ?></th>
+				<td><input type="number" name="dup_window_days" min="1" max="60" step="1" value="<?php echo esc_attr( $o['dup_window_days'] ); ?>"/></td>
+			</tr>
+		</tbody></table>
 		<?php
+		self::card_close();
+
+		self::card_open(
+			__( 'Shipping coloring', 'order-list-enhancer' ),
+			__( 'Color the "Ship to" cell in the list and the address block on the order screen, by keyword rules.', 'order-list-enhancer' ),
+			null
+		);
+		?>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Color in orders list', 'order-list-enhancer' ); ?></th>
+				<td><?php echo self::switch_html( 'ship_enabled', OLE_Settings::is_yes( $o, 'ship_enabled' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Color the “Ship to” cell in the orders list.', 'order-list-enhancer' ); ?></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Color on edit page', 'order-list-enhancer' ); ?></th>
+				<td><?php echo self::switch_html( 'ship_color_edit', OLE_Settings::is_yes( $o, 'ship_color_edit' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Color the address block on the single order edit screen.', 'order-list-enhancer' ); ?></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Coloring rules', 'order-list-enhancer' ); ?></th>
+				<td>
+					<table class="widefat ole-rules" style="max-width:680px"><thead><tr>
+						<th style="text-align:center"><?php esc_html_e( 'Keyword (in shipping address)', 'order-list-enhancer' ); ?></th>
+						<th style="text-align:center"><?php esc_html_e( 'Color', 'order-list-enhancer' ); ?></th>
+						<th style="text-align:center"><?php esc_html_e( 'Label', 'order-list-enhancer' ); ?></th>
+						<th></th>
+					</tr></thead><tbody>
+					<?php foreach ( $rules as $r ) : ?>
+						<tr>
+							<td><input type="text" name="rule_keyword[]" value="<?php echo esc_attr( $r['keyword'] ); ?>" class="regular-text"/></td>
+							<td><input type="text" name="rule_color[]" value="<?php echo esc_attr( $r['color'] ); ?>" class="ole-color" placeholder="#dcefd2"/></td>
+							<td><input type="text" name="rule_label[]" value="<?php echo esc_attr( $r['label'] ); ?>" class="regular-text"/></td>
+							<td><button type="button" class="button ole-rule-remove">&times;</button></td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody></table>
+					<p><button type="button" class="button ole-rule-add"><?php esc_html_e( 'Add rule', 'order-list-enhancer' ); ?></button></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Default color', 'order-list-enhancer' ); ?></th>
+				<td><input type="text" name="ship_default_color" value="<?php echo esc_attr( $o['ship_default_color'] ); ?>" class="ole-color" placeholder="#f7eec6"/>
+				<p class="description"><?php esc_html_e( 'Used when no rule matches. Leave empty to not color unmatched rows.', 'order-list-enhancer' ); ?></p></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Default label', 'order-list-enhancer' ); ?></th>
+				<td><input type="text" name="ship_default_label" value="<?php echo esc_attr( $o['ship_default_label'] ); ?>" class="regular-text"/></td>
+			</tr>
+		</tbody></table>
+		<?php
+		self::card_close();
+
+		self::card_open(
+			__( 'Order-total coloring', 'order-list-enhancer' ),
+			__( 'Ring an order (row + address panel) when its total reaches a threshold. Highest matched threshold wins.', 'order-list-enhancer' ),
+			array( 'name' => 'total_color_enabled', 'checked' => OLE_Settings::is_yes( $o, 'total_color_enabled' ) )
+		);
+		?>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Threshold rules', 'order-list-enhancer' ); ?></th>
+				<td>
+					<?php
+					$trules = $o['total_color_rules'];
+					if ( empty( $trules ) ) {
+						$trules = array(
+							array(
+								'threshold' => '',
+								'color'     => '',
+								'label'     => '',
+							),
+						);
+					}
+					?>
+					<table class="widefat ole-rules" style="max-width:680px"><thead><tr>
+						<th style="text-align:center"><?php esc_html_e( 'Order total ≥', 'order-list-enhancer' ); ?></th>
+						<th style="text-align:center"><?php esc_html_e( 'Color', 'order-list-enhancer' ); ?></th>
+						<th style="text-align:center"><?php esc_html_e( 'Label', 'order-list-enhancer' ); ?></th>
+						<th></th>
+					</tr></thead><tbody>
+					<?php foreach ( $trules as $r ) : ?>
+						<tr>
+							<td><input type="number" step="0.01" min="0" name="total_threshold[]" value="<?php echo esc_attr( '' === $r['threshold'] ? '' : $r['threshold'] ); ?>" class="regular-text" placeholder="100"/></td>
+							<td><input type="text" name="total_color[]" value="<?php echo esc_attr( $r['color'] ); ?>" class="ole-color" placeholder="#d63638"/></td>
+							<td><input type="text" name="total_label[]" value="<?php echo esc_attr( $r['label'] ); ?>" class="regular-text"/></td>
+							<td><button type="button" class="button ole-rule-remove">&times;</button></td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody></table>
+					<p><button type="button" class="button ole-rule-add"><?php esc_html_e( 'Add rule', 'order-list-enhancer' ); ?></button></p>
+					<p class="description"><?php esc_html_e( 'When an order\'s total is at or above a threshold it gets a ring in that color. If several apply, the highest threshold wins. The ring is drawn on top of any shipping color — both stay visible.', 'order-list-enhancer' ); ?></p>
+				</td>
+			</tr>
+		</tbody></table>
+		<?php
+		self::card_close();
+
+		self::card_open(
+			__( 'Order total on the edit screen', 'order-list-enhancer' ),
+			__( 'Show the total near the billing address on the order screen, with copy buttons.', 'order-list-enhancer' ),
+			array( 'name' => 'total_on_edit', 'checked' => OLE_Settings::is_yes( $o, 'total_on_edit' ) )
+		);
+		?>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Copy buttons', 'order-list-enhancer' ); ?></th>
+				<td><?php echo self::switch_html( 'copy_buttons', OLE_Settings::is_yes( $o, 'copy_buttons' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show copy-to-clipboard buttons for name, phone and total on the order edit screen.', 'order-list-enhancer' ); ?></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Decimal separator', 'order-list-enhancer' ); ?></th>
+				<td>
+					<?php $dsep = $o['total_decimal_sep']; ?>
+					<select name="total_decimal_sep">
+						<option value="," <?php selected( $dsep, ',' ); ?>><?php esc_html_e( 'Comma (,)', 'order-list-enhancer' ); ?></option>
+						<option value="." <?php selected( $dsep, '.' ); ?>><?php esc_html_e( 'Dot (.)', 'order-list-enhancer' ); ?></option>
+					</select>
+					<p class="description"><?php esc_html_e( 'Decimal separator for the order total shown under the address (and its copy button).', 'order-list-enhancer' ); ?></p>
+				</td>
+			</tr>
+		</tbody></table>
+		<?php
+		self::card_close();
+
+		self::card_open(
+			__( 'Default bulk action', 'order-list-enhancer' ),
+			__( 'Pre-select an entry in the orders-list bulk-actions menu on page load.', 'order-list-enhancer' ),
+			null
+		);
+		?>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Pre-selected action', 'order-list-enhancer' ); ?></th>
+				<td>
+					<?php
+					$bulk_actions = OLE_Settings::bulk_actions();
+					$bulk_cur     = $o['bulk_default_action'];
+					// Keep the saved value selectable even before the menu has been captured.
+					if ( '' !== $bulk_cur && ! isset( $bulk_actions[ $bulk_cur ] ) ) {
+						$bulk_actions[ $bulk_cur ] = $bulk_cur;
+					}
+					?>
+					<select name="bulk_default_action">
+						<option value="" <?php selected( $bulk_cur, '' ); ?>><?php esc_html_e( '— (none)', 'order-list-enhancer' ); ?></option>
+						<?php foreach ( $bulk_actions as $val => $label ) : ?>
+							<option value="<?php echo esc_attr( $val ); ?>" <?php selected( $bulk_cur, (string) $val ); ?>><?php echo esc_html( '' !== $label ? $label : $val ); ?></option>
+						<?php endforeach; ?>
+					</select>
+					<p class="description"><?php esc_html_e( 'Pre-selects this entry in the orders-list bulk-actions menu on page load. The list is filled from your Orders screen — open the Orders list once if it looks empty.', 'order-list-enhancer' ); ?></p>
+				</td>
+			</tr>
+		</tbody></table>
+		<?php
+		self::card_close();
+
+		self::card_open(
+			__( 'Open selected one-by-one', 'order-list-enhancer' ),
+			__( 'Add a button that opens each checkbox-selected order in its own tab, one at a time.', 'order-list-enhancer' ),
+			array( 'name' => 'seq_open_enabled', 'checked' => OLE_Settings::is_yes( $o, 'seq_open_enabled' ) )
+		);
+		?>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Default interval (seconds)', 'order-list-enhancer' ); ?></th>
+				<td><input type="number" name="seq_open_interval" min="1" max="300" step="1" value="<?php echo esc_attr( $o['seq_open_interval'] ); ?>"/>
+				<p class="description"><?php esc_html_e( 'Seconds to wait between opening tabs (editable on the button too). Tip: your browser must allow pop-ups for this site, or only the first tab opens.', 'order-list-enhancer' ); ?></p></td>
+			</tr>
+		</tbody></table>
+		<?php
+		self::card_close();
 	}
 
 	private function render_tab_checkout( $o, $cb ) {
