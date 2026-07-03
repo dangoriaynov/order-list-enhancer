@@ -1,0 +1,67 @@
+/* ---- Tab shell ---- */
+.ole-settings-shell { display: flex; gap: 20px; align-items: flex-start; margin-top: 12px; }
+.ole-tabnav { flex: 0 0 200px; margin: 0; position: sticky; top: 40px; }
+.ole-tabnav li { margin: 0; }
+.ole-tabnav a {
+	display: block; padding: 10px 14px; text-decoration: none; color: #1d2327;
+	border-left: 3px solid transparent; border-radius: 4px; font-weight: 600;
+}
+.ole-tabnav a:hover { background: #f0f0f1; }
+.ole-tabnav a.is-active { background: #f0f6fc; border-left-color: #2271b1; color: #0a4b78; }
+.ole-tabpanels { flex: 1 1 auto; min-width: 0; }
+.ole-tabpanel { }
+
+/* ---- Card ---- */
+.ole-card {
+	background: #fff; border: 1px solid #dcdcde; border-radius: 8px;
+	padding: 16px 18px; margin: 0 0 16px; box-shadow: 0 1px 1px rgba(0,0,0,.03);
+}
+.ole-card-head { display: flex; align-items: center; gap: 8px; }
+.ole-card-title { font-size: 14px; font-weight: 600; margin: 0; flex: 1 1 auto; }
+.ole-card-body { margin-top: 12px; }
+.ole-card-body .form-table { margin-top: 0; }
+.ole-card-body .form-table th { padding-left: 0; }
+/* Progressive disclosure: dim + hide body when the header switch is off */
+.ole-card.ole-off .ole-card-body { display: none; }
+.ole-card.ole-off .ole-card-title { color: #646970; }
+
+/* ---- On/off switch (wraps a real checkbox) ---- */
+.ole-switch { position: relative; display: inline-flex; align-items: center; cursor: pointer; }
+.ole-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+.ole-switch .ole-slider {
+	width: 40px; height: 22px; background: #c3c4c7; border-radius: 22px; transition: background .15s; position: relative;
+}
+.ole-switch .ole-slider::before {
+	content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+	background: #fff; border-radius: 50%; transition: transform .15s;
+}
+.ole-switch input:checked + .ole-slider { background: #2271b1; }
+.ole-switch input:checked + .ole-slider::before { transform: translateX(18px); }
+.ole-switch input:focus + .ole-slider { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #2271b1; }
+
+/* ---- Help tooltip ---- */
+.ole-help {
+	display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px;
+	border-radius: 50%; background: #dcdcde; color: #1d2327; font-size: 12px; font-weight: 700;
+	cursor: help; user-select: none; text-decoration: none;
+}
+.ole-help:focus { outline: 2px solid #2271b1; }
+
+/* ---- Sticky save bar ---- */
+.ole-savebar {
+	position: sticky; bottom: 0; background: #fff; border-top: 1px solid #dcdcde;
+	padding: 12px 0; margin-top: 8px; display: flex; align-items: center; gap: 12px;
+}
+
+/* Keep rule/mapping tables full width inside cards (migrated from the old inline <style>). */
+#ole-settings-form .form-table { width: 100%; }
+#ole-settings-form .ole-rules,
+#ole-settings-form .ole-extras { width: 100%; max-width: 100% !important; }
+#ole-settings-form .ole-extras td input[type=text],
+#ole-settings-form .ole-extras td .wc-product-search,
+#ole-settings-form .ole-extras td .select2-container { width: 100% !important; }
+
+@media screen and (max-width: 782px) {
+	.ole-settings-shell { flex-direction: column; }
+	.ole-tabnav { position: static; flex-basis: auto; display: flex; flex-wrap: wrap; gap: 6px; }
+}
