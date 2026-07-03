@@ -49,6 +49,7 @@ class OLE_Settings_Page {
 			return;
 		}
 		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_style( 'ole-settings', OLE_URL . 'assets/css/ole-settings.css', array(), OLE_VERSION );
 		wp_enqueue_script( 'ole-settings', OLE_URL . 'assets/js/ole-settings.js', array( 'jquery', 'wp-color-picker' ), OLE_VERSION, true );
 		wp_enqueue_script( 'wc-enhanced-select' );
 		wp_enqueue_style( 'woocommerce_admin_styles' );
@@ -80,11 +81,99 @@ class OLE_Settings_Page {
 		return wp_strip_all_tags( $product->get_name() );
 	}
 
+	/** Ліва навігація вкладок. $tabs = [ ['id'=>'orders','label'=>'…'], … ]. */
+	private static function tab_nav( array $tabs ) {
+		echo '<ul class="ole-tabnav" role="tablist">';
+		foreach ( $tabs as $t ) {
+			printf(
+				'<li role="presentation"><a role="tab" href="#%1$s" aria-controls="%1$s" aria-selected="false">%2$s</a></li>',
+				esc_attr( $t['id'] ),
+				esc_html( $t['label'] )
+			);
+		}
+		echo '</ul>';
+	}
+
+	/** Перемикач on/off навколо справжнього чекбокса (той самий name). */
+	private static function switch_html( $name, $checked, $label = '' ) {
+		return sprintf(
+			'<label class="ole-switch">%1$s<input type="checkbox" name="%2$s" %3$s/><span class="ole-slider"></span></label>',
+			'' !== $label ? '<span class="screen-reader-text">' . esc_html( $label ) . '</span>' : '',
+			esc_attr( $name ),
+			$checked ? 'checked' : ''
+		);
+	}
+
+	/** «?»-іконка з підказкою у title. */
+	private static function help_html( $text ) {
+		if ( '' === $text ) {
+			return '';
+		}
+		return '<a href="#" class="ole-help" title="' . esc_attr( $text ) . '" aria-label="' . esc_attr( $text ) . '">?</a>';
+	}
+
+	/**
+	 * Відкриває картку фічі.
+	 * @param string     $title
+	 * @param string     $help   довгий опис у tooltip ('' = без іконки)
+	 * @param array|null $switch ['name'=>string,'checked'=>bool] для перемикача в шапці, або null
+	 */
+	private static function card_open( $title, $help = '', $switch = null ) {
+		$attr = '';
+		if ( is_array( $switch ) ) {
+			$attr = ' data-switch="' . esc_attr( $switch['name'] ) . '"';
+		}
+		echo '<div class="ole-card"' . $attr . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<div class="ole-card-head">';
+		echo '<h3 class="ole-card-title">' . esc_html( $title ) . '</h3>';
+		echo self::help_html( $help ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		if ( is_array( $switch ) ) {
+			echo self::switch_html( $switch['name'], (bool) $switch['checked'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+		echo '</div><div class="ole-card-body">';
+	}
+
+	private static function card_close() {
+		echo '</div></div>';
+	}
+
 	public function render() {
 		$o  = OLE_Settings::get();
 		$cb = function ( $key ) use ( $o ) {
 			return checked( OLE_Settings::is_yes( $o, $key ), true, false );
 		};
+		?>
+		<div class="wrap">
+			<h1><?php esc_html_e( 'Order List Enhancer', 'order-list-enhancer' ); ?></h1>
+			<form id="ole-settings-form">
+				<div class="ole-settings-shell">
+					<?php
+					self::tab_nav(
+						array(
+							array( 'id' => 'orders',    'label' => __( 'Orders', 'order-list-enhancer' ) ),
+							array( 'id' => 'checkout',  'label' => __( 'Checkout', 'order-list-enhancer' ) ),
+							array( 'id' => 'inventory', 'label' => __( 'Inventory', 'order-list-enhancer' ) ),
+							array( 'id' => 'phone',     'label' => __( 'Phone', 'order-list-enhancer' ) ),
+						)
+					);
+					?>
+					<div class="ole-tabpanels">
+						<div class="ole-tabpanel" id="orders" role="tabpanel"><?php $this->render_tab_orders( $o, $cb ); ?></div>
+						<div class="ole-tabpanel" id="checkout" role="tabpanel"><?php $this->render_tab_checkout( $o, $cb ); ?></div>
+						<div class="ole-tabpanel" id="inventory" role="tabpanel"><?php $this->render_tab_inventory( $o, $cb ); ?></div>
+						<div class="ole-tabpanel" id="phone" role="tabpanel"><?php $this->render_tab_phone( $o, $cb ); ?></div>
+					</div>
+				</div>
+				<div class="ole-savebar">
+					<button type="submit" class="button button-primary"><?php esc_html_e( 'Save changes', 'order-list-enhancer' ); ?></button>
+					<span class="ole-save-status" style="font-weight:600;"></span>
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+
+	private function render_tab_orders( $o, $cb ) {
 		$rules = $o['ship_rules'];
 		if ( empty( $rules ) ) {
 			$rules = array(
@@ -96,20 +185,6 @@ class OLE_Settings_Page {
 			);
 		}
 		?>
-		<div class="wrap">
-			<style>
-				/* Make every settings table fill the same (full) content width, and the
-				   mapping fields fill their cells so long product names are visible. */
-				#ole-settings-form .form-table { width: 100%; }
-				#ole-settings-form .ole-rules,
-				#ole-settings-form .ole-extras { width: 100%; max-width: 100% !important; }
-				#ole-settings-form .ole-extras td input[type=text],
-				#ole-settings-form .ole-extras td .wc-product-search,
-				#ole-settings-form .ole-extras td .select2-container { width: 100% !important; }
-			</style>
-			<h1><?php esc_html_e( 'Order List Enhancer', 'order-list-enhancer' ); ?></h1>
-			<form id="ole-settings-form">
-
 				<h2><?php esc_html_e( 'Repeat customer highlighting', 'order-list-enhancer' ); ?></h2>
 				<table class="form-table"><tbody>
 					<tr>
@@ -283,54 +358,11 @@ class OLE_Settings_Page {
 						<p class="description"><?php esc_html_e( 'Seconds to wait between opening tabs (editable on the button too). Tip: your browser must allow pop-ups for this site, or only the first tab opens.', 'order-list-enhancer' ); ?></p></td>
 					</tr>
 				</tbody></table>
+		<?php
+	}
 
-				<h2><?php esc_html_e( 'Extras → products', 'order-list-enhancer' ); ?></h2>
-				<table class="form-table"><tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Enable conversion', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="extras_enabled" <?php echo $cb( 'extras_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'At order creation, turn each mapped add-on extra into a real product line at the price the customer paid. Order total is unchanged.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Mapping (extra → product)', 'order-list-enhancer' ); ?></th>
-						<td>
-							<?php
-							$emap = $o['extras_map'];
-							if ( empty( $emap ) ) {
-								$emap = array( array( 'match' => '', 'product' => 0 ) );
-							}
-							?>
-							<table class="widefat ole-extras" style="width:100%;max-width:1000px"><thead><tr>
-								<th style="text-align:center;width:38%"><?php esc_html_e( 'Extra text (as shown on the order)', 'order-list-enhancer' ); ?></th>
-								<th style="text-align:center;width:54%"><?php esc_html_e( 'Product', 'order-list-enhancer' ); ?></th>
-								<th style="width:1%"></th>
-							</tr></thead><tbody>
-							<?php
-							foreach ( $emap as $row ) :
-								$pid     = isset( $row['product'] ) ? (int) $row['product'] : 0;
-								$product = $pid ? wc_get_product( $pid ) : null;
-								?>
-								<tr>
-									<td><input type="text" name="extra_match[]" value="<?php echo esc_attr( $row['match'] ); ?>" class="regular-text" placeholder="+ 500 г янтарна киселина" style="width:100%"/></td>
-									<td>
-										<select class="wc-product-search ole-extra-product" name="extra_product[]" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%">
-											<?php if ( $product ) : ?>
-												<?php $plabel = self::extra_product_label( $product ); ?>
-												<option value="<?php echo esc_attr( $pid ); ?>" selected title="<?php echo esc_attr( $plabel ); ?>"><?php echo esc_html( $plabel ); ?></option>
-											<?php else : ?>
-												<option value="" selected></option>
-											<?php endif; ?>
-										</select>
-									</td>
-									<td><button type="button" class="button ole-extra-remove">&times;</button></td>
-								</tr>
-							<?php endforeach; ?>
-							</tbody></table>
-							<p><button type="button" class="button ole-extra-add"><?php esc_html_e( 'Add row', 'order-list-enhancer' ); ?></button></p>
-							<p class="description"><?php esc_html_e( 'Match is the exact extra label as it appears on the order/checkout (Product Add-On label like "+ 500 г …", or the Checkout Add-On name). The product line will be priced at what the customer paid for that extra.', 'order-list-enhancer' ); ?></p>
-						</td>
-					</tr>
-				</tbody></table>
-
+	private function render_tab_checkout( $o, $cb ) {
+		?>
 				<h2><?php esc_html_e( 'Checkout phone validation', 'order-list-enhancer' ); ?></h2>
 				<table class="form-table"><tbody>
 					<tr>
@@ -407,6 +439,57 @@ class OLE_Settings_Page {
 					</tr>
 				</tbody></table>
 
+				<h2><?php esc_html_e( 'Extras → products', 'order-list-enhancer' ); ?></h2>
+				<table class="form-table"><tbody>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Enable conversion', 'order-list-enhancer' ); ?></th>
+						<td><label><input type="checkbox" name="extras_enabled" <?php echo $cb( 'extras_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'At order creation, turn each mapped add-on extra into a real product line at the price the customer paid. Order total is unchanged.', 'order-list-enhancer' ); ?></label></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Mapping (extra → product)', 'order-list-enhancer' ); ?></th>
+						<td>
+							<?php
+							$emap = $o['extras_map'];
+							if ( empty( $emap ) ) {
+								$emap = array( array( 'match' => '', 'product' => 0 ) );
+							}
+							?>
+							<table class="widefat ole-extras" style="width:100%;max-width:1000px"><thead><tr>
+								<th style="text-align:center;width:38%"><?php esc_html_e( 'Extra text (as shown on the order)', 'order-list-enhancer' ); ?></th>
+								<th style="text-align:center;width:54%"><?php esc_html_e( 'Product', 'order-list-enhancer' ); ?></th>
+								<th style="width:1%"></th>
+							</tr></thead><tbody>
+							<?php
+							foreach ( $emap as $row ) :
+								$pid     = isset( $row['product'] ) ? (int) $row['product'] : 0;
+								$product = $pid ? wc_get_product( $pid ) : null;
+								?>
+								<tr>
+									<td><input type="text" name="extra_match[]" value="<?php echo esc_attr( $row['match'] ); ?>" class="regular-text" placeholder="+ 500 г янтарна киселина" style="width:100%"/></td>
+									<td>
+										<select class="wc-product-search ole-extra-product" name="extra_product[]" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%">
+											<?php if ( $product ) : ?>
+												<?php $plabel = self::extra_product_label( $product ); ?>
+												<option value="<?php echo esc_attr( $pid ); ?>" selected title="<?php echo esc_attr( $plabel ); ?>"><?php echo esc_html( $plabel ); ?></option>
+											<?php else : ?>
+												<option value="" selected></option>
+											<?php endif; ?>
+										</select>
+									</td>
+									<td><button type="button" class="button ole-extra-remove">&times;</button></td>
+								</tr>
+							<?php endforeach; ?>
+							</tbody></table>
+							<p><button type="button" class="button ole-extra-add"><?php esc_html_e( 'Add row', 'order-list-enhancer' ); ?></button></p>
+							<p class="description"><?php esc_html_e( 'Match is the exact extra label as it appears on the order/checkout (Product Add-On label like "+ 500 г …", or the Checkout Add-On name). The product line will be priced at what the customer paid for that extra.', 'order-list-enhancer' ); ?></p>
+						</td>
+					</tr>
+				</tbody></table>
+		<?php
+	}
+
+	private function render_tab_inventory( $o, $cb ) {
+		?>
 				<h2><?php esc_html_e( 'Print consumables (stickers & instructions)', 'order-list-enhancer' ); ?></h2>
 				<table class="form-table"><tbody>
 					<tr>
@@ -428,7 +511,11 @@ class OLE_Settings_Page {
 						<td><a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=ole-print-stock' ) ); ?>"><?php esc_html_e( 'Open consumables stock', 'order-list-enhancer' ); ?></a></td>
 					</tr>
 				</tbody></table>
+		<?php
+	}
 
+	private function render_tab_phone( $o, $cb ) {
+		?>
 				<h2><?php esc_html_e( 'Phone numbers', 'order-list-enhancer' ); ?></h2>
 				<table class="form-table"><tbody>
 					<tr>
@@ -441,13 +528,6 @@ class OLE_Settings_Page {
 						<p class="description"><?php esc_html_e( 'Digits only, e.g. 359. Added to numbers that have no country code.', 'order-list-enhancer' ); ?></p></td>
 					</tr>
 				</tbody></table>
-
-				<p class="submit">
-					<button type="submit" class="button button-primary"><?php esc_html_e( 'Save changes', 'order-list-enhancer' ); ?></button>
-					<span class="ole-save-status" style="margin-left:10px;font-weight:600;"></span>
-				</p>
-			</form>
-		</div>
 		<?php
 	}
 

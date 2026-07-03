@@ -117,3 +117,55 @@ jQuery( function ( $ ) {
 		else { jQuery( this ).closest( 'tr' ).find( 'input' ).val( '' ); jQuery( this ).closest( 'tr' ).find( 'select' ).val( null ); }
 	} );
 } );
+
+( function ( $ ) {
+	'use strict';
+
+	function initTabs() {
+		var $nav = $( '.ole-tabnav a' );
+		var $panels = $( '.ole-tabpanel' );
+		if ( ! $nav.length ) { return; }
+
+		function activate( id ) {
+			var found = false;
+			$panels.each( function () {
+				var match = ( '#' + this.id ) === id;
+				this.hidden = ! match;
+				found = found || match;
+			} );
+			if ( ! found ) { // invalid hash → first panel
+				$panels.each( function ( i ) { this.hidden = i !== 0; } );
+				id = '#' + $panels.get( 0 ).id;
+			}
+			$nav.removeClass( 'is-active' ).attr( 'aria-selected', 'false' );
+			$nav.filter( '[href="' + id + '"]' ).addClass( 'is-active' ).attr( 'aria-selected', 'true' );
+		}
+
+		$nav.on( 'click', function ( e ) {
+			e.preventDefault();
+			var id = $( this ).attr( 'href' );
+			if ( window.history && history.replaceState ) { history.replaceState( null, '', id ); }
+			else { window.location.hash = id; }
+			activate( id );
+		} );
+
+		activate( window.location.hash || ( '#' + $panels.get( 0 ).id ) );
+	}
+
+	function initDisclosure() {
+		$( '.ole-card[data-switch]' ).each( function () {
+			var $card = $( this );
+			var name = $card.data( 'switch' );
+			var $cb = $card.find( 'input[name="' + name + '"]' ).first();
+			function sync() { $card.toggleClass( 'ole-off', ! $cb.prop( 'checked' ) ); }
+			$cb.on( 'change', sync );
+			sync();
+		} );
+	}
+
+	function initHelp() {
+		$( '.ole-help' ).on( 'click', function ( e ) { e.preventDefault(); } );
+	}
+
+	$( function () { initTabs(); initDisclosure(); initHelp(); } );
+} )( jQuery );
