@@ -520,46 +520,48 @@ class OLE_Settings_Page {
 	}
 
 	private function render_tab_inventory( $o, $cb ) {
+		self::card_open(
+			__( 'Print consumables', 'order-list-enhancer' ),
+			__( 'Track sticker & instruction-sheet stock, auto-decrement at order placement, and warn when low.', 'order-list-enhancer' ),
+			array( 'name' => 'print_stock_enabled', 'checked' => OLE_Settings::is_yes( $o, 'print_stock_enabled' ) )
+		);
 		?>
-				<h2><?php esc_html_e( 'Print consumables (stickers & instructions)', 'order-list-enhancer' ); ?></h2>
-				<table class="form-table"><tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Enable tracking', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="print_stock_enabled" <?php echo $cb( 'print_stock_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Count printed stickers (per product/variation, by quantity) and instruction sheets (one per order) as orders come in, and warn when they run low.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Sticker low threshold', 'order-list-enhancer' ); ?></th>
-						<td><input type="number" name="print_stock_threshold_sticker" min="0" max="100000" step="1" value="<?php echo esc_attr( (string) $o['print_stock_threshold_sticker'] ); ?>"/>
-						<p class="description"><?php esc_html_e( 'Warn ("time to print") when a sticker stock drops to this or below.', 'order-list-enhancer' ); ?></p></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Instruction low threshold', 'order-list-enhancer' ); ?></th>
-						<td><input type="number" name="print_stock_threshold_instruction" min="0" max="100000" step="1" value="<?php echo esc_attr( (string) $o['print_stock_threshold_instruction'] ); ?>"/>
-						<p class="description"><?php esc_html_e( 'Warn when an instruction sheet stock drops to this or below.', 'order-list-enhancer' ); ?></p></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Stock page', 'order-list-enhancer' ); ?></th>
-						<td><a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=ole-print-stock' ) ); ?>"><?php esc_html_e( 'Open consumables stock', 'order-list-enhancer' ); ?></a></td>
-					</tr>
-				</tbody></table>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Sticker low threshold', 'order-list-enhancer' ); ?></th>
+				<td><input type="number" name="print_stock_threshold_sticker" min="0" max="100000" step="1" value="<?php echo esc_attr( (string) $o['print_stock_threshold_sticker'] ); ?>"/>
+				<p class="description"><?php esc_html_e( 'Warn ("time to print") when a sticker stock drops to this or below.', 'order-list-enhancer' ); ?></p></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Instruction low threshold', 'order-list-enhancer' ); ?></th>
+				<td><input type="number" name="print_stock_threshold_instruction" min="0" max="100000" step="1" value="<?php echo esc_attr( (string) $o['print_stock_threshold_instruction'] ); ?>"/>
+				<p class="description"><?php esc_html_e( 'Warn when an instruction sheet stock drops to this or below.', 'order-list-enhancer' ); ?></p></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Stock page', 'order-list-enhancer' ); ?></th>
+				<td><a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=ole-print-stock' ) ); ?>"><?php esc_html_e( 'Open consumables stock', 'order-list-enhancer' ); ?></a></td>
+			</tr>
+		</tbody></table>
 		<?php
+		self::card_close();
 	}
 
 	private function render_tab_phone( $o, $cb ) {
+		self::card_open(
+			__( 'Phone numbers', 'order-list-enhancer' ),
+			__( 'Tidy phone numbers for display (leading 00 → +, add country code when missing). Never changes the database.', 'order-list-enhancer' ),
+			array( 'name' => 'normalize_phone', 'checked' => OLE_Settings::is_yes( $o, 'normalize_phone' ) )
+		);
 		?>
-				<h2><?php esc_html_e( 'Phone numbers', 'order-list-enhancer' ); ?></h2>
-				<table class="form-table"><tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Normalize phone (display only)', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="normalize_phone" <?php echo $cb( 'normalize_phone' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Tidy phone numbers for display: leading 00 → +, add the country code when missing. Never changes the database.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Default country code', 'order-list-enhancer' ); ?></th>
-						<td><input type="text" name="phone_cc" value="<?php echo esc_attr( $o['phone_cc'] ); ?>" placeholder="359" style="max-width:120px"/>
-						<p class="description"><?php esc_html_e( 'Digits only, e.g. 359. Added to numbers that have no country code.', 'order-list-enhancer' ); ?></p></td>
-					</tr>
-				</tbody></table>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Default country code', 'order-list-enhancer' ); ?></th>
+				<td><input type="text" name="phone_cc" value="<?php echo esc_attr( $o['phone_cc'] ); ?>" placeholder="359" style="max-width:120px"/>
+				<p class="description"><?php esc_html_e( 'Digits only, e.g. 359. Added to numbers that have no country code.', 'order-list-enhancer' ); ?></p></td>
+			</tr>
+		</tbody></table>
 		<?php
+		self::card_close();
 	}
 
 	public function ajax_save() {
