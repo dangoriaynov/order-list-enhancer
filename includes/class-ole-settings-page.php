@@ -384,130 +384,139 @@ class OLE_Settings_Page {
 	}
 
 	private function render_tab_checkout( $o, $cb ) {
+		self::card_open(
+			__( 'Checkout phone validation', 'order-list-enhancer' ),
+			__( 'Validate the billing phone (Bulgarian numbers) at checkout and flag invalid ones in admin. Country code comes from the Phone tab (default 359); orders are flagged either way.', 'order-list-enhancer' ),
+			array( 'name' => 'phone_validate_enabled', 'checked' => OLE_Settings::is_yes( $o, 'phone_validate_enabled' ) )
+		);
 		?>
-				<h2><?php esc_html_e( 'Checkout phone validation', 'order-list-enhancer' ); ?></h2>
-				<table class="form-table"><tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Validate at checkout', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="phone_validate_enabled" <?php echo $cb( 'phone_validate_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Validate the billing phone number on the checkout (Bulgarian numbers) and flag invalid numbers in the admin.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'When invalid', 'order-list-enhancer' ); ?></th>
-						<td>
-							<?php $pmode = $o['phone_validate_mode']; ?>
-							<select name="phone_validate_mode">
-								<option value="warn" <?php selected( $pmode, 'warn' ); ?>><?php esc_html_e( 'Warn only (allow the order, flag it)', 'order-list-enhancer' ); ?></option>
-								<option value="block" <?php selected( $pmode, 'block' ); ?>><?php esc_html_e( 'Block the order until fixed', 'order-list-enhancer' ); ?></option>
-							</select>
-							<p class="description"><?php esc_html_e( 'Country code comes from "Default country code" below (default 359). Invalid orders are flagged on the order page and in the orders list regardless of mode.', 'order-list-enhancer' ); ?></p>
-						</td>
-					</tr>
-				</tbody></table>
-
-				<h2><?php esc_html_e( 'Duplicate-order guard (checkout)', 'order-list-enhancer' ); ?></h2>
-				<table class="form-table"><tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Guard at checkout', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="dup_guard_enabled" <?php echo $cb( 'dup_guard_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Detect an identical recent order (same phone + cart) at checkout and disable the place-order button after the first tap.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'When a duplicate is found', 'order-list-enhancer' ); ?></th>
-						<td>
-							<?php $dgmode = $o['dup_guard_mode']; ?>
-							<select name="dup_guard_mode">
-								<option value="confirm" <?php selected( $dgmode, 'confirm' ); ?>><?php esc_html_e( 'Ask the customer to confirm in a popup', 'order-list-enhancer' ); ?></option>
-								<option value="block" <?php selected( $dgmode, 'block' ); ?>><?php esc_html_e( 'Block the duplicate order', 'order-list-enhancer' ); ?></option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Window (minutes)', 'order-list-enhancer' ); ?></th>
-						<td>
-							<input type="number" name="dup_guard_window_min" min="1" max="120" step="1" value="<?php echo esc_attr( (string) $o['dup_guard_window_min'] ); ?>" />
-							<p class="description"><?php esc_html_e( 'Treat an order from the same phone with the same cart created within this many minutes as a duplicate.', 'order-list-enhancer' ); ?></p>
-						</td>
-					</tr>
-				</tbody></table>
-
-				<h2><?php esc_html_e( 'Delivery-date notice (checkout)', 'order-list-enhancer' ); ?></h2>
-				<table class="form-table"><tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Show notice', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="delivery_notice_enabled" <?php echo $cb( 'delivery_notice_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'When the delivery-date field (Order Delivery Date plugin) is on the checkout, show a highlighted note above it. Does nothing if that field is absent.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Notice title', 'order-list-enhancer' ); ?></th>
-						<td><input type="text" name="delivery_notice_title" value="<?php echo esc_attr( $o['delivery_notice_title'] ); ?>" class="regular-text" style="width:100%;max-width:680px"/>
-						<p class="description"><?php esc_html_e( 'Bold first line. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Notice text', 'order-list-enhancer' ); ?></th>
-						<td><textarea name="delivery_notice_body" rows="2" class="large-text" style="max-width:680px"><?php echo esc_textarea( $o['delivery_notice_body'] ); ?></textarea>
-						<p class="description"><?php esc_html_e( 'Explanation under the title. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Vacation banner', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="delivery_vacation_enabled" <?php echo $cb( 'delivery_vacation_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'Also show a red "we are away" banner above the notice, until the date below.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Away until', 'order-list-enhancer' ); ?></th>
-						<td><input type="date" name="delivery_vacation_until" value="<?php echo esc_attr( $o['delivery_vacation_until'] ); ?>"/>
-						<p class="description"><?php esc_html_e( 'The banner hides automatically after this date.', 'order-list-enhancer' ); ?></p></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Vacation text', 'order-list-enhancer' ); ?></th>
-						<td><textarea name="delivery_vacation_text" rows="2" class="large-text" style="max-width:680px"><?php echo esc_textarea( $o['delivery_vacation_text'] ); ?></textarea>
-						<p class="description"><?php esc_html_e( 'Use %s where the date should appear. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
-					</tr>
-				</tbody></table>
-
-				<h2><?php esc_html_e( 'Extras → products', 'order-list-enhancer' ); ?></h2>
-				<table class="form-table"><tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Enable conversion', 'order-list-enhancer' ); ?></th>
-						<td><label><input type="checkbox" name="extras_enabled" <?php echo $cb( 'extras_enabled' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/> <?php esc_html_e( 'At order creation, turn each mapped add-on extra into a real product line at the price the customer paid. Order total is unchanged.', 'order-list-enhancer' ); ?></label></td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Mapping (extra → product)', 'order-list-enhancer' ); ?></th>
-						<td>
-							<?php
-							$emap = $o['extras_map'];
-							if ( empty( $emap ) ) {
-								$emap = array( array( 'match' => '', 'product' => 0 ) );
-							}
-							?>
-							<table class="widefat ole-extras" style="width:100%;max-width:1000px"><thead><tr>
-								<th style="text-align:center;width:38%"><?php esc_html_e( 'Extra text (as shown on the order)', 'order-list-enhancer' ); ?></th>
-								<th style="text-align:center;width:54%"><?php esc_html_e( 'Product', 'order-list-enhancer' ); ?></th>
-								<th style="width:1%"></th>
-							</tr></thead><tbody>
-							<?php
-							foreach ( $emap as $row ) :
-								$pid     = isset( $row['product'] ) ? (int) $row['product'] : 0;
-								$product = $pid ? wc_get_product( $pid ) : null;
-								?>
-								<tr>
-									<td><input type="text" name="extra_match[]" value="<?php echo esc_attr( $row['match'] ); ?>" class="regular-text" placeholder="+ 500 г янтарна киселина" style="width:100%"/></td>
-									<td>
-										<select class="wc-product-search ole-extra-product" name="extra_product[]" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%">
-											<?php if ( $product ) : ?>
-												<?php $plabel = self::extra_product_label( $product ); ?>
-												<option value="<?php echo esc_attr( $pid ); ?>" selected title="<?php echo esc_attr( $plabel ); ?>"><?php echo esc_html( $plabel ); ?></option>
-											<?php else : ?>
-												<option value="" selected></option>
-											<?php endif; ?>
-										</select>
-									</td>
-									<td><button type="button" class="button ole-extra-remove">&times;</button></td>
-								</tr>
-							<?php endforeach; ?>
-							</tbody></table>
-							<p><button type="button" class="button ole-extra-add"><?php esc_html_e( 'Add row', 'order-list-enhancer' ); ?></button></p>
-							<p class="description"><?php esc_html_e( 'Match is the exact extra label as it appears on the order/checkout (Product Add-On label like "+ 500 г …", or the Checkout Add-On name). The product line will be priced at what the customer paid for that extra.', 'order-list-enhancer' ); ?></p>
-						</td>
-					</tr>
-				</tbody></table>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'When invalid', 'order-list-enhancer' ); ?></th>
+				<td>
+					<?php $pmode = $o['phone_validate_mode']; ?>
+					<select name="phone_validate_mode">
+						<option value="warn" <?php selected( $pmode, 'warn' ); ?>><?php esc_html_e( 'Warn only (allow the order, flag it)', 'order-list-enhancer' ); ?></option>
+						<option value="block" <?php selected( $pmode, 'block' ); ?>><?php esc_html_e( 'Block the order until fixed', 'order-list-enhancer' ); ?></option>
+					</select>
+				</td>
+			</tr>
+		</tbody></table>
 		<?php
+		self::card_close();
+
+		self::card_open(
+			__( 'Duplicate-order guard', 'order-list-enhancer' ),
+			__( 'Detect an identical recent order (same phone + cart) at checkout and confirm or block it; also disables the place-order button after the first tap.', 'order-list-enhancer' ),
+			array( 'name' => 'dup_guard_enabled', 'checked' => OLE_Settings::is_yes( $o, 'dup_guard_enabled' ) )
+		);
+		?>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'When a duplicate is found', 'order-list-enhancer' ); ?></th>
+				<td>
+					<?php $dgmode = $o['dup_guard_mode']; ?>
+					<select name="dup_guard_mode">
+						<option value="confirm" <?php selected( $dgmode, 'confirm' ); ?>><?php esc_html_e( 'Ask the customer to confirm in a popup', 'order-list-enhancer' ); ?></option>
+						<option value="block" <?php selected( $dgmode, 'block' ); ?>><?php esc_html_e( 'Block the duplicate order', 'order-list-enhancer' ); ?></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Window (minutes)', 'order-list-enhancer' ); ?></th>
+				<td>
+					<input type="number" name="dup_guard_window_min" min="1" max="120" step="1" value="<?php echo esc_attr( (string) $o['dup_guard_window_min'] ); ?>" />
+					<p class="description"><?php esc_html_e( 'Same phone + same cart within this many minutes counts as a duplicate.', 'order-list-enhancer' ); ?></p>
+				</td>
+			</tr>
+		</tbody></table>
+		<?php
+		self::card_close();
+
+		self::card_open(
+			__( 'Delivery-date notice', 'order-list-enhancer' ),
+			__( 'Show a highlighted note above the delivery-date field at checkout; optional vacation banner. Requires the Order Delivery Date plugin field on checkout; does nothing if that field is absent.', 'order-list-enhancer' ),
+			array( 'name' => 'delivery_notice_enabled', 'checked' => OLE_Settings::is_yes( $o, 'delivery_notice_enabled' ) )
+		);
+		?>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Notice title', 'order-list-enhancer' ); ?></th>
+				<td><input type="text" name="delivery_notice_title" value="<?php echo esc_attr( $o['delivery_notice_title'] ); ?>" class="regular-text" style="width:100%;max-width:680px"/>
+				<p class="description"><?php esc_html_e( 'Bold first line. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Notice text', 'order-list-enhancer' ); ?></th>
+				<td><textarea name="delivery_notice_body" rows="2" class="large-text" style="max-width:680px"><?php echo esc_textarea( $o['delivery_notice_body'] ); ?></textarea>
+				<p class="description"><?php esc_html_e( 'Explanation under the title. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Vacation banner', 'order-list-enhancer' ); ?></th>
+				<td><?php echo self::switch_html( 'delivery_vacation_enabled', OLE_Settings::is_yes( $o, 'delivery_vacation_enabled' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Also show a red "we are away" banner above the notice, until the date below.', 'order-list-enhancer' ); ?></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Away until', 'order-list-enhancer' ); ?></th>
+				<td><input type="date" name="delivery_vacation_until" value="<?php echo esc_attr( $o['delivery_vacation_until'] ); ?>"/>
+				<p class="description"><?php esc_html_e( 'The banner hides automatically after this date.', 'order-list-enhancer' ); ?></p></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Vacation text', 'order-list-enhancer' ); ?></th>
+				<td><textarea name="delivery_vacation_text" rows="2" class="large-text" style="max-width:680px"><?php echo esc_textarea( $o['delivery_vacation_text'] ); ?></textarea>
+				<p class="description"><?php esc_html_e( 'Use %s where the date should appear. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
+			</tr>
+		</tbody></table>
+		<?php
+		self::card_close();
+
+		self::card_open(
+			__( 'Extras → products', 'order-list-enhancer' ),
+			__( 'At order creation, turn each mapped add-on extra into a real product line at the price paid; order total stays unchanged.', 'order-list-enhancer' ),
+			array( 'name' => 'extras_enabled', 'checked' => OLE_Settings::is_yes( $o, 'extras_enabled' ) )
+		);
+		?>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Mapping (extra → product)', 'order-list-enhancer' ); ?></th>
+				<td>
+					<?php
+					$emap = $o['extras_map'];
+					if ( empty( $emap ) ) {
+						$emap = array( array( 'match' => '', 'product' => 0 ) );
+					}
+					?>
+					<table class="widefat ole-extras" style="width:100%;max-width:1000px"><thead><tr>
+						<th style="text-align:center;width:38%"><?php esc_html_e( 'Extra text (as shown on the order)', 'order-list-enhancer' ); ?></th>
+						<th style="text-align:center;width:54%"><?php esc_html_e( 'Product', 'order-list-enhancer' ); ?></th>
+						<th style="width:1%"></th>
+					</tr></thead><tbody>
+					<?php
+					foreach ( $emap as $row ) :
+						$pid     = isset( $row['product'] ) ? (int) $row['product'] : 0;
+						$product = $pid ? wc_get_product( $pid ) : null;
+						?>
+						<tr>
+							<td><input type="text" name="extra_match[]" value="<?php echo esc_attr( $row['match'] ); ?>" class="regular-text" placeholder="+ 500 г янтарна киселина" style="width:100%"/></td>
+							<td>
+								<select class="wc-product-search ole-extra-product" name="extra_product[]" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%">
+									<?php if ( $product ) : ?>
+										<?php $plabel = self::extra_product_label( $product ); ?>
+										<option value="<?php echo esc_attr( $pid ); ?>" selected title="<?php echo esc_attr( $plabel ); ?>"><?php echo esc_html( $plabel ); ?></option>
+									<?php else : ?>
+										<option value="" selected></option>
+									<?php endif; ?>
+								</select>
+							</td>
+							<td><button type="button" class="button ole-extra-remove">&times;</button></td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody></table>
+					<p><button type="button" class="button ole-extra-add"><?php esc_html_e( 'Add row', 'order-list-enhancer' ); ?></button></p>
+					<p class="description"><?php esc_html_e( 'Match is the exact extra label as it appears on the order/checkout (Product Add-On label like "+ 500 г …", or the Checkout Add-On name).', 'order-list-enhancer' ); ?></p>
+				</td>
+			</tr>
+		</tbody></table>
+		<?php
+		self::card_close();
 	}
 
 	private function render_tab_inventory( $o, $cb ) {
