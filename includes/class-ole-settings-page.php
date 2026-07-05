@@ -138,10 +138,7 @@ class OLE_Settings_Page {
 	}
 
 	public function render() {
-		$o  = OLE_Settings::get();
-		$cb = function ( $key ) use ( $o ) {
-			return checked( OLE_Settings::is_yes( $o, $key ), true, false );
-		};
+		$o = OLE_Settings::get();
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Order List Enhancer', 'order-list-enhancer' ); ?></h1>
@@ -158,10 +155,10 @@ class OLE_Settings_Page {
 					);
 					?>
 					<div class="ole-tabpanels">
-						<div class="ole-tabpanel" id="orders" role="tabpanel"><?php $this->render_tab_orders( $o, $cb ); ?></div>
-						<div class="ole-tabpanel" id="checkout" role="tabpanel"><?php $this->render_tab_checkout( $o, $cb ); ?></div>
-						<div class="ole-tabpanel" id="inventory" role="tabpanel"><?php $this->render_tab_inventory( $o, $cb ); ?></div>
-						<div class="ole-tabpanel" id="phone" role="tabpanel"><?php $this->render_tab_phone( $o, $cb ); ?></div>
+						<div class="ole-tabpanel" id="orders" role="tabpanel"><?php $this->render_tab_orders( $o ); ?></div>
+						<div class="ole-tabpanel" id="checkout" role="tabpanel"><?php $this->render_tab_checkout( $o ); ?></div>
+						<div class="ole-tabpanel" id="inventory" role="tabpanel"><?php $this->render_tab_inventory( $o ); ?></div>
+						<div class="ole-tabpanel" id="phone" role="tabpanel"><?php $this->render_tab_phone( $o ); ?></div>
 					</div>
 				</div>
 				<div class="ole-savebar">
@@ -173,7 +170,7 @@ class OLE_Settings_Page {
 		<?php
 	}
 
-	private function render_tab_orders( $o, $cb ) {
+	private function render_tab_orders( $o ) {
 		$rules = $o['ship_rules'];
 		if ( empty( $rules ) ) {
 			$rules = array(
@@ -266,7 +263,7 @@ class OLE_Settings_Page {
 
 		self::card_open(
 			__( 'Order-total coloring', 'order-list-enhancer' ),
-			__( 'Ring an order (row + address panel) when its total reaches a threshold. Highest matched threshold wins.', 'order-list-enhancer' ),
+			__( 'Ring an order (row + address panel) when its total reaches a threshold; the highest matching threshold wins. Drawn on top of any shipping color — both stay visible.', 'order-list-enhancer' ),
 			array( 'name' => 'total_color_enabled', 'checked' => OLE_Settings::is_yes( $o, 'total_color_enabled' ) )
 		);
 		?>
@@ -302,7 +299,6 @@ class OLE_Settings_Page {
 					<?php endforeach; ?>
 					</tbody></table>
 					<p><button type="button" class="button ole-rule-add"><?php esc_html_e( 'Add rule', 'order-list-enhancer' ); ?></button></p>
-					<p class="description"><?php esc_html_e( 'When an order\'s total is at or above a threshold it gets a ring in that color. If several apply, the highest threshold wins. The ring is drawn on top of any shipping color — both stay visible.', 'order-list-enhancer' ); ?></p>
 				</td>
 			</tr>
 		</tbody></table>
@@ -328,7 +324,6 @@ class OLE_Settings_Page {
 						<option value="," <?php selected( $dsep, ',' ); ?>><?php esc_html_e( 'Comma (,)', 'order-list-enhancer' ); ?></option>
 						<option value="." <?php selected( $dsep, '.' ); ?>><?php esc_html_e( 'Dot (.)', 'order-list-enhancer' ); ?></option>
 					</select>
-					<p class="description"><?php esc_html_e( 'Decimal separator for the order total shown under the address (and its copy button).', 'order-list-enhancer' ); ?></p>
 				</td>
 			</tr>
 		</tbody></table>
@@ -359,7 +354,7 @@ class OLE_Settings_Page {
 							<option value="<?php echo esc_attr( $val ); ?>" <?php selected( $bulk_cur, (string) $val ); ?>><?php echo esc_html( '' !== $label ? $label : $val ); ?></option>
 						<?php endforeach; ?>
 					</select>
-					<p class="description"><?php esc_html_e( 'Pre-selects this entry in the orders-list bulk-actions menu on page load. The list is filled from your Orders screen — open the Orders list once if it looks empty.', 'order-list-enhancer' ); ?></p>
+					<p class="description"><?php esc_html_e( 'The list is filled from your Orders screen — open the Orders list once if it looks empty.', 'order-list-enhancer' ); ?></p>
 				</td>
 			</tr>
 		</tbody></table>
@@ -368,7 +363,7 @@ class OLE_Settings_Page {
 
 		self::card_open(
 			__( 'Open selected one-by-one', 'order-list-enhancer' ),
-			__( 'Add a button that opens each checkbox-selected order in its own tab, one at a time.', 'order-list-enhancer' ),
+			__( 'Add a button that opens each checkbox-selected order in its own tab, one at a time, waiting a configurable interval between tabs.', 'order-list-enhancer' ),
 			array( 'name' => 'seq_open_enabled', 'checked' => OLE_Settings::is_yes( $o, 'seq_open_enabled' ) )
 		);
 		?>
@@ -376,14 +371,14 @@ class OLE_Settings_Page {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Default interval (seconds)', 'order-list-enhancer' ); ?></th>
 				<td><input type="number" name="seq_open_interval" min="1" max="300" step="1" value="<?php echo esc_attr( $o['seq_open_interval'] ); ?>"/>
-				<p class="description"><?php esc_html_e( 'Seconds to wait between opening tabs (editable on the button too). Tip: your browser must allow pop-ups for this site, or only the first tab opens.', 'order-list-enhancer' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'Editable on the button too. Your browser must allow pop-ups for this site, or only the first tab opens.', 'order-list-enhancer' ); ?></p></td>
 			</tr>
 		</tbody></table>
 		<?php
 		self::card_close();
 	}
 
-	private function render_tab_checkout( $o, $cb ) {
+	private function render_tab_checkout( $o ) {
 		self::card_open(
 			__( 'Checkout phone validation', 'order-list-enhancer' ),
 			__( 'Validate the billing phone (Bulgarian numbers) at checkout and flag invalid ones in admin. Country code comes from the Phone tab (default 359); orders are flagged either way.', 'order-list-enhancer' ),
@@ -519,7 +514,7 @@ class OLE_Settings_Page {
 		self::card_close();
 	}
 
-	private function render_tab_inventory( $o, $cb ) {
+	private function render_tab_inventory( $o ) {
 		self::card_open(
 			__( 'Print consumables', 'order-list-enhancer' ),
 			__( 'Track sticker & instruction-sheet stock, auto-decrement at order placement, and warn when low.', 'order-list-enhancer' ),
@@ -546,7 +541,7 @@ class OLE_Settings_Page {
 		self::card_close();
 	}
 
-	private function render_tab_phone( $o, $cb ) {
+	private function render_tab_phone( $o ) {
 		self::card_open(
 			__( 'Phone numbers', 'order-list-enhancer' ),
 			__( 'Tidy phone numbers for display (leading 00 → +, add country code when missing). Never changes the database.', 'order-list-enhancer' ),
