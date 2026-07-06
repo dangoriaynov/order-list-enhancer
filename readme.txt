@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.28
+Stable tag: 1.0.33
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,8 +38,17 @@ Turn on checkout phone validation and customers get instant, clear feedback on w
 **Open many orders without crashing your shop.**
 Tick the orders you want to review and click "Open selected" — each one opens in its own tab, one every few seconds (you set the interval), so only a single order ever loads at a time. A Stop button and a live "3 / 12" counter keep you in control. Handy when opening many orders at once would overwhelm the server. (Your browser must allow pop-ups for the admin site.)
 
+**Stop accidental double orders at checkout.**
+Optionally guard the checkout against a customer placing the same order twice: if an identical recent order (same phone and cart) is detected within a short window, the plugin either asks the customer to confirm in a popup or blocks the duplicate outright — your choice. Off by default.
+
+**Explain the delivery date at checkout.**
+If your checkout has a delivery-date field, show a clear, highlighted note above it (for example, that the date is when the order ships, not when it arrives), plus an optional "we're away until…" vacation banner that hides itself once the date passes. Fully editable text. Off by default.
+
+**Never run out of stickers or printed instructions.**
+Track the printed consumables you pack with each order: give every product a sticker stock and group products under shared "instruction sheets." As orders come in, stock is drawn down automatically — and restored if an order is cancelled or refunded — with per-type low thresholds that warn you on a dedicated stock page, an admin banner, an orders-list badge and an email when it is time to print more. Off by default.
+
 **Built to fit in.**
-Every feature has its own on/off switch on a single settings page that saves instantly, with no page reload, a color picker for every color, and a Settings link right on the Plugins screen. Everything runs in the admin only, for users who can edit orders — no external services and no tracking. Compatible with WooCommerce HPOS (High-Performance Order Storage) and sequential order numbers, and fully translatable (English and Bulgarian included).
+Every feature has its own on/off switch on a tabbed settings page that saves instantly, with no page reload, a color picker for every color, and a Settings link right on the Plugins screen. Everything runs in the admin only, for users who can edit orders — no external services and no tracking. Compatible with WooCommerce HPOS (High-Performance Order Storage) and sequential order numbers, and fully translatable (English and Bulgarian included).
 
 == Installation ==
 
@@ -72,6 +81,15 @@ No. It only reads orders in your admin and renders the UI locally.
 
 = 1.0.32 =
 * New: Print consumables — track sticker + instruction-sheet stock, auto-decrement at order placement with restore, per-type low thresholds, stock page, admin banner, order-list badge and email.
+
+= 1.0.31 =
+* New: checkout duplicate-order guard — detect an identical recent order (same phone + cart) within a short window and either ask the customer to confirm or block the duplicate. Off by default.
+
+= 1.0.30 =
+* Delivery-date notice: place the note directly below the delivery-date field and hide the third-party field note for a cleaner checkout.
+
+= 1.0.29 =
+* New: checkout delivery-date notice — a highlighted, editable note above the delivery-date field (e.g. ship-date vs. arrival), plus an optional auto-expiring vacation banner. Off by default.
 
 = 1.0.28 =
 * New: "Open selected one-by-one" button on the orders list — opens each checkbox-selected order's edit page in its own tab, one every N seconds (editable, default 20), with a Stop button and a progress counter, so the server never loads more than one order at a time. Needs pop-ups allowed for the site. On by default.
