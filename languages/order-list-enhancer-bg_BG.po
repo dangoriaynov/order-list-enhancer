@@ -751,3 +751,128 @@ msgstr "Тези артикули достигнаха ниския си пра�
 #, php-format
 msgid "%1$s \"%2$s\" — %3$d left"
 msgstr "%1$s „%2$s“ — остават %3$d"
+
+#. Settings page redesign (v1.0.33): tab labels + card titles/help texts.
+#: includes/class-ole-settings-page.php:150
+msgid "Orders"
+msgstr "Поръчки"
+
+#: includes/class-ole-settings-page.php:151
+msgid "Checkout"
+msgstr "Плащане"
+
+#: includes/class-ole-settings-page.php:152
+msgid "Inventory"
+msgstr "Наличности"
+
+#: includes/class-ole-settings-page.php:153
+msgid "Phone"
+msgstr "Телефон"
+
+#: includes/class-ole-settings-page.php:186
+msgid "Repeat customers"
+msgstr "Повторни клиенти"
+
+#: includes/class-ole-settings-page.php:187
+msgid "Outline & badge orders from the same customer in the list, with a details modal. Choose how a match is decided and how far back to scan."
+msgstr "Очертава и маркира с бадж поръчките от същия клиент в списъка, с модал с детайли. Изберете как се определя съвпадението и колко назад да се сканира."
+
+#: includes/class-ole-settings-page.php:217
+msgid "Color the \"Ship to\" cell in the list and the address block on the order screen, by keyword rules."
+msgstr "Оцветява клетката за доставка в списъка и адресния блок на екрана на поръчката според правила с ключови думи."
+
+#: includes/class-ole-settings-page.php:265
+msgid "Order-total coloring"
+msgstr "Оцветяване по сума на поръчката"
+
+#: includes/class-ole-settings-page.php:266
+msgid "Ring an order (row + address panel) when its total reaches a threshold; the highest matching threshold wins. Drawn on top of any shipping color — both stay visible."
+msgstr "Очертава поръчка (ред + панел с адреса), когато сумата ѝ достигне праг; печели най-високият достигнат праг. Рисува се върху цвета на доставката — и двете остават видими."
+
+#: includes/class-ole-settings-page.php:309
+msgid "Order total on the edit screen"
+msgstr "Обща сума на екрана за редакция"
+
+#: includes/class-ole-settings-page.php:310
+msgid "Show the total near the billing address on the order screen, with copy buttons."
+msgstr "Показва сумата до адреса за фактуриране на екрана на поръчката, с бутони за копиране."
+
+#: includes/class-ole-settings-page.php:334
+msgid "Default bulk action"
+msgstr "Действие по подразбиране"
+
+#: includes/class-ole-settings-page.php:335
+msgid "Pre-select an entry in the orders-list bulk-actions menu on page load."
+msgstr "Предварително избира стойност в менюто за групови действия на списъка с поръчки при зареждане на страницата."
+
+#: includes/class-ole-settings-page.php:357
+msgid "The list is filled from your Orders screen — open the Orders list once if it looks empty."
+msgstr "Списъкът се попълва от екрана с поръчки — отворете списъка с поръчки веднъж, ако изглежда празен."
+
+#: includes/class-ole-settings-page.php:365
+msgid "Open selected one-by-one"
+msgstr "Отваряй избраните една по една"
+
+#: includes/class-ole-settings-page.php:366
+msgid "Add a button that opens each checkbox-selected order in its own tab, one at a time, waiting a configurable interval between tabs."
+msgstr "Добавя бутон, който отваря всяка избрана с чекбокс поръчка в собствен раздел, една по една, изчаквайки конфигурируем интервал между разделите."
+
+#: includes/class-ole-settings-page.php:374
+msgid "Editable on the button too. Your browser must allow pop-ups for this site, or only the first tab opens."
+msgstr "Може да се редактира и на бутона. Браузърът трябва да разрешава изскачащи прозорци за този сайт, иначе се отваря само първият раздел."
+
+#: includes/class-ole-settings-page.php:384
+msgid "Validate the billing phone (Bulgarian numbers) at checkout and flag invalid ones in admin. Country code comes from the Phone tab (default 359); orders are flagged either way."
+msgstr "Валидира телефона за фактуриране (български номера) при плащане и маркира невалидните в администрацията. Кодът на държавата идва от раздел „Телефон“ (по подразбиране 359); поръчките се маркират и при двата режима."
+
+#: includes/class-ole-settings-page.php:404
+msgid "Duplicate-order guard"
+msgstr "Защита от дублирани поръчки"
+
+#: includes/class-ole-settings-page.php:405
+msgid "Detect an identical recent order (same phone + cart) at checkout and confirm or block it; also disables the place-order button after the first tap."
+msgstr "Открива идентична скорошна поръчка (същия телефон + количка) при плащане и я потвърждава или блокира; освен това деактивира бутона за поръчка след първото натискане."
+
+#: includes/class-ole-settings-page.php:411
+msgid "When a duplicate is found"
+msgstr "При открит дубликат"
+
+#: includes/class-ole-settings-page.php:415
+msgid "Ask the customer to confirm in a popup"
+msgstr "Питай клиента да потвърди в изскачащ прозорец"
+
+#: includes/class-ole-settings-page.php:416
+msgid "Block the duplicate order"
+msgstr "Блокирай дублиращата поръчка"
+
+#: includes/class-ole-settings-page.php:421
+msgid "Window (minutes)"
+msgstr "Прозорец (минути)"
+
+#: includes/class-ole-settings-page.php:424
+msgid "Same phone + same cart within this many minutes counts as a duplicate."
+msgstr "Същия телефон + същата количка в рамките на толкова минути се брои за дубликат."
+
+#: includes/class-ole-settings-page.php:432
+msgid "Delivery-date notice"
+msgstr "Бележка за датата на доставка"
+
+#: includes/class-ole-settings-page.php:433
+msgid "Show a highlighted note above the delivery-date field at checkout; optional vacation banner. Requires the Order Delivery Date plugin field on checkout; does nothing if that field is absent."
+msgstr "Показва подчертана бележка над полето за дата на доставка при плащане; незадължителен банер за отпуск. Изисква полето на плъгина Order Delivery Date на касата; не прави нищо, ако полето липсва."
+
+#: includes/class-ole-settings-page.php:468
+msgid "At order creation, turn each mapped add-on extra into a real product line at the price paid; order total stays unchanged."
+msgstr "При създаване на поръчка превръща всяка съпоставена екстра в истински продуктов ред на платената цена; сумата на поръчката остава непроменена."
+
+#: includes/class-ole-settings-page.php:509
+msgid "Match is the exact extra label as it appears on the order/checkout (Product Add-On label like \"+ 500 г …\", or the Checkout Add-On name)."
+msgstr "Съвпадението е точният етикет на екстрата, както се появява в поръчката/плащането (етикет на Product Add-On като \"+ 500 г …\", или името на Checkout Add-On)."
+
+#: includes/class-ole-settings-page.php:520
+msgid "Track sticker & instruction-sheet stock, auto-decrement at order placement, and warn when low."
+msgstr "Проследява наличността на стикери и листовки с инструкции, автоматично я намалява при създаване на поръчка и предупреждава при ниска наличност."
+
+#: includes/class-ole-settings-page.php:547
+msgid "Tidy phone numbers for display (leading 00 → +, add country code when missing). Never changes the database."
+msgstr "Подрежда телефонните номера за показване (водещо 00 → +, добавя код на държавата, ако липсва). Никога не променя базата данни."

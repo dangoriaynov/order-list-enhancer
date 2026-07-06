@@ -67,6 +67,9 @@ No. It only reads orders in your admin and renders the UI locally.
 
 == Changelog ==
 
+= 1.0.33 =
+* Settings page redesigned: 4 tabbed categories, feature cards with on/off switches, tightened copy.
+
 = 1.0.32 =
 * New: Print consumables — track sticker + instruction-sheet stock, auto-decrement at order placement with restore, per-type low thresholds, stock page, admin banner, order-list badge and email.
 
