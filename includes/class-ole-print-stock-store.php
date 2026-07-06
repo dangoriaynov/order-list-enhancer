@@ -249,6 +249,7 @@ class OLE_Print_Stock_Store {
 		global $wpdb;
 		$c = self::table_consumable();
 		return (int) $wpdb->get_var( $wpdb->prepare( // phpcs:ignore WordPress.DB
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $c is a $wpdb->prefix table name, not user input.
 			"SELECT COUNT(*) FROM $c WHERE ( type = 'sticker' AND stock <= %d ) OR ( type = 'instruction' AND stock <= %d )",
 			(int) $sticker_threshold,
 			(int) $instruction_threshold
