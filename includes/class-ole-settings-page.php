@@ -457,7 +457,7 @@ class OLE_Settings_Page {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Vacation text', 'order-list-enhancer' ); ?></th>
 				<td><textarea name="delivery_vacation_text" rows="2" class="large-text" style="max-width:680px"><?php echo esc_textarea( $o['delivery_vacation_text'] ); ?></textarea>
-				<p class="description"><?php esc_html_e( 'Use %s where the date should appear. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
+				<p class="description"><?php /* translators: %s is a literal token the admin types into their text; it is not substituted here. */ esc_html_e( 'Use %s where the date should appear. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
 			</tr>
 		</tbody></table>
 		<?php

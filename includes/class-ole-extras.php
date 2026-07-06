@@ -188,6 +188,7 @@ class OLE_Extras {
 		if ( is_array( $origin ) && ! empty( $origin['label'] ) ) {
 			printf(
 				'<div class="ole-prov ole-prov--from">↩ %s</div>',
+				/* translators: 1: the add-on extra label, 2: the price it was converted from. */
 				esc_html( sprintf( __( 'Converted from extra: «%1$s» (was %2$s)', 'order-list-enhancer' ), $origin['label'], wc_format_localized_price( isset( $origin['price'] ) ? $origin['price'] : 0 ) ) )
 			);
 		}
@@ -199,6 +200,7 @@ class OLE_Extras {
 				}
 				printf(
 					'<div class="ole-prov ole-prov--moved">➡ %s</div>',
+					/* translators: %s: the add-on extra label. */
 					esc_html( sprintf( __( 'Extra «%s» moved to its own line', 'order-list-enhancer' ), $m['label'] ) )
 				);
 			}

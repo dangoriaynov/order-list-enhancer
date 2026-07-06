@@ -66,6 +66,7 @@ class OLE_Print_Stock_Admin {
 		}
 	}
 
+	// phpcs:disable WordPress.Security.NonceVerification.Missing -- Every AJAX handler below verifies the nonce first via self::guard() (check_ajax_referer).
 	public static function ajax_set_stock() {
 		self::guard();
 		$id    = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
@@ -127,6 +128,7 @@ class OLE_Print_Stock_Admin {
 		}
 		wp_send_json_success();
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 	private static function status_class( $row ) {
 		$threshold = OLE_Print_Stock::threshold_for( $row['type'] );
