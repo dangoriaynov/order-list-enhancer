@@ -125,10 +125,10 @@ class OLE_Settings_Page {
 		}
 		echo '<div class="ole-card"' . $attr . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<div class="ole-card-head">';
-		echo '<h3 class="ole-card-title">' . esc_html( $title ) . '</h3>';
+		echo '<h2 class="ole-card-title">' . esc_html( $title ) . '</h2>';
 		echo self::help_html( $help ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		if ( is_array( $switch ) ) {
-			echo self::switch_html( $switch['name'], (bool) $switch['checked'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo self::switch_html( $switch['name'], (bool) $switch['checked'], $title ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		echo '</div><div class="ole-card-body">';
 	}
@@ -221,11 +221,11 @@ class OLE_Settings_Page {
 		<table class="form-table"><tbody>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Color in orders list', 'order-list-enhancer' ); ?></th>
-				<td><?php echo self::switch_html( 'ship_enabled', OLE_Settings::is_yes( $o, 'ship_enabled' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Color the “Ship to” cell in the orders list.', 'order-list-enhancer' ); ?></td>
+				<td><?php echo self::switch_html( 'ship_enabled', OLE_Settings::is_yes( $o, 'ship_enabled' ), __( 'Color the “Ship to” cell in the orders list.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Color the “Ship to” cell in the orders list.', 'order-list-enhancer' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Color on edit page', 'order-list-enhancer' ); ?></th>
-				<td><?php echo self::switch_html( 'ship_color_edit', OLE_Settings::is_yes( $o, 'ship_color_edit' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Color the address block on the single order edit screen.', 'order-list-enhancer' ); ?></td>
+				<td><?php echo self::switch_html( 'ship_color_edit', OLE_Settings::is_yes( $o, 'ship_color_edit' ), __( 'Color the address block on the single order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Color the address block on the single order edit screen.', 'order-list-enhancer' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Coloring rules', 'order-list-enhancer' ); ?></th>
@@ -314,7 +314,7 @@ class OLE_Settings_Page {
 		<table class="form-table"><tbody>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Copy buttons', 'order-list-enhancer' ); ?></th>
-				<td><?php echo self::switch_html( 'copy_buttons', OLE_Settings::is_yes( $o, 'copy_buttons' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show copy-to-clipboard buttons for name, phone and total on the order edit screen.', 'order-list-enhancer' ); ?></td>
+				<td><?php echo self::switch_html( 'copy_buttons', OLE_Settings::is_yes( $o, 'copy_buttons' ), __( 'Show copy-to-clipboard buttons for name, phone and total on the order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show copy-to-clipboard buttons for name, phone and total on the order edit screen.', 'order-list-enhancer' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Decimal separator', 'order-list-enhancer' ); ?></th>
@@ -447,7 +447,7 @@ class OLE_Settings_Page {
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Vacation banner', 'order-list-enhancer' ); ?></th>
-				<td><?php echo self::switch_html( 'delivery_vacation_enabled', OLE_Settings::is_yes( $o, 'delivery_vacation_enabled' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Also show a red "we are away" banner above the notice, until the date below.', 'order-list-enhancer' ); ?></td>
+				<td><?php echo self::switch_html( 'delivery_vacation_enabled', OLE_Settings::is_yes( $o, 'delivery_vacation_enabled' ), __( 'Also show a red "we are away" banner above the notice, until the date below.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Also show a red "we are away" banner above the notice, until the date below.', 'order-list-enhancer' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Away until', 'order-list-enhancer' ); ?></th>
