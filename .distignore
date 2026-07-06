@@ -1,0 +1,15 @@
+# Files & directories excluded from the distributed plugin (WordPress.org build).
+# Assets in .wordpress-org/ are deployed to the SVN /assets dir, not shipped in the plugin.
+/.git
+/.github
+/.gitignore
+/.gitattributes
+/.distignore
+/.superpowers
+/.claude
+/.wordpress-org
+/docs
+/tests
+/node_modules
+*.zip
+*.map

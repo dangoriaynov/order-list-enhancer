@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Order List Enhancer
  * Plugin URI:        https://github.com/dangoriaynov/order-list-enhancer
- * Description:       Highlights repeat-customer orders (same phone, e-mail, name or address) with a click-to-open details modal, and colors the shipping column by configurable rules — right in the WooCommerce orders list.
+ * Description:       Order-management tools for the WooCommerce admin: repeat-customer highlighting with duplicate flags, shipping-column & high-value coloring, checkout safeguards, and printed-consumables tracking — each with its own toggle on a tabbed settings page.
  * Version:           1.0.33
  * Requires at least: 6.0
  * Requires PHP:      7.4
