@@ -50,10 +50,14 @@ class OLE_Print_Stock_Admin {
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'ole_ps' ),
 				'i18n'    => array(
-					'saved'   => __( 'Saved.', 'order-list-enhancer' ),
-					'error'   => __( 'Failed.', 'order-list-enhancer' ),
-					'confirm' => __( 'Delete this instruction sheet?', 'order-list-enhancer' ),
-					'addQ'    => __( 'How many printed copies to add?', 'order-list-enhancer' ),
+					'saved'       => __( 'Saved.', 'order-list-enhancer' ),
+					'error'       => __( 'Failed.', 'order-list-enhancer' ),
+					'confirm'     => __( 'Delete this instruction sheet?', 'order-list-enhancer' ),
+					'addQ'        => __( 'How many printed copies to add?', 'order-list-enhancer' ),
+					'save'        => __( 'Save', 'order-list-enhancer' ),
+					'instruction' => __( 'Instruction', 'order-list-enhancer' ),
+					'set'         => __( 'Set', 'order-list-enhancer' ),
+					'addPrinted'  => __( '+ printed', 'order-list-enhancer' ),
 				),
 			)
 		);
@@ -117,7 +121,7 @@ class OLE_Print_Stock_Admin {
 		} else {
 			$id = OLE_Print_Stock_Store::create_sheet( $name, $products, $stock );
 		}
-		wp_send_json_success( array( 'id' => $id ) );
+		wp_send_json_success( array( 'id' => $id, 'name' => $name, 'stock' => $stock ) );
 	}
 
 	public static function ajax_delete_sheet() {
