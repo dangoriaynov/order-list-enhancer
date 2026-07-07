@@ -19,6 +19,14 @@
 		$( document.body ).trigger( 'wc-enhanced-select-init' );
 	}
 
+	// Disable a row's Save/Add button while its name is empty (a sheet needs a name — avoids a slow, doomed round-trip).
+	function syncSaveBtn( $row ) {
+		var hasName = $.trim( $row.find( '.ole-ps-sheet-name' ).val() || '' ) !== '';
+		$row.find( '.ole-ps-sheet-save' ).prop( 'disabled', ! hasName );
+	}
+	$( function () { $( '.ole-ps-sheet' ).each( function () { syncSaveBtn( $( this ) ); } ); } );
+	$( document ).on( 'input', '.ole-ps-sheet-name', function () { syncSaveBtn( $( this ).closest( 'tr' ) ); } );
+
 	// Set absolute stock.
 	$( document ).on( 'click', '.ole-ps-save', function () {
 		var row = $( this ).closest( 'tr' );
@@ -41,11 +49,13 @@
 	$( document ).on( 'click', '.ole-ps-sheet-save', function () {
 		var $btn  = $( this );
 		var row   = $btn.closest( 'tr' );
+		var name  = $.trim( row.find( '.ole-ps-sheet-name' ).val() || '' );
+		if ( '' === name ) { row.find( '.ole-ps-sheet-name' ).focus(); return; } // a sheet needs a name — skip the doomed round-trip
 		var isNew = row.hasClass( 'ole-ps-sheet-new' );
 		$btn.prop( 'disabled', true );
 		post( 'ole_ps_save_sheet', {
 			id: row.data( 'id' ),
-			name: row.find( '.ole-ps-sheet-name' ).val(),
+			name: name,
 			stock: row.find( '.ole-ps-sheet-stock' ).val(),
 			products: row.find( '.ole-ps-sheet-products' ).val() || []
 		} ).done( function ( r ) {
@@ -85,8 +95,10 @@
 			.after( ' <button type="button" class="button ole-ps-sheet-delete">×</button>' );
 		flash( row );
 		if ( NEW_ROW_HTML ) {
-			row.after( NEW_ROW_HTML );
+			var $fresh = $( NEW_ROW_HTML );
+			row.after( $fresh );
 			enhanceSelects();
+			syncSaveBtn( $fresh );
 		}
 		upsertStockRow( d );
 	}
