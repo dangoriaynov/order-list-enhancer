@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.36
+Stable tag: 1.0.37
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.37 =
+* Print consumables page: the top table is now "Stickers" only (with an inline "add a product/variation" row to set sticker stock right there); instruction sheets are managed only in their own section — no more duplication.
 
 = 1.0.36 =
 * Print consumables: the "Add" button for a new instruction sheet stays disabled until you enter a name, so an empty sheet can't be submitted.
