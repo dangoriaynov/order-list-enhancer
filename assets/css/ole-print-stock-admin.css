@@ -1,5 +1,7 @@
-.ole-ps-table tr.ole-ps-low  td { background: #fff4e5; }
-.ole-ps-table tr.ole-ps-neg  td { background: #fde7e9; font-weight: 600; }
-.ole-ps-table td, .ole-ps-sheets td { vertical-align: middle; }
+.ole-ps-stickers tr.ole-ps-low td,
+.ole-ps-sheets   tr.ole-ps-low td { background: #fff4e5; }
+.ole-ps-stickers tr.ole-ps-neg td,
+.ole-ps-sheets   tr.ole-ps-neg td { background: #fde7e9; font-weight: 600; }
+.ole-ps-stickers td, .ole-ps-sheets td { vertical-align: middle; }
 .ole-ps-sheets .select2-container { min-width: 260px; }
 .ole-ps-wrap h2 { margin-top: 1.5em; }

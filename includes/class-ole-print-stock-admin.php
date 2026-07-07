@@ -82,6 +82,7 @@ class OLE_Print_Stock_Admin {
 		}
 		$diff = $stock - (int) $row['stock'];
 		OLE_Print_Stock_Store::set_stock_absolute( $id, $stock, $diff );
+		OLE_Print_Stock::maybe_notify_low( $id, (int) $row['stock'], $stock );
 		wp_send_json_success( array( 'stock' => $stock ) );
 	}
 
@@ -95,7 +96,9 @@ class OLE_Print_Stock_Admin {
 		}
 		OLE_Print_Stock_Store::add_stock( $id, $amount );
 		$fresh = OLE_Print_Stock_Store::get_consumable( $id );
-		wp_send_json_success( array( 'stock' => $fresh ? (int) $fresh['stock'] : 0 ) );
+		$after = $fresh ? (int) $fresh['stock'] : 0;
+		OLE_Print_Stock::maybe_notify_low( $id, (int) $row['stock'], $after );
+		wp_send_json_success( array( 'stock' => $after ) );
 	}
 
 	public static function ajax_save_sheet() {
@@ -142,8 +145,11 @@ class OLE_Print_Stock_Admin {
 		if ( ! $product ) {
 			wp_send_json_error( array( 'message' => 'product_required' ), 400 );
 		}
-		$name = wp_strip_all_tags( $product->get_formatted_name() );
-		$id   = OLE_Print_Stock_Store::upsert_sticker( $product_id, $name, $stock );
+		$existing = OLE_Print_Stock_Store::get_sticker( $product_id );
+		$before   = $existing ? (int) $existing['stock'] : PHP_INT_MAX; // new sticker: treat as "was above" so a low initial value notifies once
+		$name     = wp_strip_all_tags( $product->get_formatted_name() );
+		$id       = OLE_Print_Stock_Store::upsert_sticker( $product_id, $name, $stock );
+		OLE_Print_Stock::maybe_notify_low( $id, $before, $stock );
 		wp_send_json_success( array( 'id' => $id, 'name' => $name, 'stock' => $stock ) );
 	}
 	// phpcs:enable WordPress.Security.NonceVerification.Missing
@@ -207,7 +213,7 @@ class OLE_Print_Stock_Admin {
 				</tr></thead>
 				<tbody>
 				<?php foreach ( $sheets as $s ) : ?>
-					<tr class="ole-ps-sheet" data-id="<?php echo esc_attr( $s['id'] ); ?>">
+					<tr class="ole-ps-sheet <?php echo esc_attr( self::status_class( $s ) ); ?>" data-id="<?php echo esc_attr( $s['id'] ); ?>">
 						<td><input type="text" class="ole-ps-sheet-name regular-text" value="<?php echo esc_attr( $s['name'] ); ?>"/></td>
 						<td>
 							<select multiple class="wc-product-search ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products" style="width:100%">
