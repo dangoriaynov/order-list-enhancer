@@ -49,6 +49,24 @@ class OLE_Print_Stock {
 			: (int) $o['print_stock_threshold_sticker'];
 	}
 
+	/**
+	 * Edge-trigger the low-stock email + flag when a stock change (order OR manual on the stock page)
+	 * crosses a consumable from above its threshold to at/below it. Re-armed on restock via the Store.
+	 */
+	public static function maybe_notify_low( $consumable_id, $before, $after ) {
+		$row = OLE_Print_Stock_Store::get_consumable( $consumable_id );
+		if ( ! $row ) {
+			return;
+		}
+		$threshold = self::threshold_for( $row['type'] );
+		if ( OLE_Print_Stock_Calc::crosses_low( (int) $before, (int) $after, $threshold ) ) {
+			OLE_Print_Stock_Store::set_low_notified( (int) $consumable_id, 1 );
+			self::send_low_email( array(
+				array( 'name' => $row['name'], 'stock' => (int) $after, 'type' => $row['type'] ),
+			) );
+		}
+	}
+
 	public static function on_order( $order_id ) {
 		$order = wc_get_order( $order_id );
 		if ( $order instanceof WC_Order ) {
