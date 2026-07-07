@@ -17,6 +17,7 @@ class OLE_Print_Stock_Admin {
 		add_action( 'wp_ajax_ole_ps_add_stock', array( __CLASS__, 'ajax_add_stock' ) );
 		add_action( 'wp_ajax_ole_ps_save_sheet', array( __CLASS__, 'ajax_save_sheet' ) );
 		add_action( 'wp_ajax_ole_ps_delete_sheet', array( __CLASS__, 'ajax_delete_sheet' ) );
+		add_action( 'wp_ajax_ole_ps_add_sticker', array( __CLASS__, 'ajax_add_sticker' ) );
 	}
 
 	public static function menu() {
@@ -132,6 +133,19 @@ class OLE_Print_Stock_Admin {
 		}
 		wp_send_json_success();
 	}
+
+	public static function ajax_add_sticker() {
+		self::guard();
+		$product_id = isset( $_POST['product'] ) ? absint( $_POST['product'] ) : 0;
+		$stock      = isset( $_POST['stock'] ) ? (int) $_POST['stock'] : 0;
+		$product    = $product_id ? wc_get_product( $product_id ) : null;
+		if ( ! $product ) {
+			wp_send_json_error( array( 'message' => 'product_required' ), 400 );
+		}
+		$name = wp_strip_all_tags( $product->get_formatted_name() );
+		$id   = OLE_Print_Stock_Store::upsert_sticker( $product_id, $name, $stock );
+		wp_send_json_success( array( 'id' => $id, 'name' => $name, 'stock' => $stock ) );
+	}
 	// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 	private static function status_class( $row ) {
@@ -146,36 +160,39 @@ class OLE_Print_Stock_Admin {
 	}
 
 	public static function render() {
-		$rows   = OLE_Print_Stock_Store::all_consumables();
-		$sheets = OLE_Print_Stock_Store::sheets();
+		$rows     = OLE_Print_Stock_Store::all_consumables();
+		$stickers = array_filter( $rows, function ( $r ) { return 'sticker' === $r['type']; } );
+		$sheets   = OLE_Print_Stock_Store::sheets();
 		?>
 		<div class="wrap ole-ps-wrap">
 			<h1><?php esc_html_e( 'Print consumables', 'order-list-enhancer' ); ?></h1>
 
-			<h2><?php esc_html_e( 'Current stock', 'order-list-enhancer' ); ?></h2>
-			<table class="widefat striped ole-ps-table">
+			<h2><?php esc_html_e( 'Stickers', 'order-list-enhancer' ); ?></h2>
+			<p class="description"><?php esc_html_e( 'Sticker stock per product or variation — decreases by the ordered quantity. Add a product below: pick a variation for per-variation stock, or the product for one shared count.', 'order-list-enhancer' ); ?></p>
+			<table class="widefat striped ole-ps-stickers">
 				<thead><tr>
 					<th><?php esc_html_e( 'Name', 'order-list-enhancer' ); ?></th>
-					<th><?php esc_html_e( 'Type', 'order-list-enhancer' ); ?></th>
 					<th style="width:120px"><?php esc_html_e( 'Stock', 'order-list-enhancer' ); ?></th>
 					<th style="width:220px"><?php esc_html_e( 'Actions', 'order-list-enhancer' ); ?></th>
 				</tr></thead>
 				<tbody>
-				<?php if ( empty( $rows ) ) : ?>
-					<tr><td colspan="4"><?php esc_html_e( 'No consumables yet. Set a product\'s "Sticker stock" or create an instruction sheet below.', 'order-list-enhancer' ); ?></td></tr>
-				<?php else : ?>
-					<?php foreach ( $rows as $r ) : ?>
-						<tr class="<?php echo esc_attr( self::status_class( $r ) ); ?>" data-id="<?php echo esc_attr( $r['id'] ); ?>">
-							<td><?php echo esc_html( $r['name'] ); ?></td>
-							<td><?php echo esc_html( 'instruction' === $r['type'] ? __( 'Instruction', 'order-list-enhancer' ) : __( 'Sticker', 'order-list-enhancer' ) ); ?></td>
-							<td><input type="number" step="1" class="ole-ps-stock" value="<?php echo esc_attr( (string) (int) $r['stock'] ); ?>" style="width:90px"/></td>
-							<td>
-								<button type="button" class="button ole-ps-save"><?php esc_html_e( 'Set', 'order-list-enhancer' ); ?></button>
-								<button type="button" class="button ole-ps-add"><?php esc_html_e( '+ printed', 'order-list-enhancer' ); ?></button>
-							</td>
-						</tr>
-					<?php endforeach; ?>
-				<?php endif; ?>
+				<?php foreach ( $stickers as $r ) : ?>
+					<tr class="<?php echo esc_attr( self::status_class( $r ) ); ?>" data-id="<?php echo esc_attr( $r['id'] ); ?>">
+						<td><?php echo esc_html( $r['name'] ); ?></td>
+						<td><input type="number" step="1" class="ole-ps-stock" value="<?php echo esc_attr( (string) (int) $r['stock'] ); ?>" style="width:90px"/></td>
+						<td>
+							<button type="button" class="button ole-ps-save"><?php esc_html_e( 'Set', 'order-list-enhancer' ); ?></button>
+							<button type="button" class="button ole-ps-add"><?php esc_html_e( '+ printed', 'order-list-enhancer' ); ?></button>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+					<tr class="ole-ps-sticker-new">
+						<td>
+							<select class="wc-product-search ole-ps-sticker-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%"></select>
+						</td>
+						<td><input type="number" step="1" class="ole-ps-sticker-stock" value="0" style="width:90px"/></td>
+						<td><button type="button" class="button button-primary ole-ps-sticker-add"><?php esc_html_e( 'Add', 'order-list-enhancer' ); ?></button></td>
+					</tr>
 				</tbody>
 			</table>
 

@@ -876,3 +876,9 @@ msgstr "Проследява наличността на стикери и ли�
 #: includes/class-ole-settings-page.php:547
 msgid "Tidy phone numbers for display (leading 00 → +, add country code when missing). Never changes the database."
 msgstr "Подрежда телефонните номера за показване (водещо 00 → +, добавя код на държавата, ако липсва). Никога не променя базата данни."
+
+msgid "Stickers"
+msgstr "Стикери"
+
+msgid "Sticker stock per product or variation — decreases by the ordered quantity. Add a product below: pick a variation for per-variation stock, or the product for one shared count."
+msgstr "Наличност от стикери за продукт или вариация — намалява с поръчаното количество. Добавете продукт по-долу: изберете вариация за наличност по вариация или продукта за една обща бройка."
