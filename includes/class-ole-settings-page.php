@@ -638,7 +638,7 @@ class OLE_Settings_Page {
 			'total_color_enabled'    => $bool( 'total_color_enabled' ),
 			'total_color_rules'      => $total_color_rules,
 			'seq_open_enabled'       => $bool( 'seq_open_enabled' ),
-			'seq_open_interval'      => isset( $in['seq_open_interval'] ) ? max( 1, min( 300, (int) $in['seq_open_interval'] ) ) : 20,
+			'seq_open_interval'      => isset( $in['seq_open_interval'] ) ? max( 1, min( 300, (int) $in['seq_open_interval'] ) ) : 7,
 			'delivery_notice_enabled'   => $bool( 'delivery_notice_enabled' ),
 			'delivery_notice_title'     => isset( $in['delivery_notice_title'] ) ? sanitize_text_field( (string) $in['delivery_notice_title'] ) : '',
 			'delivery_notice_body'      => isset( $in['delivery_notice_body'] ) ? sanitize_textarea_field( (string) $in['delivery_notice_body'] ) : '',

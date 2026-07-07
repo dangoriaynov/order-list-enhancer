@@ -38,7 +38,7 @@ class OLE_Settings {
 			'total_color_enabled' => 'no', // ring orders whose total reaches a threshold
 			'total_color_rules'   => array(), // [ ['threshold'=>float,'color'=>'#hex','label'=>''], ... ]
 			'seq_open_enabled'    => 'yes', // "open selected one-by-one" button on the orders list
-			'seq_open_interval'   => 20, // default seconds between opened tabs
+			'seq_open_interval'   => 7, // default seconds between opened tabs
 			'delivery_notice_enabled'   => 'no',  // highlight the orddd delivery-date field at checkout
 			'delivery_notice_title'     => '',     // empty → translatable default
 			'delivery_notice_body'      => '',     // empty → translatable default

@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.33
+Stable tag: 1.0.34
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.34 =
+* "Open selected one-by-one": default interval is now 7 seconds (was 20).
 
 = 1.0.33 =
 * Settings page redesigned: 4 tabbed categories, feature cards with on/off switches, tightened copy.
