@@ -195,7 +195,7 @@ class OLE_Print_Stock_Admin {
 				<thead><tr>
 					<th><?php esc_html_e( 'Name', 'order-list-enhancer' ); ?></th>
 					<th style="width:120px"><?php esc_html_e( 'Stock', 'order-list-enhancer' ); ?></th>
-					<th style="width:220px"><?php esc_html_e( 'Actions', 'order-list-enhancer' ); ?></th>
+					<th style="width:300px"><?php esc_html_e( 'Actions', 'order-list-enhancer' ); ?></th>
 				</tr></thead>
 				<tbody>
 				<?php foreach ( $stickers as $r ) : ?>

@@ -6,5 +6,10 @@
 .ole-ps-stickers tr.ole-ps-flash td,
 .ole-ps-sheets   tr.ole-ps-flash td { background: #e6ffed !important; }
 .ole-ps-stickers td, .ole-ps-sheets td { vertical-align: middle; transition: background .35s ease; }
+/* Keep the action buttons on one line (the column widens to fit). */
+.ole-ps-stickers td:last-child,
+.ole-ps-sheets   td:last-child { white-space: nowrap; }
+.ole-ps-stickers td:last-child .button,
+.ole-ps-sheets   td:last-child .button { margin-bottom: 2px; }
 .ole-ps-sheets .select2-container { min-width: 260px; }
 .ole-ps-wrap h2 { margin-top: 1.5em; }

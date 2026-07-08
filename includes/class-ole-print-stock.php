@@ -273,6 +273,11 @@ class OLE_Print_Stock {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return;
 		}
+		// Don't nag on the stock page itself — it already lists everything and the link points here.
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( $screen && false !== strpos( (string) $screen->id, OLE_Print_Stock_Admin::SLUG ) ) {
+			return;
+		}
 		$o     = OLE_Settings::get();
 		$count = OLE_Print_Stock_Store::low_count(
 			(int) $o['print_stock_threshold_sticker'],
