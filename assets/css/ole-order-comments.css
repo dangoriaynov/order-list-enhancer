@@ -1,0 +1,25 @@
+/* Hide the carrier column; JS relocates its content into the order-number cell. */
+.wp-list-table .column-ole_comment { display: none !important; }
+
+.ole-oc-wrap { margin-top: 6px; }
+.ole-oc-note {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	max-width: 340px;
+	margin: 3px 0;
+	padding: 3px 8px;
+	border-radius: 4px;
+	font-size: 12px;
+	line-height: 1.4;
+	color: #1d2327;
+	cursor: pointer;
+	white-space: normal;
+	background: #f6f7f7;
+	border-left: 3px solid #c3c4c7;
+}
+.ole-oc-note.ole-oc-open { -webkit-line-clamp: unset; overflow: visible; }
+.ole-oc-note.ole-oc-cust  { background: #f0f6fc; border-left-color: #2271b1; }
+.ole-oc-note.ole-oc-admin { background: #fbf3e9; border-left-color: #b26a00; }
+.ole-oc-ic { margin-right: 2px; }

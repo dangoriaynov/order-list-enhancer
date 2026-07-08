@@ -376,6 +376,13 @@ class OLE_Settings_Page {
 		</tbody></table>
 		<?php
 		self::card_close();
+
+		self::card_open(
+			__( 'Order comment in the list', 'order-list-enhancer' ),
+			__( 'Show the customer note left at checkout and the most recent internal admin note right under the order number in the orders list, so you never miss them. Click a note to expand it.', 'order-list-enhancer' ),
+			array( 'name' => 'list_comments_enabled', 'checked' => OLE_Settings::is_yes( $o, 'list_comments_enabled' ) )
+		);
+		self::card_close();
 	}
 
 	private function render_tab_checkout( $o ) {
@@ -639,6 +646,7 @@ class OLE_Settings_Page {
 			'total_color_rules'      => $total_color_rules,
 			'seq_open_enabled'       => $bool( 'seq_open_enabled' ),
 			'seq_open_interval'      => isset( $in['seq_open_interval'] ) ? max( 1, min( 300, (int) $in['seq_open_interval'] ) ) : 7,
+			'list_comments_enabled'  => $bool( 'list_comments_enabled' ),
 			'delivery_notice_enabled'   => $bool( 'delivery_notice_enabled' ),
 			'delivery_notice_title'     => isset( $in['delivery_notice_title'] ) ? sanitize_text_field( (string) $in['delivery_notice_title'] ) : '',
 			'delivery_notice_body'      => isset( $in['delivery_notice_body'] ) ? sanitize_textarea_field( (string) $in['delivery_notice_body'] ) : '',

@@ -49,6 +49,9 @@ class OLE_Plugin {
 		if ( OLE_Settings::is_yes( $opts, 'print_stock_enabled' ) ) {
 			OLE_Print_Stock::init();
 		}
+		if ( OLE_Settings::is_yes( $opts, 'list_comments_enabled' ) ) {
+			OLE_Order_Comments::init();
+		}
 	}
 
 	/**
