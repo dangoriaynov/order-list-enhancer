@@ -888,3 +888,12 @@ msgstr "Да изтрия ли този стикер?"
 
 msgid "Delete"
 msgstr "Изтрий"
+
+msgid "Comment"
+msgstr "Коментар"
+
+msgid "Order comment in the list"
+msgstr "Коментар в списъка с поръчки"
+
+msgid "Show the customer note left at checkout and the most recent internal admin note right under the order number in the orders list, so you never miss them. Click a note to expand it."
+msgstr "Показвай бележката на клиента от плащането и последната вътрешна админ бележка точно под номера на поръчката в списъка, за да не ги пропускаш. Кликни бележка, за да я разгънеш."
