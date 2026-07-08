@@ -47,6 +47,9 @@ If your checkout has a delivery-date field, show a clear, highlighted note above
 **Never run out of stickers or printed instructions.**
 Track the printed consumables you pack with each order: give every product a sticker stock and group products under shared "instruction sheets." As orders come in, stock is drawn down automatically — and restored if an order is cancelled or refunded — with per-type low thresholds that warn you on a dedicated stock page, an admin banner, an orders-list badge and an email when it is time to print more. Off by default.
 
+**See order comments without opening the order.**
+Optionally show the customer's checkout note and the most recent internal admin note right under the order number in the orders list, so special instructions are never missed. Long notes truncate to a couple of lines — hover or click to read the rest. Off by default.
+
 **Built to fit in.**
 Every feature has its own on/off switch on a tabbed settings page that saves instantly, with no page reload, a color picker for every color, and a Settings link right on the Plugins screen. Everything runs in the admin only, for users who can edit orders — no external services and no tracking. Compatible with WooCommerce HPOS (High-Performance Order Storage) and sequential order numbers, and fully translatable (English and Bulgarian included).
 
