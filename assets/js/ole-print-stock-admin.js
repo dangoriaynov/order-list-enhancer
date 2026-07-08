@@ -42,6 +42,13 @@
 	$( function () { $( '.ole-ps-sheet' ).each( function () { syncSaveBtn( $( this ) ); } ); } );
 	$( document ).on( 'input', '.ole-ps-sheet-name', function () { syncSaveBtn( $( this ).closest( 'tr' ) ); } );
 
+	// Disable the "add sticker" button until a product / variation is picked.
+	function syncStickerAddBtn( $row ) {
+		$row.find( '.ole-ps-sticker-add' ).prop( 'disabled', ! $row.find( '.ole-ps-sticker-product' ).val() );
+	}
+	$( function () { $( '.ole-ps-sticker-new' ).each( function () { syncStickerAddBtn( $( this ) ); } ); } );
+	$( document ).on( 'change', '.ole-ps-sticker-product', function () { syncStickerAddBtn( $( this ).closest( 'tr' ) ); } );
+
 	// Set absolute stock (stickers table).
 	$( document ).on( 'click', '.ole-ps-save', function () {
 		var row   = $( this ).closest( 'tr' );
