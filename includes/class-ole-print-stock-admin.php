@@ -40,6 +40,7 @@ class OLE_Print_Stock_Admin {
 		if ( ! self::is_screen() ) {
 			return;
 		}
+		$o = OLE_Settings::get();
 		wp_enqueue_script( 'wc-enhanced-select' );
 		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_enqueue_style( 'ole-print-stock-admin', OLE_URL . 'assets/css/ole-print-stock-admin.css', array(), OLE_VERSION );
@@ -59,6 +60,10 @@ class OLE_Print_Stock_Admin {
 					'instruction' => __( 'Instruction', 'order-list-enhancer' ),
 					'set'         => __( 'Set', 'order-list-enhancer' ),
 					'addPrinted'  => __( '+ printed', 'order-list-enhancer' ),
+				),
+				'thresholds' => array(
+					'sticker'     => (int) $o['print_stock_threshold_sticker'],
+					'instruction' => (int) $o['print_stock_threshold_instruction'],
 				),
 			)
 		);

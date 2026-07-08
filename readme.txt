@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.38
+Stable tag: 1.0.39
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.39 =
+* Print consumables: the low/negative highlight now updates instantly after you change stock (no reload needed), and the green "saved" flash no longer fights the highlight color.
 
 = 1.0.38 =
 * Print consumables: fixed low/negative stock highlighting on the stickers table and added it to instruction sheets; the low-stock email now also fires when you set/add a consumable below its threshold on the stock page (not only from orders).
