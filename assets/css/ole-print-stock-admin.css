@@ -5,6 +5,7 @@
 /* Green confirmation flash sits on top of any low/neg highlight, then fades back cleanly. */
 .ole-ps-stickers tr.ole-ps-flash td,
 .ole-ps-sheets   tr.ole-ps-flash td { background: #e6ffed !important; }
+.ole-ps-stickers thead th, .ole-ps-sheets thead th { text-align: center; }
 .ole-ps-stickers td, .ole-ps-sheets td { vertical-align: middle; transition: background .35s ease; }
 /* Keep the action buttons on one line (the column widens to fit). */
 .ole-ps-stickers td:last-child,
