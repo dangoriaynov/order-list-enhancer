@@ -115,6 +115,15 @@
 			.fail( function () { window.alert( OLE_PS.i18n.error ); } );
 	} );
 
+	// Delete a sticker.
+	$( document ).on( 'click', '.ole-ps-sticker-delete', function () {
+		if ( ! window.confirm( OLE_PS.i18n.confirmSticker ) ) { return; }
+		var row = $( this ).closest( 'tr' );
+		post( 'ole_ps_delete_sticker', { id: row.data( 'id' ) } )
+			.done( function () { row.remove(); } )
+			.fail( function () { window.alert( OLE_PS.i18n.error ); } );
+	} );
+
 	// Turn the just-saved blank sheet row into a saved row + add a fresh blank row.
 	function promoteNewRow( row, d ) {
 		row.removeClass( 'ole-ps-sheet-new' ).data( 'id', d.id ).attr( 'data-id', d.id );
@@ -144,7 +153,8 @@
 				'<td></td>' +
 				'<td><input type="number" step="1" class="ole-ps-stock" style="width:90px"/></td>' +
 				'<td><button type="button" class="button ole-ps-save">' + OLE_PS.i18n.set + '</button> ' +
-				'<button type="button" class="button ole-ps-add">' + OLE_PS.i18n.addPrinted + '</button></td>' +
+				'<button type="button" class="button ole-ps-add">' + OLE_PS.i18n.addPrinted + '</button> ' +
+				'<button type="button" class="button ole-ps-sticker-delete">×</button></td>' +
 				'</tr>'
 			);
 			$tbody.find( '.ole-ps-sticker-new' ).before( $tr );
