@@ -882,3 +882,9 @@ msgstr "Стикери"
 
 msgid "Sticker stock per product or variation — decreases by the ordered quantity. Add a product below: pick a variation for per-variation stock, or the product for one shared count."
 msgstr "Наличност от стикери за продукт или вариация — намалява с поръчаното количество. Добавете продукт по-долу: изберете вариация за наличност по вариация или продукта за една обща бройка."
+
+msgid "Delete this sticker?"
+msgstr "Да изтрия ли този стикер?"
+
+msgid "Delete"
+msgstr "Изтрий"

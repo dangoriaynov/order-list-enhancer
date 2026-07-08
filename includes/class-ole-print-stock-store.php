@@ -193,6 +193,11 @@ class OLE_Print_Stock_Store {
 		$wpdb->delete( self::table_link(), array( 'consumable_id' => (int) $id ), array( '%d' ) );
 	}
 
+	public static function delete_sticker( $id ) {
+		global $wpdb;
+		$wpdb->delete( self::table_consumable(), array( 'id' => (int) $id, 'type' => 'sticker' ), array( '%d', '%s' ) );
+	}
+
 	private static function set_sheet_products( $id, $product_ids ) {
 		global $wpdb;
 		$l = self::table_link();

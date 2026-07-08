@@ -18,6 +18,7 @@ class OLE_Print_Stock_Admin {
 		add_action( 'wp_ajax_ole_ps_save_sheet', array( __CLASS__, 'ajax_save_sheet' ) );
 		add_action( 'wp_ajax_ole_ps_delete_sheet', array( __CLASS__, 'ajax_delete_sheet' ) );
 		add_action( 'wp_ajax_ole_ps_add_sticker', array( __CLASS__, 'ajax_add_sticker' ) );
+		add_action( 'wp_ajax_ole_ps_delete_sticker', array( __CLASS__, 'ajax_delete_sticker' ) );
 	}
 
 	public static function menu() {
@@ -55,6 +56,7 @@ class OLE_Print_Stock_Admin {
 					'saved'       => __( 'Saved.', 'order-list-enhancer' ),
 					'error'       => __( 'Failed.', 'order-list-enhancer' ),
 					'confirm'     => __( 'Delete this instruction sheet?', 'order-list-enhancer' ),
+					'confirmSticker' => __( 'Delete this sticker?', 'order-list-enhancer' ),
 					'addQ'        => __( 'How many printed copies to add?', 'order-list-enhancer' ),
 					'save'        => __( 'Save', 'order-list-enhancer' ),
 					'instruction' => __( 'Instruction', 'order-list-enhancer' ),
@@ -157,6 +159,15 @@ class OLE_Print_Stock_Admin {
 		OLE_Print_Stock::maybe_notify_low( $id, $before, $stock );
 		wp_send_json_success( array( 'id' => $id, 'name' => $name, 'stock' => $stock ) );
 	}
+
+	public static function ajax_delete_sticker() {
+		self::guard();
+		$id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
+		if ( $id ) {
+			OLE_Print_Stock_Store::delete_sticker( $id );
+		}
+		wp_send_json_success();
+	}
 	// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 	private static function status_class( $row ) {
@@ -194,6 +205,7 @@ class OLE_Print_Stock_Admin {
 						<td>
 							<button type="button" class="button ole-ps-save"><?php esc_html_e( 'Set', 'order-list-enhancer' ); ?></button>
 							<button type="button" class="button ole-ps-add"><?php esc_html_e( '+ printed', 'order-list-enhancer' ); ?></button>
+							<button type="button" class="button ole-ps-sticker-delete" aria-label="<?php esc_attr_e( 'Delete', 'order-list-enhancer' ); ?>">&times;</button>
 						</td>
 					</tr>
 				<?php endforeach; ?>
@@ -214,7 +226,7 @@ class OLE_Print_Stock_Admin {
 					<th style="width:22%"><?php esc_html_e( 'Name', 'order-list-enhancer' ); ?></th>
 					<th><?php esc_html_e( 'Products', 'order-list-enhancer' ); ?></th>
 					<th style="width:100px"><?php esc_html_e( 'Stock', 'order-list-enhancer' ); ?></th>
-					<th style="width:160px"></th>
+					<th style="width:160px"><?php esc_html_e( 'Actions', 'order-list-enhancer' ); ?></th>
 				</tr></thead>
 				<tbody>
 				<?php foreach ( $sheets as $s ) : ?>
@@ -228,7 +240,7 @@ class OLE_Print_Stock_Admin {
 								<?php endforeach; ?>
 							</select>
 						</td>
-						<td><input type="number" step="1" class="ole-ps-sheet-stock" value="<?php echo esc_attr( (string) (int) $s['stock'] ); ?>" style="width:80px"/></td>
+						<td><input type="number" step="1" class="ole-ps-sheet-stock" value="<?php echo esc_attr( (string) (int) $s['stock'] ); ?>" style="width:90px"/></td>
 						<td>
 							<button type="button" class="button ole-ps-sheet-save"><?php esc_html_e( 'Save', 'order-list-enhancer' ); ?></button>
 							<button type="button" class="button ole-ps-sheet-delete">&times;</button>
@@ -240,7 +252,7 @@ class OLE_Print_Stock_Admin {
 						<td>
 							<select multiple class="wc-product-search ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products" style="width:100%"></select>
 						</td>
-						<td><input type="number" step="1" class="ole-ps-sheet-stock" value="0" style="width:80px"/></td>
+						<td><input type="number" step="1" class="ole-ps-sheet-stock" value="0" style="width:90px"/></td>
 						<td><button type="button" class="button button-primary ole-ps-sheet-save"><?php esc_html_e( 'Add', 'order-list-enhancer' ); ?></button></td>
 					</tr>
 				</tbody>
