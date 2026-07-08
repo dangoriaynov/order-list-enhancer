@@ -3,6 +3,8 @@
 	'use strict';
 	if ( 'undefined' === typeof OLE_PS ) { return; }
 
+	var TH = OLE_PS.thresholds || { sticker: 0, instruction: 0 };
+
 	// Pristine markup of the blank "new sheet" row, captured before WooCommerce enhances its select.
 	var NEW_ROW_HTML = ( function () {
 		var el = document.querySelector( '.ole-ps-sheet-new' );
@@ -18,6 +20,20 @@
 		$( document.body ).trigger( 'wc-enhanced-select-init' );
 	}
 
+	// Recompute the low / negative highlight class for a row after its stock changes.
+	function applyStatus( $row, stock, threshold ) {
+		stock = parseInt( stock, 10 ) || 0;
+		$row.removeClass( 'ole-ps-low ole-ps-neg' );
+		if ( stock < 0 ) { $row.addClass( 'ole-ps-neg' ); }
+		else if ( stock <= threshold ) { $row.addClass( 'ole-ps-low' ); }
+	}
+
+	// Brief green confirmation that survives on top of the low/neg highlight (class, not inline bg).
+	function flash( $row ) {
+		$row.addClass( 'ole-ps-flash' );
+		setTimeout( function () { $row.removeClass( 'ole-ps-flash' ); }, 700 );
+	}
+
 	// Disable a sheet's Save/Add button while its name is empty.
 	function syncSaveBtn( $row ) {
 		var hasName = $.trim( $row.find( '.ole-ps-sheet-name' ).val() || '' ) !== '';
@@ -26,21 +42,26 @@
 	$( function () { $( '.ole-ps-sheet' ).each( function () { syncSaveBtn( $( this ) ); } ); } );
 	$( document ).on( 'input', '.ole-ps-sheet-name', function () { syncSaveBtn( $( this ).closest( 'tr' ) ); } );
 
-	// Set absolute stock (stickers and sheets share this control via the row's data-id).
+	// Set absolute stock (stickers table).
 	$( document ).on( 'click', '.ole-ps-save', function () {
-		var row = $( this ).closest( 'tr' );
-		post( 'ole_ps_set_stock', { id: row.data( 'id' ), stock: row.find( '.ole-ps-stock' ).val() } )
-			.done( function () { flash( row ); } )
+		var row   = $( this ).closest( 'tr' );
+		var stock = row.find( '.ole-ps-stock' ).val();
+		post( 'ole_ps_set_stock', { id: row.data( 'id' ), stock: stock } )
+			.done( function () { applyStatus( row, stock, TH.sticker ); flash( row ); } )
 			.fail( function () { window.alert( OLE_PS.i18n.error ); } );
 	} );
 
-	// Add printed copies.
+	// Add printed copies (stickers table).
 	$( document ).on( 'click', '.ole-ps-add', function () {
 		var row = $( this ).closest( 'tr' );
 		var n = window.prompt( OLE_PS.i18n.addQ, '100' );
 		if ( null === n || '' === n ) { return; }
 		post( 'ole_ps_add_stock', { id: row.data( 'id' ), amount: parseInt( n, 10 ) || 0 } )
-			.done( function ( r ) { row.find( '.ole-ps-stock' ).val( r.data.stock ); flash( row ); } )
+			.done( function ( r ) {
+				row.find( '.ole-ps-stock' ).val( r.data.stock );
+				applyStatus( row, r.data.stock, TH.sticker );
+				flash( row );
+			} )
 			.fail( function () { window.alert( OLE_PS.i18n.error ); } );
 	} );
 
@@ -68,15 +89,16 @@
 		var name  = $.trim( row.find( '.ole-ps-sheet-name' ).val() || '' );
 		if ( '' === name ) { row.find( '.ole-ps-sheet-name' ).focus(); return; } // a sheet needs a name — skip the doomed round-trip
 		var isNew = row.hasClass( 'ole-ps-sheet-new' );
+		var stock = row.find( '.ole-ps-sheet-stock' ).val();
 		$btn.prop( 'disabled', true );
 		post( 'ole_ps_save_sheet', {
 			id: row.data( 'id' ),
 			name: name,
-			stock: row.find( '.ole-ps-sheet-stock' ).val(),
+			stock: stock,
 			products: row.find( '.ole-ps-sheet-products' ).val() || []
 		} ).done( function ( r ) {
 			if ( isNew ) { promoteNewRow( row, ( r && r.data ) || {} ); }
-			else { flash( row ); }
+			else { applyStatus( row, stock, TH.instruction ); flash( row ); }
 		} ).fail( function () {
 			window.alert( OLE_PS.i18n.error );
 		} ).always( function () {
@@ -100,6 +122,7 @@
 			.removeClass( 'button-primary' )
 			.text( OLE_PS.i18n.save )
 			.after( ' <button type="button" class="button ole-ps-sheet-delete">×</button>' );
+		applyStatus( row, d.stock, TH.instruction );
 		flash( row );
 		if ( NEW_ROW_HTML ) {
 			var $fresh = $( NEW_ROW_HTML );
@@ -128,11 +151,7 @@
 		}
 		if ( typeof d.name !== 'undefined' ) { $tr.children( 'td' ).eq( 0 ).text( d.name ); }
 		if ( typeof d.stock !== 'undefined' ) { $tr.find( '.ole-ps-stock' ).val( parseInt( d.stock, 10 ) ); }
+		applyStatus( $tr, d.stock, TH.sticker );
 		flash( $tr );
-	}
-
-	function flash( row ) {
-		row.css( 'background-color', '#e6ffed' );
-		setTimeout( function () { row.css( 'background-color', '' ); }, 700 );
 	}
 } )( jQuery );
