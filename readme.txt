@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.41
+Stable tag: 1.0.42
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.42 =
+* Print consumables: table headers are centered.
 
 = 1.0.41 =
 * Print consumables: sticker action buttons stay on one line; the low-stock admin banner no longer shows on the consumables page itself (it already lists everything).
