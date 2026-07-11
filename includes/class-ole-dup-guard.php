@@ -172,7 +172,7 @@ class OLE_Dup_Guard {
 		if ( 'block' === OLE_Settings::get()['dup_guard_mode'] ) {
 			$msg = sprintf(
 				/* translators: 1: order number, 2: minutes ago */
-				__( 'Вече направихте подобна поръчка преди %2$d мин. (№%1$s). За нова поръчка, моля свържете се с нас.', 'order-list-enhancer' ),
+				__( 'You already placed a similar order %2$d min ago (#%1$s). To place another one, please contact us.', 'order-list-enhancer' ),
 				$match['number'],
 				$match['mins']
 			);
@@ -189,7 +189,7 @@ class OLE_Dup_Guard {
 
 		$msg = 'OLEDUP|' . sprintf(
 			/* translators: 1: order number, 2: minutes ago */
-			__( 'Вече направихте подобна поръчка преди %2$d мин. (№%1$s). Сигурни ли сте, че искате да направите още една?', 'order-list-enhancer' ),
+			__( 'You already placed a similar order %2$d min ago (#%1$s). Are you sure you want to place another one?', 'order-list-enhancer' ),
 			$match['number'],
 			$match['mins']
 		);
@@ -226,8 +226,8 @@ class OLE_Dup_Guard {
 				'action'  => 'ole_dup_confirm',
 				'nonce'   => wp_create_nonce( 'ole_dup_confirm' ),
 				'i18n'    => array(
-					'confirm' => __( 'Да, поръчай отново', 'order-list-enhancer' ),
-					'cancel'  => __( 'Отказ', 'order-list-enhancer' ),
+					'confirm' => __( 'Yes, order again', 'order-list-enhancer' ),
+					'cancel'  => __( 'Cancel', 'order-list-enhancer' ),
 				),
 			)
 		);

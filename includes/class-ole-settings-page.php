@@ -15,6 +15,7 @@ class OLE_Settings_Page {
 		add_action( 'admin_menu', array( $this, 'menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'assets' ) );
 		add_action( 'wp_ajax_ole_save_settings', array( $this, 'ajax_save' ) );
+		add_action( 'wp_ajax_ole_refresh_nonce', array( $this, 'ajax_refresh_nonce' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( OLE_FILE ), array( $this, 'action_links' ) );
 	}
 
@@ -60,9 +61,10 @@ class OLE_Settings_Page {
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'ole_save_settings' ),
 				'i18n'    => array(
-					'saving' => __( 'Saving…', 'order-list-enhancer' ),
-					'saved'  => __( 'Saved.', 'order-list-enhancer' ),
-					'error'  => __( 'Save failed.', 'order-list-enhancer' ),
+					'saving'  => __( 'Saving…', 'order-list-enhancer' ),
+					'saved'   => __( 'Saved.', 'order-list-enhancer' ),
+					'error'   => __( 'Save failed.', 'order-list-enhancer' ),
+					'expired' => __( 'Session expired — reload the page and try again.', 'order-list-enhancer' ),
 				),
 			)
 		);
@@ -313,8 +315,16 @@ class OLE_Settings_Page {
 		?>
 		<table class="form-table"><tbody>
 			<tr>
-				<th scope="row"><?php esc_html_e( 'Copy buttons', 'order-list-enhancer' ); ?></th>
-				<td><?php echo self::switch_html( 'copy_buttons', OLE_Settings::is_yes( $o, 'copy_buttons' ), __( 'Show copy-to-clipboard buttons for name, phone and total on the order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show copy-to-clipboard buttons for name, phone and total on the order edit screen.', 'order-list-enhancer' ); ?></td>
+				<th scope="row"><?php esc_html_e( 'Copy button: name', 'order-list-enhancer' ); ?></th>
+				<td><?php echo self::switch_html( 'copy_name', OLE_Settings::is_yes( $o, 'copy_name' ), __( 'Show a copy-to-clipboard button for the customer name on the order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the customer name on the order edit screen.', 'order-list-enhancer' ); ?></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Copy button: phone', 'order-list-enhancer' ); ?></th>
+				<td><?php echo self::switch_html( 'copy_phone', OLE_Settings::is_yes( $o, 'copy_phone' ), __( 'Show a copy-to-clipboard button for the phone number on the order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the phone number on the order edit screen.', 'order-list-enhancer' ); ?></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Copy button: total', 'order-list-enhancer' ); ?></th>
+				<td><?php echo self::switch_html( 'copy_total', OLE_Settings::is_yes( $o, 'copy_total' ), __( 'Show a copy-to-clipboard button for the order total on the order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the order total on the order edit screen.', 'order-list-enhancer' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Decimal separator', 'order-list-enhancer' ); ?></th>
@@ -441,15 +451,23 @@ class OLE_Settings_Page {
 			array( 'name' => 'delivery_notice_enabled', 'checked' => OLE_Settings::is_yes( $o, 'delivery_notice_enabled' ) )
 		);
 		?>
+		<?php
+		// Show the effective checkout texts instead of empty fields, so what the
+		// customer sees is explicit; an emptied field still falls back to the default.
+		$dn_def   = OLE_Delivery_Notice::defaults_copy();
+		$dn_title = '' !== trim( (string) $o['delivery_notice_title'] ) ? $o['delivery_notice_title'] : $dn_def['title'];
+		$dn_body  = '' !== trim( (string) $o['delivery_notice_body'] ) ? $o['delivery_notice_body'] : $dn_def['body'];
+		$dn_vac   = '' !== trim( (string) $o['delivery_vacation_text'] ) ? $o['delivery_vacation_text'] : $dn_def['vacation'];
+		?>
 		<table class="form-table"><tbody>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Notice title', 'order-list-enhancer' ); ?></th>
-				<td><input type="text" name="delivery_notice_title" value="<?php echo esc_attr( $o['delivery_notice_title'] ); ?>" class="regular-text" style="width:100%;max-width:680px"/>
+				<td><input type="text" name="delivery_notice_title" value="<?php echo esc_attr( $dn_title ); ?>" class="regular-text" style="width:100%;max-width:680px"/>
 				<p class="description"><?php esc_html_e( 'Bold first line. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Notice text', 'order-list-enhancer' ); ?></th>
-				<td><textarea name="delivery_notice_body" rows="2" class="large-text" style="max-width:680px"><?php echo esc_textarea( $o['delivery_notice_body'] ); ?></textarea>
+				<td><textarea name="delivery_notice_body" rows="2" class="large-text" style="max-width:680px"><?php echo esc_textarea( $dn_body ); ?></textarea>
 				<p class="description"><?php esc_html_e( 'Explanation under the title. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
 			</tr>
 			<tr>
@@ -463,7 +481,7 @@ class OLE_Settings_Page {
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Vacation text', 'order-list-enhancer' ); ?></th>
-				<td><textarea name="delivery_vacation_text" rows="2" class="large-text" style="max-width:680px"><?php echo esc_textarea( $o['delivery_vacation_text'] ); ?></textarea>
+				<td><textarea name="delivery_vacation_text" rows="2" class="large-text" style="max-width:680px"><?php echo esc_textarea( $dn_vac ); ?></textarea>
 				<p class="description"><?php /* translators: %s is a literal token the admin types into their text; it is not substituted here. */ esc_html_e( 'Use %s where the date should appear. Leave empty for the default.', 'order-list-enhancer' ); ?></p></td>
 			</tr>
 		</tbody></table>
@@ -566,6 +584,17 @@ class OLE_Settings_Page {
 		self::card_close();
 	}
 
+	/**
+	 * Видає свіжий nonce, коли сторінка налаштувань провисіла відкритою довше
+	 * за життя nonce (24 год) і збереження впало з 403. Права ті самі, що й у save.
+	 */
+	public function ajax_refresh_nonce() {
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
+		}
+		wp_send_json_success( array( 'nonce' => wp_create_nonce( 'ole_save_settings' ) ) );
+	}
+
 	public function ajax_save() {
 		check_ajax_referer( 'ole_save_settings', 'nonce' );
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
@@ -633,7 +662,9 @@ class OLE_Settings_Page {
 			'ship_default_label'    => isset( $in['ship_default_label'] ) ? sanitize_text_field( $in['ship_default_label'] ) : '',
 			'total_on_edit'         => $bool( 'total_on_edit' ),
 			'total_decimal_sep'     => ( isset( $in['total_decimal_sep'] ) && '.' === $in['total_decimal_sep'] ) ? '.' : ',',
-			'copy_buttons'          => $bool( 'copy_buttons' ),
+			'copy_name'             => $bool( 'copy_name' ),
+			'copy_phone'            => $bool( 'copy_phone' ),
+			'copy_total'            => $bool( 'copy_total' ),
 			'normalize_phone'       => $bool( 'normalize_phone' ),
 			'phone_cc'              => isset( $in['phone_cc'] ) ? preg_replace( '/\D+/', '', (string) $in['phone_cc'] ) : '',
 			'phone_validate_enabled' => $bool( 'phone_validate_enabled' ),
