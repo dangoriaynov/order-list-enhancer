@@ -204,11 +204,13 @@ class OLE_Settings_Page {
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Scan limit', 'order-list-enhancer' ); ?></th>
-				<td><input type="number" name="scan_limit" min="100" max="5000" step="100" value="<?php echo esc_attr( $o['scan_limit'] ); ?>"/></td>
+				<td><input type="number" name="scan_limit" min="100" max="5000" step="100" value="<?php echo esc_attr( $o['scan_limit'] ); ?>"/>
+				<p class="description"><?php esc_html_e( 'How many of the newest orders (all statuses) are scanned on every list load. Allowed range 100–5000, default 1500. An empty or out-of-range value is clamped when saving — empty becomes 100, not unlimited.', 'order-list-enhancer' ); ?></p></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Duplicate window (days)', 'order-list-enhancer' ); ?></th>
-				<td><input type="number" name="dup_window_days" min="1" max="60" step="1" value="<?php echo esc_attr( $o['dup_window_days'] ); ?>"/></td>
+				<td><input type="number" name="dup_window_days" min="1" max="60" step="1" value="<?php echo esc_attr( $o['dup_window_days'] ); ?>"/>
+				<p class="description"><?php esc_html_e( 'Two orders from the same customer within this many days (or 2+ still in processing) are flagged as likely duplicates. Allowed range 1–60, default 3; empty or out-of-range values are clamped when saving.', 'order-list-enhancer' ); ?></p></td>
 			</tr>
 		</tbody></table>
 		<?php
@@ -248,6 +250,7 @@ class OLE_Settings_Page {
 					<?php endforeach; ?>
 					</tbody></table>
 					<p><button type="button" class="button ole-rule-add"><?php esc_html_e( 'Add rule', 'order-list-enhancer' ); ?></button></p>
+					<p class="description"><?php esc_html_e( 'Rows without a keyword are removed when saving; an invalid color value is cleared.', 'order-list-enhancer' ); ?></p>
 				</td>
 			</tr>
 			<tr>
@@ -301,6 +304,7 @@ class OLE_Settings_Page {
 					<?php endforeach; ?>
 					</tbody></table>
 					<p><button type="button" class="button ole-rule-add"><?php esc_html_e( 'Add rule', 'order-list-enhancer' ); ?></button></p>
+					<p class="description"><?php esc_html_e( 'Only rows with a threshold above 0 and a valid color are kept when saving; the rest are removed.', 'order-list-enhancer' ); ?></p>
 				</td>
 			</tr>
 		</tbody></table>
@@ -381,7 +385,7 @@ class OLE_Settings_Page {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Default interval (seconds)', 'order-list-enhancer' ); ?></th>
 				<td><input type="number" name="seq_open_interval" min="1" max="300" step="1" value="<?php echo esc_attr( $o['seq_open_interval'] ); ?>"/>
-				<p class="description"><?php esc_html_e( 'Editable on the button too. Your browser must allow pop-ups for this site, or only the first tab opens.', 'order-list-enhancer' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'Editable on the button too. Allowed range 1–300 seconds, default 7; empty or out-of-range values are clamped when saving. Your browser must allow pop-ups for this site, or only the first tab opens.', 'order-list-enhancer' ); ?></p></td>
 			</tr>
 		</tbody></table>
 		<?php
@@ -438,7 +442,7 @@ class OLE_Settings_Page {
 				<th scope="row"><?php esc_html_e( 'Window (minutes)', 'order-list-enhancer' ); ?></th>
 				<td>
 					<input type="number" name="dup_guard_window_min" min="1" max="120" step="1" value="<?php echo esc_attr( (string) $o['dup_guard_window_min'] ); ?>" />
-					<p class="description"><?php esc_html_e( 'Same phone + same cart within this many minutes counts as a duplicate.', 'order-list-enhancer' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Same phone + same cart within this many minutes counts as a duplicate. Allowed range 1–120, default 5; empty or out-of-range values are clamped when saving.', 'order-list-enhancer' ); ?></p>
 				</td>
 			</tr>
 		</tbody></table>
@@ -477,7 +481,7 @@ class OLE_Settings_Page {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Away until', 'order-list-enhancer' ); ?></th>
 				<td><input type="date" name="delivery_vacation_until" value="<?php echo esc_attr( $o['delivery_vacation_until'] ); ?>"/>
-				<p class="description"><?php esc_html_e( 'The banner hides automatically after this date.', 'order-list-enhancer' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'The banner hides automatically after this date; with no date set it never shows.', 'order-list-enhancer' ); ?></p></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Vacation text', 'order-list-enhancer' ); ?></th>
@@ -531,6 +535,7 @@ class OLE_Settings_Page {
 					<?php endforeach; ?>
 					</tbody></table>
 					<p><button type="button" class="button ole-extra-add"><?php esc_html_e( 'Add row', 'order-list-enhancer' ); ?></button></p>
+					<p class="description"><?php esc_html_e( 'Rows without both an extra text and a product are removed when saving.', 'order-list-enhancer' ); ?></p>
 					<p class="description"><?php esc_html_e( 'Match is the exact extra label as it appears on the order/checkout (Product Add-On label like "+ 500 г …", or the Checkout Add-On name).', 'order-list-enhancer' ); ?></p>
 				</td>
 			</tr>
@@ -550,12 +555,12 @@ class OLE_Settings_Page {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Sticker low threshold', 'order-list-enhancer' ); ?></th>
 				<td><input type="number" name="print_stock_threshold_sticker" min="0" max="100000" step="1" value="<?php echo esc_attr( (string) $o['print_stock_threshold_sticker'] ); ?>"/>
-				<p class="description"><?php esc_html_e( 'Warn ("time to print") when a sticker stock drops to this or below.', 'order-list-enhancer' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'Warn ("time to print") when a sticker stock drops to this or below. Allowed range 0–100000, default 20; empty or out-of-range values are clamped when saving.', 'order-list-enhancer' ); ?></p></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Instruction low threshold', 'order-list-enhancer' ); ?></th>
 				<td><input type="number" name="print_stock_threshold_instruction" min="0" max="100000" step="1" value="<?php echo esc_attr( (string) $o['print_stock_threshold_instruction'] ); ?>"/>
-				<p class="description"><?php esc_html_e( 'Warn when an instruction sheet stock drops to this or below.', 'order-list-enhancer' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'Warn when an instruction sheet stock drops to this or below. Allowed range 0–100000, default 5; empty or out-of-range values are clamped when saving.', 'order-list-enhancer' ); ?></p></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Stock page', 'order-list-enhancer' ); ?></th>
@@ -577,7 +582,7 @@ class OLE_Settings_Page {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Default country code', 'order-list-enhancer' ); ?></th>
 				<td><input type="text" name="phone_cc" value="<?php echo esc_attr( $o['phone_cc'] ); ?>" placeholder="359" style="max-width:120px"/>
-				<p class="description"><?php esc_html_e( 'Digits only, e.g. 359. Added to numbers that have no country code.', 'order-list-enhancer' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'Digits only, e.g. 359 — anything else is stripped when saving. Added to numbers that have no country code.', 'order-list-enhancer' ); ?></p></td>
 			</tr>
 		</tbody></table>
 		<?php
