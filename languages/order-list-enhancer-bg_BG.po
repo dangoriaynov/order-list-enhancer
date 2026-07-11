@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Order List Enhancer 1.0.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-12 01:37+0300\n"
+"POT-Creation-Date: 2026-07-12 01:53+0300\n"
 "Language: bg_BG\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -244,7 +244,7 @@ msgstr ""
 #: includes/class-ole-print-stock-admin.php:27
 #: includes/class-ole-print-stock-admin.php:28
 #: includes/class-ole-print-stock-admin.php:190
-#: includes/class-ole-settings-page.php:544
+#: includes/class-ole-settings-page.php:549
 msgid "Print consumables"
 msgstr "Консумативи за печат"
 
@@ -323,7 +323,7 @@ msgid "Delete"
 msgstr "Изтрий"
 
 #: includes/class-ole-print-stock-admin.php:214
-#: includes/class-ole-settings-page.php:520
+#: includes/class-ole-settings-page.php:524
 msgid "Search for a product…"
 msgstr "Търсене на продукт…"
 
@@ -478,15 +478,37 @@ msgstr "По име + телефон"
 msgid "Scan limit"
 msgstr "Лимит на сканиране"
 
-#: includes/class-ole-settings-page.php:210
+#: includes/class-ole-settings-page.php:208
+msgid ""
+"How many of the newest orders (all statuses) are scanned on every list load. "
+"Allowed range 100–5000, default 1500. An empty or out-of-range value is "
+"clamped when saving — empty becomes 100, not unlimited."
+msgstr ""
+"Колко от най-новите поръчки (всички статуси) се сканират при всяко зареждане "
+"на списъка. Допустим диапазон 100–5000, по подразбиране 1500. Празна или "
+"извън диапазона стойност се ограничава при запазване — празно става 100, а "
+"не без лимит."
+
+#: includes/class-ole-settings-page.php:211
 msgid "Duplicate window (days)"
 msgstr "Прозорец за дубликат (дни)"
 
-#: includes/class-ole-settings-page.php:218
+#: includes/class-ole-settings-page.php:213
+msgid ""
+"Two orders from the same customer within this many days (or 2+ still in "
+"processing) are flagged as likely duplicates. Allowed range 1–60, default 3; "
+"empty or out-of-range values are clamped when saving."
+msgstr ""
+"Две поръчки от един и същ клиент в рамките на толкова дни (или 2+ още в "
+"обработка) се маркират като вероятни дубликати. Допустим диапазон 1–60, по "
+"подразбиране 3; празни или извън диапазона стойности се ограничават при "
+"запазване."
+
+#: includes/class-ole-settings-page.php:220
 msgid "Shipping coloring"
 msgstr "Оцветяване на доставката"
 
-#: includes/class-ole-settings-page.php:219
+#: includes/class-ole-settings-page.php:221
 msgid ""
 "Color the \"Ship to\" cell in the list and the address block on the order "
 "screen, by keyword rules."
@@ -494,63 +516,71 @@ msgstr ""
 "Оцветява клетката за доставка в списъка и адресния блок на екрана на "
 "поръчката според правила с ключови думи."
 
-#: includes/class-ole-settings-page.php:225
+#: includes/class-ole-settings-page.php:227
 msgid "Color in orders list"
 msgstr "Оцветяване в списъка с поръчки"
 
-#: includes/class-ole-settings-page.php:226
+#: includes/class-ole-settings-page.php:228
 msgid "Color the “Ship to” cell in the orders list."
 msgstr "Оцветява клетката за доставка в списъка с поръчки."
 
-#: includes/class-ole-settings-page.php:229
+#: includes/class-ole-settings-page.php:231
 msgid "Color on edit page"
 msgstr "Оцветяване на страницата за редакция"
 
-#: includes/class-ole-settings-page.php:230
+#: includes/class-ole-settings-page.php:232
 msgid "Color the address block on the single order edit screen."
 msgstr "Оцветява блока с адреса на екрана за редакция на поръчка."
 
-#: includes/class-ole-settings-page.php:233
+#: includes/class-ole-settings-page.php:235
 msgid "Coloring rules"
 msgstr "Правила за оцветяване"
 
-#: includes/class-ole-settings-page.php:236
+#: includes/class-ole-settings-page.php:238
 msgid "Keyword (in shipping address)"
 msgstr "Ключова дума (в адреса за доставка)"
 
-#: includes/class-ole-settings-page.php:237
-#: includes/class-ole-settings-page.php:290
+#: includes/class-ole-settings-page.php:239
+#: includes/class-ole-settings-page.php:293
 msgid "Color"
 msgstr "Цвят"
 
-#: includes/class-ole-settings-page.php:238
-#: includes/class-ole-settings-page.php:291
+#: includes/class-ole-settings-page.php:240
+#: includes/class-ole-settings-page.php:294
 msgid "Label"
 msgstr "Етикет"
 
-#: includes/class-ole-settings-page.php:250
-#: includes/class-ole-settings-page.php:303
+#: includes/class-ole-settings-page.php:252
+#: includes/class-ole-settings-page.php:306
 msgid "Add rule"
 msgstr "Добави правило"
 
-#: includes/class-ole-settings-page.php:254
+#: includes/class-ole-settings-page.php:253
+msgid ""
+"Rows without a keyword are removed when saving; an invalid color value is "
+"cleared."
+msgstr ""
+"Редове без ключова дума се премахват при запазване; невалидна стойност за "
+"цвят се изчиства."
+
+#: includes/class-ole-settings-page.php:257
 msgid "Default color"
 msgstr "Цвят по подразбиране"
 
-#: includes/class-ole-settings-page.php:256
+#: includes/class-ole-settings-page.php:259
 msgid "Used when no rule matches. Leave empty to not color unmatched rows."
 msgstr ""
 "Използва се, когато няма съвпадение. Оставете празно, за да не оцветявате."
 
-#: includes/class-ole-settings-page.php:259
+#: includes/class-ole-settings-page.php:262
 msgid "Default label"
 msgstr "Етикет по подразбиране"
 
-#: includes/class-ole-settings-page.php:267
+#: includes/class-ole-settings-page.php:270
 msgid "Order-total coloring"
 msgstr "Оцветяване по сума на поръчката"
 
-#: includes/class-ole-settings-page.php:268
+#: includes/class-ole-settings-page.php:271
 msgid ""
 "Ring an order (row + address panel) when its total reaches a threshold; the "
 "highest matching threshold wins. Drawn on top of any shipping color — both "
@@ -560,19 +590,27 @@ msgstr ""
 "печели най-високият достигнат праг. Рисува се върху цвета на доставката — и "
 "двете остават видими."
 
-#: includes/class-ole-settings-page.php:274
+#: includes/class-ole-settings-page.php:277
 msgid "Threshold rules"
 msgstr "Правила за прагове"
 
-#: includes/class-ole-settings-page.php:289
+#: includes/class-ole-settings-page.php:292
 msgid "Order total ≥"
 msgstr "Сума на поръчката ≥"
 
-#: includes/class-ole-settings-page.php:311
+#: includes/class-ole-settings-page.php:307
+msgid ""
+"Only rows with a threshold above 0 and a valid color are kept when saving; "
+"the rest are removed."
+msgstr ""
+"При запазване се пазят само редове с праг над 0 и валиден цвят; останалите "
+"се премахват."
+
+#: includes/class-ole-settings-page.php:315
 msgid "Order total on the edit screen"
 msgstr "Обща сума на екрана за редакция"
 
-#: includes/class-ole-settings-page.php:312
+#: includes/class-ole-settings-page.php:316
 msgid ""
 "Show the total near the billing address on the order screen, with copy "
 "buttons."
@@ -580,66 +618,66 @@ msgstr ""
 "Показва сумата до адреса за фактуриране на екрана на поръчката, с бутони за "
 "копиране."
 
-#: includes/class-ole-settings-page.php:318
+#: includes/class-ole-settings-page.php:322
 msgid "Copy button: name"
 msgstr "Бутон за копиране: име"
 
-#: includes/class-ole-settings-page.php:319
+#: includes/class-ole-settings-page.php:323
 msgid ""
 "Show a copy-to-clipboard button for the customer name on the order edit "
 "screen."
 msgstr "Показва бутон за копиране на името на клиента на екрана за редакция."
 
-#: includes/class-ole-settings-page.php:322
+#: includes/class-ole-settings-page.php:326
 msgid "Copy button: phone"
 msgstr "Бутон за копиране: телефон"
 
-#: includes/class-ole-settings-page.php:323
+#: includes/class-ole-settings-page.php:327
 msgid ""
 "Show a copy-to-clipboard button for the phone number on the order edit "
 "screen."
 msgstr "Показва бутон за копиране на телефонния номер на екрана за редакция."
 
-#: includes/class-ole-settings-page.php:326
+#: includes/class-ole-settings-page.php:330
 msgid "Copy button: total"
 msgstr "Бутон за копиране: сума"
 
-#: includes/class-ole-settings-page.php:327
+#: includes/class-ole-settings-page.php:331
 msgid ""
 "Show a copy-to-clipboard button for the order total on the order edit screen."
 msgstr "Показва бутон за копиране на общата сума на екрана за редакция."
 
-#: includes/class-ole-settings-page.php:330
+#: includes/class-ole-settings-page.php:334
 msgid "Decimal separator"
 msgstr "Десетичен разделител"
 
-#: includes/class-ole-settings-page.php:334
+#: includes/class-ole-settings-page.php:338
 msgid "Comma (,)"
 msgstr "Запетая (,)"
 
-#: includes/class-ole-settings-page.php:335
+#: includes/class-ole-settings-page.php:339
 msgid "Dot (.)"
 msgstr "Точка (.)"
 
-#: includes/class-ole-settings-page.php:344
+#: includes/class-ole-settings-page.php:348
 msgid "Default bulk action"
 msgstr "Действие по подразбиране"
 
-#: includes/class-ole-settings-page.php:345
+#: includes/class-ole-settings-page.php:349
 msgid "Pre-select an entry in the orders-list bulk-actions menu on page load."
 msgstr ""
 "Предварително избира стойност в менюто за групови действия на списъка с "
 "поръчки при зареждане на страницата."
 
-#: includes/class-ole-settings-page.php:351
+#: includes/class-ole-settings-page.php:355
 msgid "Pre-selected action"
 msgstr "Предварително избрано действие"
 
-#: includes/class-ole-settings-page.php:362
+#: includes/class-ole-settings-page.php:366
 msgid "— (none)"
 msgstr "— (няма)"
 
-#: includes/class-ole-settings-page.php:367
+#: includes/class-ole-settings-page.php:371
 msgid ""
 "The list is filled from your Orders screen — open the Orders list once if it "
 "looks empty."
@@ -647,11 +685,11 @@ msgstr ""
 "Списъкът се попълва от екрана с поръчки — отворете списъка с поръчки веднъж, "
 "ако изглежда празен."
 
-#: includes/class-ole-settings-page.php:375
+#: includes/class-ole-settings-page.php:379
 msgid "Open selected one-by-one"
 msgstr "Отваряй избраните една по една"
 
-#: includes/class-ole-settings-page.php:376
+#: includes/class-ole-settings-page.php:380
 msgid ""
 "Add a button that opens each checkbox-selected order in its own tab, one at "
 "a time, waiting a configurable interval between tabs."
@@ -659,23 +697,26 @@ msgstr ""
 "Добавя бутон, който отваря всяка избрана с чекбокс поръчка в собствен "
 "раздел, една по една, изчаквайки конфигурируем интервал между разделите."
 
-#: includes/class-ole-settings-page.php:382
+#: includes/class-ole-settings-page.php:386
 msgid "Default interval (seconds)"
 msgstr "Интервал по подразбиране (секунди)"
 
-#: includes/class-ole-settings-page.php:384
+#: includes/class-ole-settings-page.php:388
 msgid ""
-"Editable on the button too. Your browser must allow pop-ups for this site, "
-"or only the first tab opens."
+"Editable on the button too. Allowed range 1–300 seconds, default 7; empty or "
+"out-of-range values are clamped when saving. Your browser must allow pop-ups "
+"for this site, or only the first tab opens."
 msgstr ""
-"Може да се редактира и на бутона. Браузърът трябва да разрешава изскачащи "
-"прозорци за този сайт, иначе се отваря само първият раздел."
+"Може да се редактира и на бутона. Допустим диапазон 1–300 секунди, по "
+"подразбиране 7; празни или извън диапазона стойности се ограничават при "
+"запазване. Браузърът трябва да разрешава изскачащи прозорци за този сайт, "
+"иначе се отваря само първият раздел."
 
-#: includes/class-ole-settings-page.php:391
+#: includes/class-ole-settings-page.php:395
 msgid "Order comment in the list"
 msgstr "Коментар в списъка с поръчки"
 
-#: includes/class-ole-settings-page.php:392
+#: includes/class-ole-settings-page.php:396
 msgid ""
 "Show the customer note left at checkout and the most recent internal admin "
 "note right under the order number in the orders list, so you never miss "
@@ -685,11 +726,11 @@ msgstr ""
 "бележка точно под номера на поръчката в списъка, за да не ги пропускаш. "
 "Кликни бележка, за да я разгънеш."
 
-#: includes/class-ole-settings-page.php:400
+#: includes/class-ole-settings-page.php:404
 msgid "Checkout phone validation"
 msgstr "Валидиране на телефон при плащане"
 
-#: includes/class-ole-settings-page.php:401
+#: includes/class-ole-settings-page.php:405
 msgid ""
 "Validate the billing phone (Bulgarian numbers) at checkout and flag invalid "
 "ones in admin. Country code comes from the Phone tab (default 359); orders "
@@ -699,23 +740,23 @@ msgstr ""
 "невалидните в администрацията. Кодът на държавата идва от раздел „Телефон“ "
 "(по подразбиране 359); поръчките се маркират и при двата режима."
 
-#: includes/class-ole-settings-page.php:407
+#: includes/class-ole-settings-page.php:411
 msgid "When invalid"
 msgstr "При невалиден"
 
-#: includes/class-ole-settings-page.php:411
+#: includes/class-ole-settings-page.php:415
 msgid "Warn only (allow the order, flag it)"
 msgstr "Само предупреждение (разреши поръчката, маркирай я)"
 
-#: includes/class-ole-settings-page.php:412
+#: includes/class-ole-settings-page.php:416
 msgid "Block the order until fixed"
 msgstr "Блокирай поръчката до коригиране"
 
-#: includes/class-ole-settings-page.php:421
+#: includes/class-ole-settings-page.php:425
 msgid "Duplicate-order guard"
 msgstr "Защита от дублирани поръчки"
 
-#: includes/class-ole-settings-page.php:422
+#: includes/class-ole-settings-page.php:426
 msgid ""
 "Detect an identical recent order (same phone + cart) at checkout and confirm "
 "or block it; also disables the place-order button after the first tap."
@@ -724,33 +765,37 @@ msgstr ""
 "потвърждава или блокира; освен това деактивира бутона за поръчка след "
 "първото натискане."
 
-#: includes/class-ole-settings-page.php:428
+#: includes/class-ole-settings-page.php:432
 msgid "When a duplicate is found"
 msgstr "При открит дубликат"
 
-#: includes/class-ole-settings-page.php:432
+#: includes/class-ole-settings-page.php:436
 msgid "Ask the customer to confirm in a popup"
 msgstr "Питай клиента да потвърди в изскачащ прозорец"
 
-#: includes/class-ole-settings-page.php:433
+#: includes/class-ole-settings-page.php:437
 msgid "Block the duplicate order"
 msgstr "Блокирай дублиращата поръчка"
 
-#: includes/class-ole-settings-page.php:438
+#: includes/class-ole-settings-page.php:442
 msgid "Window (minutes)"
 msgstr "Прозорец (минути)"
 
-#: includes/class-ole-settings-page.php:441
-msgid "Same phone + same cart within this many minutes counts as a duplicate."
+#: includes/class-ole-settings-page.php:445
+msgid ""
+"Same phone + same cart within this many minutes counts as a duplicate. "
+"Allowed range 1–120, default 5; empty or out-of-range values are clamped "
+"when saving."
 msgstr ""
-"Същия телефон + същата количка в рамките на толкова минути се брои за "
-"дубликат."
+"Същият телефон + същата количка в рамките на толкова минути се брои за "
+"дубликат. Допустим диапазон 1–120, по подразбиране 5; празни или извън "
+"диапазона стойности се ограничават при запазване."
 
-#: includes/class-ole-settings-page.php:449
+#: includes/class-ole-settings-page.php:453
 msgid "Delivery-date notice"
 msgstr "Бележка за датата на доставка"
 
-#: includes/class-ole-settings-page.php:450
+#: includes/class-ole-settings-page.php:454
 msgid ""
 "Show a highlighted note above the delivery-date field at checkout; optional "
 "vacation banner. Requires the Order Delivery Date plugin field on checkout; "
@@ -760,28 +805,28 @@ msgstr ""
 "незадължителен банер за отпуск. Изисква полето на плъгина Order Delivery "
 "Date на касата; не прави нищо, ако полето липсва."
 
-#: includes/class-ole-settings-page.php:464
+#: includes/class-ole-settings-page.php:468
 msgid "Notice title"
 msgstr "Заглавие на бележката"
 
-#: includes/class-ole-settings-page.php:466
+#: includes/class-ole-settings-page.php:470
 msgid "Bold first line. Leave empty for the default."
 msgstr "Удебелен първи ред. Оставете празно за стойността по подразбиране."
 
-#: includes/class-ole-settings-page.php:469
+#: includes/class-ole-settings-page.php:473
 msgid "Notice text"
 msgstr "Текст на бележката"
 
-#: includes/class-ole-settings-page.php:471
+#: includes/class-ole-settings-page.php:475
 msgid "Explanation under the title. Leave empty for the default."
 msgstr ""
 "Пояснение под заглавието. Оставете празно за стойността по подразбиране."
 
-#: includes/class-ole-settings-page.php:474
+#: includes/class-ole-settings-page.php:478
 msgid "Vacation banner"
 msgstr "Банер за отпуск"
 
-#: includes/class-ole-settings-page.php:475
+#: includes/class-ole-settings-page.php:479
 msgid ""
 "Also show a red \"we are away\" banner above the notice, until the date "
 "below."
@@ -789,31 +834,35 @@ msgstr ""
 "Показвай и червен банер „в отпуск сме“ над бележката, до посочената по-долу "
 "дата."
 
-#: includes/class-ole-settings-page.php:478
+#: includes/class-ole-settings-page.php:482
 msgid "Away until"
 msgstr "Отпуск до"
 
-#: includes/class-ole-settings-page.php:480
-msgid "The banner hides automatically after this date."
-msgstr "Банерът се скрива автоматично след тази дата."
+#: includes/class-ole-settings-page.php:484
+msgid ""
+"The banner hides automatically after this date; with no date set it never "
+"shows."
+msgstr ""
+"Банерът се скрива автоматично след тази дата; без зададена дата не се "
+"показва."
 
-#: includes/class-ole-settings-page.php:483
+#: includes/class-ole-settings-page.php:487
 msgid "Vacation text"
 msgstr "Текст за отпуск"
 
 #. translators: %s is a literal token the admin types into their text; it is not substituted here.
-#: includes/class-ole-settings-page.php:485
+#: includes/class-ole-settings-page.php:489
 #, php-format
 msgid "Use %s where the date should appear. Leave empty for the default."
 msgstr ""
 "Използвайте %s там, където трябва да се покаже датата. Оставете празно за "
 "стойността по подразбиране."
 
-#: includes/class-ole-settings-page.php:492
+#: includes/class-ole-settings-page.php:496
 msgid "Extras → products"
 msgstr "Екстри → продукти"
 
-#: includes/class-ole-settings-page.php:493
+#: includes/class-ole-settings-page.php:497
 msgid ""
 "At order creation, turn each mapped add-on extra into a real product line at "
 "the price paid; order total stays unchanged."
@@ -821,23 +870,28 @@ msgstr ""
 "При създаване на поръчка превръща всяка съпоставена екстра в истински "
 "продуктов ред на платената цена; сумата на поръчката остава непроменена."
 
-#: includes/class-ole-settings-page.php:499
+#: includes/class-ole-settings-page.php:503
 msgid "Mapping (extra → product)"
 msgstr "Съпоставяне (екстра → продукт)"
 
-#: includes/class-ole-settings-page.php:508
+#: includes/class-ole-settings-page.php:512
 msgid "Extra text (as shown on the order)"
 msgstr "Текст на екстрата (както се показва в поръчката)"
 
-#: includes/class-ole-settings-page.php:509
+#: includes/class-ole-settings-page.php:513
 msgid "Product"
 msgstr "Продукт"
 
-#: includes/class-ole-settings-page.php:533
+#: includes/class-ole-settings-page.php:537
 msgid "Add row"
 msgstr "Добави ред"
 
-#: includes/class-ole-settings-page.php:534
+#: includes/class-ole-settings-page.php:538
+msgid "Rows without both an extra text and a product are removed when saving."
+msgstr ""
+"Редове без текст на екстра и избран продукт се премахват при запазване."
+
+#: includes/class-ole-settings-page.php:539
 msgid ""
 "Match is the exact extra label as it appears on the order/checkout (Product "
 "Add-On label like \"+ 500 г …\", or the Checkout Add-On name)."
@@ -846,7 +900,7 @@ msgstr ""
 "плащането (етикет на Product Add-On като \"+ 500 г …\", или името на "
 "Checkout Add-On)."
 
-#: includes/class-ole-settings-page.php:545
+#: includes/class-ole-settings-page.php:550
 msgid ""
 "Track sticker & instruction-sheet stock, auto-decrement at order placement, "
 "and warn when low."
@@ -854,39 +908,46 @@ msgstr ""
 "Проследява наличността на стикери и листовки с инструкции, автоматично я "
 "намалява при създаване на поръчка и предупреждава при ниска наличност."
 
-#: includes/class-ole-settings-page.php:551
+#: includes/class-ole-settings-page.php:556
 msgid "Sticker low threshold"
 msgstr "Праг за стикери"
 
-#: includes/class-ole-settings-page.php:553
-msgid "Warn (\"time to print\") when a sticker stock drops to this or below."
+#: includes/class-ole-settings-page.php:558
+msgid ""
+"Warn (\"time to print\") when a sticker stock drops to this or below. "
+"Allowed range 0–100000, default 20; empty or out-of-range values are clamped "
+"when saving."
 msgstr ""
-"Предупреди („време е за печат“), когато наличността от стикери падне до тази "
-"стойност или под нея."
+"Предупреждава („време за печат“), когато наличността на стикери падне до "
+"тази стойност или под нея. Допустим диапазон 0–100000, по подразбиране 20; "
+"празни или извън диапазона стойности се ограничават при запазване."
 
-#: includes/class-ole-settings-page.php:556
+#: includes/class-ole-settings-page.php:561
 msgid "Instruction low threshold"
 msgstr "Праг за инструкции"
 
-#: includes/class-ole-settings-page.php:558
-msgid "Warn when an instruction sheet stock drops to this or below."
+#: includes/class-ole-settings-page.php:563
+msgid ""
+"Warn when an instruction sheet stock drops to this or below. Allowed range 0–"
+"100000, default 5; empty or out-of-range values are clamped when saving."
 msgstr ""
-"Предупреди, когато наличността от листовка падне до тази стойност или под "
-"нея."
+"Предупреждава, когато наличността на листове с инструкции падне до тази "
+"стойност или под нея. Допустим диапазон 0–100000, по подразбиране 5; празни "
+"или извън диапазона стойности се ограничават при запазване."
 
-#: includes/class-ole-settings-page.php:561
+#: includes/class-ole-settings-page.php:566
 msgid "Stock page"
 msgstr "Страница с наличности"
 
-#: includes/class-ole-settings-page.php:562
+#: includes/class-ole-settings-page.php:567
 msgid "Open consumables stock"
 msgstr "Отвори наличностите"
 
-#: includes/class-ole-settings-page.php:571
+#: includes/class-ole-settings-page.php:576
 msgid "Phone numbers"
 msgstr "Телефонни номера"
 
-#: includes/class-ole-settings-page.php:572
+#: includes/class-ole-settings-page.php:577
 msgid ""
 "Tidy phone numbers for display (leading 00 → +, add country code when "
 "missing). Never changes the database."
@@ -894,12 +955,14 @@ msgstr ""
 "Подрежда телефонните номера за показване (водещо 00 → +, добавя код на "
 "държавата, ако липсва). Никога не променя базата данни."
 
-#: includes/class-ole-settings-page.php:578
+#: includes/class-ole-settings-page.php:583
 msgid "Default country code"
 msgstr "Код на държавата по подразбиране"
 
-#: includes/class-ole-settings-page.php:580
-msgid "Digits only, e.g. 359. Added to numbers that have no country code."
+#: includes/class-ole-settings-page.php:585
+msgid ""
+"Digits only, e.g. 359 — anything else is stripped when saving. Added to "
+"numbers that have no country code."
 msgstr ""
-"Само цифри (напр. 359). Добавя се към номера, който не съдържа код за "
-"държавата."
+"Само цифри (напр. 359) — всичко останало се премахва при запазване. Добавя "
+"се към номера, който не съдържа код за държавата."

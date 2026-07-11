@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.45
+Stable tag: 1.0.46
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.46 =
+* Improved: every numeric setting now states its allowed range, default and clamping behavior right in its help text (scan limit, duplicate windows, open-interval, low-stock thresholds), and the rule/mapping tables explain which rows are silently removed on save.
 
 = 1.0.45 =
 * New: each copy button on the order edit screen (name, phone, total) now has its own on/off switch instead of one shared toggle.
