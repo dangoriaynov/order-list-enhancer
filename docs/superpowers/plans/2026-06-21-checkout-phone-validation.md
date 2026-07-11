@@ -70,7 +70,6 @@ After the `extras_map` sanitize line add:
 git add includes/class-ole-settings.php
 git commit -m "feat(phone): add phone_validate_enabled + phone_validate_mode settings
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -209,7 +208,6 @@ Expected: `ALL PASS`, exit 0.
 git add includes/class-ole-phone-validator.php tests/phone/test-phone-validator.php
 git commit -m "feat(phone): pure Bulgarian phone validator + unit tests
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -266,7 +264,6 @@ Lint (server `/tmp`): `php -l includes/class-ole-settings-page.php` → no synta
 git add includes/class-ole-settings-page.php
 git commit -m "feat(phone): settings UI — enable toggle + warn/block mode
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -444,7 +441,6 @@ Lint (server `/tmp`): `php -l includes/class-ole-phone-checkout.php` → no synt
 git add assets/js/ole-phone-checkout.js tests/phone/test-phone-js.cjs includes/class-ole-phone-checkout.php
 git commit -m "feat(phone): live checkout validation (JS port + parity tests + enqueue)
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -539,7 +535,6 @@ Expected: `valid-ok` then `too_short`. (Controller stages the two files in `/tmp
 git add includes/class-ole-phone-checkout.php
 git commit -m "feat(phone): server-side checkout validation (warn allows, block stops)
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -710,7 +705,6 @@ Lint `class-ole-phone-checkout.php` and `class-ole-plugin.php` (server `/tmp`) �
 git add includes/class-ole-phone-checkout.php includes/class-ole-plugin.php assets/js/ole-admin.js assets/css/ole-admin.css
 git commit -m "feat(phone): admin flags — order page warning + orders-list badge
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -767,7 +761,6 @@ Enable the feature (WooCommerce → Order List Enhancer → Checkout phone valid
 git add order-list-enhancer.php includes/class-ole-plugin.php
 git commit -m "feat(phone): wire up + gate checkout phone validation; bump 1.0.17
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---

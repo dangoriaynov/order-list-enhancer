@@ -5,7 +5,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Шар БД для обліку витратних: 3 таблиці + журнал рухів.
+ *
+ * Таблиці власні (WP не має API для них), обсяги крихітні й лише в адмінці,
+ * тому прямі запити тут доречні; імена таблиць передаються через %i.
  */
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- dedicated DB layer for the plugin's own tables; no WP API exists and result sets are tiny, admin-side only.
 class OLE_Print_Stock_Store {
 
 	const DB_VERSION    = '1';
@@ -84,14 +88,14 @@ class OLE_Print_Stock_Store {
 	public static function get_consumable( $id ) {
 		global $wpdb;
 		$c = self::table_consumable();
-		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $c WHERE id = %d", (int) $id ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$row = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d', $c, (int) $id ), ARRAY_A );
 		return $row ?: null;
 	}
 
 	public static function get_sticker( $ref_id ) {
 		global $wpdb;
 		$c = self::table_consumable();
-		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $c WHERE type = 'sticker' AND ref_id = %d", (int) $ref_id ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE type = 'sticker' AND ref_id = %d", $c, (int) $ref_id ), ARRAY_A );
 		return $row ?: null;
 	}
 
@@ -129,7 +133,7 @@ class OLE_Print_Stock_Store {
 	public static function add_stock( $id, $amount ) {
 		global $wpdb;
 		$c = self::table_consumable();
-		$wpdb->query( $wpdb->prepare( "UPDATE $c SET stock = stock + %d, updated_at = %s WHERE id = %d", (int) $amount, self::now(), (int) $id ) ); // phpcs:ignore WordPress.DB
+		$wpdb->query( $wpdb->prepare( 'UPDATE %i SET stock = stock + %d, updated_at = %s WHERE id = %d', $c, (int) $amount, self::now(), (int) $id ) );
 		self::log( 0, (int) $id, (int) $amount, 'manual' );
 		self::rearm_if_above( (int) $id );
 	}
@@ -137,14 +141,14 @@ class OLE_Print_Stock_Store {
 	public static function all_consumables() {
 		global $wpdb;
 		$c = self::table_consumable();
-		return $wpdb->get_results( "SELECT * FROM $c ORDER BY type ASC, stock ASC", ARRAY_A ); // phpcs:ignore WordPress.DB
+		return $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i ORDER BY type ASC, stock ASC', $c ), ARRAY_A );
 	}
 
 	public static function sticker_config() {
 		global $wpdb;
 		$c   = self::table_consumable();
 		$out = array();
-		$rows = $wpdb->get_results( "SELECT ref_id, id FROM $c WHERE type = 'sticker'", ARRAY_A ); // phpcs:ignore WordPress.DB
+		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT ref_id, id FROM %i WHERE type = 'sticker'", $c ), ARRAY_A );
 		foreach ( (array) $rows as $r ) {
 			$out[ (int) $r['ref_id'] ] = (int) $r['id'];
 		}
@@ -155,9 +159,9 @@ class OLE_Print_Stock_Store {
 		global $wpdb;
 		$c = self::table_consumable();
 		$l = self::table_link();
-		$rows = $wpdb->get_results( "SELECT * FROM $c WHERE type = 'instruction' ORDER BY name ASC", ARRAY_A ); // phpcs:ignore WordPress.DB
+		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i WHERE type = 'instruction' ORDER BY name ASC", $c ), ARRAY_A );
 		foreach ( $rows as &$row ) {
-			$ids = $wpdb->get_col( $wpdb->prepare( "SELECT product_id FROM $l WHERE consumable_id = %d", (int) $row['id'] ) ); // phpcs:ignore WordPress.DB
+			$ids = $wpdb->get_col( $wpdb->prepare( 'SELECT product_id FROM %i WHERE consumable_id = %d', $l, (int) $row['id'] ) );
 			$row['product_ids'] = array_map( 'intval', (array) $ids );
 		}
 		return $rows;
@@ -217,8 +221,8 @@ class OLE_Print_Stock_Store {
 	public static function apply_delta( $consumable_id, $delta, $order_id, $reason ) {
 		global $wpdb;
 		$c = self::table_consumable();
-		$wpdb->query( $wpdb->prepare( "UPDATE $c SET stock = stock + %d, updated_at = %s WHERE id = %d", (int) $delta, self::now(), (int) $consumable_id ) ); // phpcs:ignore WordPress.DB
-		$after  = (int) $wpdb->get_var( $wpdb->prepare( "SELECT stock FROM $c WHERE id = %d", (int) $consumable_id ) ); // phpcs:ignore WordPress.DB
+		$wpdb->query( $wpdb->prepare( 'UPDATE %i SET stock = stock + %d, updated_at = %s WHERE id = %d', $c, (int) $delta, self::now(), (int) $consumable_id ) );
+		$after  = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT stock FROM %i WHERE id = %d', $c, (int) $consumable_id ) );
 		$before = $after - (int) $delta;
 		self::log( (int) $order_id, (int) $consumable_id, (int) $delta, (string) $reason );
 		return array( 'before' => $before, 'after' => $after );
@@ -228,7 +232,7 @@ class OLE_Print_Stock_Store {
 		global $wpdb;
 		$g   = self::table_log();
 		$out = array();
-		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT consumable_id, SUM(delta) net FROM $g WHERE order_id = %d GROUP BY consumable_id", (int) $order_id ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT consumable_id, SUM(delta) net FROM %i WHERE order_id = %d GROUP BY consumable_id', $g, (int) $order_id ), ARRAY_A );
 		foreach ( (array) $rows as $r ) {
 			$out[ (int) $r['consumable_id'] ] = (int) $r['net'];
 		}
@@ -253,9 +257,9 @@ class OLE_Print_Stock_Store {
 	public static function low_count( $sticker_threshold, $instruction_threshold ) {
 		global $wpdb;
 		$c = self::table_consumable();
-		return (int) $wpdb->get_var( $wpdb->prepare( // phpcs:ignore WordPress.DB
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $c is a $wpdb->prefix table name, not user input.
-			"SELECT COUNT(*) FROM $c WHERE ( type = 'sticker' AND stock <= %d ) OR ( type = 'instruction' AND stock <= %d )",
+		return (int) $wpdb->get_var( $wpdb->prepare(
+			"SELECT COUNT(*) FROM %i WHERE ( type = 'sticker' AND stock <= %d ) OR ( type = 'instruction' AND stock <= %d )",
+			$c,
 			(int) $sticker_threshold,
 			(int) $instruction_threshold
 		) );

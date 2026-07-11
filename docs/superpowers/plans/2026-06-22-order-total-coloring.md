@@ -196,7 +196,6 @@ Expected: PASS — ends with `ALL PASS`, exit 0.
 git add includes/class-ole-settings.php includes/class-ole-order-color.php order-list-enhancer.php tests/order-color/test-rules.php
 git commit -m "feat(total-color): settings sanitization + OLE_Order_Color rule prep
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -302,7 +301,6 @@ Then add these two entries to the `$opts = array( … )` literal (next to `'bulk
 git add includes/class-ole-settings-page.php
 git commit -m "feat(total-color): settings section + save for threshold rules
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -412,7 +410,6 @@ Expected: PASS — ends with `ALL PASS`, exit 0.
 git add assets/js/ole-order-color.js tests/order-color/test-order-color-js.cjs
 git commit -m "feat(total-color): parseAmount + matchTotal JS module with node tests
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -534,7 +531,6 @@ Expected: `No syntax errors detected`.
 git add includes/class-ole-plugin.php
 git commit -m "feat(total-color): enqueue payload, gating, conditional module load
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -659,7 +655,6 @@ Expected: PASS (the module is unchanged, but confirm nothing broke).
 git add assets/js/ole-admin.js
 git commit -m "feat(total-color): draw threshold rings on list cells and edit panel
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -712,7 +707,6 @@ Expected: every script ends with `ALL PASS` (exit 0).
 git add order-list-enhancer.php readme.txt
 git commit -m "chore(release): order total coloring; bump 1.0.24
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -785,7 +779,6 @@ Expected: `msgfmt` prints "N translated messages" with **no** "untranslated" or 
 git add languages/order-list-enhancer.pot languages/order-list-enhancer-bg_BG.po languages/order-list-enhancer-bg_BG.mo
 git commit -m "i18n(bg_BG): translate all admin options + values; rebuild catalog
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---

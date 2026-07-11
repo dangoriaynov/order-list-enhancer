@@ -221,7 +221,6 @@ Expected: `ALL PASS` and exit 0.
 git add includes/class-ole-print-stock-calc.php tests/print-stock/test-calc.php
 git commit -m "feat(print-stock): pure OLE_Print_Stock_Calc + unit tests
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -300,7 +299,6 @@ In `includes/class-ole-settings-page.php`, in `ajax_save()`, inside the `$opts =
 git add includes/class-ole-settings.php includes/class-ole-settings-page.php
 git commit -m "feat(print-stock): settings toggle + sticker/instruction thresholds
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 **Live verification (after the feature is wired in Task 4 + deployed):** the "Print consumables" section appears on the OLE settings page; toggling it and setting thresholds to 20/5 survives Save + reload.
@@ -631,7 +629,6 @@ require_once OLE_DIR . 'includes/class-ole-print-stock-admin.php';
 git add includes/class-ole-print-stock-store.php order-list-enhancer.php
 git commit -m "feat(print-stock): DB store — 3 tables, CRUD, atomic apply_delta + ledger
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 **Live verification (after Task 4 wiring + deploy):** enabling the feature and loading any admin page creates `{prefix}ole_consumable`, `{prefix}ole_consumable_product`, `{prefix}ole_consume_log`; `get_option('ole_print_stock_db')` returns `1`.
@@ -838,7 +835,6 @@ In `includes/class-ole-plugin.php`, in `__construct()`, after the `if ( OLE_Sett
 git add includes/class-ole-print-stock.php includes/class-ole-plugin.php
 git commit -m "feat(print-stock): reconcile engine (consume/restore) + order hooks + low email
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 **Live verification (after Task 5/6 give a way to set stock + deploy):** with a sheet + sticker stock set, placing an order drops the sticker by qty and the sheet by 1; cancelling restores both exactly; a second place consumes again; the ledger table shows matching `order`/`restore` rows.
@@ -942,7 +938,6 @@ In `includes/class-ole-print-stock.php`, add these methods to the class:
 git add includes/class-ole-print-stock.php
 git commit -m "feat(print-stock): sticker-stock fields on product & variation inventory tabs
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 **Live verification (after deploy):** the Inventory tab of a simple product shows "Sticker stock"; setting `50` and saving creates a sticker row with stock 50 (visible on the stock page from Task 6); a variable product shows the field per variation, each keyed on the variation id.
@@ -1265,7 +1260,6 @@ In `includes/class-ole-print-stock.php`, inside `init()`, after the product/vari
 git add includes/class-ole-print-stock-admin.php assets/js/ole-print-stock-admin.js assets/css/ole-print-stock-admin.css includes/class-ole-print-stock.php
 git commit -m "feat(print-stock): stock admin page — inline stock, +printed, instruction-sheet CRUD
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 **Live verification (after deploy):** WooCommerce → "Print consumables" lists all stickers + sheets, lowest first, low rows amber / negative red; "Set" and "+ printed" update stock via AJAX and write `manual` ledger rows; creating a sheet with 2–3 products and stock 30, then editing/deleting it, works without reload errors.
@@ -1365,7 +1359,6 @@ In `includes/class-ole-print-stock.php`, add:
 git add includes/class-ole-print-stock.php
 git commit -m "feat(print-stock): low-stock admin banner + order-list depleted badge
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 **Live verification (after deploy):** when any consumable is ≤ its threshold, a warning banner appears on admin screens linking to the stock page; an order that pushed a consumable to/below threshold shows a "🖨️ N" badge in the orders list (red when negative), tooltip listing item names + remaining stock; a low-crossing order sends one email to the admin address listing the crossed items.
@@ -1525,7 +1518,6 @@ In `readme.txt`, add a `= 1.0.32 =` changelog entry under Changelog: `Print cons
 git add order-list-enhancer.php languages/order-list-enhancer-bg_BG.po languages/order-list-enhancer-bg_BG.mo readme.txt
 git commit -m "chore(print-stock): bg_BG translations, bump 1.0.32, changelog
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
