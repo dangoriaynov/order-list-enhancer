@@ -24,7 +24,9 @@ class OLE_Settings {
 			'ship_default_label'  => '',
 			'total_on_edit'       => 'yes',
 			'total_decimal_sep'   => ',', // ',' or '.' for the order total under the address
-			'copy_buttons'        => 'yes', // copy name/phone/total on edit page
+			'copy_name'           => 'yes', // copy button: customer name (edit page)
+			'copy_phone'          => 'yes', // copy button: phone (edit page)
+			'copy_total'          => 'yes', // copy button: order total (edit page)
 			'normalize_phone'     => 'no', // display-only phone normalization
 			'phone_cc'            => '', // default country dial code (digits, e.g. 359)
 			'bulk_default_action' => '', // pre-selected entry in the orders-list bulk-actions menu ('' = none)
@@ -110,12 +112,30 @@ class OLE_Settings {
 		return $out;
 	}
 
+	/**
+	 * Розносить старий спільний перемикач copy_buttons на три окремі ключі,
+	 * поки їх ще жодного разу не зберігали окремо. Pure, без WordPress.
+	 */
+	public static function migrate_copy_buttons( array $saved, array $opts ) : array {
+		if ( ! isset( $saved['copy_buttons'] ) ) {
+			return $opts;
+		}
+		$legacy = ( 'yes' === $saved['copy_buttons'] ) ? 'yes' : 'no';
+		foreach ( array( 'copy_name', 'copy_phone', 'copy_total' ) as $k ) {
+			if ( ! isset( $saved[ $k ] ) ) {
+				$opts[ $k ] = $legacy;
+			}
+		}
+		return $opts;
+	}
+
 	public static function get() {
 		$saved = get_option( self::OPTION, array() );
 		if ( ! is_array( $saved ) ) {
 			$saved = array();
 		}
 		$opts               = array_merge( self::defaults(), $saved );
+		$opts               = self::migrate_copy_buttons( $saved, $opts );
 		$opts['scan_limit']      = max( 100, min( 5000, (int) $opts['scan_limit'] ) );
 		$opts['dup_window_days'] = max( 1, min( 60, (int) $opts['dup_window_days'] ) );
 		if ( '.' !== $opts['total_decimal_sep'] ) {

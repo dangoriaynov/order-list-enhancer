@@ -57,6 +57,11 @@
 #ole-settings-form .form-table { width: 100%; }
 #ole-settings-form .ole-rules,
 #ole-settings-form .ole-extras { width: 100%; max-width: 100% !important; }
+/* Fluid inputs: the default 25em .regular-text width forces the table past the card edge. */
+#ole-settings-form .ole-rules td .regular-text,
+#ole-settings-form .ole-rules td input[type=number] { width: 100%; max-width: 100%; box-sizing: border-box; }
+#ole-settings-form .ole-rules th:last-child,
+#ole-settings-form .ole-rules td:last-child { width: 1%; white-space: nowrap; }
 #ole-settings-form .ole-extras td input[type=text],
 #ole-settings-form .ole-extras td .wc-product-search,
 #ole-settings-form .ole-extras td .select2-container { width: 100% !important; }

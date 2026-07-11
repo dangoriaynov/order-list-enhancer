@@ -133,7 +133,10 @@ class OLE_Plugin {
 		$ship_active = ( 'list' === $context )
 			? OLE_Settings::is_yes( $opts, 'ship_enabled' )
 			: OLE_Settings::is_yes( $opts, 'ship_color_edit' );
-		$copy_on     = OLE_Settings::is_yes( $opts, 'copy_buttons' );
+		$copy_name   = OLE_Settings::is_yes( $opts, 'copy_name' );
+		$copy_phone  = OLE_Settings::is_yes( $opts, 'copy_phone' );
+		$copy_total  = OLE_Settings::is_yes( $opts, 'copy_total' );
+		$copy_on     = $copy_name || $copy_phone || $copy_total;
 		$total_color_active = OLE_Settings::is_yes( $opts, 'total_color_enabled' );
 		$bulk_def    = ( 'list' === $context ) ? (string) $opts['bulk_default_action'] : '';
 		$seq_open    = ( 'list' === $context ) && OLE_Settings::is_yes( $opts, 'seq_open_enabled' );
@@ -172,7 +175,11 @@ class OLE_Plugin {
 			'flags'    => array(
 				'duplicates' => ( $dup_on && 'list' === $context ),
 				'shipping'   => $ship_active,
-				'copy'       => ( $copy_on && 'edit' === $context ),
+				'copy'       => array(
+					'name'  => ( $copy_name && 'edit' === $context ),
+					'phone' => ( $copy_phone && 'edit' === $context ),
+					'total' => ( $copy_total && 'edit' === $context ),
+				),
 			),
 			'map'      => new stdClass(),
 			'groups'   => new stdClass(),

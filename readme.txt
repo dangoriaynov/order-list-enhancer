@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.44
+Stable tag: 1.0.45
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,13 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.45 =
+* New: each copy button on the order edit screen (name, phone, total) now has its own on/off switch instead of one shared toggle.
+* Fix: saving settings no longer fails after the settings tab has been open for over a day — the expired security token is refreshed and the save retried automatically; a clear "session expired" message shows if that is not possible.
+* Fix: the shipping-coloring and total-threshold rule tables no longer overflow the settings card on narrow screens.
+* Improved: the delivery-date notice and vacation-banner text fields now show the actual default texts instead of being blank, so what customers see at checkout is explicit.
+* i18n: checkout duplicate-guard messages are now English in the source (translated output unchanged); translation template and Bulgarian catalog refreshed to 100% coverage.
 
 = 1.0.44 =
 * New: show the order comment (customer note + last admin note) right in the orders list, under the order number, with a per-feature toggle. Click a note to expand it.

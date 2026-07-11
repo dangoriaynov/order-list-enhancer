@@ -37,7 +37,8 @@ jQuery( function ( $ ) {
 		}
 	} );
 
-	// AJAX save — no page reload.
+	// AJAX save — no page reload. A nonce lives 24h; if the tab sat open longer
+	// the save 403s, so we fetch a fresh nonce once and retry before giving up.
 	$form.on( 'submit', function ( e ) {
 		e.preventDefault();
 		var $btn    = $form.find( 'button[type=submit]' );
@@ -45,25 +46,48 @@ jQuery( function ( $ ) {
 		$btn.prop( 'disabled', true );
 		$status.text( OLE_SETTINGS.i18n.saving ).css( 'color', '' );
 
-		var data = $form.serializeArray();
-		data.push( { name: 'action', value: 'ole_save_settings' } );
-		data.push( { name: 'nonce', value: OLE_SETTINGS.nonce } );
-
-		$.post( OLE_SETTINGS.ajaxUrl, data )
-			.done( function ( res ) {
-				if ( res && res.success ) {
-					$status.text( OLE_SETTINGS.i18n.saved ).css( 'color', '#1a7a3c' );
-				} else {
-					$status.text( OLE_SETTINGS.i18n.error ).css( 'color', '#d63638' );
-				}
-			} )
-			.fail( function () {
-				$status.text( OLE_SETTINGS.i18n.error ).css( 'color', '#d63638' );
-			} )
-			.always( function () {
-				$btn.prop( 'disabled', false );
-				setTimeout( function () { $status.text( '' ); }, 2500 );
-			} );
+		function finish( msg, color ) {
+			$status.text( msg ).css( 'color', color );
+			$btn.prop( 'disabled', false );
+			setTimeout( function () { $status.text( '' ); }, 4000 );
+		}
+		function send( isRetry ) {
+			var data = $form.serializeArray();
+			data.push( { name: 'action', value: 'ole_save_settings' } );
+			data.push( { name: 'nonce', value: OLE_SETTINGS.nonce } );
+			$.post( OLE_SETTINGS.ajaxUrl, data )
+				.done( function ( res ) {
+					if ( res && res.success ) {
+						finish( OLE_SETTINGS.i18n.saved, '#1a7a3c' );
+					} else {
+						finish( OLE_SETTINGS.i18n.error, '#d63638' );
+					}
+				} )
+				.fail( function ( xhr ) {
+					if ( 403 === xhr.status && ! isRetry ) {
+						refreshNonceAndRetry();
+					} else if ( 403 === xhr.status ) {
+						finish( OLE_SETTINGS.i18n.expired, '#d63638' );
+					} else {
+						finish( OLE_SETTINGS.i18n.error, '#d63638' );
+					}
+				} );
+		}
+		function refreshNonceAndRetry() {
+			$.post( OLE_SETTINGS.ajaxUrl, { action: 'ole_refresh_nonce' } )
+				.done( function ( res ) {
+					if ( res && res.success && res.data && res.data.nonce ) {
+						OLE_SETTINGS.nonce = res.data.nonce;
+						send( true );
+					} else {
+						finish( OLE_SETTINGS.i18n.expired, '#d63638' );
+					}
+				} )
+				.fail( function () {
+					finish( OLE_SETTINGS.i18n.expired, '#d63638' );
+				} );
+		}
+		send( false );
 	} );
 
 	// Extras mapping: add/remove rows + (re)init WC product search.

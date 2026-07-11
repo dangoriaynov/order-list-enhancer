@@ -328,10 +328,11 @@
 		return b;
 	}
 	function addCopyButtons() {
-		if ( ! FLAGS.copy ) { return; }
+		var C = FLAGS.copy || {};
+		if ( ! C.name && ! C.phone && ! C.total ) { return; }
 		// Full name — first line of the first address block.
 		var addr = document.querySelector( '#order_data .address' );
-		if ( addr && ! addr.getAttribute( 'data-ole-copy' ) ) {
+		if ( C.name && addr && ! addr.getAttribute( 'data-ole-copy' ) ) {
 			addr.setAttribute( 'data-ole-copy', '1' );
 			var p = addr.querySelector( 'p' );
 			if ( p ) {
@@ -345,7 +346,7 @@
 		}
 		// Phone — the tel: link.
 		var tel = document.querySelector( '#order_data a[href^="tel:"]' );
-		if ( tel && ! tel.getAttribute( 'data-ole-copy' ) ) {
+		if ( C.phone && tel && ! tel.getAttribute( 'data-ole-copy' ) ) {
 			tel.setAttribute( 'data-ole-copy', '1' );
 			var phone = ( tel.textContent || '' ).trim();
 			if ( phone ) {
@@ -355,7 +356,7 @@
 		}
 		// Order total — the numeric amount.
 		var tot = document.querySelector( '.ole-order-total' );
-		if ( tot && ! tot.getAttribute( 'data-ole-copy' ) ) {
+		if ( C.total && tot && ! tot.getAttribute( 'data-ole-copy' ) ) {
 			tot.setAttribute( 'data-ole-copy', '1' );
 			var tb = copyBtn( function () {
 				var a = tot.querySelector( '.woocommerce-Price-amount' );
