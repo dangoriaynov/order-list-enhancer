@@ -55,12 +55,11 @@ One-time, via the web — there is no CLI for the initial review:
 
 1. **Account**: log in (or register) at wordpress.org with the account that should
    own the plugin — this cannot be transferred easily later.
-2. **Build the zip from a clean export** so `docs/`, `tests/`, `.git` etc. stay out
-   (`.distignore` already lists them). From the repo root:
-   `git archive --format=zip --prefix=order-list-enhancer/ -o /tmp/order-list-enhancer.zip HEAD -- . ':!docs' ':!tests' ':!.distignore' ':!.gitignore'`
-   then unzip once and sanity-check the contents (main file, readme.txt, includes/,
-   assets/, languages/, LICENSE, uninstall.php and nothing else).
-   Max 10 MB; ours is well under.
+2. **Build the zip with `bin/build-zip.sh`** (never zip the folder by hand — a
+   Finder zip ships `tests/`, hidden dev directories, stray old zips and fails Plugin Check,
+   as the 2026-07-12 report showed). The script whitelists runtime files only and
+   writes `dist/order-list-enhancer-<version>.zip`. Run Plugin Check against THIS
+   zip too. Max 10 MB; ours is well under.
 3. **Upload** at <https://wordpress.org/plugins/developers/add/>. The form asks for
    the zip only; the plugin name in the main file's header becomes the requested
    slug (`order-list-enhancer`). Slug is assigned at review time and is final.
@@ -82,7 +81,7 @@ One-time, via the web — there is no CLI for the initial review:
 
 Pre-flight checklist (all currently true for 1.0.46):
 - [x] `Stable tag` = plugin `Version` = changelog top entry
-- [x] `Tested up to: 7.0`, `Requires at least: 6.0`, `Requires PHP: 7.4`
+- [x] `Tested up to: 7.0`, `Requires at least: 6.2`, `Requires PHP: 7.4`
 - [x] GPLv2+ license header + LICENSE file
 - [x] All strings text-domain `order-list-enhancer`, POT fresh, bg_BG 100%
 - [x] No external services called (readme FAQ states this)

@@ -105,7 +105,6 @@ Expected: `no | map=0` (before deploy this won't reflect new code; this step is 
 git add includes/class-ole-settings.php
 git commit -m "feat(extras): add extras_enabled + extras_map settings
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -271,7 +270,6 @@ Expected: `ALL PASS`, exit 0.
 git add includes/class-ole-extras-matcher.php tests/extras/test-matcher.php
 git commit -m "feat(extras): pure matcher + unit tests
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -433,7 +431,6 @@ Manual: open WooCommerce → Order List Enhancer → "Extras → products"; add 
 git add includes/class-ole-settings-page.php assets/js/ole-settings.js
 git commit -m "feat(extras): settings UI — enable toggle + extra→product mapping table
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -711,7 +708,6 @@ Expected: `ALL PASS`. (Note: `OLE_Extras`/matcher must be loadable; once Task 7 
 git add includes/class-ole-extras.php tests/extras/it-product-addons.php
 git commit -m "feat(extras): convert Product Add-Ons into real product lines at order creation
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -834,7 +830,6 @@ Expected: both `ALL PASS`.
 git add includes/class-ole-extras.php tests/extras/it-checkout-addons.php
 git commit -m "feat(extras): convert Checkout Add-On fees into product lines
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -919,7 +914,6 @@ Deploy (rsync of `includes/` + `assets/`), then open the order created/converted
 git add includes/class-ole-extras.php assets/css/ole-admin.css
 git commit -m "feat(extras): admin-only provenance under converted order items
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -982,7 +976,6 @@ Enable the feature (WooCommerce → Order List Enhancer → Extras → products:
 git add order-list-enhancer.php includes/class-ole-plugin.php
 git commit -m "feat(extras): wire up + gate the extras-to-products module; bump to 1.0.15
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---

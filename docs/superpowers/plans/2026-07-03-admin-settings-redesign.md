@@ -340,7 +340,6 @@ grep -oE 'name="[a-z_]+(\[\])?"' includes/class-ole-settings-page.php | sort -u
 git add includes/class-ole-settings-page.php assets/css/ole-settings.css assets/js/ole-settings.js
 git commit -m "feat(settings): tabbed shell + card/switch helpers; move sections into 4 tabs (verbatim)
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -422,7 +421,6 @@ The enable toggles moved into `switch_html()` calls, so their `name` is now dyna
 git add includes/class-ole-settings-page.php
 git commit -m "feat(settings): Orders tab as cards with switches + disclosure
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -457,7 +455,6 @@ Confirm the Checkout field names are all still present across BOTH greps (`phone
 git add includes/class-ole-settings-page.php
 git commit -m "feat(settings): Checkout tab as cards
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -492,7 +489,6 @@ Compare this union against the field set captured before the redesign (Task 1 St
 git add includes/class-ole-settings-page.php
 git commit -m "feat(settings): Inventory + Phone tabs as cards
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---
@@ -564,7 +560,6 @@ Add a `= 1.0.33 =` entry to `readme.txt`: `Settings page redesigned: 4 tabbed ca
 git add order-list-enhancer.php languages/order-list-enhancer-bg_BG.po languages/order-list-enhancer-bg_BG.mo readme.txt
 git commit -m "chore(settings): bg_BG for redesign, bump 1.0.33, changelog
 
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
 ---

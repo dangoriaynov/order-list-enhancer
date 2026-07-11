@@ -3,8 +3,8 @@
  * Plugin Name:       Order List Enhancer
  * Plugin URI:        https://github.com/dangoriaynov/order-list-enhancer
  * Description:       Order-management tools for the WooCommerce admin: repeat-customer highlighting with duplicate flags, shipping-column & high-value coloring, checkout safeguards, and printed-consumables tracking — each with its own toggle on a tabbed settings page.
- * Version:           1.0.46
- * Requires at least: 6.0
+ * Version:           1.0.47
+ * Requires at least: 6.2
  * Requires PHP:      7.4
  * Author:            Dan Goriaynov
  * Author URI:        https://github.com/dangoriaynov
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'OLE_VERSION', '1.0.46' );
+define( 'OLE_VERSION', '1.0.47' );
 define( 'OLE_FILE', __FILE__ );
 define( 'OLE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'OLE_URL', plugin_dir_url( __FILE__ ) );
