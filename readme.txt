@@ -1,5 +1,5 @@
 === Ordelist – Order List Enhancer for WooCommerce ===
-Contributors: dangoriaynov
+Contributors: winter2007d
 Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
