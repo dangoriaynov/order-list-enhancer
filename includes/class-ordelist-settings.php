@@ -6,10 +6,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Збереження/читання налаштувань (без UI).
  */
-class OLE_Settings {
+class ORDELIST_Settings {
 
-	const OPTION       = 'ole_settings';
-	const BULK_ACTIONS = 'ole_bulk_actions'; // cached value=>label map captured from the orders screen
+	const OPTION       = 'ordelist_settings';
+	const BULK_ACTIONS = 'ordelist_bulk_actions'; // cached value=>label map captured from the orders screen
 
 	public static function defaults() {
 		return array(

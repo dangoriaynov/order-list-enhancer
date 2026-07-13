@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Чиста перевірка болгарського телефону (без WordPress) — юніт-тестована;
  * правила дзеркалить JS-порт у assets/js/ole-phone-checkout.js.
  */
-class OLE_Phone_Validator {
+class ORDELIST_Phone_Validator {
 
 	/** @return array{valid:bool,reason:string,normalized:string} */
 	public static function validate( $raw, $cc = '359' ) {

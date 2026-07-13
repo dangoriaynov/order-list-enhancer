@@ -10,10 +10,10 @@ $target_id = $target ? (int) $target[0] : 0;
 ck( $target_id > 0, 'found a target product' );
 
 // Force a mapping in settings (in-memory for this run).
-$opts = OLE_Settings::get();
+$opts = ORDELIST_Settings::get();
 $opts['extras_enabled'] = 'yes';
 $opts['extras_map']     = array( array( 'match' => '+ TEST EXTRA pH', 'product' => $target_id ) );
-update_option( OLE_Settings::OPTION, $opts );
+update_option( ORDELIST_Settings::OPTION, $opts );
 
 // Build a draft order: one line item priced 5.50 base + 1.00 add-on = 6.50.
 $order = wc_create_order();
@@ -31,7 +31,7 @@ $order->set_total( 6.50 );
 $order->save();
 $before_total = (float) $order->get_total();
 
-$n = OLE_Extras::convert( $order );
+$n = ORDELIST_Extras::convert( $order );
 ck( $n === 1, 'convert reports 1 extra' );
 
 $order = wc_get_order( $order->get_id() );
@@ -40,26 +40,26 @@ ck( count( $lines ) === 2, 'order now has 2 line items' );
 
 $parent = null; $child = null;
 foreach ( $lines as $li ) {
-	if ( $li->get_meta( '_ole_addon_origin' ) ) { $child = $li; } else { $parent = $li; }
+	if ( $li->get_meta( '_ordelist_addon_origin' ) ) { $child = $li; } else { $parent = $li; }
 }
 ck( $parent && abs( (float) $parent->get_total() - 5.50 ) < 0.001, 'parent total reduced to 5.50' );
 ck( $parent && '' === $parent->get_meta( 'Екстри' ), 'parent visible add-on meta removed' );
 ck( $child && abs( (float) $child->get_total() - 1.00 ) < 0.001, 'new line priced 1.00' );
 ck( abs( (float) $order->get_total() - $before_total ) < 0.001, 'order total unchanged' );
-ck( (int) $order->get_meta( '_ole_extras_converted' ) === 1, 'idempotency guard set' );
+ck( (int) $order->get_meta( '_ordelist_extras_converted' ) === 1, 'idempotency guard set' );
 
 // Idempotent: second run does nothing.
-$n2 = OLE_Extras::convert( $order );
+$n2 = ORDELIST_Extras::convert( $order );
 ck( $n2 === 0, 'second convert is a no-op' );
 
 // Cleanup.
 $order->delete( true );
 
 // Regression (C1): mapping points to a non-existent product → nothing converts, parent untouched.
-$opts2 = OLE_Settings::get();
+$opts2 = ORDELIST_Settings::get();
 $opts2['extras_enabled'] = 'yes';
 $opts2['extras_map']     = array( array( 'match' => '+ GHOST EXTRA', 'product' => 999999999 ) );
-update_option( OLE_Settings::OPTION, $opts2 );
+update_option( ORDELIST_Settings::OPTION, $opts2 );
 
 $o2   = wc_create_order();
 $it2  = new WC_Order_Item_Product();
@@ -69,7 +69,7 @@ $it2->add_meta_data( '_pao_ids', array( array( 'key' => 'Екстри', 'value' 
 $it2->add_meta_data( '_pao_total', 1.5, true );
 $o2->add_item( $it2 ); $o2->set_total( 7.50 ); $o2->save();
 
-$n3 = OLE_Extras::convert( $o2 );
+$n3 = ORDELIST_Extras::convert( $o2 );
 ck( $n3 === 0, 'product-not-found: convert reports 0' );
 $o2 = wc_get_order( $o2->get_id() );
 ck( count( $o2->get_items( 'line_item' ) ) === 1, 'product-not-found: no extra line added' );
@@ -78,10 +78,10 @@ ck( abs( (float) $only->get_total() - 7.50 ) < 0.001, 'product-not-found: parent
 $o2->delete( true );
 
 // Quantity: a "N бр" add-on converts to a line with qty N (total = paid).
-$opts3 = OLE_Settings::get();
+$opts3 = ORDELIST_Settings::get();
 $opts3['extras_enabled'] = 'yes';
 $opts3['extras_map']     = array( array( 'match' => '+ 2 бр TEST', 'product' => $target_id ) );
-update_option( OLE_Settings::OPTION, $opts3 );
+update_option( ORDELIST_Settings::OPTION, $opts3 );
 $o3  = wc_create_order();
 $it3 = new WC_Order_Item_Product();
 $it3->set_product( $prod ); $it3->set_quantity( 1 ); $it3->set_subtotal( 13.0 ); $it3->set_total( 13.0 );
@@ -89,10 +89,10 @@ $it3->add_meta_data( 'Екстри', '+ 2 бр TEST', true );
 $it3->add_meta_data( '_pao_ids', array( array( 'key' => 'Екстри', 'value' => '+ 2 бр TEST', 'id' => '3', 'raw_value' => '+ 2 бр TEST', 'raw_price' => 3, 'price_type' => 'flat_fee' ) ), true );
 $it3->add_meta_data( '_pao_total', 3, true );
 $o3->add_item( $it3 ); $o3->set_total( 13.0 ); $o3->save();
-OLE_Extras::convert( $o3 );
+ORDELIST_Extras::convert( $o3 );
 $o3 = wc_get_order( $o3->get_id() );
 $child3 = null;
-foreach ( $o3->get_items( 'line_item' ) as $li ) { if ( $li->get_meta( '_ole_addon_origin' ) ) { $child3 = $li; } }
+foreach ( $o3->get_items( 'line_item' ) as $li ) { if ( $li->get_meta( '_ordelist_addon_origin' ) ) { $child3 = $li; } }
 ck( $child3 && (int) $child3->get_quantity() === 2, 'qty: «+ 2 бр» -> line qty 2' );
 ck( $child3 && abs( (float) $child3->get_total() - 3.0 ) < 0.001, 'qty: line total = paid 3.00' );
 $o3->delete( true );

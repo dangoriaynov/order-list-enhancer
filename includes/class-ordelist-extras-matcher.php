@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Чиста логіка співставлення екстри з товаром (без WordPress) — повністю юніт-тестована.
  */
-class OLE_Extras_Matcher {
+class ORDELIST_Extras_Matcher {
 
 	/** Нормалізує текст ярлика: trim, стиснуті пробіли, нижній регістр. */
 	public static function normalize( $s ) {

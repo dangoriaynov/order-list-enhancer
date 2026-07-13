@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Виявлення замовлень одного клієнта (union-find) + деталі груп для модалки.
  */
-class OLE_Duplicates {
+class ORDELIST_Duplicates {
 
 	public static function build( $opts ) {
 		$orders = self::fetch( $opts );
@@ -14,7 +14,7 @@ class OLE_Duplicates {
 
 		// Прозорец за „дубликат" (поръчки близо във времето), в дни — от настройките.
 		$win_days = isset( $opts['dup_window_days'] ) ? (int) $opts['dup_window_days'] : 3;
-		$win_days = (int) apply_filters( 'ole_duplicate_window_days', $win_days );
+		$win_days = (int) apply_filters( 'ordelist_duplicate_window_days', $win_days );
 		$win      = max( 1, $win_days ) * DAY_IN_SECONDS;
 
 		// Събиране на членовете на всяка група (id, ts, статус, име).

@@ -1,18 +1,18 @@
 <?php
-// Standalone unit tests for OLE_Settings::migrate_copy_buttons (no WordPress).
+// Standalone unit tests for ORDELIST_Settings::migrate_copy_buttons (no WordPress).
 define( 'ABSPATH', true );
-require __DIR__ . '/../../includes/class-ole-settings.php';
+require __DIR__ . '/../../includes/class-ordelist-settings.php';
 
 $fails = 0;
 function ck( $cond, $msg ) { global $fails; echo ( $cond ? "ok   - " : "FAIL - " ) . "$msg\n"; if ( ! $cond ) { $fails++; } }
 
 function mig( $saved ) {
-	$opts = array_merge( OLE_Settings::defaults(), $saved );
-	return OLE_Settings::migrate_copy_buttons( $saved, $opts );
+	$opts = array_merge( ORDELIST_Settings::defaults(), $saved );
+	return ORDELIST_Settings::migrate_copy_buttons( $saved, $opts );
 }
 
 // New keys default to yes.
-$d = OLE_Settings::defaults();
+$d = ORDELIST_Settings::defaults();
 ck( 'yes' === $d['copy_name'] && 'yes' === $d['copy_phone'] && 'yes' === $d['copy_total'], 'defaults: all three yes' );
 ck( ! isset( $d['copy_buttons'] ), 'defaults: legacy key gone' );
 

@@ -3,7 +3,7 @@
  * Plugin Name:       Ordelist – Order List Enhancer for WooCommerce
  * Plugin URI:        https://github.com/dangoriaynov/order-list-enhancer
  * Description:       Order-management tools for the WooCommerce admin: repeat-customer highlighting with duplicate flags, shipping-column & high-value coloring, checkout safeguards, and printed-consumables tracking — each with its own toggle on a tabbed settings page.
- * Version:           1.0.48
+ * Version:           1.0.49
  * Requires at least: 6.2
  * Requires PHP:      7.4
  * Author:            Dan Goriaynov
@@ -23,37 +23,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'OLE_VERSION', '1.0.48' );
-define( 'OLE_FILE', __FILE__ );
-define( 'OLE_DIR', plugin_dir_path( __FILE__ ) );
-define( 'OLE_URL', plugin_dir_url( __FILE__ ) );
+define( 'ORDELIST_VERSION', '1.0.49' );
+define( 'ORDELIST_FILE', __FILE__ );
+define( 'ORDELIST_DIR', plugin_dir_path( __FILE__ ) );
+define( 'ORDELIST_URL', plugin_dir_url( __FILE__ ) );
 
-require_once OLE_DIR . 'includes/class-ole-settings.php';
-require_once OLE_DIR . 'includes/class-ole-settings-page.php';
-require_once OLE_DIR . 'includes/class-ole-duplicates.php';
-require_once OLE_DIR . 'includes/class-ole-shipping.php';
-require_once OLE_DIR . 'includes/class-ole-order-color.php';
-require_once OLE_DIR . 'includes/class-ole-phone.php';
-require_once OLE_DIR . 'includes/class-ole-order-total.php';
-require_once OLE_DIR . 'includes/class-ole-extras-matcher.php';
-require_once OLE_DIR . 'includes/class-ole-extras.php';
-require_once OLE_DIR . 'includes/class-ole-phone-validator.php';
-require_once OLE_DIR . 'includes/class-ole-phone-checkout.php';
-require_once OLE_DIR . 'includes/class-ole-delivery-notice.php';
-require_once OLE_DIR . 'includes/class-ole-dup-guard.php';
-require_once OLE_DIR . 'includes/class-ole-print-stock-calc.php';
-require_once OLE_DIR . 'includes/class-ole-print-stock-store.php';
-require_once OLE_DIR . 'includes/class-ole-print-stock.php';
-require_once OLE_DIR . 'includes/class-ole-print-stock-admin.php';
-require_once OLE_DIR . 'includes/class-ole-order-comments.php';
-require_once OLE_DIR . 'includes/class-ole-plugin.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-settings.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-settings-page.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-duplicates.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-shipping.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-order-color.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-phone.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-order-total.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-extras-matcher.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-extras.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-phone-validator.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-phone-checkout.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-delivery-notice.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-dup-guard.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-print-stock-calc.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-print-stock-store.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-print-stock.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-print-stock-admin.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-order-comments.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-plugin.php';
 
 // Declare HPOS (custom order tables) compatibility.
 add_action(
 	'before_woocommerce_init',
 	function () {
 		if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
-			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', OLE_FILE, true );
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', ORDELIST_FILE, true );
 		}
 	}
 );
@@ -62,6 +62,6 @@ add_action(
 	'plugins_loaded',
 	function () {
 		// Translations load just-in-time from /languages (text domain = plugin slug); no manual call needed.
-		OLE_Plugin::instance();
+		ORDELIST_Plugin::instance();
 	}
 );

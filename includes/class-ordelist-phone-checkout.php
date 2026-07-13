@@ -5,9 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Перевірка телефону на чекауті (frontend + server) та позначки в адмінці.
- * Чисті правила — у [[OLE_Phone_Validator]].
+ * Чисті правила — у [[ORDELIST_Phone_Validator]].
  */
-class OLE_Phone_Checkout {
+class ORDELIST_Phone_Checkout {
 
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_checkout' ) );
@@ -17,7 +17,7 @@ class OLE_Phone_Checkout {
 	}
 
 	private static function cc() {
-		$cc = preg_replace( '/\D+/', '', (string) OLE_Settings::get()['phone_cc'] );
+		$cc = preg_replace( '/\D+/', '', (string) ORDELIST_Settings::get()['phone_cc'] );
 		return '' !== $cc ? $cc : '359';
 	}
 
@@ -35,11 +35,11 @@ class OLE_Phone_Checkout {
 
 	/** Перевіряє значення телефону за поточними налаштуваннями. */
 	public static function check_value( $phone ) {
-		return OLE_Phone_Validator::validate( (string) $phone, self::cc() );
+		return ORDELIST_Phone_Validator::validate( (string) $phone, self::cc() );
 	}
 
 	private static function is_block_mode() {
-		return 'block' === OLE_Settings::get()['phone_validate_mode'];
+		return 'block' === ORDELIST_Settings::get()['phone_validate_mode'];
 	}
 
 	/** Класичний чекаут: додає помилку у режимі block. */
@@ -53,7 +53,7 @@ class OLE_Phone_Checkout {
 			$msgs = self::messages();
 			$msg  = isset( $msgs[ $res['reason'] ] ) ? $msgs[ $res['reason'] ] : $msgs['invalid'];
 			if ( $errors instanceof WP_Error ) {
-				$errors->add( 'ole_phone_invalid', $msg );
+				$errors->add( 'ordelist_phone_invalid', $msg );
 			} else {
 				wc_add_notice( $msg, 'error' );
 			}
@@ -73,7 +73,7 @@ class OLE_Phone_Checkout {
 		if ( ! $res['valid'] ) {
 			$msgs = self::messages();
 			$msg  = isset( $msgs[ $res['reason'] ] ) ? $msgs[ $res['reason'] ] : $msgs['invalid'];
-			throw new \Automattic\WooCommerce\StoreApi\Exceptions\RouteException( 'ole_phone_invalid', esc_html( $msg ), 400 );
+			throw new \Automattic\WooCommerce\StoreApi\Exceptions\RouteException( 'ordelist_phone_invalid', esc_html( $msg ), 400 );
 		}
 	}
 
@@ -101,7 +101,7 @@ class OLE_Phone_Checkout {
 
 	/** ID останніх замовлень із невалідним білінг-телефоном (для бейджів у списку). */
 	public static function invalid_order_ids( $limit = 500 ) {
-		$key    = 'ole_phone_invalid_ids';
+		$key    = 'ordelist_phone_invalid_ids';
 		$cached = get_transient( $key );
 		if ( is_array( $cached ) ) {
 			return $cached;
@@ -132,7 +132,7 @@ class OLE_Phone_Checkout {
 			if ( '' === trim( $phone ) ) {
 				continue;
 			}
-			$res = OLE_Phone_Validator::validate( $phone, $cc );
+			$res = ORDELIST_Phone_Validator::validate( $phone, $cc );
 			if ( ! $res['valid'] ) {
 				$ids[] = $o->get_id();
 			}
@@ -144,11 +144,11 @@ class OLE_Phone_Checkout {
 		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 			return;
 		}
-		wp_enqueue_style( 'ole-phone-checkout', OLE_URL . 'assets/css/ole-phone-checkout.css', array(), OLE_VERSION );
-		wp_enqueue_script( 'ole-phone-checkout', OLE_URL . 'assets/js/ole-phone-checkout.js', array(), OLE_VERSION, true );
+		wp_enqueue_style( 'ordelist-phone-checkout', ORDELIST_URL . 'assets/css/ole-phone-checkout.css', array(), ORDELIST_VERSION );
+		wp_enqueue_script( 'ordelist-phone-checkout', ORDELIST_URL . 'assets/js/ole-phone-checkout.js', array(), ORDELIST_VERSION, true );
 		wp_localize_script(
-			'ole-phone-checkout',
-			'OLE_PHONE',
+			'ordelist-phone-checkout',
+			'ORDELIST_PHONE',
 			array(
 				'cc'   => self::cc(),
 				'i18n' => self::messages(),

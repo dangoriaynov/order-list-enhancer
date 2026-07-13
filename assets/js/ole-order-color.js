@@ -15,7 +15,7 @@
 		return isNaN( f ) ? null : f;
 	}
 
-	// rules MUST be pre-sorted descending by threshold (OLE_Order_Color::for_js does this).
+	// rules MUST be pre-sorted descending by threshold (ORDELIST_Order_Color::for_js does this).
 	function matchTotal( total, rules ) {
 		if ( total == null || isNaN( total ) || ! rules || ! rules.length ) { return null; }
 		for ( var i = 0; i < rules.length; i++ ) {
@@ -31,5 +31,5 @@
 	// Node export for parity tests; harmless in the browser.
 	if ( typeof module !== 'undefined' && module.exports ) { module.exports = api; }
 	// Browser: expose for ole-admin.js.
-	if ( typeof window !== 'undefined' ) { window.OLE_OrderColor = api; }
+	if ( typeof window !== 'undefined' ) { window.ORDELIST_OrderColor = api; }
 } )();

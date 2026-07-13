@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Точка входу: реєстрація налаштувань + підвантаження ассетів на екрані замовлень.
  */
-class OLE_Plugin {
+class ORDELIST_Plugin {
 
 	private static $instance = null;
 
@@ -18,39 +18,39 @@ class OLE_Plugin {
 	}
 
 	private function __construct() {
-		new OLE_Settings_Page();
+		new ORDELIST_Settings_Page();
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
-		add_action( 'woocommerce_admin_order_data_after_billing_address', array( 'OLE_Order_Total', 'render' ) );
-		add_action( 'wp_ajax_ole_group_details', array( $this, 'ajax_group_details' ) );
-		add_action( 'wp_ajax_ole_save_bulk_actions', array( $this, 'ajax_save_bulk_actions' ) );
+		add_action( 'woocommerce_admin_order_data_after_billing_address', array( 'ORDELIST_Order_Total', 'render' ) );
+		add_action( 'wp_ajax_ordelist_group_details', array( $this, 'ajax_group_details' ) );
+		add_action( 'wp_ajax_ordelist_save_bulk_actions', array( $this, 'ajax_save_bulk_actions' ) );
 
 		// Нормализация на телефон — само за показване (view context); БД не се пипа.
-		$opts = OLE_Settings::get();
-		if ( OLE_Settings::is_yes( $opts, 'normalize_phone' ) ) {
+		$opts = ORDELIST_Settings::get();
+		if ( ORDELIST_Settings::is_yes( $opts, 'normalize_phone' ) ) {
 			$cc   = preg_replace( '/\D+/', '', (string) $opts['phone_cc'] );
 			$norm = function ( $v ) use ( $cc ) {
-				return OLE_Phone::normalize( $v, $cc );
+				return ORDELIST_Phone::normalize( $v, $cc );
 			};
 			add_filter( 'woocommerce_order_get_billing_phone', $norm, 20 );
 			add_filter( 'woocommerce_order_get_shipping_phone', $norm, 20 );
 		}
-		if ( OLE_Settings::is_yes( $opts, 'extras_enabled' ) ) {
-			OLE_Extras::init();
+		if ( ORDELIST_Settings::is_yes( $opts, 'extras_enabled' ) ) {
+			ORDELIST_Extras::init();
 		}
-		if ( OLE_Settings::is_yes( $opts, 'phone_validate_enabled' ) ) {
-			OLE_Phone_Checkout::init();
+		if ( ORDELIST_Settings::is_yes( $opts, 'phone_validate_enabled' ) ) {
+			ORDELIST_Phone_Checkout::init();
 		}
-		if ( OLE_Settings::is_yes( $opts, 'delivery_notice_enabled' ) ) {
-			OLE_Delivery_Notice::init();
+		if ( ORDELIST_Settings::is_yes( $opts, 'delivery_notice_enabled' ) ) {
+			ORDELIST_Delivery_Notice::init();
 		}
-		if ( OLE_Settings::is_yes( $opts, 'dup_guard_enabled' ) ) {
-			OLE_Dup_Guard::init();
+		if ( ORDELIST_Settings::is_yes( $opts, 'dup_guard_enabled' ) ) {
+			ORDELIST_Dup_Guard::init();
 		}
-		if ( OLE_Settings::is_yes( $opts, 'print_stock_enabled' ) ) {
-			OLE_Print_Stock::init();
+		if ( ORDELIST_Settings::is_yes( $opts, 'print_stock_enabled' ) ) {
+			ORDELIST_Print_Stock::init();
 		}
-		if ( OLE_Settings::is_yes( $opts, 'list_comments_enabled' ) ) {
-			OLE_Order_Comments::init();
+		if ( ORDELIST_Settings::is_yes( $opts, 'list_comments_enabled' ) ) {
+			ORDELIST_Order_Comments::init();
 		}
 	}
 
@@ -58,14 +58,14 @@ class OLE_Plugin {
 	 * AJAX: връща детайлите на поръчките от една група (по подадени ID-та).
 	 */
 	public function ajax_group_details() {
-		check_ajax_referer( 'ole_group_details', 'nonce' );
+		check_ajax_referer( 'ordelist_group_details', 'nonce' );
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
 		$raw = isset( $_POST['ids'] ) ? sanitize_text_field( wp_unslash( $_POST['ids'] ) ) : '';
 		$ids = array_filter( array_map( 'intval', explode( ',', $raw ) ) );
 		$ids = array_slice( $ids, 0, 200 );
-		wp_send_json_success( OLE_Duplicates::details_for_ids( $ids ) );
+		wp_send_json_success( ORDELIST_Duplicates::details_for_ids( $ids ) );
 	}
 
 	/**
@@ -73,7 +73,7 @@ class OLE_Plugin {
 	 * щоб сторінка налаштувань могла показати їх у випадаючому списку.
 	 */
 	public function ajax_save_bulk_actions() {
-		check_ajax_referer( 'ole_bulk_actions', 'nonce' );
+		check_ajax_referer( 'ordelist_bulk_actions', 'nonce' );
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
@@ -94,7 +94,7 @@ class OLE_Plugin {
 			}
 			$clean[ $val ] = sanitize_text_field( (string) $label );
 		}
-		update_option( OLE_Settings::BULK_ACTIONS, $clean, false );
+		update_option( ORDELIST_Settings::BULK_ACTIONS, $clean, false );
 		wp_send_json_success();
 	}
 
@@ -128,25 +128,25 @@ class OLE_Plugin {
 		if ( '' === $context || ! current_user_can( 'edit_shop_orders' ) ) {
 			return;
 		}
-		$opts        = OLE_Settings::get();
-		$dup_on      = OLE_Settings::is_yes( $opts, 'dup_enabled' );
+		$opts        = ORDELIST_Settings::get();
+		$dup_on      = ORDELIST_Settings::is_yes( $opts, 'dup_enabled' );
 		$ship_active = ( 'list' === $context )
-			? OLE_Settings::is_yes( $opts, 'ship_enabled' )
-			: OLE_Settings::is_yes( $opts, 'ship_color_edit' );
-		$copy_name   = OLE_Settings::is_yes( $opts, 'copy_name' );
-		$copy_phone  = OLE_Settings::is_yes( $opts, 'copy_phone' );
-		$copy_total  = OLE_Settings::is_yes( $opts, 'copy_total' );
+			? ORDELIST_Settings::is_yes( $opts, 'ship_enabled' )
+			: ORDELIST_Settings::is_yes( $opts, 'ship_color_edit' );
+		$copy_name   = ORDELIST_Settings::is_yes( $opts, 'copy_name' );
+		$copy_phone  = ORDELIST_Settings::is_yes( $opts, 'copy_phone' );
+		$copy_total  = ORDELIST_Settings::is_yes( $opts, 'copy_total' );
 		$copy_on     = $copy_name || $copy_phone || $copy_total;
-		$total_color_active = OLE_Settings::is_yes( $opts, 'total_color_enabled' );
+		$total_color_active = ORDELIST_Settings::is_yes( $opts, 'total_color_enabled' );
 		$bulk_def    = ( 'list' === $context ) ? (string) $opts['bulk_default_action'] : '';
-		$seq_open    = ( 'list' === $context ) && OLE_Settings::is_yes( $opts, 'seq_open_enabled' );
+		$seq_open    = ( 'list' === $context ) && ORDELIST_Settings::is_yes( $opts, 'seq_open_enabled' );
 
 		// На екрана за редакция: групата на текущата поръчка (за да отворим същия модал).
 		$edit_group = null;
 		if ( 'edit' === $context && $dup_on ) {
 			$oid = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : ( isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( $oid ) {
-				$built = OLE_Duplicates::build( $opts );
+				$built = ORDELIST_Duplicates::build( $opts );
 				$key   = (string) $oid;
 				if ( isset( $built['map'][ $key ] ) ) {
 					$g = (int) $built['map'][ $key ]['g'];
@@ -161,7 +161,7 @@ class OLE_Plugin {
 		if ( 'edit' === $context && ! $ship_active && ! $copy_on && ! $edit_group && ! $total_color_active ) {
 			return;
 		}
-		if ( 'list' === $context && ! $dup_on && ! $ship_active && '' === $bulk_def && ! OLE_Settings::is_yes( $opts, 'phone_validate_enabled' ) && ! $total_color_active && ! $seq_open ) {
+		if ( 'list' === $context && ! $dup_on && ! $ship_active && '' === $bulk_def && ! ORDELIST_Settings::is_yes( $opts, 'phone_validate_enabled' ) && ! $total_color_active && ! $seq_open ) {
 			return;
 		}
 
@@ -169,7 +169,7 @@ class OLE_Plugin {
 			'context'    => $context,
 			'decimalSep' => ( ',' === $opts['total_decimal_sep'] || '.' === $opts['total_decimal_sep'] ) ? $opts['total_decimal_sep'] : ',',
 			'phone'      => array(
-				'on' => OLE_Settings::is_yes( $opts, 'normalize_phone' ),
+				'on' => ORDELIST_Settings::is_yes( $opts, 'normalize_phone' ),
 				'cc' => preg_replace( '/\D+/', '', (string) $opts['phone_cc'] ),
 			),
 			'flags'    => array(
@@ -193,7 +193,7 @@ class OLE_Plugin {
 			'palette'  => array( '#d63638', '#b26a00', '#7a4ce0', '#1a7a3c', '#0a6b9c', '#c2185b', '#00796b', '#5d4037' ),
 			'ajax'     => array(
 				'url'   => admin_url( 'admin-ajax.php' ),
-				'nonce' => wp_create_nonce( 'ole_group_details' ),
+				'nonce' => wp_create_nonce( 'ordelist_group_details' ),
 			),
 			'i18n'     => array(
 				/* translators: %s: number of orders. */
@@ -229,7 +229,7 @@ class OLE_Plugin {
 		);
 
 		if ( $dup_on && 'list' === $context ) {
-			$built = OLE_Duplicates::build( $opts );
+			$built = ORDELIST_Duplicates::build( $opts );
 			if ( ! empty( $built['map'] ) ) {
 				$data['map'] = $built['map'];
 			}
@@ -238,27 +238,27 @@ class OLE_Plugin {
 			}
 		}
 		if ( $ship_active ) {
-			$data['shipping'] = OLE_Shipping::for_js( $opts );
+			$data['shipping'] = ORDELIST_Shipping::for_js( $opts );
 		}
 		if ( $edit_group ) {
 			$data['editGroup'] = $edit_group;
 		}
 		if ( 'list' === $context ) {
 			$data['bulkDefault'] = $bulk_def;
-			$data['bulkCache']   = (object) OLE_Settings::bulk_actions();
-			$data['bulkNonce']   = wp_create_nonce( 'ole_bulk_actions' );
+			$data['bulkCache']   = (object) ORDELIST_Settings::bulk_actions();
+			$data['bulkNonce']   = wp_create_nonce( 'ordelist_bulk_actions' );
 			$data['seqOpen']     = array(
 				'enabled'  => $seq_open,
 				'interval' => (int) $opts['seq_open_interval'],
 			);
 		}
-		if ( 'list' === $context && OLE_Settings::is_yes( $opts, 'phone_validate_enabled' ) ) {
-			$data['phoneInvalid'] = array_map( 'strval', OLE_Phone_Checkout::invalid_order_ids() );
+		if ( 'list' === $context && ORDELIST_Settings::is_yes( $opts, 'phone_validate_enabled' ) ) {
+			$data['phoneInvalid'] = array_map( 'strval', ORDELIST_Phone_Checkout::invalid_order_ids() );
 		}
 
 		$data['totalColor'] = array(
 			'on'    => $total_color_active,
-			'rules' => $total_color_active ? OLE_Order_Color::for_js( $opts )['rules'] : array(),
+			'rules' => $total_color_active ? ORDELIST_Order_Color::for_js( $opts )['rules'] : array(),
 		);
 		$data['priceFormat'] = array(
 			'decimal'  => function_exists( 'wc_get_price_decimal_separator' ) ? wc_get_price_decimal_separator() : '.',
@@ -274,13 +274,13 @@ class OLE_Plugin {
 			}
 		}
 
-		wp_enqueue_style( 'ole-admin', OLE_URL . 'assets/css/ole-admin.css', array(), OLE_VERSION );
+		wp_enqueue_style( 'ordelist-admin', ORDELIST_URL . 'assets/css/ole-admin.css', array(), ORDELIST_VERSION );
 		$admin_deps = array();
 		if ( $total_color_active ) {
-			wp_enqueue_script( 'ole-order-color', OLE_URL . 'assets/js/ole-order-color.js', array(), OLE_VERSION, true );
-			$admin_deps[] = 'ole-order-color';
+			wp_enqueue_script( 'ordelist-order-color', ORDELIST_URL . 'assets/js/ole-order-color.js', array(), ORDELIST_VERSION, true );
+			$admin_deps[] = 'ordelist-order-color';
 		}
-		wp_enqueue_script( 'ole-admin', OLE_URL . 'assets/js/ole-admin.js', $admin_deps, OLE_VERSION, true );
-		wp_localize_script( 'ole-admin', 'OLE_DATA', $data );
+		wp_enqueue_script( 'ordelist-admin', ORDELIST_URL . 'assets/js/ole-admin.js', $admin_deps, ORDELIST_VERSION, true );
+		wp_localize_script( 'ordelist-admin', 'ORDELIST_DATA', $data );
 	}
 }

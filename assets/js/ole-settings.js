@@ -1,4 +1,4 @@
-/* global jQuery, OLE_SETTINGS */
+/* global jQuery, ORDELIST_SETTINGS */
 jQuery( function ( $ ) {
 	var $form = $( '#ole-settings-form' );
 	if ( ! $form.length ) { return; }
@@ -44,7 +44,7 @@ jQuery( function ( $ ) {
 		var $btn    = $form.find( 'button[type=submit]' );
 		var $status = $form.find( '.ole-save-status' );
 		$btn.prop( 'disabled', true );
-		$status.text( OLE_SETTINGS.i18n.saving ).css( 'color', '' );
+		$status.text( ORDELIST_SETTINGS.i18n.saving ).css( 'color', '' );
 
 		function finish( msg, color ) {
 			$status.text( msg ).css( 'color', color );
@@ -53,38 +53,38 @@ jQuery( function ( $ ) {
 		}
 		function send( isRetry ) {
 			var data = $form.serializeArray();
-			data.push( { name: 'action', value: 'ole_save_settings' } );
-			data.push( { name: 'nonce', value: OLE_SETTINGS.nonce } );
-			$.post( OLE_SETTINGS.ajaxUrl, data )
+			data.push( { name: 'action', value: 'ordelist_save_settings' } );
+			data.push( { name: 'nonce', value: ORDELIST_SETTINGS.nonce } );
+			$.post( ORDELIST_SETTINGS.ajaxUrl, data )
 				.done( function ( res ) {
 					if ( res && res.success ) {
-						finish( OLE_SETTINGS.i18n.saved, '#1a7a3c' );
+						finish( ORDELIST_SETTINGS.i18n.saved, '#1a7a3c' );
 					} else {
-						finish( OLE_SETTINGS.i18n.error, '#d63638' );
+						finish( ORDELIST_SETTINGS.i18n.error, '#d63638' );
 					}
 				} )
 				.fail( function ( xhr ) {
 					if ( 403 === xhr.status && ! isRetry ) {
 						refreshNonceAndRetry();
 					} else if ( 403 === xhr.status ) {
-						finish( OLE_SETTINGS.i18n.expired, '#d63638' );
+						finish( ORDELIST_SETTINGS.i18n.expired, '#d63638' );
 					} else {
-						finish( OLE_SETTINGS.i18n.error, '#d63638' );
+						finish( ORDELIST_SETTINGS.i18n.error, '#d63638' );
 					}
 				} );
 		}
 		function refreshNonceAndRetry() {
-			$.post( OLE_SETTINGS.ajaxUrl, { action: 'ole_refresh_nonce' } )
+			$.post( ORDELIST_SETTINGS.ajaxUrl, { action: 'ordelist_refresh_nonce' } )
 				.done( function ( res ) {
 					if ( res && res.success && res.data && res.data.nonce ) {
-						OLE_SETTINGS.nonce = res.data.nonce;
+						ORDELIST_SETTINGS.nonce = res.data.nonce;
 						send( true );
 					} else {
-						finish( OLE_SETTINGS.i18n.expired, '#d63638' );
+						finish( ORDELIST_SETTINGS.i18n.expired, '#d63638' );
 					}
 				} )
 				.fail( function () {
-					finish( OLE_SETTINGS.i18n.expired, '#d63638' );
+					finish( ORDELIST_SETTINGS.i18n.expired, '#d63638' );
 				} );
 		}
 		send( false );

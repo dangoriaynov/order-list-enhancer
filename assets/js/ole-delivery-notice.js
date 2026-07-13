@@ -1,6 +1,6 @@
 ( function () {
 	if ( typeof window === 'undefined' || typeof document === 'undefined' ) { return; }
-	var D = window.OLE_DELIVERY || null;
+	var D = window.ORDELIST_DELIVERY || null;
 	if ( ! D ) { return; }
 
 	// Будуємо акцентний блок (іконка вже всередині тексту title/body).
