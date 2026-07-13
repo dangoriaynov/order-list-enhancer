@@ -1,0 +1,8 @@
+.ole-wr-table input[type="date"] { min-width: 140px; }
+.ole-wr-expired > td { background: #fbeaea !important; }
+.ole-wr-soon > td { background: #fff8e5 !important; }
+.ole-wr-zero > td { background: #f0f0f1 !important; color: #757575; }
+.ole-wr-flash > td { background: #e6f6e6 !important; transition: background 0.3s; }
+.ole-wr-gaps { margin-top: 2em; }
+.ole-wr-gaps summary { cursor: pointer; font-weight: 600; }
+.ole-wr-gaps ul { margin: 0.5em 0 0 1.5em; list-style: disc; }
