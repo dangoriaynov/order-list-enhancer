@@ -11,7 +11,7 @@
 	if ( typeof module !== 'undefined' && module.exports ) { module.exports = { stripMarker: stripMarker }; }
 
 	if ( typeof window === 'undefined' || typeof document === 'undefined' ) { return; }
-	var D = window.OLE_DUP || null;
+	var D = window.ORDELIST_DUP || null;
 	if ( ! D || ! window.jQuery ) { return; }
 	var $ = window.jQuery;
 

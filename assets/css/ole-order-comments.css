@@ -1,5 +1,5 @@
 /* Hide the carrier column; JS relocates its content into the order-number cell. */
-.wp-list-table .column-ole_comment { display: none !important; }
+.wp-list-table .column-ordelist_comment { display: none !important; }
 
 .ole-oc-wrap { margin-top: 6px; }
 .ole-oc-note {

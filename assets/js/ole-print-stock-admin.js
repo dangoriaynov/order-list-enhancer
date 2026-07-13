@@ -1,9 +1,9 @@
-/* global OLE_PS, jQuery */
+/* global ORDELIST_PS, jQuery */
 ( function ( $ ) {
 	'use strict';
-	if ( 'undefined' === typeof OLE_PS ) { return; }
+	if ( 'undefined' === typeof ORDELIST_PS ) { return; }
 
-	var TH = OLE_PS.thresholds || { sticker: 0, instruction: 0 };
+	var TH = ORDELIST_PS.thresholds || { sticker: 0, instruction: 0 };
 
 	// Pristine markup of the blank "new sheet" row, captured before WooCommerce enhances its select.
 	var NEW_ROW_HTML = ( function () {
@@ -12,7 +12,7 @@
 	} )();
 
 	function post( action, data ) {
-		return $.post( OLE_PS.ajaxUrl, $.extend( { action: action, nonce: OLE_PS.nonce }, data ) );
+		return $.post( ORDELIST_PS.ajaxUrl, $.extend( { action: action, nonce: ORDELIST_PS.nonce }, data ) );
 	}
 
 	// WC only enhances not-yet-enhanced selects, so triggering this wires product search on new rows.
@@ -53,23 +53,23 @@
 	$( document ).on( 'click', '.ole-ps-save', function () {
 		var row   = $( this ).closest( 'tr' );
 		var stock = row.find( '.ole-ps-stock' ).val();
-		post( 'ole_ps_set_stock', { id: row.data( 'id' ), stock: stock } )
+		post( 'ordelist_ps_set_stock', { id: row.data( 'id' ), stock: stock } )
 			.done( function () { applyStatus( row, stock, TH.sticker ); flash( row ); } )
-			.fail( function () { window.alert( OLE_PS.i18n.error ); } );
+			.fail( function () { window.alert( ORDELIST_PS.i18n.error ); } );
 	} );
 
 	// Add printed copies (stickers table).
 	$( document ).on( 'click', '.ole-ps-add', function () {
 		var row = $( this ).closest( 'tr' );
-		var n = window.prompt( OLE_PS.i18n.addQ, '100' );
+		var n = window.prompt( ORDELIST_PS.i18n.addQ, '100' );
 		if ( null === n || '' === n ) { return; }
-		post( 'ole_ps_add_stock', { id: row.data( 'id' ), amount: parseInt( n, 10 ) || 0 } )
+		post( 'ordelist_ps_add_stock', { id: row.data( 'id' ), amount: parseInt( n, 10 ) || 0 } )
 			.done( function ( r ) {
 				row.find( '.ole-ps-stock' ).val( r.data.stock );
 				applyStatus( row, r.data.stock, TH.sticker );
 				flash( row );
 			} )
-			.fail( function () { window.alert( OLE_PS.i18n.error ); } );
+			.fail( function () { window.alert( ORDELIST_PS.i18n.error ); } );
 	} );
 
 	// Add / update a sticker for a product or variation.
@@ -79,13 +79,13 @@
 		var pid  = row.find( '.ole-ps-sticker-product' ).val();
 		if ( ! pid ) { return; } // pick a product first
 		$btn.prop( 'disabled', true );
-		post( 'ole_ps_add_sticker', { product: pid, stock: row.find( '.ole-ps-sticker-stock' ).val() } )
+		post( 'ordelist_ps_add_sticker', { product: pid, stock: row.find( '.ole-ps-sticker-stock' ).val() } )
 			.done( function ( r ) {
 				upsertStickerRow( ( r && r.data ) || {} );
 				row.find( '.ole-ps-sticker-product' ).val( null ).trigger( 'change' );
 				row.find( '.ole-ps-sticker-stock' ).val( 0 );
 			} )
-			.fail( function () { window.alert( OLE_PS.i18n.error ); } )
+			.fail( function () { window.alert( ORDELIST_PS.i18n.error ); } )
 			.always( function () { $btn.prop( 'disabled', false ); } );
 	} );
 
@@ -98,7 +98,7 @@
 		var isNew = row.hasClass( 'ole-ps-sheet-new' );
 		var stock = row.find( '.ole-ps-sheet-stock' ).val();
 		$btn.prop( 'disabled', true );
-		post( 'ole_ps_save_sheet', {
+		post( 'ordelist_ps_save_sheet', {
 			id: row.data( 'id' ),
 			name: name,
 			stock: stock,
@@ -107,7 +107,7 @@
 			if ( isNew ) { promoteNewRow( row, ( r && r.data ) || {} ); }
 			else { applyStatus( row, stock, TH.instruction ); flash( row ); }
 		} ).fail( function () {
-			window.alert( OLE_PS.i18n.error );
+			window.alert( ORDELIST_PS.i18n.error );
 		} ).always( function () {
 			$btn.prop( 'disabled', false );
 		} );
@@ -115,20 +115,20 @@
 
 	// Delete a sheet.
 	$( document ).on( 'click', '.ole-ps-sheet-delete', function () {
-		if ( ! window.confirm( OLE_PS.i18n.confirm ) ) { return; }
+		if ( ! window.confirm( ORDELIST_PS.i18n.confirm ) ) { return; }
 		var row = $( this ).closest( 'tr' );
-		post( 'ole_ps_delete_sheet', { id: row.data( 'id' ) } )
+		post( 'ordelist_ps_delete_sheet', { id: row.data( 'id' ) } )
 			.done( function () { row.remove(); } )
-			.fail( function () { window.alert( OLE_PS.i18n.error ); } );
+			.fail( function () { window.alert( ORDELIST_PS.i18n.error ); } );
 	} );
 
 	// Delete a sticker.
 	$( document ).on( 'click', '.ole-ps-sticker-delete', function () {
-		if ( ! window.confirm( OLE_PS.i18n.confirmSticker ) ) { return; }
+		if ( ! window.confirm( ORDELIST_PS.i18n.confirmSticker ) ) { return; }
 		var row = $( this ).closest( 'tr' );
-		post( 'ole_ps_delete_sticker', { id: row.data( 'id' ) } )
+		post( 'ordelist_ps_delete_sticker', { id: row.data( 'id' ) } )
 			.done( function () { row.remove(); } )
-			.fail( function () { window.alert( OLE_PS.i18n.error ); } );
+			.fail( function () { window.alert( ORDELIST_PS.i18n.error ); } );
 	} );
 
 	// Turn the just-saved blank sheet row into a saved row + add a fresh blank row.
@@ -136,7 +136,7 @@
 		row.removeClass( 'ole-ps-sheet-new' ).data( 'id', d.id ).attr( 'data-id', d.id );
 		row.find( '.ole-ps-sheet-save' )
 			.removeClass( 'button-primary' )
-			.text( OLE_PS.i18n.save )
+			.text( ORDELIST_PS.i18n.save )
 			.after( ' <button type="button" class="button ole-ps-sheet-delete">×</button>' );
 		applyStatus( row, d.stock, TH.instruction );
 		flash( row );
@@ -159,8 +159,8 @@
 				'<tr data-id="' + d.id + '">' +
 				'<td></td>' +
 				'<td><input type="number" step="1" class="ole-ps-stock" style="width:90px"/></td>' +
-				'<td><button type="button" class="button ole-ps-save">' + OLE_PS.i18n.set + '</button> ' +
-				'<button type="button" class="button ole-ps-add">' + OLE_PS.i18n.addPrinted + '</button> ' +
+				'<td><button type="button" class="button ole-ps-save">' + ORDELIST_PS.i18n.set + '</button> ' +
+				'<button type="button" class="button ole-ps-add">' + ORDELIST_PS.i18n.addPrinted + '</button> ' +
 				'<button type="button" class="button ole-ps-sticker-delete">×</button></td>' +
 				'</tr>'
 			);

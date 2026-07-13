@@ -6,19 +6,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Сторінка запасу витратних + AJAX (інлайн-редагування, +N, CRUD аркушів).
  */
-class OLE_Print_Stock_Admin {
+class ORDELIST_Print_Stock_Admin {
 
-	const SLUG = 'ole-print-stock';
+	const SLUG = 'ordelist-print-stock';
 
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'assets' ) );
-		add_action( 'wp_ajax_ole_ps_set_stock', array( __CLASS__, 'ajax_set_stock' ) );
-		add_action( 'wp_ajax_ole_ps_add_stock', array( __CLASS__, 'ajax_add_stock' ) );
-		add_action( 'wp_ajax_ole_ps_save_sheet', array( __CLASS__, 'ajax_save_sheet' ) );
-		add_action( 'wp_ajax_ole_ps_delete_sheet', array( __CLASS__, 'ajax_delete_sheet' ) );
-		add_action( 'wp_ajax_ole_ps_add_sticker', array( __CLASS__, 'ajax_add_sticker' ) );
-		add_action( 'wp_ajax_ole_ps_delete_sticker', array( __CLASS__, 'ajax_delete_sticker' ) );
+		add_action( 'wp_ajax_ordelist_ps_set_stock', array( __CLASS__, 'ajax_set_stock' ) );
+		add_action( 'wp_ajax_ordelist_ps_add_stock', array( __CLASS__, 'ajax_add_stock' ) );
+		add_action( 'wp_ajax_ordelist_ps_save_sheet', array( __CLASS__, 'ajax_save_sheet' ) );
+		add_action( 'wp_ajax_ordelist_ps_delete_sheet', array( __CLASS__, 'ajax_delete_sheet' ) );
+		add_action( 'wp_ajax_ordelist_ps_add_sticker', array( __CLASS__, 'ajax_add_sticker' ) );
+		add_action( 'wp_ajax_ordelist_ps_delete_sticker', array( __CLASS__, 'ajax_delete_sticker' ) );
 	}
 
 	public static function menu() {
@@ -41,17 +41,17 @@ class OLE_Print_Stock_Admin {
 		if ( ! self::is_screen() ) {
 			return;
 		}
-		$o = OLE_Settings::get();
+		$o = ORDELIST_Settings::get();
 		wp_enqueue_script( 'wc-enhanced-select' );
 		wp_enqueue_style( 'woocommerce_admin_styles' );
-		wp_enqueue_style( 'ole-print-stock-admin', OLE_URL . 'assets/css/ole-print-stock-admin.css', array(), OLE_VERSION );
-		wp_enqueue_script( 'ole-print-stock-admin', OLE_URL . 'assets/js/ole-print-stock-admin.js', array( 'jquery', 'wc-enhanced-select' ), OLE_VERSION, true );
+		wp_enqueue_style( 'ordelist-print-stock-admin', ORDELIST_URL . 'assets/css/ole-print-stock-admin.css', array(), ORDELIST_VERSION );
+		wp_enqueue_script( 'ordelist-print-stock-admin', ORDELIST_URL . 'assets/js/ole-print-stock-admin.js', array( 'jquery', 'wc-enhanced-select' ), ORDELIST_VERSION, true );
 		wp_localize_script(
-			'ole-print-stock-admin',
-			'OLE_PS',
+			'ordelist-print-stock-admin',
+			'ORDELIST_PS',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'ole_ps' ),
+				'nonce'   => wp_create_nonce( 'ordelist_ps' ),
 				'i18n'    => array(
 					'saved'       => __( 'Saved.', 'order-list-enhancer' ),
 					'error'       => __( 'Failed.', 'order-list-enhancer' ),
@@ -72,7 +72,7 @@ class OLE_Print_Stock_Admin {
 	}
 
 	private static function guard() {
-		check_ajax_referer( 'ole_ps', 'nonce' );
+		check_ajax_referer( 'ordelist_ps', 'nonce' );
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
@@ -83,13 +83,13 @@ class OLE_Print_Stock_Admin {
 		self::guard();
 		$id    = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
 		$stock = isset( $_POST['stock'] ) ? (int) $_POST['stock'] : 0;
-		$row   = $id ? OLE_Print_Stock_Store::get_consumable( $id ) : null;
+		$row   = $id ? ORDELIST_Print_Stock_Store::get_consumable( $id ) : null;
 		if ( ! $row ) {
 			wp_send_json_error( array( 'message' => 'not_found' ), 404 );
 		}
 		$diff = $stock - (int) $row['stock'];
-		OLE_Print_Stock_Store::set_stock_absolute( $id, $stock, $diff );
-		OLE_Print_Stock::maybe_notify_low( $id, (int) $row['stock'], $stock );
+		ORDELIST_Print_Stock_Store::set_stock_absolute( $id, $stock, $diff );
+		ORDELIST_Print_Stock::maybe_notify_low( $id, (int) $row['stock'], $stock );
 		wp_send_json_success( array( 'stock' => $stock ) );
 	}
 
@@ -97,14 +97,14 @@ class OLE_Print_Stock_Admin {
 		self::guard();
 		$id     = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
 		$amount = isset( $_POST['amount'] ) ? (int) $_POST['amount'] : 0;
-		$row    = $id ? OLE_Print_Stock_Store::get_consumable( $id ) : null;
+		$row    = $id ? ORDELIST_Print_Stock_Store::get_consumable( $id ) : null;
 		if ( ! $row || 0 === $amount ) {
 			wp_send_json_error( array( 'message' => 'bad' ), 400 );
 		}
-		OLE_Print_Stock_Store::add_stock( $id, $amount );
-		$fresh = OLE_Print_Stock_Store::get_consumable( $id );
+		ORDELIST_Print_Stock_Store::add_stock( $id, $amount );
+		$fresh = ORDELIST_Print_Stock_Store::get_consumable( $id );
 		$after = $fresh ? (int) $fresh['stock'] : 0;
-		OLE_Print_Stock::maybe_notify_low( $id, (int) $row['stock'], $after );
+		ORDELIST_Print_Stock::maybe_notify_low( $id, (int) $row['stock'], $after );
 		wp_send_json_success( array( 'stock' => $after ) );
 	}
 
@@ -128,9 +128,9 @@ class OLE_Print_Stock_Admin {
 			wp_send_json_error( array( 'message' => 'name_required' ), 400 );
 		}
 		if ( $id ) {
-			OLE_Print_Stock_Store::update_sheet( $id, $name, $products, $stock );
+			ORDELIST_Print_Stock_Store::update_sheet( $id, $name, $products, $stock );
 		} else {
-			$id = OLE_Print_Stock_Store::create_sheet( $name, $products, $stock );
+			$id = ORDELIST_Print_Stock_Store::create_sheet( $name, $products, $stock );
 		}
 		wp_send_json_success( array( 'id' => $id, 'name' => $name, 'stock' => $stock ) );
 	}
@@ -139,7 +139,7 @@ class OLE_Print_Stock_Admin {
 		self::guard();
 		$id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
 		if ( $id ) {
-			OLE_Print_Stock_Store::delete_sheet( $id );
+			ORDELIST_Print_Stock_Store::delete_sheet( $id );
 		}
 		wp_send_json_success();
 	}
@@ -152,11 +152,11 @@ class OLE_Print_Stock_Admin {
 		if ( ! $product ) {
 			wp_send_json_error( array( 'message' => 'product_required' ), 400 );
 		}
-		$existing = OLE_Print_Stock_Store::get_sticker( $product_id );
+		$existing = ORDELIST_Print_Stock_Store::get_sticker( $product_id );
 		$before   = $existing ? (int) $existing['stock'] : PHP_INT_MAX; // new sticker: treat as "was above" so a low initial value notifies once
 		$name     = wp_strip_all_tags( $product->get_formatted_name() );
-		$id       = OLE_Print_Stock_Store::upsert_sticker( $product_id, $name, $stock );
-		OLE_Print_Stock::maybe_notify_low( $id, $before, $stock );
+		$id       = ORDELIST_Print_Stock_Store::upsert_sticker( $product_id, $name, $stock );
+		ORDELIST_Print_Stock::maybe_notify_low( $id, $before, $stock );
 		wp_send_json_success( array( 'id' => $id, 'name' => $name, 'stock' => $stock ) );
 	}
 
@@ -164,14 +164,14 @@ class OLE_Print_Stock_Admin {
 		self::guard();
 		$id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
 		if ( $id ) {
-			OLE_Print_Stock_Store::delete_sticker( $id );
+			ORDELIST_Print_Stock_Store::delete_sticker( $id );
 		}
 		wp_send_json_success();
 	}
 	// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 	private static function status_class( $row ) {
-		$threshold = OLE_Print_Stock::threshold_for( $row['type'] );
+		$threshold = ORDELIST_Print_Stock::threshold_for( $row['type'] );
 		if ( (int) $row['stock'] < 0 ) {
 			return 'ole-ps-neg';
 		}
@@ -182,9 +182,9 @@ class OLE_Print_Stock_Admin {
 	}
 
 	public static function render() {
-		$rows     = OLE_Print_Stock_Store::all_consumables();
+		$rows     = ORDELIST_Print_Stock_Store::all_consumables();
 		$stickers = array_filter( $rows, function ( $r ) { return 'sticker' === $r['type']; } );
-		$sheets   = OLE_Print_Stock_Store::sheets();
+		$sheets   = ORDELIST_Print_Stock_Store::sheets();
 		?>
 		<div class="wrap ole-ps-wrap">
 			<h1><?php esc_html_e( 'Print consumables', 'order-list-enhancer' ); ?></h1>

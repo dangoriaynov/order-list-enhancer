@@ -10,22 +10,22 @@ if ( ! defined( 'ABSPATH' ) ) {
  * тому прямі запити тут доречні; імена таблиць передаються через %i.
  */
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- dedicated DB layer for the plugin's own tables; no WP API exists and result sets are tiny, admin-side only.
-class OLE_Print_Stock_Store {
+class ORDELIST_Print_Stock_Store {
 
 	const DB_VERSION    = '1';
-	const DB_VERSION_OPT = 'ole_print_stock_db';
+	const DB_VERSION_OPT = 'ordelist_print_stock_db';
 
 	public static function table_consumable() {
 		global $wpdb;
-		return $wpdb->prefix . 'ole_consumable';
+		return $wpdb->prefix . 'ordelist_consumable';
 	}
 	public static function table_link() {
 		global $wpdb;
-		return $wpdb->prefix . 'ole_consumable_product';
+		return $wpdb->prefix . 'ordelist_consumable_product';
 	}
 	public static function table_log() {
 		global $wpdb;
-		return $wpdb->prefix . 'ole_consume_log';
+		return $wpdb->prefix . 'ordelist_consume_log';
 	}
 
 	/** Створити/оновити таблиці (dbDelta) якщо версія БД не збігається. */
@@ -271,7 +271,7 @@ class OLE_Print_Stock_Store {
 		if ( ! $row || (int) $row['low_notified'] === 0 ) {
 			return;
 		}
-		$o         = OLE_Settings::get();
+		$o         = ORDELIST_Settings::get();
 		$threshold = ( 'instruction' === $row['type'] )
 			? (int) $o['print_stock_threshold_instruction']
 			: (int) $o['print_stock_threshold_sticker'];

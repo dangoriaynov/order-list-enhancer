@@ -42,10 +42,44 @@ touches prod):
 4. Fix anything red (ERROR). Yellow warnings: fix what's reasonable, note the rest —
    reviewers tolerate justified warnings.
 
-Known expected finding: the `OLE_`/`ole_` prefix may warn as "too short" — kept by
-design (renaming would orphan live `ole_*` options/meta); mention this in the
-review thread if asked. The static PHPCS/WPCS layer was already run clean locally;
-only the runtime checks need this live pass.
+The prefix is `ORDELIST_`/`ordelist_` since 1.0.49 — the review team flagged the
+old 3-char `ole_` prefix (guideline requires ≥4 chars), so everything was renamed:
+classes, constants, the `ordelist_settings` option, the three custom tables, all
+`wp_ajax_ordelist_*` actions, `_ordelist_*` meta keys, nonces, script/style handles,
+JS globals, the `ordelist_duplicate_window_days` filter, and the two admin page
+slugs (`ordelist-settings`, `ordelist-print-stock`). CSS class names and asset file
+names intentionally keep `ole-` — they are outside the prefix rule's scope and
+renaming them would only risk breaking the admin UI. The static PHPCS/WPCS layer
+was already run clean locally; only the runtime checks need this live pass.
+
+### Live-site migration (run once when deploying ≥1.0.49 to dobavki.club)
+
+Existing `ole_*` data must be renamed or the plugin starts blank (settings, the
+consumables tables, per-product sticker stock, per-order consumed-state). Run via
+the read-only-inspection mariadb access, but with write grants (adjust the `wp_`
+table prefix if the live one differs):
+
+```sql
+UPDATE wp_options SET option_name = 'ordelist_settings' WHERE option_name = 'ole_settings';
+RENAME TABLE wp_ole_consumable          TO wp_ordelist_consumable,
+             wp_ole_consumable_product  TO wp_ordelist_consumable_product,
+             wp_ole_consume_log         TO wp_ordelist_consume_log;
+-- product sticker stock + any post-storage order meta
+UPDATE wp_postmeta                  SET meta_key = CONCAT('_ordelist_', SUBSTRING(meta_key, 6)) WHERE meta_key LIKE '\_ole\_%';
+-- HPOS order meta (consumed/restored state, depleted list, extras-converted flag)
+UPDATE wp_wc_orders_meta            SET meta_key = CONCAT('_ordelist_', SUBSTRING(meta_key, 6)) WHERE meta_key LIKE '\_ole\_%';
+-- order item meta (extras origin/moved markers)
+UPDATE wp_woocommerce_order_itemmeta SET meta_key = CONCAT('_ordelist_', SUBSTRING(meta_key, 6)) WHERE meta_key LIKE '\_ole\_%';
+```
+
+Then **flush the persistent Memcached object cache** (the site caches the
+autoloaded-options blob, so after a raw-SQL rename WP would neither see
+`ordelist_settings` nor drop the stale `ole_settings` entry until the cache is
+cleared — restart memcached or trigger a cache flush from the admin).
+
+Skipping the meta updates would double-consume consumables stock on old orders'
+next status change and lose per-product sticker counts. The settings-page URL also
+changes to `admin.php?page=ordelist-settings` (update any bookmarks).
 
 Deactivate + delete Plugin Check afterwards (it is a dev tool).
 

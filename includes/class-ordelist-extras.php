@@ -5,11 +5,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Перетворює зіставлені екстри (Product Add-Ons / Checkout Add-Ons) на окремі товарні рядки
- * при створенні замовлення. Чиста логіка — в [[OLE_Extras_Matcher]].
+ * при створенні замовлення. Чиста логіка — в [[ORDELIST_Extras_Matcher]].
  */
-class OLE_Extras {
+class ORDELIST_Extras {
 
-	/** Реєстрація хуків (викликається з OLE_Plugin, якщо фіча увімкнена). */
+	/** Реєстрація хуків (викликається з ORDELIST_Plugin, якщо фіча увімкнена). */
 	public static function init() {
 		add_action( 'woocommerce_checkout_order_processed', array( __CLASS__, 'on_order_processed' ), 20, 1 );
 		add_action( 'woocommerce_store_api_checkout_order_processed', array( __CLASS__, 'on_order_processed' ), 20, 1 );
@@ -28,14 +28,14 @@ class OLE_Extras {
 	 * Головна конвертація. Повертає к-сть перетворених екстр. Ідемпотентна.
 	 */
 	public static function convert( WC_Order $order ) {
-		if ( $order->get_meta( '_ole_extras_converted' ) ) {
+		if ( $order->get_meta( '_ordelist_extras_converted' ) ) {
 			return 0;
 		}
-		$opts = OLE_Settings::get();
-		if ( ! OLE_Settings::is_yes( $opts, 'extras_enabled' ) ) {
+		$opts = ORDELIST_Settings::get();
+		if ( ! ORDELIST_Settings::is_yes( $opts, 'extras_enabled' ) ) {
 			return 0;
 		}
-		$index = OLE_Extras_Matcher::index( $opts['extras_map'] );
+		$index = ORDELIST_Extras_Matcher::index( $opts['extras_map'] );
 		if ( empty( $index ) ) {
 			return 0;
 		}
@@ -46,7 +46,7 @@ class OLE_Extras {
 
 		if ( $count > 0 ) {
 			$order->add_order_note( __( 'OLE — extras converted to product lines:', 'order-list-enhancer' ) . "\n" . implode( "\n", $notes ) );
-			$order->update_meta_data( '_ole_extras_converted', 1 );
+			$order->update_meta_data( '_ordelist_extras_converted', 1 );
 			$order->save();
 		}
 		return $count;
@@ -61,11 +61,11 @@ class OLE_Extras {
 				continue;
 			}
 			$pao       = array_values( $pao );
-			$addons    = OLE_Extras_Matcher::parse_addons( $pao );
+			$addons    = ORDELIST_Extras_Matcher::parse_addons( $pao );
 			$pao_total = (float) $item->get_meta( '_pao_total' );
 
 			// Safety: only proceed if the parsed add-on prices reconcile with _pao_total.
-			if ( ! OLE_Extras_Matcher::prices_balance( $addons, $pao_total ) ) {
+			if ( ! ORDELIST_Extras_Matcher::prices_balance( $addons, $pao_total ) ) {
 				continue;
 			}
 
@@ -74,13 +74,13 @@ class OLE_Extras {
 			$drop_label = array();   // visible field=>label rows to drop
 
 			foreach ( $addons as $idx => $a ) {
-				$pid = OLE_Extras_Matcher::match( $index, $a['label'] );
+				$pid = ORDELIST_Extras_Matcher::match( $index, $a['label'] );
 				if ( ! $pid || 'flat_fee' !== $a['price_type'] ) {
 					$keep_pao[] = $pao[ $idx ];
 					continue;
 				}
 				$price   = (float) $a['price'];
-				$qty     = OLE_Extras_Matcher::parse_qty( $a['label'] );
+				$qty     = ORDELIST_Extras_Matcher::parse_qty( $a['label'] );
 				$new_id  = self::add_product_line( $order, $pid, $price, array(
 					'source'   => 'pa',
 					'label'    => $a['label'],
@@ -132,7 +132,7 @@ class OLE_Extras {
 			}
 
 			// Provenance for admin display (hidden from invoices).
-			$item->update_meta_data( '_ole_extra_moved', $moved );
+			$item->update_meta_data( '_ordelist_extra_moved', $moved );
 			$item->save();
 		}
 		return $count;
@@ -152,7 +152,7 @@ class OLE_Extras {
 		$line->set_total( (float) $price );
 		$line->set_subtotal_tax( 0 );
 		$line->set_total_tax( 0 );
-		$line->add_meta_data( '_ole_addon_origin', $origin, true );
+		$line->add_meta_data( '_ordelist_addon_origin', $origin, true );
 		$order->add_item( $line );
 		$line->save();
 
@@ -172,10 +172,10 @@ class OLE_Extras {
 		return html_entity_decode( wp_strip_all_tags( wc_price( $amount, array( 'currency' => $order->get_currency() ) ) ) );
 	}
 
-	/** Ховає сирі _ole_* ключі зі стандартного відображення метаданих рядка. */
+	/** Ховає сирі _ordelist_* ключі зі стандартного відображення метаданих рядка. */
 	public static function hidden_itemmeta( $keys ) {
-		$keys[] = '_ole_addon_origin';
-		$keys[] = '_ole_extra_moved';
+		$keys[] = '_ordelist_addon_origin';
+		$keys[] = '_ordelist_extra_moved';
 		return $keys;
 	}
 
@@ -184,7 +184,7 @@ class OLE_Extras {
 		if ( ! is_a( $item, 'WC_Order_Item' ) ) {
 			return;
 		}
-		$origin = $item->get_meta( '_ole_addon_origin' );
+		$origin = $item->get_meta( '_ordelist_addon_origin' );
 		if ( is_array( $origin ) && ! empty( $origin['label'] ) ) {
 			printf(
 				'<div class="ole-prov ole-prov--from">↩ %s</div>',
@@ -192,7 +192,7 @@ class OLE_Extras {
 				esc_html( sprintf( __( 'Converted from extra: «%1$s» (was %2$s)', 'order-list-enhancer' ), $origin['label'], wc_format_localized_price( isset( $origin['price'] ) ? $origin['price'] : 0 ) ) )
 			);
 		}
-		$moved = $item->get_meta( '_ole_extra_moved' );
+		$moved = $item->get_meta( '_ordelist_extra_moved' );
 		if ( is_array( $moved ) ) {
 			foreach ( $moved as $m ) {
 				if ( empty( $m['label'] ) ) {
@@ -211,12 +211,12 @@ class OLE_Extras {
 	private static function convert_checkout_addons( WC_Order $order, $index, &$notes ) {
 		$count = 0;
 		foreach ( $order->get_items( 'fee' ) as $fee_id => $fee ) {
-			$pid = OLE_Extras_Matcher::match( $index, $fee->get_name() );
+			$pid = ORDELIST_Extras_Matcher::match( $index, $fee->get_name() );
 			if ( ! $pid ) {
 				continue;
 			}
 			$price  = (float) $fee->get_total();
-			$qty    = OLE_Extras_Matcher::parse_qty( (string) $fee->get_meta( '_wc_checkout_add_on_label' ) );
+			$qty    = ORDELIST_Extras_Matcher::parse_qty( (string) $fee->get_meta( '_wc_checkout_add_on_label' ) );
 			$new_id = self::add_product_line( $order, $pid, $price, array(
 				'source'   => 'ca',
 				'label'    => $fee->get_name(),

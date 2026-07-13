@@ -8,9 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * у списку замовлень. Рендер іде в приховану колонку-носій (per-row хук дає $order),
  * а JS переносить блок у клітинку номера замовлення. Вмикається окремим тоглом.
  */
-class OLE_Order_Comments {
+class ORDELIST_Order_Comments {
 
-	const COL = 'ole_comment';
+	const COL = 'ordelist_comment';
 
 	public static function init() {
 		// HPOS (custom order tables) orders screen.
@@ -114,7 +114,7 @@ class OLE_Order_Comments {
 		if ( ( 'woocommerce_page_wc-orders' !== $id && 'edit-shop_order' !== $id ) || ! current_user_can( 'edit_shop_orders' ) ) {
 			return;
 		}
-		wp_enqueue_style( 'ole-order-comments', OLE_URL . 'assets/css/ole-order-comments.css', array(), OLE_VERSION );
-		wp_enqueue_script( 'ole-order-comments', OLE_URL . 'assets/js/ole-order-comments.js', array( 'jquery' ), OLE_VERSION, true );
+		wp_enqueue_style( 'ordelist-order-comments', ORDELIST_URL . 'assets/css/ole-order-comments.css', array(), ORDELIST_VERSION );
+		wp_enqueue_script( 'ordelist-order-comments', ORDELIST_URL . 'assets/js/ole-order-comments.js', array( 'jquery' ), ORDELIST_VERSION, true );
 	}
 }

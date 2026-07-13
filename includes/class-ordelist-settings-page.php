@@ -7,16 +7,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Власна сторінка налаштувань (WooCommerce → Order List Enhancer) з AJAX-збереженням.
  * Кожна фіча має свій перемикач; зберігається без перезавантаження сторінки.
  */
-class OLE_Settings_Page {
+class ORDELIST_Settings_Page {
 
-	const SLUG = 'ole-settings';
+	const SLUG = 'ordelist-settings';
 
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'assets' ) );
-		add_action( 'wp_ajax_ole_save_settings', array( $this, 'ajax_save' ) );
-		add_action( 'wp_ajax_ole_refresh_nonce', array( $this, 'ajax_refresh_nonce' ) );
-		add_filter( 'plugin_action_links_' . plugin_basename( OLE_FILE ), array( $this, 'action_links' ) );
+		add_action( 'wp_ajax_ordelist_save_settings', array( $this, 'ajax_save' ) );
+		add_action( 'wp_ajax_ordelist_refresh_nonce', array( $this, 'ajax_refresh_nonce' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( ORDELIST_FILE ), array( $this, 'action_links' ) );
 	}
 
 	/**
@@ -50,16 +50,16 @@ class OLE_Settings_Page {
 			return;
 		}
 		wp_enqueue_style( 'wp-color-picker' );
-		wp_enqueue_style( 'ole-settings', OLE_URL . 'assets/css/ole-settings.css', array(), OLE_VERSION );
-		wp_enqueue_script( 'ole-settings', OLE_URL . 'assets/js/ole-settings.js', array( 'jquery', 'wp-color-picker' ), OLE_VERSION, true );
+		wp_enqueue_style( 'ordelist-settings', ORDELIST_URL . 'assets/css/ole-settings.css', array(), ORDELIST_VERSION );
+		wp_enqueue_script( 'ordelist-settings', ORDELIST_URL . 'assets/js/ole-settings.js', array( 'jquery', 'wp-color-picker' ), ORDELIST_VERSION, true );
 		wp_enqueue_script( 'wc-enhanced-select' );
 		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_localize_script(
-			'ole-settings',
-			'OLE_SETTINGS',
+			'ordelist-settings',
+			'ORDELIST_SETTINGS',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'ole_save_settings' ),
+				'nonce'   => wp_create_nonce( 'ordelist_save_settings' ),
 				'i18n'    => array(
 					'saving'  => __( 'Saving…', 'order-list-enhancer' ),
 					'saved'   => __( 'Saved.', 'order-list-enhancer' ),
@@ -140,7 +140,7 @@ class OLE_Settings_Page {
 	}
 
 	public function render() {
-		$o = OLE_Settings::get();
+		$o = ORDELIST_Settings::get();
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Order List Enhancer', 'order-list-enhancer' ); ?></h1>
@@ -187,7 +187,7 @@ class OLE_Settings_Page {
 		self::card_open(
 			__( 'Repeat customers', 'order-list-enhancer' ),
 			__( 'Outline & badge orders from the same customer in the list, with a details modal. Choose how a match is decided and how far back to scan.', 'order-list-enhancer' ),
-			array( 'name' => 'dup_enabled', 'checked' => OLE_Settings::is_yes( $o, 'dup_enabled' ) )
+			array( 'name' => 'dup_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'dup_enabled' ) )
 		);
 		?>
 		<table class="form-table"><tbody>
@@ -225,11 +225,11 @@ class OLE_Settings_Page {
 		<table class="form-table"><tbody>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Color in orders list', 'order-list-enhancer' ); ?></th>
-				<td><?php echo self::switch_html( 'ship_enabled', OLE_Settings::is_yes( $o, 'ship_enabled' ), __( 'Color the “Ship to” cell in the orders list.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Color the “Ship to” cell in the orders list.', 'order-list-enhancer' ); ?></td>
+				<td><?php echo self::switch_html( 'ship_enabled', ORDELIST_Settings::is_yes( $o, 'ship_enabled' ), __( 'Color the “Ship to” cell in the orders list.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Color the “Ship to” cell in the orders list.', 'order-list-enhancer' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Color on edit page', 'order-list-enhancer' ); ?></th>
-				<td><?php echo self::switch_html( 'ship_color_edit', OLE_Settings::is_yes( $o, 'ship_color_edit' ), __( 'Color the address block on the single order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Color the address block on the single order edit screen.', 'order-list-enhancer' ); ?></td>
+				<td><?php echo self::switch_html( 'ship_color_edit', ORDELIST_Settings::is_yes( $o, 'ship_color_edit' ), __( 'Color the address block on the single order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Color the address block on the single order edit screen.', 'order-list-enhancer' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Coloring rules', 'order-list-enhancer' ); ?></th>
@@ -269,7 +269,7 @@ class OLE_Settings_Page {
 		self::card_open(
 			__( 'Order-total coloring', 'order-list-enhancer' ),
 			__( 'Ring an order (row + address panel) when its total reaches a threshold; the highest matching threshold wins. Drawn on top of any shipping color — both stay visible.', 'order-list-enhancer' ),
-			array( 'name' => 'total_color_enabled', 'checked' => OLE_Settings::is_yes( $o, 'total_color_enabled' ) )
+			array( 'name' => 'total_color_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'total_color_enabled' ) )
 		);
 		?>
 		<table class="form-table"><tbody>
@@ -314,21 +314,21 @@ class OLE_Settings_Page {
 		self::card_open(
 			__( 'Order total on the edit screen', 'order-list-enhancer' ),
 			__( 'Show the total near the billing address on the order screen, with copy buttons.', 'order-list-enhancer' ),
-			array( 'name' => 'total_on_edit', 'checked' => OLE_Settings::is_yes( $o, 'total_on_edit' ) )
+			array( 'name' => 'total_on_edit', 'checked' => ORDELIST_Settings::is_yes( $o, 'total_on_edit' ) )
 		);
 		?>
 		<table class="form-table"><tbody>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Copy button: name', 'order-list-enhancer' ); ?></th>
-				<td><?php echo self::switch_html( 'copy_name', OLE_Settings::is_yes( $o, 'copy_name' ), __( 'Show a copy-to-clipboard button for the customer name on the order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the customer name on the order edit screen.', 'order-list-enhancer' ); ?></td>
+				<td><?php echo self::switch_html( 'copy_name', ORDELIST_Settings::is_yes( $o, 'copy_name' ), __( 'Show a copy-to-clipboard button for the customer name on the order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the customer name on the order edit screen.', 'order-list-enhancer' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Copy button: phone', 'order-list-enhancer' ); ?></th>
-				<td><?php echo self::switch_html( 'copy_phone', OLE_Settings::is_yes( $o, 'copy_phone' ), __( 'Show a copy-to-clipboard button for the phone number on the order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the phone number on the order edit screen.', 'order-list-enhancer' ); ?></td>
+				<td><?php echo self::switch_html( 'copy_phone', ORDELIST_Settings::is_yes( $o, 'copy_phone' ), __( 'Show a copy-to-clipboard button for the phone number on the order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the phone number on the order edit screen.', 'order-list-enhancer' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Copy button: total', 'order-list-enhancer' ); ?></th>
-				<td><?php echo self::switch_html( 'copy_total', OLE_Settings::is_yes( $o, 'copy_total' ), __( 'Show a copy-to-clipboard button for the order total on the order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the order total on the order edit screen.', 'order-list-enhancer' ); ?></td>
+				<td><?php echo self::switch_html( 'copy_total', ORDELIST_Settings::is_yes( $o, 'copy_total' ), __( 'Show a copy-to-clipboard button for the order total on the order edit screen.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the order total on the order edit screen.', 'order-list-enhancer' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Decimal separator', 'order-list-enhancer' ); ?></th>
@@ -355,7 +355,7 @@ class OLE_Settings_Page {
 				<th scope="row"><?php esc_html_e( 'Pre-selected action', 'order-list-enhancer' ); ?></th>
 				<td>
 					<?php
-					$bulk_actions = OLE_Settings::bulk_actions();
+					$bulk_actions = ORDELIST_Settings::bulk_actions();
 					$bulk_cur     = $o['bulk_default_action'];
 					// Keep the saved value selectable even before the menu has been captured.
 					if ( '' !== $bulk_cur && ! isset( $bulk_actions[ $bulk_cur ] ) ) {
@@ -378,7 +378,7 @@ class OLE_Settings_Page {
 		self::card_open(
 			__( 'Open selected one-by-one', 'order-list-enhancer' ),
 			__( 'Add a button that opens each checkbox-selected order in its own tab, one at a time, waiting a configurable interval between tabs.', 'order-list-enhancer' ),
-			array( 'name' => 'seq_open_enabled', 'checked' => OLE_Settings::is_yes( $o, 'seq_open_enabled' ) )
+			array( 'name' => 'seq_open_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'seq_open_enabled' ) )
 		);
 		?>
 		<table class="form-table"><tbody>
@@ -394,7 +394,7 @@ class OLE_Settings_Page {
 		self::card_open(
 			__( 'Order comment in the list', 'order-list-enhancer' ),
 			__( 'Show the customer note left at checkout and the most recent internal admin note right under the order number in the orders list, so you never miss them. Click a note to expand it.', 'order-list-enhancer' ),
-			array( 'name' => 'list_comments_enabled', 'checked' => OLE_Settings::is_yes( $o, 'list_comments_enabled' ) )
+			array( 'name' => 'list_comments_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'list_comments_enabled' ) )
 		);
 		self::card_close();
 	}
@@ -403,7 +403,7 @@ class OLE_Settings_Page {
 		self::card_open(
 			__( 'Checkout phone validation', 'order-list-enhancer' ),
 			__( 'Validate the billing phone (Bulgarian numbers) at checkout and flag invalid ones in admin. Country code comes from the Phone tab (default 359); orders are flagged either way.', 'order-list-enhancer' ),
-			array( 'name' => 'phone_validate_enabled', 'checked' => OLE_Settings::is_yes( $o, 'phone_validate_enabled' ) )
+			array( 'name' => 'phone_validate_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'phone_validate_enabled' ) )
 		);
 		?>
 		<table class="form-table"><tbody>
@@ -424,7 +424,7 @@ class OLE_Settings_Page {
 		self::card_open(
 			__( 'Duplicate-order guard', 'order-list-enhancer' ),
 			__( 'Detect an identical recent order (same phone + cart) at checkout and confirm or block it; also disables the place-order button after the first tap.', 'order-list-enhancer' ),
-			array( 'name' => 'dup_guard_enabled', 'checked' => OLE_Settings::is_yes( $o, 'dup_guard_enabled' ) )
+			array( 'name' => 'dup_guard_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'dup_guard_enabled' ) )
 		);
 		?>
 		<table class="form-table"><tbody>
@@ -452,13 +452,13 @@ class OLE_Settings_Page {
 		self::card_open(
 			__( 'Delivery-date notice', 'order-list-enhancer' ),
 			__( 'Show a highlighted note above the delivery-date field at checkout; optional vacation banner. Requires the Order Delivery Date plugin field on checkout; does nothing if that field is absent.', 'order-list-enhancer' ),
-			array( 'name' => 'delivery_notice_enabled', 'checked' => OLE_Settings::is_yes( $o, 'delivery_notice_enabled' ) )
+			array( 'name' => 'delivery_notice_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'delivery_notice_enabled' ) )
 		);
 		?>
 		<?php
 		// Show the effective checkout texts instead of empty fields, so what the
 		// customer sees is explicit; an emptied field still falls back to the default.
-		$dn_def   = OLE_Delivery_Notice::defaults_copy();
+		$dn_def   = ORDELIST_Delivery_Notice::defaults_copy();
 		$dn_title = '' !== trim( (string) $o['delivery_notice_title'] ) ? $o['delivery_notice_title'] : $dn_def['title'];
 		$dn_body  = '' !== trim( (string) $o['delivery_notice_body'] ) ? $o['delivery_notice_body'] : $dn_def['body'];
 		$dn_vac   = '' !== trim( (string) $o['delivery_vacation_text'] ) ? $o['delivery_vacation_text'] : $dn_def['vacation'];
@@ -476,7 +476,7 @@ class OLE_Settings_Page {
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Vacation banner', 'order-list-enhancer' ); ?></th>
-				<td><?php echo self::switch_html( 'delivery_vacation_enabled', OLE_Settings::is_yes( $o, 'delivery_vacation_enabled' ), __( 'Also show a red "we are away" banner above the notice, until the date below.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Also show a red "we are away" banner above the notice, until the date below.', 'order-list-enhancer' ); ?></td>
+				<td><?php echo self::switch_html( 'delivery_vacation_enabled', ORDELIST_Settings::is_yes( $o, 'delivery_vacation_enabled' ), __( 'Also show a red "we are away" banner above the notice, until the date below.', 'order-list-enhancer' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Also show a red "we are away" banner above the notice, until the date below.', 'order-list-enhancer' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Away until', 'order-list-enhancer' ); ?></th>
@@ -495,7 +495,7 @@ class OLE_Settings_Page {
 		self::card_open(
 			__( 'Extras → products', 'order-list-enhancer' ),
 			__( 'At order creation, turn each mapped add-on extra into a real product line at the price paid; order total stays unchanged.', 'order-list-enhancer' ),
-			array( 'name' => 'extras_enabled', 'checked' => OLE_Settings::is_yes( $o, 'extras_enabled' ) )
+			array( 'name' => 'extras_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'extras_enabled' ) )
 		);
 		?>
 		<table class="form-table"><tbody>
@@ -548,7 +548,7 @@ class OLE_Settings_Page {
 		self::card_open(
 			__( 'Print consumables', 'order-list-enhancer' ),
 			__( 'Track sticker & instruction-sheet stock, auto-decrement at order placement, and warn when low.', 'order-list-enhancer' ),
-			array( 'name' => 'print_stock_enabled', 'checked' => OLE_Settings::is_yes( $o, 'print_stock_enabled' ) )
+			array( 'name' => 'print_stock_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'print_stock_enabled' ) )
 		);
 		?>
 		<table class="form-table"><tbody>
@@ -564,7 +564,7 @@ class OLE_Settings_Page {
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Stock page', 'order-list-enhancer' ); ?></th>
-				<td><a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=ole-print-stock' ) ); ?>"><?php esc_html_e( 'Open consumables stock', 'order-list-enhancer' ); ?></a></td>
+				<td><a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=ordelist-print-stock' ) ); ?>"><?php esc_html_e( 'Open consumables stock', 'order-list-enhancer' ); ?></a></td>
 			</tr>
 		</tbody></table>
 		<?php
@@ -575,7 +575,7 @@ class OLE_Settings_Page {
 		self::card_open(
 			__( 'Phone numbers', 'order-list-enhancer' ),
 			__( 'Tidy phone numbers for display (leading 00 → +, add country code when missing). Never changes the database.', 'order-list-enhancer' ),
-			array( 'name' => 'normalize_phone', 'checked' => OLE_Settings::is_yes( $o, 'normalize_phone' ) )
+			array( 'name' => 'normalize_phone', 'checked' => ORDELIST_Settings::is_yes( $o, 'normalize_phone' ) )
 		);
 		?>
 		<table class="form-table"><tbody>
@@ -597,11 +597,11 @@ class OLE_Settings_Page {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
-		wp_send_json_success( array( 'nonce' => wp_create_nonce( 'ole_save_settings' ) ) );
+		wp_send_json_success( array( 'nonce' => wp_create_nonce( 'ordelist_save_settings' ) ) );
 	}
 
 	public function ajax_save() {
-		check_ajax_referer( 'ole_save_settings', 'nonce' );
+		check_ajax_referer( 'ordelist_save_settings', 'nonce' );
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
@@ -637,7 +637,7 @@ class OLE_Settings_Page {
 				);
 			}
 		}
-		$extras_map = OLE_Settings::clean_extras_map( $extras_map );
+		$extras_map = ORDELIST_Settings::clean_extras_map( $extras_map );
 
 		$total_color_rules = array();
 		if ( isset( $in['total_threshold'] ) && is_array( $in['total_threshold'] ) ) {
@@ -651,7 +651,7 @@ class OLE_Settings_Page {
 				);
 			}
 		}
-		$total_color_rules = OLE_Settings::clean_total_color_rules( $total_color_rules );
+		$total_color_rules = ORDELIST_Settings::clean_total_color_rules( $total_color_rules );
 
 		$opts = array(
 			'extras_enabled'         => $bool( 'extras_enabled' ),
@@ -693,7 +693,7 @@ class OLE_Settings_Page {
 			'print_stock_threshold_sticker'     => isset( $in['print_stock_threshold_sticker'] ) ? max( 0, min( 100000, (int) $in['print_stock_threshold_sticker'] ) ) : 20,
 			'print_stock_threshold_instruction' => isset( $in['print_stock_threshold_instruction'] ) ? max( 0, min( 100000, (int) $in['print_stock_threshold_instruction'] ) ) : 5,
 		);
-		update_option( OLE_Settings::OPTION, $opts );
+		update_option( ORDELIST_Settings::OPTION, $opts );
 		wp_send_json_success( array( 'message' => 'saved' ) );
 	}
 }

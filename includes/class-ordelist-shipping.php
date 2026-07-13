@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Готує правила кольорування доставки для передачі у JS.
  */
-class OLE_Shipping {
+class ORDELIST_Shipping {
 
 	public static function for_js( $opts ) {
 		$rules = array();

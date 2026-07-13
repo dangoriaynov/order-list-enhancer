@@ -1,11 +1,11 @@
 <?php
-// Standalone unit tests for OLE_Phone_Validator (no WordPress).
+// Standalone unit tests for ORDELIST_Phone_Validator (no WordPress).
 define( 'ABSPATH', true );
-require __DIR__ . '/../../includes/class-ole-phone-validator.php';
+require __DIR__ . '/../../includes/class-ordelist-phone-validator.php';
 
 $fails = 0;
 function ck( $cond, $msg ) { global $fails; echo ( $cond ? "ok   - " : "FAIL - " ) . "$msg\n"; if ( ! $cond ) { $fails++; } }
-function v( $raw ) { return OLE_Phone_Validator::validate( $raw ); }
+function v( $raw ) { return ORDELIST_Phone_Validator::validate( $raw ); }
 
 // Valid Bulgarian forms (all → +359888123456).
 foreach ( array( '0888123456', '+359888123456', '00359888123456', '359888123456', '888123456', '0888 123 456', '0888/123-456', '(+359) 888 123 456' ) as $in ) {

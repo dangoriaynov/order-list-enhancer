@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * + опційний банер відпустки. Тільки презентація — нічого не пишемо в замовлення.
  * Тихо нічого не робить, якщо поля orddd на сторінці немає.
  */
-class OLE_Delivery_Notice {
+class ORDELIST_Delivery_Notice {
 
 	/**
 	 * Чи активний банер відпустки на дату $today.
@@ -43,7 +43,7 @@ class OLE_Delivery_Notice {
 
 	/** Дані для фронтенду: тексти + (опційно) банер відпустки. */
 	public static function payload() {
-		$o   = OLE_Settings::get();
+		$o   = ORDELIST_Settings::get();
 		$def = self::defaults_copy();
 
 		$title = trim( (string) $o['delivery_notice_title'] );
@@ -52,7 +52,7 @@ class OLE_Delivery_Notice {
 		$body  = '' !== $body ? $body : $def['body'];
 
 		$vacation = null;
-		if ( OLE_Settings::is_yes( $o, 'delivery_vacation_enabled' )
+		if ( ORDELIST_Settings::is_yes( $o, 'delivery_vacation_enabled' )
 			&& self::vacation_active( (string) $o['delivery_vacation_until'], current_time( 'Y-m-d' ) ) ) {
 			$tpl  = '' !== trim( (string) $o['delivery_vacation_text'] ) ? (string) $o['delivery_vacation_text'] : $def['vacation'];
 			$date = date_i18n( get_option( 'date_format' ), strtotime( (string) $o['delivery_vacation_until'] . ' 12:00:00' ) );
@@ -71,8 +71,8 @@ class OLE_Delivery_Notice {
 		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 			return;
 		}
-		wp_enqueue_style( 'ole-delivery-notice', OLE_URL . 'assets/css/ole-delivery-notice.css', array(), OLE_VERSION );
-		wp_enqueue_script( 'ole-delivery-notice', OLE_URL . 'assets/js/ole-delivery-notice.js', array(), OLE_VERSION, true );
-		wp_localize_script( 'ole-delivery-notice', 'OLE_DELIVERY', self::payload() );
+		wp_enqueue_style( 'ordelist-delivery-notice', ORDELIST_URL . 'assets/css/ole-delivery-notice.css', array(), ORDELIST_VERSION );
+		wp_enqueue_script( 'ordelist-delivery-notice', ORDELIST_URL . 'assets/js/ole-delivery-notice.js', array(), ORDELIST_VERSION, true );
+		wp_localize_script( 'ordelist-delivery-notice', 'ORDELIST_DELIVERY', self::payload() );
 	}
 }

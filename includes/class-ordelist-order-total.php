@@ -7,14 +7,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Показує сумарну ціну замовлення біля адреси на екрані редагування поръчки.
  * Хук: woocommerce_admin_order_data_after_billing_address (передає WC_Order).
  */
-class OLE_Order_Total {
+class ORDELIST_Order_Total {
 
 	public static function render( $order ) {
 		if ( ! ( $order instanceof WC_Order ) ) {
 			return;
 		}
-		$opts = OLE_Settings::get();
-		if ( ! OLE_Settings::is_yes( $opts, 'total_on_edit' ) ) {
+		$opts = ORDELIST_Settings::get();
+		if ( ! ORDELIST_Settings::is_yes( $opts, 'total_on_edit' ) ) {
 			return;
 		}
 

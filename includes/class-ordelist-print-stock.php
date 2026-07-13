@@ -6,13 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * WP-glue обліку витратних: звірка consume/restore за станом замовлення + сповіщення.
  */
-class OLE_Print_Stock {
+class ORDELIST_Print_Stock {
 
-	const STATE_META    = '_ole_ps_state';    // '' | 'consumed' | 'restored'
-	const DEPLETED_META = '_ole_depleted';    // [ ['name'=>str,'stock'=>int], ... ]
+	const STATE_META    = '_ordelist_ps_state';    // '' | 'consumed' | 'restored'
+	const DEPLETED_META = '_ordelist_depleted';    // [ ['name'=>str,'stock'=>int], ... ]
 
 	public static function init() {
-		OLE_Print_Stock_Store::maybe_upgrade();
+		ORDELIST_Print_Stock_Store::maybe_upgrade();
 
 		// Створення замовлення (класичний + Store API checkout).
 		add_action( 'woocommerce_checkout_order_processed', array( __CLASS__, 'on_order' ), 30, 1 );
@@ -28,7 +28,7 @@ class OLE_Print_Stock {
 		add_action( 'woocommerce_variation_options_inventory', array( __CLASS__, 'render_variation_field' ), 10, 3 );
 		add_action( 'woocommerce_save_product_variation', array( __CLASS__, 'save_variation_field' ), 20, 2 );
 
-		OLE_Print_Stock_Admin::init();
+		ORDELIST_Print_Stock_Admin::init();
 
 		// Банер «пора друкувати».
 		add_action( 'admin_notices', array( __CLASS__, 'low_banner' ) );
@@ -43,7 +43,7 @@ class OLE_Print_Stock {
 	}
 
 	public static function threshold_for( $type ) {
-		$o = OLE_Settings::get();
+		$o = ORDELIST_Settings::get();
 		return ( 'instruction' === $type )
 			? (int) $o['print_stock_threshold_instruction']
 			: (int) $o['print_stock_threshold_sticker'];
@@ -54,13 +54,13 @@ class OLE_Print_Stock {
 	 * crosses a consumable from above its threshold to at/below it. Re-armed on restock via the Store.
 	 */
 	public static function maybe_notify_low( $consumable_id, $before, $after ) {
-		$row = OLE_Print_Stock_Store::get_consumable( $consumable_id );
+		$row = ORDELIST_Print_Stock_Store::get_consumable( $consumable_id );
 		if ( ! $row ) {
 			return;
 		}
 		$threshold = self::threshold_for( $row['type'] );
-		if ( OLE_Print_Stock_Calc::crosses_low( (int) $before, (int) $after, $threshold ) ) {
-			OLE_Print_Stock_Store::set_low_notified( (int) $consumable_id, 1 );
+		if ( ORDELIST_Print_Stock_Calc::crosses_low( (int) $before, (int) $after, $threshold ) ) {
+			ORDELIST_Print_Stock_Store::set_low_notified( (int) $consumable_id, 1 );
 			self::send_low_email( array(
 				array( 'name' => $row['name'], 'stock' => (int) $after, 'type' => $row['type'] ),
 			) );
@@ -85,7 +85,7 @@ class OLE_Print_Stock {
 
 	/** Єдина точка: приводить облік у відповідність до стану замовлення. */
 	public static function reconcile( WC_Order $order ) {
-		$live  = OLE_Print_Stock_Calc::is_live( $order->get_status() );
+		$live  = ORDELIST_Print_Stock_Calc::is_live( $order->get_status() );
 		$state = (string) $order->get_meta( self::STATE_META );
 
 		if ( $live && 'consumed' !== $state ) {
@@ -98,14 +98,14 @@ class OLE_Print_Stock {
 	private static function consume( WC_Order $order ) {
 		// Бекстоп ідемпотентності: якщо журнал уже має списання цього замовлення
 		// (напр. мета-прапорець не зберігся через збій) — не списувати вдруге.
-		if ( OLE_Print_Stock_Store::is_consumed( $order->get_id() ) ) {
+		if ( ORDELIST_Print_Stock_Store::is_consumed( $order->get_id() ) ) {
 			$order->update_meta_data( self::STATE_META, 'consumed' );
 			$order->save();
 			return;
 		}
 
 		$config = self::build_config();
-		$deltas = OLE_Print_Stock_Calc::compute( self::lines_from_order( $order ), $config );
+		$deltas = ORDELIST_Print_Stock_Calc::compute( self::lines_from_order( $order ), $config );
 		if ( empty( $deltas ) ) {
 			$order->update_meta_data( self::STATE_META, 'consumed' );
 			$order->save();
@@ -118,14 +118,14 @@ class OLE_Print_Stock {
 			if ( $delta >= 0 ) {
 				continue;
 			}
-			$row = OLE_Print_Stock_Store::get_consumable( $cid );
+			$row = ORDELIST_Print_Stock_Store::get_consumable( $cid );
 			if ( ! $row ) {
 				continue;
 			}
-			$res       = OLE_Print_Stock_Store::apply_delta( $cid, (int) $delta, $order_id, 'order' );
+			$res       = ORDELIST_Print_Stock_Store::apply_delta( $cid, (int) $delta, $order_id, 'order' );
 			$threshold = self::threshold_for( $row['type'] );
-			if ( OLE_Print_Stock_Calc::crosses_low( $res['before'], $res['after'], $threshold ) ) {
-				OLE_Print_Stock_Store::set_low_notified( (int) $cid, 1 );
+			if ( ORDELIST_Print_Stock_Calc::crosses_low( $res['before'], $res['after'], $threshold ) ) {
+				ORDELIST_Print_Stock_Store::set_low_notified( (int) $cid, 1 );
 				$depleted[] = array( 'name' => $row['name'], 'stock' => $res['after'] );
 				$crossed[]  = array( 'name' => $row['name'], 'stock' => $res['after'], 'type' => $row['type'] );
 			}
@@ -143,16 +143,16 @@ class OLE_Print_Stock {
 
 	private static function restore( WC_Order $order ) {
 		$order_id = $order->get_id();
-		$net      = OLE_Print_Stock_Store::ledger_net( $order_id );
+		$net      = ORDELIST_Print_Stock_Store::ledger_net( $order_id );
 		foreach ( $net as $cid => $sum ) {
 			if ( 0 === (int) $sum ) {
 				continue;
 			}
 			// Реверс поточного застосованого footprint замовлення.
-			$res = OLE_Print_Stock_Store::apply_delta( (int) $cid, -(int) $sum, $order_id, 'restore' );
-			$row = OLE_Print_Stock_Store::get_consumable( $cid );
+			$res = ORDELIST_Print_Stock_Store::apply_delta( (int) $cid, -(int) $sum, $order_id, 'restore' );
+			$row = ORDELIST_Print_Stock_Store::get_consumable( $cid );
 			if ( $row && (int) $row['low_notified'] === 1 && $res['after'] > self::threshold_for( $row['type'] ) ) {
-				OLE_Print_Stock_Store::set_low_notified( (int) $cid, 0 );
+				ORDELIST_Print_Stock_Store::set_low_notified( (int) $cid, 0 );
 			}
 		}
 		$order->update_meta_data( self::STATE_META, 'restored' );
@@ -175,14 +175,14 @@ class OLE_Print_Stock {
 
 	public static function build_config() {
 		$instructions = array();
-		foreach ( OLE_Print_Stock_Store::sheets() as $sheet ) {
+		foreach ( ORDELIST_Print_Stock_Store::sheets() as $sheet ) {
 			$instructions[] = array(
 				'id'          => (int) $sheet['id'],
 				'product_ids' => $sheet['product_ids'],
 			);
 		}
 		return array(
-			'stickers'     => OLE_Print_Stock_Store::sticker_config(),
+			'stickers'     => ORDELIST_Print_Stock_Store::sticker_config(),
 			'instructions' => $instructions,
 		);
 	}
@@ -203,7 +203,7 @@ class OLE_Print_Stock {
 
 	/** Поточний запас наліпки товару/варіації (для відображення в полі). */
 	private static function sticker_stock_value( $ref_id ) {
-		$row = OLE_Print_Stock_Store::get_sticker( (int) $ref_id );
+		$row = ORDELIST_Print_Stock_Store::get_sticker( (int) $ref_id );
 		return $row ? (string) (int) $row['stock'] : '';
 	}
 
@@ -216,7 +216,7 @@ class OLE_Print_Stock {
 		$val = self::sticker_stock_value( (int) $post->ID );
 		woocommerce_wp_text_input(
 			array(
-				'id'                => '_ole_sticker_stock',
+				'id'                => '_ordelist_sticker_stock',
 				'label'             => __( 'Sticker stock', 'order-list-enhancer' ),
 				'desc_tip'          => true,
 				'description'       => __( 'Printed stickers on hand for this product. Decreases by the quantity ordered. Leave blank to not track.', 'order-list-enhancer' ),
@@ -228,16 +228,16 @@ class OLE_Print_Stock {
 	}
 
 	public static function save_simple_field( $post_id ) {
-		if ( ! isset( $_POST['_ole_sticker_stock'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! isset( $_POST['_ordelist_sticker_stock'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
-		$raw = wp_unslash( $_POST['_ole_sticker_stock'] ); // phpcs:ignore WordPress.Security
+		$raw = wp_unslash( $_POST['_ordelist_sticker_stock'] ); // phpcs:ignore WordPress.Security
 		if ( '' === trim( (string) $raw ) ) {
 			return; // не трекаємо / не чіпаємо існуючий запас
 		}
 		$product = wc_get_product( $post_id );
 		$name    = $product ? wp_strip_all_tags( $product->get_name() ) : ( '#' . (int) $post_id );
-		OLE_Print_Stock_Store::upsert_sticker( (int) $post_id, $name, (int) $raw );
+		ORDELIST_Print_Stock_Store::upsert_sticker( (int) $post_id, $name, (int) $raw );
 	}
 
 	public static function render_variation_field( $loop, $variation_data, $variation ) {
@@ -245,8 +245,8 @@ class OLE_Print_Stock {
 		$val = self::sticker_stock_value( $vid );
 		woocommerce_wp_text_input(
 			array(
-				'id'                => '_ole_sticker_stock_' . $loop,
-				'name'              => '_ole_sticker_stock_var[' . $loop . ']',
+				'id'                => '_ordelist_sticker_stock_' . $loop,
+				'name'              => '_ordelist_sticker_stock_var[' . $loop . ']',
 				'label'             => __( 'Sticker stock', 'order-list-enhancer' ),
 				'wrapper_class'     => 'form-row form-row-first',
 				'type'              => 'number',
@@ -257,16 +257,16 @@ class OLE_Print_Stock {
 	}
 
 	public static function save_variation_field( $variation_id, $i ) {
-		if ( ! isset( $_POST['_ole_sticker_stock_var'][ $i ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! isset( $_POST['_ordelist_sticker_stock_var'][ $i ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
-		$raw = wp_unslash( $_POST['_ole_sticker_stock_var'][ $i ] ); // phpcs:ignore WordPress.Security
+		$raw = wp_unslash( $_POST['_ordelist_sticker_stock_var'][ $i ] ); // phpcs:ignore WordPress.Security
 		if ( '' === trim( (string) $raw ) ) {
 			return;
 		}
 		$variation = wc_get_product( $variation_id );
 		$name      = $variation ? wp_strip_all_tags( $variation->get_name() ) : ( '#' . (int) $variation_id );
-		OLE_Print_Stock_Store::upsert_sticker( (int) $variation_id, $name, (int) $raw );
+		ORDELIST_Print_Stock_Store::upsert_sticker( (int) $variation_id, $name, (int) $raw );
 	}
 
 	public static function low_banner() {
@@ -275,18 +275,18 @@ class OLE_Print_Stock {
 		}
 		// Don't nag on the stock page itself — it already lists everything and the link points here.
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		if ( $screen && false !== strpos( (string) $screen->id, OLE_Print_Stock_Admin::SLUG ) ) {
+		if ( $screen && false !== strpos( (string) $screen->id, ORDELIST_Print_Stock_Admin::SLUG ) ) {
 			return;
 		}
-		$o     = OLE_Settings::get();
-		$count = OLE_Print_Stock_Store::low_count(
+		$o     = ORDELIST_Settings::get();
+		$count = ORDELIST_Print_Stock_Store::low_count(
 			(int) $o['print_stock_threshold_sticker'],
 			(int) $o['print_stock_threshold_instruction']
 		);
 		if ( $count < 1 ) {
 			return;
 		}
-		$url = admin_url( 'admin.php?page=' . OLE_Print_Stock_Admin::SLUG );
+		$url = admin_url( 'admin.php?page=' . ORDELIST_Print_Stock_Admin::SLUG );
 		printf(
 			'<div class="notice notice-warning"><p>%s <a href="%s">%s</a></p></div>',
 			esc_html( sprintf( /* translators: %d: number of low items. */ _n( '%d print consumable is low — time to print more.', '%d print consumables are low — time to print more.', $count, 'order-list-enhancer' ), $count ) ),
@@ -296,7 +296,7 @@ class OLE_Print_Stock {
 	}
 
 	public static function add_order_column( $columns ) {
-		$columns['ole_depleted'] = __( 'Print', 'order-list-enhancer' );
+		$columns['ordelist_depleted'] = __( 'Print', 'order-list-enhancer' );
 		return $columns;
 	}
 
@@ -317,14 +317,14 @@ class OLE_Print_Stock {
 	}
 
 	public static function render_order_column( $column, $order ) {
-		if ( 'ole_depleted' !== $column ) {
+		if ( 'ordelist_depleted' !== $column ) {
 			return;
 		}
 		echo self::badge_html( $order->get_meta( self::DEPLETED_META ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	public static function render_order_column_legacy( $column, $post_id ) {
-		if ( 'ole_depleted' !== $column ) {
+		if ( 'ordelist_depleted' !== $column ) {
 			return;
 		}
 		$order = wc_get_order( $post_id );

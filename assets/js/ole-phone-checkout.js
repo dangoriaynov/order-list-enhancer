@@ -1,5 +1,5 @@
 ( function () {
-	// Validator — must mirror OLE_Phone_Validator (PHP).
+	// Validator — must mirror ORDELIST_Phone_Validator (PHP).
 	function validate( raw, cc ) {
 		cc = String( cc || '359' ).replace( /\D+/g, '' ) || '359';
 		var s = String( raw == null ? '' : raw );
@@ -30,7 +30,7 @@
 
 	// Browser: live feedback under the billing phone field.
 	if ( typeof window === 'undefined' || typeof document === 'undefined' ) { return; }
-	var D = window.OLE_PHONE || null;
+	var D = window.ORDELIST_PHONE || null;
 	if ( ! D ) { return; }
 
 	function fieldEl() { return document.getElementById( 'billing_phone' ); }

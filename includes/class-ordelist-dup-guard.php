@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * find_match — чиста функція (без WordPress), тестується ізольовано.
  * WP-glue (хуки/сесія/AJAX) додається в Task A4.
  */
-class OLE_Dup_Guard {
+class ORDELIST_Dup_Guard {
 
 	/** Статуси, які НЕ вважаємо «живим» замовленням (можна законно перезамовити). */
 	const DEAD_STATUSES = array( 'cancelled', 'failed', 'trash' );
@@ -55,31 +55,31 @@ class OLE_Dup_Guard {
 		return null;
 	}
 
-	const SESS_PENDING   = 'ole_dup_pending';
-	const SESS_CONFIRMED = 'ole_dup_confirmed';
+	const SESS_PENDING   = 'ordelist_dup_pending';
+	const SESS_CONFIRMED = 'ordelist_dup_confirmed';
 
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_checkout' ) );
 		add_action( 'woocommerce_after_checkout_validation', array( __CLASS__, 'validate_classic' ), 10, 2 );
-		add_action( 'wp_ajax_ole_dup_confirm', array( __CLASS__, 'ajax_confirm' ) );
-		add_action( 'wp_ajax_nopriv_ole_dup_confirm', array( __CLASS__, 'ajax_confirm' ) );
+		add_action( 'wp_ajax_ordelist_dup_confirm', array( __CLASS__, 'ajax_confirm' ) );
+		add_action( 'wp_ajax_nopriv_ordelist_dup_confirm', array( __CLASS__, 'ajax_confirm' ) );
 		// Keep our guard out of wp-rocket "delay JS" so the button-lock binds on load.
 		add_filter( 'rocket_delay_js_exclusions', array( __CLASS__, 'rocket_exclude' ) );
 	}
 
 	public static function rocket_exclude( $excluded ) {
 		$excluded   = is_array( $excluded ) ? $excluded : array();
-		$excluded[] = 'ole-dup-guard';
+		$excluded[] = 'ordelist-dup-guard';
 		return $excluded;
 	}
 
 	private static function cc() {
-		$cc = preg_replace( '/\D+/', '', (string) OLE_Settings::get()['phone_cc'] );
+		$cc = preg_replace( '/\D+/', '', (string) ORDELIST_Settings::get()['phone_cc'] );
 		return '' !== $cc ? $cc : '359';
 	}
 
 	private static function window_min() {
-		return (int) OLE_Settings::get()['dup_guard_window_min'];
+		return (int) ORDELIST_Settings::get()['dup_guard_window_min'];
 	}
 
 	/** Підпис набору позицій: відсортовані "<pid>:<vid>:<qty>" через "|". */
@@ -111,7 +111,7 @@ class OLE_Dup_Guard {
 		$phone = isset( $data['billing_phone'] ) ? (string) $data['billing_phone'] : '';
 		$cart  = ( function_exists( 'WC' ) && WC()->cart ) ? WC()->cart : null;
 		return array(
-			'phone'     => OLE_Phone::normalize( $phone, self::cc() ),
+			'phone'     => ORDELIST_Phone::normalize( $phone, self::cc() ),
 			'cart_hash' => self::cart_hash(),
 			'items_sig' => self::items_sig_from_cart(),
 			'total'     => $cart ? number_format( (float) $cart->get_total( 'edit' ), 2, '.', '' ) : '',
@@ -138,7 +138,7 @@ class OLE_Dup_Guard {
 		foreach ( $orders as $o ) {
 			$out[] = array(
 				'number'     => $o->get_order_number(),
-				'phone'      => OLE_Phone::normalize( (string) $o->get_billing_phone(), $cc ),
+				'phone'      => ORDELIST_Phone::normalize( (string) $o->get_billing_phone(), $cc ),
 				'cart_hash'  => (string) $o->get_cart_hash(),
 				'items_sig'  => self::items_sig_from_order( $o ),
 				'total'      => number_format( (float) $o->get_total(), 2, '.', '' ),
@@ -169,7 +169,7 @@ class OLE_Dup_Guard {
 		}
 
 		// Block mode: hard stop, no confirm round-trip / no modal (plain error, no OLEDUP| marker).
-		if ( 'block' === OLE_Settings::get()['dup_guard_mode'] ) {
+		if ( 'block' === ORDELIST_Settings::get()['dup_guard_mode'] ) {
 			$msg = sprintf(
 				/* translators: 1: order number, 2: minutes ago */
 				__( 'You already placed a similar order %2$d min ago (#%1$s). To place another one, please contact us.', 'order-list-enhancer' ),
@@ -177,7 +177,7 @@ class OLE_Dup_Guard {
 				$match['mins']
 			);
 			if ( $errors instanceof WP_Error ) {
-				$errors->add( 'ole_dup_guard', $msg );
+				$errors->add( 'ordelist_dup_guard', $msg );
 			} else {
 				wc_add_notice( $msg, 'error' );
 			}
@@ -194,7 +194,7 @@ class OLE_Dup_Guard {
 			$match['mins']
 		);
 		if ( $errors instanceof WP_Error ) {
-			$errors->add( 'ole_dup_guard', $msg );
+			$errors->add( 'ordelist_dup_guard', $msg );
 		} else {
 			wc_add_notice( $msg, 'error' );
 		}
@@ -202,7 +202,7 @@ class OLE_Dup_Guard {
 
 	/** Клієнт натиснув «Да, поръчай отново» — переносимо pending → confirmed. */
 	public static function ajax_confirm() {
-		check_ajax_referer( 'ole_dup_confirm', 'nonce' );
+		check_ajax_referer( 'ordelist_dup_confirm', 'nonce' );
 		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
 			wp_send_json_error( array( 'message' => 'no_session' ), 400 );
 			return;
@@ -216,15 +216,15 @@ class OLE_Dup_Guard {
 		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_order_received_page() ) {
 			return;
 		}
-		wp_enqueue_style( 'ole-dup-guard', OLE_URL . 'assets/css/ole-dup-guard.css', array(), OLE_VERSION );
-		wp_enqueue_script( 'ole-dup-guard', OLE_URL . 'assets/js/ole-dup-guard.js', array( 'jquery' ), OLE_VERSION, true );
+		wp_enqueue_style( 'ordelist-dup-guard', ORDELIST_URL . 'assets/css/ole-dup-guard.css', array(), ORDELIST_VERSION );
+		wp_enqueue_script( 'ordelist-dup-guard', ORDELIST_URL . 'assets/js/ole-dup-guard.js', array( 'jquery' ), ORDELIST_VERSION, true );
 		wp_localize_script(
-			'ole-dup-guard',
-			'OLE_DUP',
+			'ordelist-dup-guard',
+			'ORDELIST_DUP',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'action'  => 'ole_dup_confirm',
-				'nonce'   => wp_create_nonce( 'ole_dup_confirm' ),
+				'action'  => 'ordelist_dup_confirm',
+				'nonce'   => wp_create_nonce( 'ordelist_dup_confirm' ),
 				'i18n'    => array(
 					'confirm' => __( 'Yes, order again', 'order-list-enhancer' ),
 					'cancel'  => __( 'Cancel', 'order-list-enhancer' ),

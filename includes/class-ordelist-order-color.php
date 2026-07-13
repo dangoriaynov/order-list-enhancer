@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Сортує за спаданням порога — JS бере перше правило, де сума >= порога
  * («вищий поріг перемагає»).
  */
-class OLE_Order_Color {
+class ORDELIST_Order_Color {
 
 	public static function for_js( $opts ) {
 		$rules = array();

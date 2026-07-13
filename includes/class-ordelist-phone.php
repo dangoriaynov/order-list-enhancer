@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Правила: водещо „00" → „+"; „+0"/„0" в началото на локален номер се махат
  * и се добавя кодът на държавата. При нещо нередно връща оригинала.
  */
-class OLE_Phone {
+class ORDELIST_Phone {
 
 	public static function normalize( $raw, $cc ) {
 		$raw = (string) $raw;

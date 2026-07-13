@@ -1,5 +1,5 @@
 ( function () {
-	var D      = window.OLE_DATA || {};
+	var D      = window.ORDELIST_DATA || {};
 	var MAP    = D.map || {};
 	var GROUPS = D.groups || {};
 	var SHIP   = D.shipping || { rules: [], default: { color: '', label: '' } };
@@ -11,7 +11,7 @@
 	var DEC    = D.decimalSep || ',';
 	var TC  = D.totalColor || { on: false, rules: [] };
 	var PF  = D.priceFormat || { decimal: '.', thousand: ',' };
-	var OC  = ( typeof window !== 'undefined' && window.OLE_OrderColor ) ? window.OLE_OrderColor : null;
+	var OC  = ( typeof window !== 'undefined' && window.ORDELIST_OrderColor ) ? window.ORDELIST_OrderColor : null;
 	var detailsCache = {};
 
 	function fmt( tmpl, args ) {
@@ -245,7 +245,7 @@
 		showLoading( body );
 
 		var fd = new FormData();
-		fd.append( 'action', 'ole_group_details' );
+		fd.append( 'action', 'ordelist_group_details' );
 		fd.append( 'nonce', AJAX.nonce || '' );
 		fd.append( 'ids', key );
 		fetch( AJAX.url, { method: 'POST', body: fd, credentials: 'same-origin' } )
@@ -469,7 +469,7 @@
 			var map = captureBulkActions( top );
 			if ( ! sameMap( map, D.bulkCache || {} ) ) {
 				var fd = new FormData();
-				fd.append( 'action', 'ole_save_bulk_actions' );
+				fd.append( 'action', 'ordelist_save_bulk_actions' );
 				fd.append( 'nonce', D.bulkNonce );
 				fd.append( 'actions', JSON.stringify( map ) );
 				fetch( AJAX.url, { method: 'POST', body: fd, credentials: 'same-origin' } ).catch( function () {} );
