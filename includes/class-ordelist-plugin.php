@@ -49,6 +49,9 @@ class ORDELIST_Plugin {
 		if ( ORDELIST_Settings::is_yes( $opts, 'print_stock_enabled' ) ) {
 			ORDELIST_Print_Stock::init();
 		}
+		if ( ORDELIST_Settings::is_yes( $opts, 'warranty_enabled' ) ) {
+			ORDELIST_Warranty::init();
+		}
 		if ( ORDELIST_Settings::is_yes( $opts, 'list_comments_enabled' ) ) {
 			ORDELIST_Order_Comments::init();
 		}

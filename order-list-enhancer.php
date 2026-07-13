@@ -45,6 +45,10 @@ require_once ORDELIST_DIR . 'includes/class-ordelist-print-stock-calc.php';
 require_once ORDELIST_DIR . 'includes/class-ordelist-print-stock-store.php';
 require_once ORDELIST_DIR . 'includes/class-ordelist-print-stock.php';
 require_once ORDELIST_DIR . 'includes/class-ordelist-print-stock-admin.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-warranty-calc.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-warranty-store.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-warranty.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-warranty-admin.php';
 require_once ORDELIST_DIR . 'includes/class-ordelist-order-comments.php';
 require_once ORDELIST_DIR . 'includes/class-ordelist-plugin.php';
 
@@ -65,3 +69,6 @@ add_action(
 		ORDELIST_Plugin::instance();
 	}
 );
+
+// Прибрати щоденну перевірку термінів придатності при деактивації плагіна.
+register_deactivation_hook( __FILE__, array( 'ORDELIST_Warranty', 'unschedule' ) );
