@@ -569,6 +569,26 @@ class ORDELIST_Settings_Page {
 		</tbody></table>
 		<?php
 		self::card_close();
+
+		self::card_open(
+			__( 'Warranty dates', 'order-list-enhancer' ),
+			__( 'Track stock batches with their "valid until" dates, auto-consume the oldest batch as orders come in, and get an email + admin banner before dates arrive.', 'order-list-enhancer' ),
+			array( 'name' => 'warranty_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'warranty_enabled' ) )
+		);
+		?>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Warn ahead, days', 'order-list-enhancer' ); ?></th>
+				<td><input type="number" name="warranty_days" min="1" max="365" step="1" value="<?php echo esc_attr( (string) $o['warranty_days'] ); ?>"/>
+				<p class="description"><?php esc_html_e( 'Email + banner when a batch is within this many days of its date. Allowed range 1–365, default 30; empty or out-of-range values are clamped when saving.', 'order-list-enhancer' ); ?></p></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Batches page', 'order-list-enhancer' ); ?></th>
+				<td><a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=ordelist-warranty' ) ); ?>"><?php esc_html_e( 'Open warranty dates', 'order-list-enhancer' ); ?></a></td>
+			</tr>
+		</tbody></table>
+		<?php
+		self::card_close();
 	}
 
 	private function render_tab_phone( $o ) {
@@ -692,8 +712,11 @@ class ORDELIST_Settings_Page {
 			'print_stock_enabled'               => $bool( 'print_stock_enabled' ),
 			'print_stock_threshold_sticker'     => isset( $in['print_stock_threshold_sticker'] ) ? max( 0, min( 100000, (int) $in['print_stock_threshold_sticker'] ) ) : 20,
 			'print_stock_threshold_instruction' => isset( $in['print_stock_threshold_instruction'] ) ? max( 0, min( 100000, (int) $in['print_stock_threshold_instruction'] ) ) : 5,
+			'warranty_enabled'                  => $bool( 'warranty_enabled' ),
+			'warranty_days'                     => isset( $in['warranty_days'] ) ? max( 1, min( 365, (int) $in['warranty_days'] ) ) : 30,
 		);
 		update_option( ORDELIST_Settings::OPTION, $opts );
+		ORDELIST_Warranty::sync_schedule( $opts );
 		wp_send_json_success( array( 'message' => 'saved' ) );
 	}
 }
