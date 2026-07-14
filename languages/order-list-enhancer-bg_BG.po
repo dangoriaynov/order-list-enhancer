@@ -1044,3 +1044,82 @@ msgstr "Изчерпана"
 
 msgid "Expiring soon"
 msgstr "Изтича скоро"
+
+msgid "Purchase planning"
+msgstr "Планиране на закупките"
+
+msgid "Pick a product or a single variation: yearly sales curves overlay on the chart, the table compares the selected slice across years, and the panel computes how much to order for the chosen period."
+msgstr "Изберете продукт или отделна вариация: графиката наслагва продажбите по години, таблицата сравнява избрания отрязък между годините, а панелът изчислява колко да поръчате за избрания период."
+
+msgid "kg"
+msgstr "кг"
+
+msgid "pcs"
+msgstr "бр"
+
+msgid "Period"
+msgstr "Период"
+
+msgid "Month"
+msgstr "Месец"
+
+msgid "Quarter"
+msgstr "Тримесечие"
+
+msgid "Half-year"
+msgstr "Полугодие"
+
+msgid "Reference year"
+msgstr "Опорна година"
+
+msgid "Coefficient"
+msgstr "Коефициент"
+
+msgid "auto"
+msgstr "авто"
+
+msgid "Margin, %"
+msgstr "Резерв, %"
+
+msgid "Sold in the selected slice"
+msgstr "Продадено за избрания отрязък"
+
+msgid "Year"
+msgstr "Година"
+
+msgid "no weight set — pieces only"
+msgstr "без тегло — само бройки"
+
+msgid "Stock not subtracted — no batches are tracked for this product."
+msgstr "Наличността не е приспадната — за този продукт не се водят партиди."
+
+msgid "Reference year has no sales in this slice — coefficient set to 1."
+msgstr "Опорната година няма продажби в този отрязък — коефициентът е 1."
+
+#. translators: %s: amount with unit, e.g. "3 kg".
+msgid "of which %s expires before the period ends"
+msgstr "от тях %s изтича преди края на периода"
+
+msgid "Forecast demand"
+msgstr "Прогнозно търсене"
+
+msgid "Sellable stock"
+msgstr "Годна наличност"
+
+msgid "Recommended purchase"
+msgstr "Препоръчана поръчка"
+
+msgid "Multi-year sales chart with a purchase recommendation for a chosen period. Uses WooCommerce sales history; subtracts warranty-batch stock when batches are tracked."
+msgstr "Графика на продажбите по години с препоръка колко да поръчате за избран период. Използва историята на продажбите на WooCommerce; приспада наличността от партидите, когато се водят."
+
+msgid "Safety margin, %"
+msgstr "Резерв за сигурност, %"
+
+msgid "Added on top of the forecast. Allowed range 0–100, default 20; empty or out-of-range values are clamped when saving. Adjustable on the page per calculation."
+msgstr "Добавя се върху прогнозата. Позволен диапазон 0–100, по подразбиране 20; празни или извън диапазона стойности се ограничават при запис. Може да се променя на страницата при всяко изчисление."
+
+msgid "Planning page"
+msgstr "Страница за планиране"
+
+msgid "Open purchase planning"
+msgstr "Отвори планирането на закупките"
