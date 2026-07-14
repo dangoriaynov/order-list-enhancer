@@ -589,6 +589,26 @@ class ORDELIST_Settings_Page {
 		</tbody></table>
 		<?php
 		self::card_close();
+
+		self::card_open(
+			__( 'Purchase planning', 'order-list-enhancer' ),
+			__( 'Multi-year sales chart with a purchase recommendation for a chosen period. Uses WooCommerce sales history; subtracts warranty-batch stock when batches are tracked.', 'order-list-enhancer' ),
+			array( 'name' => 'forecast_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'forecast_enabled' ) )
+		);
+		?>
+		<table class="form-table"><tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Safety margin, %', 'order-list-enhancer' ); ?></th>
+				<td><input type="number" name="forecast_margin" min="0" max="100" step="1" value="<?php echo esc_attr( (string) $o['forecast_margin'] ); ?>"/>
+				<p class="description"><?php esc_html_e( 'Added on top of the forecast. Allowed range 0–100, default 20; empty or out-of-range values are clamped when saving. Adjustable on the page per calculation.', 'order-list-enhancer' ); ?></p></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Planning page', 'order-list-enhancer' ); ?></th>
+				<td><a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=ordelist-forecast' ) ); ?>"><?php esc_html_e( 'Open purchase planning', 'order-list-enhancer' ); ?></a></td>
+			</tr>
+		</tbody></table>
+		<?php
+		self::card_close();
 	}
 
 	private function render_tab_phone( $o ) {
@@ -714,6 +734,8 @@ class ORDELIST_Settings_Page {
 			'print_stock_threshold_instruction' => isset( $in['print_stock_threshold_instruction'] ) ? max( 0, min( 100000, (int) $in['print_stock_threshold_instruction'] ) ) : 5,
 			'warranty_enabled'                  => $bool( 'warranty_enabled' ),
 			'warranty_days'                     => isset( $in['warranty_days'] ) ? max( 1, min( 365, (int) $in['warranty_days'] ) ) : 30,
+			'forecast_enabled'                  => $bool( 'forecast_enabled' ),
+			'forecast_margin'                   => isset( $in['forecast_margin'] ) ? max( 0, min( 100, (int) $in['forecast_margin'] ) ) : 20,
 		);
 		update_option( ORDELIST_Settings::OPTION, $opts );
 		ORDELIST_Warranty::sync_schedule( $opts );

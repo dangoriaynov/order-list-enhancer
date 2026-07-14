@@ -49,6 +49,8 @@ require_once ORDELIST_DIR . 'includes/class-ordelist-warranty-calc.php';
 require_once ORDELIST_DIR . 'includes/class-ordelist-warranty-store.php';
 require_once ORDELIST_DIR . 'includes/class-ordelist-warranty.php';
 require_once ORDELIST_DIR . 'includes/class-ordelist-warranty-admin.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-forecast-data.php';
+require_once ORDELIST_DIR . 'includes/class-ordelist-forecast-admin.php';
 require_once ORDELIST_DIR . 'includes/class-ordelist-order-comments.php';
 require_once ORDELIST_DIR . 'includes/class-ordelist-plugin.php';
 

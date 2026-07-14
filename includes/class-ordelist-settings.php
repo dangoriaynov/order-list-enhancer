@@ -53,6 +53,8 @@ class ORDELIST_Settings {
 			'print_stock_threshold_instruction'  => 5,     // low threshold for instruction sheets
 			'warranty_enabled'                   => 'no',  // партії з термінами придатності + сповіщення
 			'warranty_days'                      => 30,    // вікно попередження, днів
+			'forecast_enabled'                   => 'no',  // сторінка планування закупівлі
+			'forecast_margin'                    => 20,    // запас похибки прогнозу, %
 		);
 	}
 
@@ -160,6 +162,7 @@ class ORDELIST_Settings {
 		$opts['print_stock_threshold_sticker']     = max( 0, min( 100000, (int) $opts['print_stock_threshold_sticker'] ) );
 		$opts['print_stock_threshold_instruction'] = max( 0, min( 100000, (int) $opts['print_stock_threshold_instruction'] ) );
 		$opts['warranty_days'] = max( 1, min( 365, (int) $opts['warranty_days'] ) );
+		$opts['forecast_margin'] = max( 0, min( 100, (int) $opts['forecast_margin'] ) );
 		if ( ! is_array( $opts['ship_rules'] ) ) {
 			$opts['ship_rules'] = array();
 		}
