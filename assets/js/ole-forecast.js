@@ -78,18 +78,29 @@
 			state.data = d;
 			// Вибрали варіацію — режим варіації; вибрали товар — увесь препарат.
 			state.target = ( picked !== d.product_id ) ? { type: 'variation', id: picked } : { type: 'product' };
-			// Товар без жодної ваги → одиниця за замовчуванням шт.
-			var anyWeight = d.variations.some( function ( v ) { return null !== v.weight_kg; } );
-			state.unit = anyWeight ? $( 'input[name="ole-fc-unit"]:checked' ).val() : 'pcs';
-			if ( ! anyWeight ) { $( 'input[name="ole-fc-unit"][value="pcs"]' ).prop( 'checked', true ); }
+			// Одиницю визначаємо за ЦІЛЛЮ: у режимі варіації — за вагою саме цієї варіації;
+			// у режимі товару — чи є вага хоч у якоїсь варіації.
+			var hasWeight;
+			if ( 'variation' === state.target.type ) {
+				hasWeight = d.variations.some( function ( v ) { return v.id === state.target.id && null !== v.weight_kg; } );
+			} else {
+				hasWeight = d.variations.some( function ( v ) { return null !== v.weight_kg; } );
+			}
+			state.unit = hasWeight ? $( 'input[name="ole-fc-unit"]:checked' ).val() : 'pcs';
+			if ( ! hasWeight ) { $( 'input[name="ole-fc-unit"][value="pcs"]' ).prop( 'checked', true ); }
 			fillRefYears();
 			state.coefAuto = true;
+			if ( ! state.refYear ) {
+				$( '.ole-fc-result' ).empty().removeAttr( 'hidden' );
+				$( '<div class="ole-fc-note"/>' ).text( ORDELIST_FC.i18n.noSales ).appendTo( '.ole-fc-result' );
+			}
 			recalc();
 		} ).fail( function () { window.alert( ORDELIST_FC.i18n.error ); } );
 	} );
 
 	function fillRefYears() {
-		var ys = yearsOf( series() );
+		// роки — з штучного ряду: він завжди повний, кг-ряд може бути порожній без ваги.
+		var ys = yearsOf( C.unitSeries( state.data.variations, state.target, 'pcs' ) );
 		var $ref = $( '.ole-fc-ref' ).empty();
 		var def = null;
 		for ( var i = 0; i < ys.length; i++ ) {
@@ -179,7 +190,7 @@
 		var coef = parseFloat( $( '.ole-fc-coef' ).val() );
 		if ( isNaN( coef ) || coef < 0 ) { coef = auto.value; }
 		if ( ! $( '.ole-fc-margin' ).val() ) { $( '.ole-fc-margin' ).val( ORDELIST_FC.margin ); }
-		var margin = parseInt( $( '.ole-fc-margin' ).val(), 10 ) || 0;
+		var margin = Math.max( 0, Math.min( 100, parseInt( $( '.ole-fc-margin' ).val(), 10 ) || 0 ) );
 
 		var refSlice = C.rangeSum( s[ state.refYear ], p.startMMDD, p.endMMDD );
 		var fc = C.forecast( refSlice, coef, margin );
@@ -193,7 +204,9 @@
 		row( $out, ORDELIST_FC.i18n.stockL, fmt( stock, state.unit ) );
 		if ( 0 === state.data.batches.length ) { note( $out, ORDELIST_FC.i18n.noBatches ); }
 		if ( auto.refZero && state.coefAuto ) { note( $out, ORDELIST_FC.i18n.refZero ); }
-		var $buy = row( $out, ORDELIST_FC.i18n.buyL, fmt( buy, state.unit ) );
+		// У штуках округлюємо ВГОРУ — округлення вниз недозамовляє.
+		var buyShow = ( 'pcs' === state.unit ) ? Math.ceil( buy ) : buy;
+		var $buy = row( $out, ORDELIST_FC.i18n.buyL, fmt( buyShow, state.unit ) );
 		$buy.addClass( 'ole-fc-buy' );
 		if ( expiring > 0 ) { note( $out, ORDELIST_FC.i18n.expiring.replace( '%s', fmt( expiring, state.unit ) ) ); }
 		// У кг-режимі позначаємо варіації без ваги — вони рахуються лише в штуках.

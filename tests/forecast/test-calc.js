@@ -25,6 +25,7 @@ check( C.rangeSum( ys, '01-01', '03-31' ) === 6, 'rangeSum sums inside range' );
 check( C.rangeSum( ys, '03-15', '03-15' ) === 4, 'rangeSum boundaries inclusive' );
 check( C.rangeSum( ys, '12-20', '01-10' ) === 8, 'wrapped range sums both same-year segments' );
 check( C.rangeSum( null, '01-01', '12-31' ) === 0, 'missing year -> 0' );
+check( C.rangeSum( { '01-05': 5, '01-08': -2 }, '01-01', '01-31' ) === 3, 'negative refund days net out' );
 
 // ---- unitSeries ----
 var variations = [

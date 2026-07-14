@@ -12,6 +12,8 @@ class ORDELIST_Forecast_Admin {
 	const SLUG = 'ordelist-forecast';
 
 	public static function init() {
+		// Таблиця партій потрібна для залишків — гарантуємо її наявність (ідемпотентно).
+		ORDELIST_Warranty_Store::maybe_upgrade();
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'assets' ) );
 		add_action( 'wp_ajax_ordelist_fc_series', array( __CLASS__, 'ajax_series' ) );
@@ -59,6 +61,7 @@ class ORDELIST_Forecast_Admin {
 					'year'      => __( 'Year', 'order-list-enhancer' ),
 					'noWeight'  => __( 'no weight set — pieces only', 'order-list-enhancer' ),
 					'noBatches' => __( 'Stock not subtracted — no batches are tracked for this product.', 'order-list-enhancer' ),
+					'noSales'   => __( 'No sales recorded for this product yet.', 'order-list-enhancer' ),
 					'refZero'   => __( 'Reference year has no sales in this slice — coefficient set to 1.', 'order-list-enhancer' ),
 					/* translators: %s: amount with unit, e.g. "3 kg". */
 					'expiring'  => __( 'of which %s expires before the period ends', 'order-list-enhancer' ),

@@ -1123,3 +1123,6 @@ msgstr "Страница за планиране"
 
 msgid "Open purchase planning"
 msgstr "Отвори планирането на закупките"
+
+msgid "No sales recorded for this product yet."
+msgstr "Няма записани продажби за този продукт."
