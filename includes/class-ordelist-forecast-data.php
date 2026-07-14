@@ -18,8 +18,20 @@ class ORDELIST_Forecast_Data {
 	/** Сирі агрегати продажів товару: variation_id / d (Y-m-d) / qty. */
 	public static function rows_for_product( $product_id ) {
 		global $wpdb;
+		// Чисті продажі за семантикою WooCommerce Analytics: неоплачені/скасовані/невдалі
+		// не рахуються; wc-refunded лишаються — їх компенсують від'ємні рядки повернень.
 		return (array) $wpdb->get_results(
-			$wpdb->prepare( 'SELECT variation_id, DATE(date_created) d, SUM(product_qty) qty FROM %i WHERE product_id = %d GROUP BY variation_id, DATE(date_created)', self::table_lookup(), (int) $product_id ),
+			$wpdb->prepare(
+				"SELECT l.variation_id, DATE(l.date_created) d, SUM(l.product_qty) qty
+				FROM %i l
+				JOIN %i s ON s.order_id = l.order_id
+				WHERE l.product_id = %d
+					AND s.status NOT IN ( 'wc-pending', 'wc-cancelled', 'wc-failed', 'wc-checkout-draft', 'wc-auto-draft', 'wc-trash' )
+				GROUP BY l.variation_id, DATE(l.date_created)",
+				self::table_lookup(),
+				$wpdb->prefix . 'wc_order_stats',
+				(int) $product_id
+			),
 			ARRAY_A
 		);
 	}
@@ -34,7 +46,8 @@ class ORDELIST_Forecast_Data {
 			}
 			$vid = (int) ( $r['variation_id'] ?? 0 );
 			$qty = (int) ( $r['qty'] ?? 0 );
-			if ( $qty <= 0 ) {
+			// Нульові рядки пропускаємо; від'ємні рядки повернень проходять і віднімаються.
+			if ( 0 === $qty ) {
 				continue;
 			}
 			$out[ $vid ][ $m[1] ][ $m[2] ] = ( $out[ $vid ][ $m[1] ][ $m[2] ] ?? 0 ) + $qty;

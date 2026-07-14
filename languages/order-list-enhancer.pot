@@ -1093,3 +1093,7 @@ msgstr ""
 #: includes/class-ordelist-settings-page.php
 msgid "Open purchase planning"
 msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "No sales recorded for this product yet."
+msgstr ""

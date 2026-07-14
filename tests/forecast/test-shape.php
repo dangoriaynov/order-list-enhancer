@@ -17,6 +17,8 @@ $rows = array(
 	array( 'variation_id' => 11, 'd' => 'garbage',    'qty' => 9 ),  // зіпсована дата — пропуск
 	array( 'variation_id' => 11, 'd' => '2025-07-01', 'qty' => 0 ),  // нульова кількість — пропуск
 	array( 'variation_id' => 12, 'd' => '2024-02-29', 'qty' => 5 ),  // 29 лютого лишається як є (клієнт складає)
+	array( 'variation_id' => 13, 'd' => '2025-03-01', 'qty' => 5 ),  // продаж
+	array( 'variation_id' => 13, 'd' => '2025-03-05', 'qty' => -2 ), // повернення — від'ємний рядок проходить
 );
 $out = ORDELIST_Forecast_Data::shape_rows( $rows );
 
@@ -25,6 +27,8 @@ check( $out[10]['2026']['01-02'] === 1, 'years separated' );
 check( $out[0]['2025']['07-01'] === 4, 'simple product keyed by variation_id 0' );
 check( ! isset( $out[11] ), 'garbage date and zero qty rows skipped entirely' );
 check( $out[12]['2024']['02-29'] === 5, 'Feb 29 passes through untouched' );
+check( $out[13]['2025']['03-01'] === 5, 'refund rows pass through as negatives' );
+check( $out[13]['2025']['03-05'] === -2, 'refund rows pass through as negatives' );
 check( ORDELIST_Forecast_Data::shape_rows( array() ) === array(), 'empty input -> empty array' );
 
 echo $fails ? "\n$fails FAILED\n" : "\nALL PASS\n";
