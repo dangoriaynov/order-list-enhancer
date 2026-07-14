@@ -1,0 +1,8 @@
+.ole-fc-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 12px 0; }
+.ole-fc-chart { position: relative; height: 340px; max-width: 1100px; background: #fff; border: 1px solid #dcdcde; padding: 8px; }
+.ole-fc-result { max-width: 560px; background: #fff; border: 1px solid #dcdcde; padding: 12px 16px; margin: 12px 0; }
+.ole-fc-row { display: flex; justify-content: space-between; padding: 3px 0; }
+.ole-fc-row.ole-fc-buy { font-weight: 700; border-top: 1px solid #dcdcde; margin-top: 6px; padding-top: 8px; }
+.ole-fc-row.ole-fc-split { color: #50575e; padding-left: 14px; }
+.ole-fc-note { color: #996800; margin-top: 6px; }
+.ole-fc-totals { max-width: 560px; }
