@@ -52,6 +52,9 @@ class ORDELIST_Plugin {
 		if ( ORDELIST_Settings::is_yes( $opts, 'warranty_enabled' ) ) {
 			ORDELIST_Warranty::init();
 		}
+		if ( ORDELIST_Settings::is_yes( $opts, 'forecast_enabled' ) ) {
+			ORDELIST_Forecast_Admin::init();
+		}
 		if ( ORDELIST_Settings::is_yes( $opts, 'list_comments_enabled' ) ) {
 			ORDELIST_Order_Comments::init();
 		}
