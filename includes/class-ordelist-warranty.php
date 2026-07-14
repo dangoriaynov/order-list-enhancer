@@ -90,17 +90,32 @@ class ORDELIST_Warranty {
 			return;
 		}
 
-		// Спочатку рахуємо повну мапу списання в пам'яті — жодного take_qty() тут ще нема.
-		$map = array();
+		// Кілька рядків одного товару зливаються в один попит — інакше другий рядок
+		// розподілявся б по ще не списаних партіях (take_qty відкладено, SELECT їх не бачить).
+		$demand = array();
 		foreach ( $order->get_items( 'line_item' ) as $item ) {
 			$qty = (int) $item->get_quantity();
 			if ( $qty <= 0 ) {
 				continue;
 			}
-			$vid     = (int) $item->get_variation_id();
-			$target  = $vid > 0 ? $vid : (int) $item->get_product_id();
-			$batches = ORDELIST_Warranty_Store::batches_for_target( $target, $vid > 0 );
-			$takes   = ORDELIST_Warranty_Calc::allocate( $qty, $batches ); // без партій — порожньо, нічого не пишемо
+			$vid    = (int) $item->get_variation_id();
+			$target = $vid > 0 ? $vid : (int) $item->get_product_id();
+			$key    = ( $vid > 0 ? 'v' : 'p' ) . $target;
+			if ( ! isset( $demand[ $key ] ) ) {
+				$demand[ $key ] = array(
+					'id'           => $target,
+					'is_variation' => $vid > 0,
+					'qty'          => 0,
+				);
+			}
+			$demand[ $key ]['qty'] += $qty;
+		}
+
+		// Спочатку рахуємо повну мапу списання в пам'яті — жодного take_qty() тут ще нема.
+		$map = array();
+		foreach ( $demand as $d ) {
+			$batches = ORDELIST_Warranty_Store::batches_for_target( $d['id'], $d['is_variation'] );
+			$takes   = ORDELIST_Warranty_Calc::allocate( $d['qty'], $batches ); // без партій — порожньо, нічого не пишемо
 			foreach ( $takes as $bid => $take ) {
 				$map[ (int) $bid ] = ( $map[ (int) $bid ] ?? 0 ) + (int) $take;
 			}
