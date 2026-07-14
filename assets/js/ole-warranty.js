@@ -61,6 +61,7 @@
 			note:   $row.find( '.ole-wr-note' ).val()
 		} ).done( function ( r ) {
 			setStatus( $row, ( r && r.data && r.data.status ) || '' );
+			$row.find( '.ole-wr-status' ).text( ( r && r.data && r.data.status_label ) || '' );
 			flash( $row );
 		} ).fail( function () {
 			window.alert( ORDELIST_WR.i18n.error );
@@ -85,6 +86,7 @@
 			'<td><input type="date" class="ole-wr-expiry"/></td>' +
 			'<td><input type="number" step="1" class="ole-wr-qty" style="width:80px"/></td>' +
 			'<td><input type="text" class="ole-wr-note regular-text" maxlength="200"/></td>' +
+			'<td class="ole-wr-status"></td>' +
 			'<td><button type="button" class="button ole-wr-save">' + ORDELIST_WR.i18n.save + '</button> ' +
 			'<button type="button" class="button ole-wr-delete" aria-label="' + ORDELIST_WR.i18n.del + '">×</button></td>' +
 			'</tr>'
@@ -93,6 +95,7 @@
 		$tr.find( '.ole-wr-expiry' ).val( d.expiry || '' );
 		$tr.find( '.ole-wr-qty' ).val( parseInt( d.qty, 10 ) || 0 );
 		$tr.find( '.ole-wr-note' ).val( d.note || '' );
+		$tr.find( '.ole-wr-status' ).text( d.status_label || '' );
 		setStatus( $tr, d.status || '' );
 		$( '.ole-wr-new' ).after( $tr );
 		flash( $tr );

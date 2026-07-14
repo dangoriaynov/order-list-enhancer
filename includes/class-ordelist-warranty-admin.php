@@ -65,10 +65,14 @@ class ORDELIST_Warranty_Admin {
 		}
 	}
 
-	/** '' або валідна дата Y-m-d (той самий підхід, що й delivery_vacation_until). */
+	/** '' або валідна календарна дата Y-m-d (той самий підхід, що й delivery_vacation_until + checkdate()). */
 	private static function clean_date( $raw ) {
 		$raw = (string) $raw;
-		return ( 1 === preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ) ? $raw : '';
+		if ( 1 !== preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ) {
+			return '';
+		}
+		list( $y, $m, $d ) = array_map( 'intval', explode( '-', $raw ) );
+		return checkdate( $m, $d, $y ) ? $raw : '';
 	}
 
 	// phpcs:disable WordPress.Security.NonceVerification.Missing -- every handler verifies the nonce first via self::guard() (check_ajax_referer).
@@ -82,6 +86,9 @@ class ORDELIST_Warranty_Admin {
 		if ( ! $p || '' === $expiry ) {
 			wp_send_json_error( array( 'message' => 'bad_input' ), 400 );
 		}
+		if ( $p->is_type( 'variable' ) ) {
+			wp_send_json_error( array( 'message' => 'variable_parent' ), 400 ); // партії ведуться на варіаціях
+		}
 		if ( $p->is_type( 'variation' ) ) {
 			$product_id   = (int) $p->get_parent_id();
 			$variation_id = (int) $p->get_id();
@@ -94,13 +101,14 @@ class ORDELIST_Warranty_Admin {
 		$row = ORDELIST_Warranty_Store::get_batch( $id );
 		wp_send_json_success(
 			array(
-				'id'     => $id,
-				'name'   => ORDELIST_Warranty::target_name( $row ),
-				'url'    => get_edit_post_link( $product_id, 'raw' ),
-				'expiry' => $row['expiry'],
-				'qty'    => (int) $row['qty'],
-				'note'   => $row['note'],
-				'status' => self::status_class( $row ),
+				'id'           => $id,
+				'name'         => ORDELIST_Warranty::target_name( $row ),
+				'url'          => get_edit_post_link( $product_id, 'raw' ),
+				'expiry'       => $row['expiry'],
+				'qty'          => (int) $row['qty'],
+				'note'         => $row['note'],
+				'status'       => self::status_class( $row ),
+				'status_label' => self::status_label( $row ),
 			)
 		);
 	}
@@ -119,7 +127,12 @@ class ORDELIST_Warranty_Admin {
 		}
 		ORDELIST_Warranty::run_check(); // зміна дати могла переозброїти сповіщення
 		$row = ORDELIST_Warranty_Store::get_batch( $id );
-		wp_send_json_success( array( 'status' => self::status_class( $row ) ) );
+		wp_send_json_success(
+			array(
+				'status'       => self::status_class( $row ),
+				'status_label' => self::status_label( $row ),
+			)
+		);
 	}
 
 	public static function ajax_delete() {
@@ -132,16 +145,23 @@ class ORDELIST_Warranty_Admin {
 	}
 	// phpcs:enable WordPress.Security.NonceVerification.Missing
 
-	/** CSS-клас рядка: мінус/прострочено → червоний, нуль → сірий, у вікні → жовтий. */
-	public static function status_class( $row ) {
+	/**
+	 * CSS-клас рядка: мінус/прострочено → червоний, нуль → сірий, у вікні → жовтий.
+	 *
+	 * @param array      $row   рядок партії.
+	 * @param array|null $o     налаштування (щоб не мерджити їх у кожному рядку таблиці); null → підтягнути самому.
+	 * @param string|null $today Y-m-d; null → current_time( 'Y-m-d' ).
+	 */
+	public static function status_class( $row, $o = null, $today = null ) {
 		if ( (int) $row['qty'] < 0 ) {
 			return 'ole-wr-expired';
 		}
 		if ( 0 === (int) $row['qty'] ) {
 			return 'ole-wr-zero';
 		}
-		$o      = ORDELIST_Settings::get();
-		$status = ORDELIST_Warranty_Calc::status( (string) $row['expiry'], current_time( 'Y-m-d' ), (int) $o['warranty_days'] );
+		$o      = null === $o ? ORDELIST_Settings::get() : $o;
+		$today  = null === $today ? current_time( 'Y-m-d' ) : $today;
+		$status = ORDELIST_Warranty_Calc::status( (string) $row['expiry'], $today, (int) $o['warranty_days'] );
 		if ( 'expired' === $status ) {
 			return 'ole-wr-expired';
 		}
@@ -151,10 +171,32 @@ class ORDELIST_Warranty_Admin {
 		return '';
 	}
 
+	/** Текстова мітка статусу (колонка «Статус» + доступність) — той самий пріоритет, що й у status_class(). */
+	public static function status_label( $row, $o = null, $today = null ) {
+		if ( (int) $row['qty'] < 0 ) {
+			return __( 'Expired', 'order-list-enhancer' );
+		}
+		if ( 0 === (int) $row['qty'] ) {
+			return __( 'Sold out', 'order-list-enhancer' );
+		}
+		$o      = null === $o ? ORDELIST_Settings::get() : $o;
+		$today  = null === $today ? current_time( 'Y-m-d' ) : $today;
+		$status = ORDELIST_Warranty_Calc::status( (string) $row['expiry'], $today, (int) $o['warranty_days'] );
+		if ( 'expired' === $status ) {
+			return __( 'Expired', 'order-list-enhancer' );
+		}
+		if ( 'soon' === $status ) {
+			return __( 'Expiring soon', 'order-list-enhancer' );
+		}
+		return '—';
+	}
+
 	public static function render() {
 		ORDELIST_Warranty::run_check(); // фолбек, якщо cron не спрацював
-		$rows = ORDELIST_Warranty_Store::all_batches();
-		$gaps = self::targets_without_batches();
+		$rows  = ORDELIST_Warranty_Store::all_batches();
+		$gaps  = self::targets_without_batches();
+		$o     = ORDELIST_Settings::get(); // рахуємо один раз, а не в кожному рядку таблиці
+		$today = current_time( 'Y-m-d' );
 		?>
 		<div class="wrap ole-wr-wrap">
 			<h1><?php esc_html_e( 'Warranty dates', 'order-list-enhancer' ); ?></h1>
@@ -165,22 +207,25 @@ class ORDELIST_Warranty_Admin {
 					<th style="width:160px"><?php esc_html_e( 'Valid until', 'order-list-enhancer' ); ?></th>
 					<th style="width:110px"><?php esc_html_e( 'Quantity', 'order-list-enhancer' ); ?></th>
 					<th><?php esc_html_e( 'Note', 'order-list-enhancer' ); ?></th>
+					<th style="width:110px"><?php esc_html_e( 'Status', 'order-list-enhancer' ); ?></th>
 					<th style="width:170px"><?php esc_html_e( 'Actions', 'order-list-enhancer' ); ?></th>
 				</tr></thead>
 				<tbody>
 					<tr class="ole-wr-new">
-						<td><select class="wc-product-search ole-wr-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%"></select></td>
+						<td><select class="wc-product-search ole-wr-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" data-exclude_type="variable" style="width:100%"></select></td>
 						<td><input type="date" class="ole-wr-expiry"/></td>
 						<td><input type="number" step="1" class="ole-wr-qty" value="0" style="width:80px"/></td>
 						<td><input type="text" class="ole-wr-note regular-text" maxlength="200" placeholder="<?php esc_attr_e( 'Note (lot number…)', 'order-list-enhancer' ); ?>"/></td>
+						<td></td>
 						<td><button type="button" class="button button-primary ole-wr-add" disabled><?php esc_html_e( 'Add', 'order-list-enhancer' ); ?></button></td>
 					</tr>
 				<?php foreach ( $rows as $r ) : ?>
-					<tr class="<?php echo esc_attr( self::status_class( $r ) ); ?>" data-id="<?php echo esc_attr( $r['id'] ); ?>">
+					<tr class="<?php echo esc_attr( self::status_class( $r, $o, $today ) ); ?>" data-id="<?php echo esc_attr( $r['id'] ); ?>">
 						<td><a href="<?php echo esc_url( (string) get_edit_post_link( (int) $r['product_id'], 'raw' ) ); ?>"><?php echo esc_html( ORDELIST_Warranty::target_name( $r ) ); ?></a></td>
 						<td><input type="date" class="ole-wr-expiry" value="<?php echo esc_attr( $r['expiry'] ); ?>"/></td>
 						<td><input type="number" step="1" class="ole-wr-qty" value="<?php echo esc_attr( (string) (int) $r['qty'] ); ?>" style="width:80px"/></td>
 						<td><input type="text" class="ole-wr-note regular-text" maxlength="200" value="<?php echo esc_attr( $r['note'] ); ?>"/></td>
+						<td class="ole-wr-status"><?php echo esc_html( self::status_label( $r, $o, $today ) ); ?></td>
 						<td>
 							<button type="button" class="button ole-wr-save"><?php esc_html_e( 'Save', 'order-list-enhancer' ); ?></button>
 							<button type="button" class="button ole-wr-delete" aria-label="<?php esc_attr_e( 'Delete', 'order-list-enhancer' ); ?>">&times;</button>

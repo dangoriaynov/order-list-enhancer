@@ -90,6 +90,7 @@ class ORDELIST_Warranty {
 			return;
 		}
 
+		// Спочатку рахуємо повну мапу списання в пам'яті — жодного take_qty() тут ще нема.
 		$map = array();
 		foreach ( $order->get_items( 'line_item' ) as $item ) {
 			$qty = (int) $item->get_quantity();
@@ -101,7 +102,6 @@ class ORDELIST_Warranty {
 			$batches = ORDELIST_Warranty_Store::batches_for_target( $target, $vid > 0 );
 			$takes   = ORDELIST_Warranty_Calc::allocate( $qty, $batches ); // без партій — порожньо, нічого не пишемо
 			foreach ( $takes as $bid => $take ) {
-				ORDELIST_Warranty_Store::take_qty( (int) $bid, (int) $take );
 				$map[ (int) $bid ] = ( $map[ (int) $bid ] ?? 0 ) + (int) $take;
 			}
 		}
@@ -111,6 +111,13 @@ class ORDELIST_Warranty {
 			$order->update_meta_data( self::CONSUMED_META, $map );
 		}
 		$order->save();
+
+		// Тільки після save() списуємо партії. Якщо процес впаде між save() і цим циклом —
+		// партії залишаться НЕсписаними (недосписання видно на сторінці і виправляється вручну),
+		// замість подвійного списання при повторі хука.
+		foreach ( $map as $bid => $take ) {
+			ORDELIST_Warranty_Store::take_qty( (int) $bid, (int) $take );
+		}
 	}
 
 	private static function restore( WC_Order $order ) {
