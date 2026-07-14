@@ -966,3 +966,69 @@ msgid ""
 msgstr ""
 "Само цифри (напр. 359) — всичко останало се премахва при запазване. Добавя "
 "се към номера, който не съдържа код за държавата."
+
+msgid "OLE — product expiry dates need attention"
+msgstr "OLE — срокове на годност изискват внимание"
+
+msgid "Expired:"
+msgstr "Изтекли:"
+
+#. translators: %d: warning window in days.
+msgid "Expiring within %d days:"
+msgstr "Изтичат до %d дни:"
+
+#. translators: 1: product name, 2: expiry date, 3: quantity left.
+msgid "%1$s — %2$s, %3$d left"
+msgstr "%1$s — %2$s, остават %3$d"
+
+#. translators: 1: number of batches, 2: warning window in days.
+msgid "%1$d product batch expires within %2$d days"
+msgid_plural "%1$d product batches expire within %2$d days"
+msgstr[0] "%1$d партида изтича до %2$d дни"
+msgstr[1] "%1$d партиди изтичат до %2$d дни"
+
+#. translators: %d: number of batches.
+msgid "%d batch already expired"
+msgid_plural "%d batches already expired"
+msgstr[0] "%d партида вече е изтекла"
+msgstr[1] "%d партиди вече са изтекли"
+
+msgid "Open warranty dates"
+msgstr "Отвори сроковете на годност"
+
+msgid "Warranty dates"
+msgstr "Срокове на годност"
+
+msgid "Delete this batch?"
+msgstr "Да изтрия ли тази партида?"
+
+msgid "Batches of stock with their \"valid until\" dates. Sales reduce the oldest batch first; cancelled or refunded orders put the units back."
+msgstr "Партиди стока със срок на годност („валидно до“). Продажбите намаляват първо най-старата партида; отменени или възстановени поръчки връщат бройките."
+
+msgid "Valid until"
+msgstr "Валидно до"
+
+msgid "Quantity"
+msgstr "Количество"
+
+msgid "Note"
+msgstr "Бележка"
+
+msgid "Note (lot number…)"
+msgstr "Бележка (партиден номер…)"
+
+#. translators: %d: number of products/variations without batches.
+msgid "Products without batch data (%d)"
+msgstr "Продукти без партиди (%d)"
+
+msgid "Track stock batches with their \"valid until\" dates, auto-consume the oldest batch as orders come in, and get an email + admin banner before dates arrive."
+msgstr "Следи партиди стока с дата „валидно до“, изписва автоматично най-старата партида при нова поръчка и предупреждава с имейл + банер преди датата."
+
+msgid "Warn ahead, days"
+msgstr "Предупреждение, дни"
+
+msgid "Email + banner when a batch is within this many days of its date. Allowed range 1–365, default 30; empty or out-of-range values are clamped when saving."
+msgstr "Имейл + банер, когато партида е на толкова дни от датата си. Позволен диапазон 1–365, по подразбиране 30; празни или извън диапазона стойности се ограничават при запис."
+
+msgid "Batches page"
+msgstr "Страница с партиди"

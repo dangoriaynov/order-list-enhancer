@@ -887,3 +887,88 @@ msgid ""
 "Digits only, e.g. 359 — anything else is stripped when saving. Added to "
 "numbers that have no country code."
 msgstr ""
+
+#: includes/class-ordelist-warranty.php
+msgid "OLE — product expiry dates need attention"
+msgstr ""
+
+#: includes/class-ordelist-warranty.php
+msgid "Expired:"
+msgstr ""
+
+#. translators: %d: warning window in days.
+#: includes/class-ordelist-warranty.php
+msgid "Expiring within %d days:"
+msgstr ""
+
+#. translators: 1: product name, 2: expiry date, 3: quantity left.
+#: includes/class-ordelist-warranty.php
+msgid "%1$s — %2$s, %3$d left"
+msgstr ""
+
+#. translators: 1: number of batches, 2: warning window in days.
+#: includes/class-ordelist-warranty.php
+msgid "%1$d product batch expires within %2$d days"
+msgid_plural "%1$d product batches expire within %2$d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of batches.
+#: includes/class-ordelist-warranty.php
+msgid "%d batch already expired"
+msgid_plural "%d batches already expired"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-ordelist-warranty.php includes/class-ordelist-settings-page.php
+msgid "Open warranty dates"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php includes/class-ordelist-settings-page.php
+msgid "Warranty dates"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php
+msgid "Delete this batch?"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php
+msgid "Batches of stock with their \"valid until\" dates. Sales reduce the oldest batch first; cancelled or refunded orders put the units back."
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php
+msgid "Valid until"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php
+msgid "Quantity"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php
+msgid "Note"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php
+msgid "Note (lot number…)"
+msgstr ""
+
+#. translators: %d: number of products/variations without batches.
+#: includes/class-ordelist-warranty-admin.php
+msgid "Products without batch data (%d)"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php
+msgid "Track stock batches with their \"valid until\" dates, auto-consume the oldest batch as orders come in, and get an email + admin banner before dates arrive."
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php
+msgid "Warn ahead, days"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php
+msgid "Email + banner when a batch is within this many days of its date. Allowed range 1–365, default 30; empty or out-of-range values are clamped when saving."
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php
+msgid "Batches page"
+msgstr ""
