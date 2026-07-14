@@ -988,3 +988,108 @@ msgstr ""
 #: includes/class-ordelist-warranty-admin.php
 msgid "Expiring soon"
 msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php includes/class-ordelist-settings-page.php
+msgid "Purchase planning"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Pick a product or a single variation: yearly sales curves overlay on the chart, the table compares the selected slice across years, and the panel computes how much to order for the chosen period."
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "kg"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "pcs"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Period"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Month"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Quarter"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Half-year"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Reference year"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Coefficient"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "auto"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Margin, %"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Sold in the selected slice"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Year"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "no weight set — pieces only"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Stock not subtracted — no batches are tracked for this product."
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Reference year has no sales in this slice — coefficient set to 1."
+msgstr ""
+
+#. translators: %s: amount with unit, e.g. "3 kg".
+#: includes/class-ordelist-forecast-admin.php
+msgid "of which %s expires before the period ends"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Forecast demand"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Sellable stock"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Recommended purchase"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php
+msgid "Multi-year sales chart with a purchase recommendation for a chosen period. Uses WooCommerce sales history; subtracts warranty-batch stock when batches are tracked."
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php
+msgid "Safety margin, %"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php
+msgid "Added on top of the forecast. Allowed range 0–100, default 20; empty or out-of-range values are clamped when saving. Adjustable on the page per calculation."
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php
+msgid "Planning page"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php
+msgid "Open purchase planning"
+msgstr ""
