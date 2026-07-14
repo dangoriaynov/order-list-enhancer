@@ -1,0 +1,110 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Дані для сторінки закупівлі: ЄДИНЕ місце читання таблиці wc_order_product_lookup
+ * (аналітичний журнал WooCommerce) + збирання payload для клієнта.
+ */
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- read-only aggregate over WooCommerce's analytics lookup table; no WP API exposes it; admin-side only.
+class ORDELIST_Forecast_Data {
+
+	public static function table_lookup() {
+		global $wpdb;
+		return $wpdb->prefix . 'wc_order_product_lookup';
+	}
+
+	/** Сирі агрегати продажів товару: variation_id / d (Y-m-d) / qty. */
+	public static function rows_for_product( $product_id ) {
+		global $wpdb;
+		return (array) $wpdb->get_results(
+			$wpdb->prepare( 'SELECT variation_id, DATE(date_created) d, SUM(product_qty) qty FROM %i WHERE product_id = %d GROUP BY variation_id, DATE(date_created)', self::table_lookup(), (int) $product_id ),
+			ARRAY_A
+		);
+	}
+
+	/** Pure: рядки → [ variation_id => [ 'YYYY' => [ 'MM-DD' => qty ] ] ]. Тестується без WP. */
+	public static function shape_rows( array $rows ) {
+		$out = array();
+		foreach ( $rows as $r ) {
+			$d = (string) ( $r['d'] ?? '' );
+			if ( 1 !== preg_match( '/^(\d{4})-(\d{2}-\d{2})$/', $d, $m ) ) {
+				continue;
+			}
+			$vid = (int) ( $r['variation_id'] ?? 0 );
+			$qty = (int) ( $r['qty'] ?? 0 );
+			if ( $qty <= 0 ) {
+				continue;
+			}
+			$out[ $vid ][ $m[1] ][ $m[2] ] = ( $out[ $vid ][ $m[1] ][ $m[2] ] ?? 0 ) + $qty;
+		}
+		return $out;
+	}
+
+	/** Вага в кг або null (порожнє поле ваги) — конвертація з одиниці ваги магазину. */
+	private static function weight_kg( $product ) {
+		$w = $product ? $product->get_weight() : '';
+		if ( '' === (string) $w ) {
+			return null;
+		}
+		return (float) wc_get_weight( (float) $w, 'kg' );
+	}
+
+	/** Повний payload для сторінки; null якщо товар не знайдено. */
+	public static function payload( $picked_id ) {
+		$p = wc_get_product( (int) $picked_id );
+		if ( ! $p ) {
+			return null;
+		}
+		$parent = $p->is_type( 'variation' ) ? wc_get_product( $p->get_parent_id() ) : $p;
+		if ( ! $parent ) {
+			return null;
+		}
+
+		$shaped = self::shape_rows( self::rows_for_product( (int) $parent->get_id() ) );
+		$today  = current_time( 'Y-m-d' );
+
+		$targets = array(); // vid (0 = простий товар) => WC_Product|null
+		if ( $parent->is_type( 'variable' ) ) {
+			foreach ( $parent->get_children() as $vid ) {
+				$targets[ (int) $vid ] = wc_get_product( $vid );
+			}
+			// Варіації з продажами, але вже видалені — показуємо як '#id'.
+			foreach ( array_keys( $shaped ) as $vid ) {
+				if ( $vid > 0 && ! isset( $targets[ $vid ] ) ) {
+					$targets[ $vid ] = null;
+				}
+			}
+		} else {
+			$targets[0] = $parent;
+		}
+
+		$variations = array();
+		$batches    = array();
+		foreach ( $targets as $vid => $prod ) {
+			$variations[] = array(
+				'id'        => (int) $vid,
+				'name'      => $prod ? wp_strip_all_tags( $prod->get_formatted_name() ) : ( '#' . (int) $vid ),
+				'weight_kg' => self::weight_kg( $prod ),
+				'series'    => isset( $shaped[ $vid ] ) ? $shaped[ $vid ] : array(),
+			);
+			$target_id = ( $vid > 0 ) ? (int) $vid : (int) $parent->get_id();
+			foreach ( ORDELIST_Warranty_Store::batches_for_target( $target_id, $vid > 0 ) as $b ) {
+				if ( (int) $b['qty'] > 0 && (string) $b['expiry'] >= $today ) {
+					$batches[] = array(
+						'variation_id' => (int) $vid,
+						'expiry'       => (string) $b['expiry'],
+						'qty'          => (int) $b['qty'],
+					);
+				}
+			}
+		}
+
+		return array(
+			'product_id' => (int) $parent->get_id(),
+			'variations' => $variations,
+			'batches'    => $batches,
+		);
+	}
+}
