@@ -972,3 +972,19 @@ msgstr ""
 #: includes/class-ordelist-settings-page.php
 msgid "Batches page"
 msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php
+msgid "Status"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php
+msgid "Expired"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php
+msgid "Sold out"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php
+msgid "Expiring soon"
+msgstr ""

@@ -1032,3 +1032,15 @@ msgstr "Имейл + банер, когато партида е на толко�
 
 msgid "Batches page"
 msgstr "Страница с партиди"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Expired"
+msgstr "Изтекла"
+
+msgid "Sold out"
+msgstr "Изчерпана"
+
+msgid "Expiring soon"
+msgstr "Изтича скоро"
