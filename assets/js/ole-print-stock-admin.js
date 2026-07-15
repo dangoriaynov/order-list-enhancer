@@ -139,6 +139,7 @@
 			.text( ORDELIST_PS.i18n.save )
 			.after( ' <button type="button" class="button ole-ps-sheet-delete">×</button>' );
 		applyStatus( row, d.stock, TH.instruction );
+		row.find( '.ole-ps-files' ).html( emptyFilesCellHtml() );
 		flash( row );
 		if ( NEW_ROW_HTML ) {
 			var $fresh = $( NEW_ROW_HTML );
@@ -159,6 +160,7 @@
 				'<tr data-id="' + d.id + '">' +
 				'<td></td>' +
 				'<td><input type="number" step="1" class="ole-ps-stock" style="width:90px"/></td>' +
+				'<td class="ole-ps-files">' + emptyFilesCellHtml() + '</td>' +
 				'<td><button type="button" class="button ole-ps-save">' + ORDELIST_PS.i18n.set + '</button> ' +
 				'<button type="button" class="button ole-ps-add">' + ORDELIST_PS.i18n.addPrinted + '</button> ' +
 				'<button type="button" class="button ole-ps-sticker-delete">×</button></td>' +
@@ -170,5 +172,57 @@
 		if ( typeof d.stock !== 'undefined' ) { $tr.find( '.ole-ps-stock' ).val( parseInt( d.stock, 10 ) ); }
 		applyStatus( $tr, d.stock, TH.sticker );
 		flash( $tr );
+	}
+
+	// ----- Printable files (chips + media modal) -----
+
+	function fileIds( $cell ) {
+		return $cell.find( '.ole-ps-file' ).map( function () {
+			return String( $( this ).data( 'att' ) );
+		} ).get();
+	}
+
+	function saveFiles( $row, $cell, ids ) {
+		post( 'ordelist_ps_set_files', { id: $row.data( 'id' ), attachments: ids.join( ',' ) } )
+			.done( function ( r ) {
+				$cell.html( r.data.html );
+				flash( $row );
+			} )
+			.fail( function () { window.alert( ORDELIST_PS.i18n.error ); } );
+	}
+
+	// Open the media modal and merge the selection into the row's file list.
+	$( document ).on( 'click', '.ole-ps-file-add', function () {
+		var $cell = $( this ).closest( '.ole-ps-files' );
+		var $row  = $cell.closest( 'tr' );
+		if ( ! $row.data( 'id' ) ) { return; } // unsaved row — create it first
+		var frame = wp.media( {
+			title: ORDELIST_PS.i18n.filesTitle,
+			button: { text: ORDELIST_PS.i18n.filesButton },
+			multiple: true,
+			library: { type: [ 'application/pdf', 'image/jpeg', 'image/png' ] }
+		} );
+		frame.on( 'select', function () {
+			var ids = fileIds( $cell );
+			frame.state().get( 'selection' ).each( function ( att ) {
+				var id = String( att.id );
+				if ( ids.indexOf( id ) === -1 ) { ids.push( id ); }
+			} );
+			saveFiles( $row, $cell, ids );
+		} );
+		frame.open();
+	} );
+
+	// Unlink one file (does not delete it from the Media Library).
+	$( document ).on( 'click', '.ole-ps-file-remove', function () {
+		var $chip = $( this ).closest( '.ole-ps-file' );
+		var $cell = $chip.closest( '.ole-ps-files' );
+		var $row  = $cell.closest( 'tr' );
+		var drop  = String( $chip.data( 'att' ) );
+		saveFiles( $row, $cell, fileIds( $cell ).filter( function ( id ) { return id !== drop; } ) );
+	} );
+
+	function emptyFilesCellHtml() {
+		return '<button type="button" class="button ole-ps-file-add">' + ORDELIST_PS.i18n.addFile + '</button>';
 	}
 } )( jQuery );
