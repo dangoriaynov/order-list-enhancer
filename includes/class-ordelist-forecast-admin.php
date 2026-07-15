@@ -60,6 +60,8 @@ class ORDELIST_Forecast_Admin {
 					'pcs'       => __( 'pcs', 'order-list-enhancer' ),
 					'year'      => __( 'Year', 'order-list-enhancer' ),
 					'noWeight'  => __( 'no weight set — pieces only', 'order-list-enhancer' ),
+					/* translators: %s: number of variations. */
+					'noWeightMany' => __( '%s variations have no weight — counted in pieces only', 'order-list-enhancer' ),
 					'noBatches' => __( 'Stock not subtracted — no batches are tracked for this product.', 'order-list-enhancer' ),
 					'noSales'   => __( 'No sales recorded for this product yet.', 'order-list-enhancer' ),
 					'projection' => __( 'projection', 'order-list-enhancer' ),

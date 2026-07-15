@@ -1129,3 +1129,7 @@ msgstr "Няма записани продажби за този продукт.
 
 msgid "projection"
 msgstr "прогноза"
+
+#, php-format
+msgid "%s variations have no weight — counted in pieces only"
+msgstr "%s варианта са без тегло — броят се само в бройки"
