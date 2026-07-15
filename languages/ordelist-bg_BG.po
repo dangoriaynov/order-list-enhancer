@@ -1133,3 +1133,16 @@ msgstr "прогноза"
 #, php-format
 msgid "%s variations have no weight - counted in pieces only"
 msgstr "%s варианта са без тегло - броят се само в бройки"
+
+msgid "Variation"
+msgstr "Вариант"
+
+#, php-format
+msgid "Sold in %s"
+msgstr "Продадено през %s"
+
+msgid "Good until (optional)"
+msgstr "Годно до (незадължително)"
+
+msgid "Stock and sales by variation"
+msgstr "Наличност и продажби по варианти"

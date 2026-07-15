@@ -141,6 +141,7 @@ class ORDELIST_Forecast_Data {
 			$variations[] = array(
 				'id'        => (int) $vid,
 				'name'      => $name,
+				'exists'    => (bool) $prod,
 				'weight_kg' => $weight,
 				'series'    => isset( $shaped[ $vid ] ) ? $shaped[ $vid ] : array(),
 			);

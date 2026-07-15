@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.54
+Stable tag: 1.0.55
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings - every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.55 =
+* Purchase planning: new per-variation table with sold amounts (pieces and kg) for the selected slice, current sellable stock, and a quick stock-entry form (amount plus optional best-before date) that stores warranty batches; the loading spinner is now a small indicator next to the product picker.
 
 = 1.0.54 =
 * Purchase planning: weights of deleted variations are recovered from order history and, when the weight field is empty, from the amount in the product name; the chart and tables stay hidden until a product is picked, with a spinner while data loads.

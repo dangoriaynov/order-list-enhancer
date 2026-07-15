@@ -100,6 +100,8 @@
 	$( document ).on( 'change', '.ole-fc-product', function () {
 		var picked = parseInt( $( this ).val(), 10 ) || 0;
 		if ( ! picked ) { return; }
+		// Поки дані в дорозі: все нижче ховаємо, крутиться лише спінер біля вибору товару.
+		$( '.ole-fc-needs-product' ).attr( 'hidden', true );
 		$( '.ole-fc-loader' ).removeAttr( 'hidden' );
 		post( { product: picked } ).done( function ( r ) {
 			var d = r && r.data;
@@ -245,6 +247,7 @@
 		if ( ! state.data ) { return; }
 		var p = period();
 		renderTotals( p );
+		renderVariations( p );
 		// Підсвітка відрізка на графіку; перехід через Новий рік - двома сегментами.
 		if ( p ) {
 			var si = MMDD.indexOf( p.startMMDD );
@@ -333,6 +336,70 @@
 		$( '<div/>' ).text( detail ).appendTo( $d );
 		$d.appendTo( $box );
 	}
+
+	// Таблиця "наличност і продажби по варіантах" + швидкий запис партії.
+	function renderVariations( p ) {
+		var $head = $( '.ole-fc-vars thead' ).empty();
+		var $body = $( '.ole-fc-vars tbody' ).empty();
+		if ( ! p || ! state.data || ! state.refYear ) { return; }
+		var year = state.refYear;
+		var $tr  = $( '<tr/>' );
+		$( '<th/>' ).text( ORDELIST_FC.i18n.varL ).appendTo( $tr );
+		$( '<th/>' ).text( ORDELIST_FC.i18n.soldIn.replace( '%s', year ) + ', ' + ORDELIST_FC.i18n.pcs ).appendTo( $tr );
+		$( '<th/>' ).text( ORDELIST_FC.i18n.soldIn.replace( '%s', year ) + ', ' + ORDELIST_FC.i18n.kg ).appendTo( $tr );
+		$( '<th/>' ).text( ORDELIST_FC.i18n.stockCol + ', ' + ORDELIST_FC.i18n.pcs ).appendTo( $tr );
+		$( '<th/>' ).text( ORDELIST_FC.i18n.add ).appendTo( $tr );
+		$head.append( $tr );
+		for ( var i = 0; i < state.data.variations.length; i++ ) {
+			var v = state.data.variations[ i ];
+			if ( 'variation' === state.target.type && v.id !== state.target.id ) { continue; }
+			var pcs = C.rangeSum( C.foldFeb29( ( v.series && v.series[ year ] ) || {} ), p.startMMDD, p.endMMDD );
+			var kg  = ( null === v.weight_kg || undefined === v.weight_kg ) ? null : Math.round( pcs * v.weight_kg * 10 ) / 10;
+			var stock = 0;
+			for ( var b = 0; b < state.data.batches.length; b++ ) {
+				if ( state.data.batches[ b ].variation_id === v.id ) { stock += state.data.batches[ b ].qty; }
+			}
+			var $r = $( '<tr/>' );
+			$( '<td/>' ).text( v.name ).appendTo( $r );
+			$( '<td/>' ).text( pcs ).appendTo( $r );
+			$( '<td/>' ).text( null === kg ? '' : kg ).appendTo( $r );
+			$( '<td/>' ).text( stock ).appendTo( $r );
+			var $cell = $( '<td/>' );
+			if ( v.exists ) {
+				// Швидкий запис: кількість + необов'язкова дата придатності.
+				$( '<input type="number" min="1" step="1" class="ole-fc-add-qty"/>' ).appendTo( $cell );
+				$cell.append( ' ' );
+				$( '<input type="date" class="ole-fc-add-exp"/>' ).attr( 'title', ORDELIST_FC.i18n.goodUntil ).appendTo( $cell );
+				$cell.append( ' ' );
+				$( '<button type="button" class="button ole-fc-add-batch"/>' )
+					.text( ORDELIST_FC.i18n.add )
+					.attr( 'data-target', v.id > 0 ? v.id : state.data.product_id )
+					.appendTo( $cell );
+			}
+			$cell.appendTo( $r );
+			$body.append( $r );
+		}
+	}
+
+	$( document ).on( 'click', '.ole-fc-add-batch', function () {
+		var $btn = $( this );
+		var $row = $btn.closest( 'tr' );
+		var qty  = parseInt( $row.find( '.ole-fc-add-qty' ).val(), 10 ) || 0;
+		var exp  = $row.find( '.ole-fc-add-exp' ).val() || '';
+		if ( qty <= 0 ) { return; }
+		$btn.prop( 'disabled', true );
+		post( { action: 'ordelist_fc_add_batch', target: $btn.data( 'target' ), qty: qty, expiry: exp } )
+			.done( function ( r ) {
+				if ( r && r.success ) {
+					// Один источник на истина: презареждаме целия payload.
+					$( '.ole-fc-product' ).trigger( 'change' );
+				} else {
+					window.alert( ORDELIST_FC.i18n.error );
+				}
+			} )
+			.fail( function () { window.alert( ORDELIST_FC.i18n.error ); } )
+			.always( function () { $btn.prop( 'disabled', false ); } );
+	} );
 
 	// Таблиця «продано за відрізок»: рік | кг | шт (кг лише якщо є ваги).
 	function renderTotals( p ) {

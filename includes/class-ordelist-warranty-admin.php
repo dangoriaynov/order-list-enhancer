@@ -65,14 +65,9 @@ class ORDELIST_Warranty_Admin {
 		}
 	}
 
-	/** '' або валідна календарна дата Y-m-d (той самий підхід, що й delivery_vacation_until + checkdate()). */
+	/** '' або валідна календарна дата Y-m-d (делегує в чистий шар). */
 	private static function clean_date( $raw ) {
-		$raw = (string) $raw;
-		if ( 1 !== preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ) {
-			return '';
-		}
-		list( $y, $m, $d ) = array_map( 'intval', explode( '-', $raw ) );
-		return checkdate( $m, $d, $y ) ? $raw : '';
+		return ORDELIST_Warranty_Calc::clean_date( $raw );
 	}
 
 	// phpcs:disable WordPress.Security.NonceVerification.Missing -- every handler verifies the nonce first via self::guard() (check_ajax_referer).

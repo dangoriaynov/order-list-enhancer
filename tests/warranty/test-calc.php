@@ -59,5 +59,17 @@ $expired_ids = array_map( function ( $r ) { return $r['id']; }, $c['expired'] );
 check( $soon_ids === array( 4 ), 'soon: only unwarned positive-qty rows inside the window' );
 check( $expired_ids === array( 1, 6 ), 'expired: unwarned + soon-warned-now-expired rows' );
 
+// ---- clean_date ----
+check( ORDELIST_Warranty_Calc::clean_date( '2026-08-01' ) === '2026-08-01', 'clean_date passes a valid date' );
+check( ORDELIST_Warranty_Calc::clean_date( '2026-02-30' ) === '', 'clean_date rejects Feb 30' );
+check( ORDELIST_Warranty_Calc::clean_date( '01/08/2026' ) === '', 'clean_date rejects wrong format' );
+check( ORDELIST_Warranty_Calc::clean_date( '' ) === '', 'clean_date rejects empty' );
+
+// ---- stock_expiry (бърз запис на наличност: празно -> далечен страж) ----
+check( ORDELIST_Warranty_Calc::stock_expiry( '2027-01-15' ) === '2027-01-15', 'stock_expiry keeps a valid date' );
+check( ORDELIST_Warranty_Calc::stock_expiry( '' ) === '2099-12-31', 'stock_expiry: empty -> far-future sentinel' );
+check( ORDELIST_Warranty_Calc::stock_expiry( 'garbage' ) === null, 'stock_expiry: invalid -> null (reject)' );
+check( ORDELIST_Warranty_Calc::stock_expiry( '2026-13-01' ) === null, 'stock_expiry: impossible date -> null' );
+
 echo $fails ? "\n$fails FAILED\n" : "\nALL PASS\n";
 exit( $fails ? 1 : 0 );
