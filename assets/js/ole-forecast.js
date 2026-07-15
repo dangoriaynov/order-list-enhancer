@@ -100,9 +100,12 @@
 	$( document ).on( 'change', '.ole-fc-product', function () {
 		var picked = parseInt( $( this ).val(), 10 ) || 0;
 		if ( ! picked ) { return; }
+		$( '.ole-fc-loader' ).removeAttr( 'hidden' );
 		post( { product: picked } ).done( function ( r ) {
 			var d = r && r.data;
 			if ( ! d ) { return; }
+			// Показуємо блоки ПЕРЕД малюванням: canvas у hidden-контейнері має нульовий розмір.
+			$( '.ole-fc-needs-product' ).removeAttr( 'hidden' );
 			state.data = d;
 			// Вибрали варіацію - режим варіації; вибрали товар - увесь препарат.
 			state.target = ( picked !== d.product_id ) ? { type: 'variation', id: picked } : { type: 'product' };
@@ -128,7 +131,8 @@
 			} else {
 				recalc();
 			}
-		} ).fail( function () { window.alert( ORDELIST_FC.i18n.error ); } );
+		} ).fail( function () { window.alert( ORDELIST_FC.i18n.error ); } )
+			.always( function () { $( '.ole-fc-loader' ).attr( 'hidden', true ); } );
 	} );
 
 	function fillRefYears() {

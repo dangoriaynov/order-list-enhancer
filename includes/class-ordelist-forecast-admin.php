@@ -107,9 +107,11 @@ class ORDELIST_Forecast_Admin {
 				<label><input type="radio" name="ole-fc-unit" value="pcs"/> <?php esc_html_e( 'pcs', 'ordelist' ); ?></label>
 			</div>
 
-			<div class="ole-fc-chart"><canvas id="ole-fc-canvas"></canvas></div>
+			<div class="ole-fc-loader" hidden></div>
 
-			<div class="ole-fc-controls">
+			<div class="ole-fc-chart ole-fc-needs-product" hidden><canvas id="ole-fc-canvas"></canvas></div>
+
+			<div class="ole-fc-controls ole-fc-needs-product" hidden>
 				<label><?php esc_html_e( 'Period', 'ordelist' ); ?> <input type="date" class="ole-fc-start"/> - <input type="date" class="ole-fc-end"/></label>
 				<button type="button" class="button ole-fc-preset" data-days="30"><?php esc_html_e( 'Month', 'ordelist' ); ?></button>
 				<button type="button" class="button ole-fc-preset" data-days="91"><?php esc_html_e( 'Quarter', 'ordelist' ); ?></button>
@@ -122,8 +124,8 @@ class ORDELIST_Forecast_Admin {
 
 			<div class="ole-fc-result" hidden></div>
 
-			<h2><?php esc_html_e( 'Sold in the selected slice', 'ordelist' ); ?></h2>
-			<table class="widefat striped ole-fc-totals"><thead></thead><tbody></tbody></table>
+			<h2 class="ole-fc-needs-product" hidden><?php esc_html_e( 'Sold in the selected slice', 'ordelist' ); ?></h2>
+			<table class="widefat striped ole-fc-totals ole-fc-needs-product" hidden><thead></thead><tbody></tbody></table>
 		</div>
 		<?php
 	}
