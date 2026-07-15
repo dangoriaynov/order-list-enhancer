@@ -62,7 +62,7 @@ class ORDELIST_Print_Stock {
 		if ( ORDELIST_Print_Stock_Calc::crosses_low( (int) $before, (int) $after, $threshold ) ) {
 			ORDELIST_Print_Stock_Store::set_low_notified( (int) $consumable_id, 1 );
 			self::send_low_email( array(
-				array( 'name' => $row['name'], 'stock' => (int) $after, 'type' => $row['type'] ),
+				array( 'id' => (int) $consumable_id, 'name' => $row['name'], 'stock' => (int) $after, 'type' => $row['type'] ),
 			) );
 		}
 	}
@@ -127,7 +127,7 @@ class ORDELIST_Print_Stock {
 			if ( ORDELIST_Print_Stock_Calc::crosses_low( $res['before'], $res['after'], $threshold ) ) {
 				ORDELIST_Print_Stock_Store::set_low_notified( (int) $cid, 1 );
 				$depleted[] = array( 'name' => $row['name'], 'stock' => $res['after'] );
-				$crossed[]  = array( 'name' => $row['name'], 'stock' => $res['after'], 'type' => $row['type'] );
+				$crossed[]  = array( 'id' => (int) $cid, 'name' => $row['name'], 'stock' => $res['after'], 'type' => $row['type'] );
 			}
 		}
 		$order->update_meta_data( self::STATE_META, 'consumed' );
@@ -197,6 +197,14 @@ class ORDELIST_Print_Stock {
 				: __( 'Sticker', 'order-list-enhancer' );
 			/* translators: 1: type, 2: name, 3: remaining stock. */
 			$lines[] = sprintf( __( '%1$s "%2$s" — %3$d left', 'order-list-enhancer' ), $label, $c['name'], (int) $c['stock'] );
+			if ( ! empty( $c['id'] ) ) {
+				foreach ( ORDELIST_Print_Stock_Store::get_attachments( (int) $c['id'] ) as $att_id ) {
+					$url = wp_get_attachment_url( $att_id );
+					if ( $url ) {
+						$lines[] = '    ' . $url;
+					}
+				}
+			}
 		}
 		wp_mail( $to, $subject, implode( "\n", $lines ) );
 	}
