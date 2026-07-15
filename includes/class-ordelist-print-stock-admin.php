@@ -19,6 +19,7 @@ class ORDELIST_Print_Stock_Admin {
 		add_action( 'wp_ajax_ordelist_ps_delete_sheet', array( __CLASS__, 'ajax_delete_sheet' ) );
 		add_action( 'wp_ajax_ordelist_ps_add_sticker', array( __CLASS__, 'ajax_add_sticker' ) );
 		add_action( 'wp_ajax_ordelist_ps_delete_sticker', array( __CLASS__, 'ajax_delete_sticker' ) );
+		add_action( 'wp_ajax_ordelist_ps_set_files', array( __CLASS__, 'ajax_set_files' ) );
 	}
 
 	public static function menu() {
@@ -43,6 +44,7 @@ class ORDELIST_Print_Stock_Admin {
 		}
 		$o = ORDELIST_Settings::get();
 		wp_enqueue_script( 'wc-enhanced-select' );
+		wp_enqueue_media();
 		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_enqueue_style( 'ordelist-print-stock-admin', ORDELIST_URL . 'assets/css/ole-print-stock-admin.css', array(), ORDELIST_VERSION );
 		wp_enqueue_script( 'ordelist-print-stock-admin', ORDELIST_URL . 'assets/js/ole-print-stock-admin.js', array( 'jquery', 'wc-enhanced-select' ), ORDELIST_VERSION, true );
@@ -62,6 +64,9 @@ class ORDELIST_Print_Stock_Admin {
 					'instruction' => __( 'Instruction', 'order-list-enhancer' ),
 					'set'         => __( 'Set', 'order-list-enhancer' ),
 					'addPrinted'  => __( '+ printed', 'order-list-enhancer' ),
+					'addFile'     => __( '+ File', 'order-list-enhancer' ),
+					'filesTitle'  => __( 'Choose printable files', 'order-list-enhancer' ),
+					'filesButton' => __( 'Attach', 'order-list-enhancer' ),
 				),
 				'thresholds' => array(
 					'sticker'     => (int) $o['print_stock_threshold_sticker'],
@@ -168,6 +173,47 @@ class ORDELIST_Print_Stock_Admin {
 		}
 		wp_send_json_success();
 	}
+
+	const ALLOWED_MIMES = array( 'application/pdf', 'image/jpeg', 'image/png' );
+
+	/** Внутрішній HTML комірки "Files": чіпи + кнопка додавання. */
+	public static function files_cell_html( $ids ) {
+		$html = '';
+		foreach ( ORDELIST_Print_Stock_Calc::sanitize_attachment_ids( $ids ) as $att_id ) {
+			$url = wp_get_attachment_url( $att_id );
+			if ( $url ) {
+				$name  = get_the_title( $att_id );
+				$name  = '' !== $name ? $name : wp_basename( $url );
+				$html .= '<span class="ole-ps-file" data-att="' . esc_attr( (string) $att_id ) . '">'
+					. '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html( $name ) . '</a>'
+					. ' <button type="button" class="ole-ps-file-remove" aria-label="' . esc_attr__( 'Remove file', 'order-list-enhancer' ) . '">&times;</button></span> ';
+			} else {
+				$html .= '<span class="ole-ps-file ole-ps-file-missing" data-att="' . esc_attr( (string) $att_id ) . '">'
+					. esc_html__( '(file deleted)', 'order-list-enhancer' )
+					. ' <button type="button" class="ole-ps-file-remove" aria-label="' . esc_attr__( 'Remove file', 'order-list-enhancer' ) . '">&times;</button></span> ';
+			}
+		}
+		$html .= '<button type="button" class="button ole-ps-file-add">' . esc_html__( '+ File', 'order-list-enhancer' ) . '</button>';
+		return $html;
+	}
+
+	public static function ajax_set_files() {
+		self::guard();
+		$id  = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
+		$row = $id ? ORDELIST_Print_Stock_Store::get_consumable( $id ) : null;
+		if ( ! $row ) {
+			wp_send_json_error( array( 'message' => 'not_found' ), 404 );
+		}
+		$csv = isset( $_POST['attachments'] ) ? sanitize_text_field( wp_unslash( $_POST['attachments'] ) ) : '';
+		$ids = ORDELIST_Print_Stock_Calc::sanitize_attachment_ids( '' === $csv ? array() : explode( ',', $csv ) );
+		// Тільки реальні вкладення дозволених типів; невалідні мовчки відкидаються.
+		$ids = array_values( array_filter( $ids, function ( $att_id ) {
+			return 'attachment' === get_post_type( $att_id )
+				&& in_array( (string) get_post_mime_type( $att_id ), self::ALLOWED_MIMES, true );
+		} ) );
+		ORDELIST_Print_Stock_Store::set_attachments( $id, $ids );
+		wp_send_json_success( array( 'html' => self::files_cell_html( $ids ) ) );
+	}
 	// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 	private static function status_class( $row ) {
@@ -195,6 +241,7 @@ class ORDELIST_Print_Stock_Admin {
 				<thead><tr>
 					<th><?php esc_html_e( 'Name', 'order-list-enhancer' ); ?></th>
 					<th style="width:120px"><?php esc_html_e( 'Stock', 'order-list-enhancer' ); ?></th>
+					<th style="width:22%"><?php esc_html_e( 'Files', 'order-list-enhancer' ); ?></th>
 					<th style="width:300px"><?php esc_html_e( 'Actions', 'order-list-enhancer' ); ?></th>
 				</tr></thead>
 				<tbody>
@@ -202,6 +249,7 @@ class ORDELIST_Print_Stock_Admin {
 					<tr class="<?php echo esc_attr( self::status_class( $r ) ); ?>" data-id="<?php echo esc_attr( $r['id'] ); ?>">
 						<td><?php echo esc_html( $r['name'] ); ?></td>
 						<td><input type="number" step="1" class="ole-ps-stock" value="<?php echo esc_attr( (string) (int) $r['stock'] ); ?>" style="width:90px"/></td>
+						<td class="ole-ps-files"><?php echo self::files_cell_html( ORDELIST_Print_Stock_Calc::decode_attachments( $r['attachments'] ?? null ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts ?></td>
 						<td>
 							<button type="button" class="button ole-ps-save"><?php esc_html_e( 'Set', 'order-list-enhancer' ); ?></button>
 							<button type="button" class="button ole-ps-add"><?php esc_html_e( '+ printed', 'order-list-enhancer' ); ?></button>
@@ -214,6 +262,7 @@ class ORDELIST_Print_Stock_Admin {
 							<select class="wc-product-search ole-ps-sticker-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%"></select>
 						</td>
 						<td><input type="number" step="1" class="ole-ps-sticker-stock" value="0" style="width:90px"/></td>
+						<td class="ole-ps-files"></td>
 						<td><button type="button" class="button button-primary ole-ps-sticker-add"><?php esc_html_e( 'Add', 'order-list-enhancer' ); ?></button></td>
 					</tr>
 				</tbody>
@@ -226,6 +275,7 @@ class ORDELIST_Print_Stock_Admin {
 					<th style="width:22%"><?php esc_html_e( 'Name', 'order-list-enhancer' ); ?></th>
 					<th><?php esc_html_e( 'Products', 'order-list-enhancer' ); ?></th>
 					<th style="width:100px"><?php esc_html_e( 'Stock', 'order-list-enhancer' ); ?></th>
+					<th style="width:20%"><?php esc_html_e( 'Files', 'order-list-enhancer' ); ?></th>
 					<th style="width:160px"><?php esc_html_e( 'Actions', 'order-list-enhancer' ); ?></th>
 				</tr></thead>
 				<tbody>
@@ -241,6 +291,7 @@ class ORDELIST_Print_Stock_Admin {
 							</select>
 						</td>
 						<td><input type="number" step="1" class="ole-ps-sheet-stock" value="<?php echo esc_attr( (string) (int) $s['stock'] ); ?>" style="width:90px"/></td>
+						<td class="ole-ps-files"><?php echo self::files_cell_html( ORDELIST_Print_Stock_Calc::decode_attachments( $s['attachments'] ?? null ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts ?></td>
 						<td>
 							<button type="button" class="button ole-ps-sheet-save"><?php esc_html_e( 'Save', 'order-list-enhancer' ); ?></button>
 							<button type="button" class="button ole-ps-sheet-delete">&times;</button>
@@ -253,6 +304,7 @@ class ORDELIST_Print_Stock_Admin {
 							<select multiple class="wc-product-search ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products" style="width:100%"></select>
 						</td>
 						<td><input type="number" step="1" class="ole-ps-sheet-stock" value="0" style="width:90px"/></td>
+						<td class="ole-ps-files"></td>
 						<td><button type="button" class="button button-primary ole-ps-sheet-save"><?php esc_html_e( 'Add', 'order-list-enhancer' ); ?></button></td>
 					</tr>
 				</tbody>
