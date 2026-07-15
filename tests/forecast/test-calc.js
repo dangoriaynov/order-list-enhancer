@@ -51,6 +51,8 @@ var co = C.autoCoefficient( series, '2026', '2025', '06-01' );
 check( Math.abs( co.value - 0.5 ) < 1e-9 && co.refZero === false, 'auto coefficient = current YTD / ref YTD' );
 var co0 = C.autoCoefficient( series, '2026', '2020', '06-01' );
 check( co0.value === 1 && co0.refZero === true, 'zero reference slice -> coefficient 1 + flag' );
+var coNeg = C.autoCoefficient( { '2025': { '01-10': 10 }, '2026': { '01-05': 2, '01-08': -5 } }, '2026', '2025', '06-01' );
+check( coNeg.value === 0 && coNeg.refZero === false, 'negative current-year net clamps coefficient to 0' );
 
 // ---- forecast / recommendation ----
 check( Math.abs( C.forecast( 100, 0.5, 20 ) - 60 ) < 1e-9, 'forecast = slice * coef * (1+margin%)' );
@@ -83,6 +85,12 @@ check( split[ 2 ].pcs === 5, 'split: 50% share of 10kg at 1kg -> 5 pcs' );
 check( split[ 0 ].pcs === Math.ceil( split[ 0 ].pcs ), 'split rounds up' );
 var none = C.variationSplit( 10, vs, '2019', '01-01', '12-31' );
 check( none[ 0 ].pcs === 0 && none[ 2 ].pcs === 0, 'zero reference total -> all zeros' );
+var vsNeg = [
+	{ id: 20, weight_kg: 1, series: { '2025': { '02-01': 10 } } },  // +10 кг в опорному відрізку
+	{ id: 21, weight_kg: 1, series: { '2025': { '02-01': -5 } } }   // чистий мінус — частка 0
+];
+var splitNeg = C.variationSplit( 10, vsNeg, '2025', '01-01', '12-31' );
+check( splitNeg[ 0 ].pcs === 10 && splitNeg[ 1 ].pcs === 0, 'negative ref share clamped to zero, others not inflated' );
 
 console.log( fails ? '\n' + fails + ' FAILED' : '\nALL PASS' );
 process.exit( fails ? 1 : 0 );
