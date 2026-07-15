@@ -1097,3 +1097,7 @@ msgstr ""
 #: includes/class-ordelist-forecast-admin.php
 msgid "No sales recorded for this product yet."
 msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "projection"
+msgstr ""

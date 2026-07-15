@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.50
+Stable tag: 1.0.51
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.51 =
+* Purchase planning: the current-year curve now continues past today as a dashed projection (reference-year pace × coefficient), and the chart's X axis marks the start of each month instead of arbitrary dates.
 
 = 1.0.50 =
 * Print consumables: attach printable files (PDF/JPG/PNG from the Media Library) to any sticker or instruction sheet — open them in one click from the stock page; low-stock emails now include direct links to the files that need printing.
