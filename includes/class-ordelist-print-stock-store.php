@@ -285,7 +285,7 @@ class ORDELIST_Print_Stock_Store {
 		) );
 	}
 
-	/** Якщо запас піднявся вище порогу свого типу — переозброїти low_notified. */
+	/** Якщо запас піднявся вище порогу свого типу - переозброїти low_notified. */
 	private static function rearm_if_above( $id ) {
 		$row = self::get_consumable( $id );
 		if ( ! $row || (int) $row['low_notified'] === 0 ) {

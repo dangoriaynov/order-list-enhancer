@@ -37,7 +37,7 @@ jQuery( function ( $ ) {
 		}
 	} );
 
-	// AJAX save — no page reload. A nonce lives 24h; if the tab sat open longer
+	// AJAX save - no page reload. A nonce lives 24h; if the tab sat open longer
 	// the save 403s, so we fetch a fresh nonce once and retry before giving up.
 	$form.on( 'submit', function ( e ) {
 		e.preventDefault();
@@ -113,12 +113,12 @@ jQuery( function ( $ ) {
 					minimumInputLength: 2,
 					width: '100%',
 					dropdownAutoWidth: true,
-					// Lead the selected label with the size ("… - 500 г" -> "500 г — …")
+					// Lead the selected label with the size ("… - 500 г" -> "500 г - …")
 					// so variations stay distinguishable when the box truncates.
 					templateSelection: function ( data ) {
 						var t = ( data && data.text ) || '';
 						var i = t.lastIndexOf( ' - ' );
-						return i > -1 ? ( t.slice( i + 3 ) + ' — ' + t.slice( 0, i ) ) : t;
+						return i > -1 ? ( t.slice( i + 3 ) + ' - ' + t.slice( 0, i ) ) : t;
 					}
 				} );
 			}

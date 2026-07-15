@@ -20,7 +20,7 @@ class ORDELIST_Order_Total {
 
 		$html = $order->get_formatted_order_total();
 
-		// Десетичен разделител по избор — сменяме само разделителя МЕЖДУ цифри,
+		// Десетичен разделител по избор - сменяме само разделителя МЕЖДУ цифри,
 		// за да не пипнем валутния символ (напр. „лв.").
 		$sep    = $opts['total_decimal_sep'];
 		$wc_dec = function_exists( 'wc_get_price_decimal_separator' ) ? wc_get_price_decimal_separator() : '.';

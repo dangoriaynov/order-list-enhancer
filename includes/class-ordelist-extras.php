@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Перетворює зіставлені екстри (Product Add-Ons / Checkout Add-Ons) на окремі товарні рядки
- * при створенні замовлення. Чиста логіка — в [[ORDELIST_Extras_Matcher]].
+ * при створенні замовлення. Чиста логіка - в [[ORDELIST_Extras_Matcher]].
  */
 class ORDELIST_Extras {
 
@@ -45,7 +45,7 @@ class ORDELIST_Extras {
 		$count += self::convert_checkout_addons( $order, $index, $notes );
 
 		if ( $count > 0 ) {
-			$order->add_order_note( __( 'OLE — extras converted to product lines:', 'ordelist' ) . "\n" . implode( "\n", $notes ) );
+			$order->add_order_note( __( 'OLE - extras converted to product lines:', 'ordelist' ) . "\n" . implode( "\n", $notes ) );
 			$order->update_meta_data( '_ordelist_extras_converted', 1 );
 			$order->save();
 		}

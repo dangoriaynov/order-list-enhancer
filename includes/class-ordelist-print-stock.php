@@ -38,8 +38,8 @@ class ORDELIST_Print_Stock {
 		add_filter( 'manage_edit-shop_order_columns', array( __CLASS__, 'add_order_column' ) );
 		add_action( 'manage_shop_order_posts_custom_column', array( __CLASS__, 'render_order_column_legacy' ), 10, 2 );
 
-		// Адмін-UI реєструється в своїх задачах (поля товару — Task 5; сторінка — Task 6;
-		// банер/значок — Task 7). Тут лише споживання/повернення + email.
+		// Адмін-UI реєструється в своїх задачах (поля товару - Task 5; сторінка - Task 6;
+		// банер/значок - Task 7). Тут лише споживання/повернення + email.
 	}
 
 	public static function threshold_for( $type ) {
@@ -97,7 +97,7 @@ class ORDELIST_Print_Stock {
 
 	private static function consume( WC_Order $order ) {
 		// Бекстоп ідемпотентності: якщо журнал уже має списання цього замовлення
-		// (напр. мета-прапорець не зберігся через збій) — не списувати вдруге.
+		// (напр. мета-прапорець не зберігся через збій) - не списувати вдруге.
 		if ( ORDELIST_Print_Stock_Store::is_consumed( $order->get_id() ) ) {
 			$order->update_meta_data( self::STATE_META, 'consumed' );
 			$order->save();
@@ -189,14 +189,14 @@ class ORDELIST_Print_Stock {
 
 	private static function send_low_email( $crossed ) {
 		$to      = get_option( 'admin_email' );
-		$subject = __( 'OLE — time to print more consumables', 'ordelist' );
+		$subject = __( 'OLE - time to print more consumables', 'ordelist' );
 		$lines   = array( __( 'These items dropped to their low threshold:', 'ordelist' ), '' );
 		foreach ( $crossed as $c ) {
 			$label = ( 'instruction' === $c['type'] )
 				? __( 'Instruction', 'ordelist' )
 				: __( 'Sticker', 'ordelist' );
 			/* translators: 1: type, 2: name, 3: remaining stock. */
-			$lines[] = sprintf( __( '%1$s "%2$s" — %3$d left', 'ordelist' ), $label, $c['name'], (int) $c['stock'] );
+			$lines[] = sprintf( __( '%1$s "%2$s" - %3$d left', 'ordelist' ), $label, $c['name'], (int) $c['stock'] );
 			if ( ! empty( $c['id'] ) ) {
 				foreach ( ORDELIST_Print_Stock_Store::get_attachments( (int) $c['id'] ) as $att_id ) {
 					$url = wp_get_attachment_url( $att_id );
@@ -281,7 +281,7 @@ class ORDELIST_Print_Stock {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return;
 		}
-		// Don't nag on the stock page itself — it already lists everything and the link points here.
+		// Don't nag on the stock page itself - it already lists everything and the link points here.
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		if ( $screen && false !== strpos( (string) $screen->id, ORDELIST_Print_Stock_Admin::SLUG ) ) {
 			return;
@@ -297,7 +297,7 @@ class ORDELIST_Print_Stock {
 		$url = admin_url( 'admin.php?page=' . ORDELIST_Print_Stock_Admin::SLUG );
 		printf(
 			'<div class="notice notice-warning"><p>%s <a href="%s">%s</a></p></div>',
-			esc_html( sprintf( /* translators: %d: number of low items. */ _n( '%d print consumable is low — time to print more.', '%d print consumables are low — time to print more.', $count, 'ordelist' ), $count ) ),
+			esc_html( sprintf( /* translators: %d: number of low items. */ _n( '%d print consumable is low - time to print more.', '%d print consumables are low - time to print more.', $count, 'ordelist' ), $count ) ),
 			esc_url( $url ),
 			esc_html__( 'Open stock', 'ordelist' )
 		);

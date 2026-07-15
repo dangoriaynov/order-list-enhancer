@@ -5,14 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Сторінка «Планування закупівлі»: графік продажів по роках + рекомендація
- * скільки взяти на період. Уся математика — на клієнті; тут меню, ассети й AJAX.
+ * скільки взяти на період. Уся математика - на клієнті; тут меню, ассети й AJAX.
  */
 class ORDELIST_Forecast_Admin {
 
 	const SLUG = 'ordelist-forecast';
 
 	public static function init() {
-		// Таблиця партій потрібна для залишків — гарантуємо її наявність (ідемпотентно).
+		// Таблиця партій потрібна для залишків - гарантуємо її наявність (ідемпотентно).
 		ORDELIST_Warranty_Store::maybe_upgrade();
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'assets' ) );
@@ -59,13 +59,13 @@ class ORDELIST_Forecast_Admin {
 					'kg'        => __( 'kg', 'ordelist' ),
 					'pcs'       => __( 'pcs', 'ordelist' ),
 					'year'      => __( 'Year', 'ordelist' ),
-					'noWeight'  => __( 'no weight set — pieces only', 'ordelist' ),
+					'noWeight'  => __( 'no weight set - pieces only', 'ordelist' ),
 					/* translators: %s: number of variations. */
-					'noWeightMany' => __( '%s variations have no weight — counted in pieces only', 'ordelist' ),
-					'noBatches' => __( 'Stock not subtracted — no batches are tracked for this product.', 'ordelist' ),
+					'noWeightMany' => __( '%s variations have no weight - counted in pieces only', 'ordelist' ),
+					'noBatches' => __( 'Stock not subtracted - no batches are tracked for this product.', 'ordelist' ),
 					'noSales'   => __( 'No sales recorded for this product yet.', 'ordelist' ),
 					'projection' => __( 'projection', 'ordelist' ),
-					'refZero'   => __( 'Reference year has no sales in this slice — coefficient set to 1.', 'ordelist' ),
+					'refZero'   => __( 'Reference year has no sales in this slice - coefficient set to 1.', 'ordelist' ),
 					/* translators: %s: amount with unit, e.g. "3 kg". */
 					'expiring'  => __( 'of which %s expires before the period ends', 'ordelist' ),
 					'forecastL' => __( 'Forecast demand', 'ordelist' ),
@@ -110,7 +110,7 @@ class ORDELIST_Forecast_Admin {
 			<div class="ole-fc-chart"><canvas id="ole-fc-canvas"></canvas></div>
 
 			<div class="ole-fc-controls">
-				<label><?php esc_html_e( 'Period', 'ordelist' ); ?> <input type="date" class="ole-fc-start"/> — <input type="date" class="ole-fc-end"/></label>
+				<label><?php esc_html_e( 'Period', 'ordelist' ); ?> <input type="date" class="ole-fc-start"/> - <input type="date" class="ole-fc-end"/></label>
 				<button type="button" class="button ole-fc-preset" data-days="30"><?php esc_html_e( 'Month', 'ordelist' ); ?></button>
 				<button type="button" class="button ole-fc-preset" data-days="91"><?php esc_html_e( 'Quarter', 'ordelist' ); ?></button>
 				<button type="button" class="button ole-fc-preset" data-days="182"><?php esc_html_e( 'Half-year', 'ordelist' ); ?></button>

@@ -1,5 +1,5 @@
 ( function () {
-	// Validator — must mirror ORDELIST_Phone_Validator (PHP).
+	// Validator - must mirror ORDELIST_Phone_Validator (PHP).
 	function validate( raw, cc ) {
 		cc = String( cc || '359' ).replace( /\D+/g, '' ) || '359';
 		var s = String( raw == null ? '' : raw );
@@ -42,7 +42,7 @@
 		return el;
 	}
 	// Drive WooCommerce's own field state classes so the field gets the theme's
-	// native red (invalid) / green (validated) styling — the standard checkout look.
+	// native red (invalid) / green (validated) styling - the standard checkout look.
 	function setRowState( field, state ) {
 		var row = rowEl( field );
 		if ( ! row || ! row.classList ) { return; }

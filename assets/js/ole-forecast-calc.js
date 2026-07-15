@@ -8,7 +8,7 @@
 	function pad( n ) { return ( n < 10 ? '0' : '' ) + n; }
 	function has( o, k ) { return Object.prototype.hasOwnProperty.call( o, k ); }
 
-	// 365 ключів 'MM-DD' (без 29 лютого — воно складається у 28-ме).
+	// 365 ключів 'MM-DD' (без 29 лютого - воно складається у 28-ме).
 	C.mmddList = function () {
 		var days = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
 		var out = [];
@@ -80,8 +80,8 @@
 		return out;
 	};
 
-	// Прогнозна крива поточного року: до сьогодні — null (там малює фактична лінія),
-	// від сьогодні — факт + приріст опорного року за той самий відрізок × коефіцієнт.
+	// Прогнозна крива поточного року: до сьогодні - null (там малює фактична лінія),
+	// від сьогодні - факт + приріст опорного року за той самий відрізок × коефіцієнт.
 	C.projection = function ( curSeries, refSeries, todayMMDD, coefficient, mmdd ) {
 		mmdd = mmdd || C.mmddList();
 		var cumCur = C.cumulative( curSeries, mmdd );
@@ -101,7 +101,7 @@
 		var ref = C.rangeSum( series[ refYear ], '01-01', todayMMDD );
 		if ( ref <= 0 ) { return { value: 1, refZero: true }; }
 		var value = cur / ref;
-		if ( value < 0 ) { value = 0; } // чистий мінус цього року — коефіцієнт 0, прогноз нульовий
+		if ( value < 0 ) { value = 0; } // чистий мінус цього року - коефіцієнт 0, прогноз нульовий
 		return { value: value, refZero: false };
 	};
 
@@ -151,7 +151,7 @@
 			if ( null !== v.weight_kg && undefined !== v.weight_kg ) {
 				kg = C.rangeSum( C.foldFeb29( v.series[ refYear ] || {} ), startMMDD, endMMDD ) * v.weight_kg;
 			}
-			if ( kg < 0 ) { kg = 0; } // повернень більше ніж продажів — частка нульова, не спотворює інших
+			if ( kg < 0 ) { kg = 0; } // повернень більше ніж продажів - частка нульова, не спотворює інших
 			shares.push( kg );
 			total += kg;
 		}

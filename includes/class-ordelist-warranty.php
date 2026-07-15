@@ -16,7 +16,7 @@ class ORDELIST_Warranty {
 	public static function init() {
 		ORDELIST_Warranty_Store::maybe_upgrade();
 
-		// Створення замовлення + переходи статусів — той самий набір хуків, що й у витратних.
+		// Створення замовлення + переходи статусів - той самий набір хуків, що й у витратних.
 		add_action( 'woocommerce_checkout_order_processed', array( __CLASS__, 'on_order' ), 40, 1 );
 		add_action( 'woocommerce_store_api_checkout_order_processed', array( __CLASS__, 'on_order' ), 40, 1 );
 		add_action( 'woocommerce_order_status_changed', array( __CLASS__, 'on_status_changed' ), 40, 4 );
@@ -42,7 +42,7 @@ class ORDELIST_Warranty {
 		wp_clear_scheduled_hook( self::CRON_HOOK );
 	}
 
-	/** Після збереження налаштувань (спрацьовує і коли фічу щойно вимкнули — клас завантажений завжди). */
+	/** Після збереження налаштувань (спрацьовує і коли фічу щойно вимкнули - клас завантажений завжди). */
 	public static function sync_schedule( array $opts ) {
 		if ( ORDELIST_Settings::is_yes( $opts, 'warranty_enabled' ) ) {
 			self::ensure_scheduled();
@@ -82,7 +82,7 @@ class ORDELIST_Warranty {
 	}
 
 	private static function consume( WC_Order $order ) {
-		// Бекстоп ідемпотентності: мапа вже записана (прапорець стану загубився через збій) — не списувати вдруге.
+		// Бекстоп ідемпотентності: мапа вже записана (прапорець стану загубився через збій) - не списувати вдруге.
 		$existing = $order->get_meta( self::CONSUMED_META );
 		if ( is_array( $existing ) && ! empty( $existing ) ) {
 			$order->update_meta_data( self::STATE_META, 'consumed' );
@@ -90,7 +90,7 @@ class ORDELIST_Warranty {
 			return;
 		}
 
-		// Кілька рядків одного товару зливаються в один попит — інакше другий рядок
+		// Кілька рядків одного товару зливаються в один попит - інакше другий рядок
 		// розподілявся б по ще не списаних партіях (take_qty відкладено, SELECT їх не бачить).
 		$demand = array();
 		foreach ( $order->get_items( 'line_item' ) as $item ) {
@@ -111,11 +111,11 @@ class ORDELIST_Warranty {
 			$demand[ $key ]['qty'] += $qty;
 		}
 
-		// Спочатку рахуємо повну мапу списання в пам'яті — жодного take_qty() тут ще нема.
+		// Спочатку рахуємо повну мапу списання в пам'яті - жодного take_qty() тут ще нема.
 		$map = array();
 		foreach ( $demand as $d ) {
 			$batches = ORDELIST_Warranty_Store::batches_for_target( $d['id'], $d['is_variation'] );
-			$takes   = ORDELIST_Warranty_Calc::allocate( $d['qty'], $batches ); // без партій — порожньо, нічого не пишемо
+			$takes   = ORDELIST_Warranty_Calc::allocate( $d['qty'], $batches ); // без партій - порожньо, нічого не пишемо
 			foreach ( $takes as $bid => $take ) {
 				$map[ (int) $bid ] = ( $map[ (int) $bid ] ?? 0 ) + (int) $take;
 			}
@@ -127,7 +127,7 @@ class ORDELIST_Warranty {
 		}
 		$order->save();
 
-		// Тільки після save() списуємо партії. Якщо процес впаде між save() і цим циклом —
+		// Тільки після save() списуємо партії. Якщо процес впаде між save() і цим циклом -
 		// партії залишаться НЕсписаними (недосписання видно на сторінці і виправляється вручну),
 		// замість подвійного списання при повторі хука.
 		foreach ( $map as $bid => $take ) {
@@ -139,7 +139,7 @@ class ORDELIST_Warranty {
 		$map = $order->get_meta( self::CONSUMED_META );
 		if ( is_array( $map ) ) {
 			foreach ( $map as $bid => $qty ) {
-				ORDELIST_Warranty_Store::give_back( (int) $bid, (int) $qty ); // видалена партія — мовчки пропускається
+				ORDELIST_Warranty_Store::give_back( (int) $bid, (int) $qty ); // видалена партія - мовчки пропускається
 			}
 		}
 		$order->update_meta_data( self::STATE_META, 'restored' );
@@ -179,7 +179,7 @@ class ORDELIST_Warranty {
 	}
 
 	private static function send_email( $lists, $window ) {
-		$subject = __( 'OLE — product expiry dates need attention', 'ordelist' );
+		$subject = __( 'OLE - product expiry dates need attention', 'ordelist' );
 		$lines   = array();
 		if ( $lists['expired'] ) {
 			$lines[] = __( 'Expired:', 'ordelist' );
@@ -204,7 +204,7 @@ class ORDELIST_Warranty {
 			$name .= ' (' . $row['note'] . ')';
 		}
 		/* translators: 1: product name, 2: expiry date, 3: quantity left. */
-		return sprintf( __( '%1$s — %2$s, %3$d left', 'ordelist' ), $name, $row['expiry'], (int) $row['qty'] );
+		return sprintf( __( '%1$s - %2$s, %3$d left', 'ordelist' ), $name, $row['expiry'], (int) $row['qty'] );
 	}
 
 	/* ---------- банер ---------- */
@@ -213,7 +213,7 @@ class ORDELIST_Warranty {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return;
 		}
-		// Не докучати на самій сторінці партій — там усе й так видно.
+		// Не докучати на самій сторінці партій - там усе й так видно.
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		if ( $screen && false !== strpos( (string) $screen->id, ORDELIST_Warranty_Admin::SLUG ) ) {
 			return;
@@ -235,7 +235,7 @@ class ORDELIST_Warranty {
 			$bits[] = sprintf( _n( '%d batch already expired', '%d batches already expired', $counts['expired'], 'ordelist' ), (int) $counts['expired'] );
 		}
 		printf(
-			'<div class="notice notice-warning"><p>%s — <a href="%s">%s</a></p></div>',
+			'<div class="notice notice-warning"><p>%s - <a href="%s">%s</a></p></div>',
 			esc_html( implode( ', ', $bits ) ),
 			esc_url( admin_url( 'admin.php?page=' . ORDELIST_Warranty_Admin::SLUG ) ),
 			esc_html__( 'Open warranty dates', 'ordelist' )

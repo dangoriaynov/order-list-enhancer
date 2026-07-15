@@ -64,21 +64,21 @@ class ORDELIST_Settings_Page {
 					'saving'  => __( 'Saving…', 'ordelist' ),
 					'saved'   => __( 'Saved.', 'ordelist' ),
 					'error'   => __( 'Save failed.', 'ordelist' ),
-					'expired' => __( 'Session expired — reload the page and try again.', 'ordelist' ),
+					'expired' => __( 'Session expired - reload the page and try again.', 'ordelist' ),
 				),
 			)
 		);
 	}
 
 	/**
-	 * Короткий ярлик товару для мапінгу: для варіацій — спершу розмір (щоб було видно,
-	 * який обрано, навіть коли довгу назву обрізає; напр. «500 г — Янтарна …»).
+	 * Короткий ярлик товару для мапінгу: для варіацій - спершу розмір (щоб було видно,
+	 * який обрано, навіть коли довгу назву обрізає; напр. «500 г - Янтарна …»).
 	 */
 	private static function extra_product_label( $product ) {
 		if ( $product->is_type( 'variation' ) ) {
 			$size   = wc_get_formatted_variation( $product, true, false );
 			$parent = wp_strip_all_tags( get_the_title( $product->get_parent_id() ) );
-			return ( '' !== $size ? $size . ' — ' : '' ) . $parent;
+			return ( '' !== $size ? $size . ' - ' : '' ) . $parent;
 		}
 		return wp_strip_all_tags( $product->get_name() );
 	}
@@ -205,12 +205,12 @@ class ORDELIST_Settings_Page {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Scan limit', 'ordelist' ); ?></th>
 				<td><input type="number" name="scan_limit" min="100" max="5000" step="100" value="<?php echo esc_attr( $o['scan_limit'] ); ?>"/>
-				<p class="description"><?php esc_html_e( 'How many of the newest orders (all statuses) are scanned on every list load. Allowed range 100–5000, default 1500. An empty or out-of-range value is clamped when saving — empty becomes 100, not unlimited.', 'ordelist' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'How many of the newest orders (all statuses) are scanned on every list load. Allowed range 100-5000, default 1500. An empty or out-of-range value is clamped when saving - empty becomes 100, not unlimited.', 'ordelist' ); ?></p></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Duplicate window (days)', 'ordelist' ); ?></th>
 				<td><input type="number" name="dup_window_days" min="1" max="60" step="1" value="<?php echo esc_attr( $o['dup_window_days'] ); ?>"/>
-				<p class="description"><?php esc_html_e( 'Two orders from the same customer within this many days (or 2+ still in processing) are flagged as likely duplicates. Allowed range 1–60, default 3; empty or out-of-range values are clamped when saving.', 'ordelist' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'Two orders from the same customer within this many days (or 2+ still in processing) are flagged as likely duplicates. Allowed range 1-60, default 3; empty or out-of-range values are clamped when saving.', 'ordelist' ); ?></p></td>
 			</tr>
 		</tbody></table>
 		<?php
@@ -268,7 +268,7 @@ class ORDELIST_Settings_Page {
 
 		self::card_open(
 			__( 'Order-total coloring', 'ordelist' ),
-			__( 'Ring an order (row + address panel) when its total reaches a threshold; the highest matching threshold wins. Drawn on top of any shipping color — both stay visible.', 'ordelist' ),
+			__( 'Ring an order (row + address panel) when its total reaches a threshold; the highest matching threshold wins. Drawn on top of any shipping color - both stay visible.', 'ordelist' ),
 			array( 'name' => 'total_color_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'total_color_enabled' ) )
 		);
 		?>
@@ -363,12 +363,12 @@ class ORDELIST_Settings_Page {
 					}
 					?>
 					<select name="bulk_default_action">
-						<option value="" <?php selected( $bulk_cur, '' ); ?>><?php esc_html_e( '— (none)', 'ordelist' ); ?></option>
+						<option value="" <?php selected( $bulk_cur, '' ); ?>><?php esc_html_e( '- (none)', 'ordelist' ); ?></option>
 						<?php foreach ( $bulk_actions as $val => $label ) : ?>
 							<option value="<?php echo esc_attr( $val ); ?>" <?php selected( $bulk_cur, (string) $val ); ?>><?php echo esc_html( '' !== $label ? $label : $val ); ?></option>
 						<?php endforeach; ?>
 					</select>
-					<p class="description"><?php esc_html_e( 'The list is filled from your Orders screen — open the Orders list once if it looks empty.', 'ordelist' ); ?></p>
+					<p class="description"><?php esc_html_e( 'The list is filled from your Orders screen - open the Orders list once if it looks empty.', 'ordelist' ); ?></p>
 				</td>
 			</tr>
 		</tbody></table>
@@ -385,7 +385,7 @@ class ORDELIST_Settings_Page {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Default interval (seconds)', 'ordelist' ); ?></th>
 				<td><input type="number" name="seq_open_interval" min="1" max="300" step="1" value="<?php echo esc_attr( $o['seq_open_interval'] ); ?>"/>
-				<p class="description"><?php esc_html_e( 'Editable on the button too. Allowed range 1–300 seconds, default 7; empty or out-of-range values are clamped when saving. Your browser must allow pop-ups for this site, or only the first tab opens.', 'ordelist' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'Editable on the button too. Allowed range 1-300 seconds, default 7; empty or out-of-range values are clamped when saving. Your browser must allow pop-ups for this site, or only the first tab opens.', 'ordelist' ); ?></p></td>
 			</tr>
 		</tbody></table>
 		<?php
@@ -442,7 +442,7 @@ class ORDELIST_Settings_Page {
 				<th scope="row"><?php esc_html_e( 'Window (minutes)', 'ordelist' ); ?></th>
 				<td>
 					<input type="number" name="dup_guard_window_min" min="1" max="120" step="1" value="<?php echo esc_attr( (string) $o['dup_guard_window_min'] ); ?>" />
-					<p class="description"><?php esc_html_e( 'Same phone + same cart within this many minutes counts as a duplicate. Allowed range 1–120, default 5; empty or out-of-range values are clamped when saving.', 'ordelist' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Same phone + same cart within this many minutes counts as a duplicate. Allowed range 1-120, default 5; empty or out-of-range values are clamped when saving.', 'ordelist' ); ?></p>
 				</td>
 			</tr>
 		</tbody></table>
@@ -555,12 +555,12 @@ class ORDELIST_Settings_Page {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Sticker low threshold', 'ordelist' ); ?></th>
 				<td><input type="number" name="print_stock_threshold_sticker" min="0" max="100000" step="1" value="<?php echo esc_attr( (string) $o['print_stock_threshold_sticker'] ); ?>"/>
-				<p class="description"><?php esc_html_e( 'Warn ("time to print") when a sticker stock drops to this or below. Allowed range 0–100000, default 20; empty or out-of-range values are clamped when saving.', 'ordelist' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'Warn ("time to print") when a sticker stock drops to this or below. Allowed range 0-100000, default 20; empty or out-of-range values are clamped when saving.', 'ordelist' ); ?></p></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Instruction low threshold', 'ordelist' ); ?></th>
 				<td><input type="number" name="print_stock_threshold_instruction" min="0" max="100000" step="1" value="<?php echo esc_attr( (string) $o['print_stock_threshold_instruction'] ); ?>"/>
-				<p class="description"><?php esc_html_e( 'Warn when an instruction sheet stock drops to this or below. Allowed range 0–100000, default 5; empty or out-of-range values are clamped when saving.', 'ordelist' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'Warn when an instruction sheet stock drops to this or below. Allowed range 0-100000, default 5; empty or out-of-range values are clamped when saving.', 'ordelist' ); ?></p></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Stock page', 'ordelist' ); ?></th>
@@ -580,7 +580,7 @@ class ORDELIST_Settings_Page {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Warn ahead, days', 'ordelist' ); ?></th>
 				<td><input type="number" name="warranty_days" min="1" max="365" step="1" value="<?php echo esc_attr( (string) $o['warranty_days'] ); ?>"/>
-				<p class="description"><?php esc_html_e( 'Email + banner when a batch is within this many days of its date. Allowed range 1–365, default 30; empty or out-of-range values are clamped when saving.', 'ordelist' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'Email + banner when a batch is within this many days of its date. Allowed range 1-365, default 30; empty or out-of-range values are clamped when saving.', 'ordelist' ); ?></p></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Batches page', 'ordelist' ); ?></th>
@@ -600,7 +600,7 @@ class ORDELIST_Settings_Page {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Safety margin, %', 'ordelist' ); ?></th>
 				<td><input type="number" name="forecast_margin" min="0" max="100" step="1" value="<?php echo esc_attr( (string) $o['forecast_margin'] ); ?>"/>
-				<p class="description"><?php esc_html_e( 'Added on top of the forecast. Allowed range 0–100, default 20; empty or out-of-range values are clamped when saving. Adjustable on the page per calculation.', 'ordelist' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'Added on top of the forecast. Allowed range 0-100, default 20; empty or out-of-range values are clamped when saving. Adjustable on the page per calculation.', 'ordelist' ); ?></p></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Planning page', 'ordelist' ); ?></th>
@@ -622,7 +622,7 @@ class ORDELIST_Settings_Page {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Default country code', 'ordelist' ); ?></th>
 				<td><input type="text" name="phone_cc" value="<?php echo esc_attr( $o['phone_cc'] ); ?>" placeholder="359" style="max-width:120px"/>
-				<p class="description"><?php esc_html_e( 'Digits only, e.g. 359 — anything else is stripped when saving. Added to numbers that have no country code.', 'ordelist' ); ?></p></td>
+				<p class="description"><?php esc_html_e( 'Digits only, e.g. 359 - anything else is stripped when saving. Added to numbers that have no country code.', 'ordelist' ); ?></p></td>
 			</tr>
 		</tbody></table>
 		<?php

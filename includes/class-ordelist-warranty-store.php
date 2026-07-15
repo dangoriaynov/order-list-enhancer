@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Шар БД для партій з термінами придатності (одна таблиця).
- * Запити до таблиці — ЛИШЕ тут; імена таблиць — через %i (Plugin Check).
+ * Запити до таблиці - ЛИШЕ тут; імена таблиць - через %i (Plugin Check).
  */
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- dedicated DB layer for the plugin's own table; tiny result sets, admin/cron only.
 class ORDELIST_Warranty_Store {
@@ -18,7 +18,7 @@ class ORDELIST_Warranty_Store {
 		return $wpdb->prefix . 'ordelist_batch';
 	}
 
-	/** Створити/оновити таблицю (dbDelta), якщо версія БД не збігається. Деплой — rsync, тому НЕ покладаємось на activation hook. */
+	/** Створити/оновити таблицю (dbDelta), якщо версія БД не збігається. Деплой - rsync, тому НЕ покладаємось на activation hook. */
 	public static function maybe_upgrade() {
 		if ( get_option( self::DB_VERSION_OPT ) === self::DB_VERSION ) {
 			return;
@@ -124,7 +124,7 @@ class ORDELIST_Warranty_Store {
 		$wpdb->query( $wpdb->prepare( 'UPDATE %i SET qty = qty - %d WHERE id = %d', self::table_batches(), (int) $take, (int) $id ) );
 	}
 
-	/** Повернення у конкретну партію; false — якщо партію вже видалили вручну. */
+	/** Повернення у конкретну партію; false - якщо партію вже видалили вручну. */
 	public static function give_back( $id, $amount ) {
 		global $wpdb;
 		$n = $wpdb->query( $wpdb->prepare( 'UPDATE %i SET qty = qty + %d WHERE id = %d', self::table_batches(), (int) $amount, (int) $id ) );

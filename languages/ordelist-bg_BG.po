@@ -93,8 +93,8 @@ msgid "phone + name"
 msgstr "телефон + име"
 
 #: includes/class-ordelist-extras.php:48
-msgid "OLE — extras converted to product lines:"
-msgstr "OLE — екстрите са преобразувани в продуктови редове:"
+msgid "OLE - extras converted to product lines:"
+msgstr "OLE - екстрите са преобразувани в продуктови редове:"
 
 #. translators: 1: the add-on extra label, 2: the price it was converted from.
 #: includes/class-ordelist-extras.php:192
@@ -139,8 +139,8 @@ msgid "Invalid phone number. Example: 0888 123 456 or +359 888 123 456."
 msgstr "Невалиден телефонен номер. Пример: 0888 123 456 или +359 888 123 456."
 
 #: includes/class-ordelist-phone-checkout.php:97
-msgid "Phone may be invalid — please verify."
-msgstr "Телефонът може да е невалиден — моля, проверете."
+msgid "Phone may be invalid - please verify."
+msgstr "Телефонът може да е невалиден - моля, проверете."
 
 #. translators: %s: number of orders.
 #: includes/class-ordelist-plugin.php:200
@@ -177,8 +177,8 @@ msgid "Close"
 msgstr "Затвори"
 
 #: includes/class-ordelist-plugin.php:210
-msgid "—"
-msgstr "—"
+msgid "-"
+msgstr "-"
 
 #. translators: %s: delivery method label.
 #: includes/class-ordelist-plugin.php:212
@@ -237,9 +237,9 @@ msgid "Select some orders first."
 msgstr "Първо изберете поръчки."
 
 #: includes/class-ordelist-plugin.php:227
-msgid "Pop-ups are blocked — allow them for this site, then try again."
+msgid "Pop-ups are blocked - allow them for this site, then try again."
 msgstr ""
-"Изскачащите прозорци са блокирани — разрешете ги за този сайт и опитайте пак."
+"Изскачащите прозорци са блокирани - разрешете ги за този сайт и опитайте пак."
 
 #: includes/class-ordelist-print-stock-admin.php:27
 #: includes/class-ordelist-print-stock-admin.php:28
@@ -295,11 +295,11 @@ msgstr "Стикери"
 
 #: includes/class-ordelist-print-stock-admin.php:193
 msgid ""
-"Sticker stock per product or variation — decreases by the ordered quantity. "
+"Sticker stock per product or variation - decreases by the ordered quantity. "
 "Add a product below: pick a variation for per-variation stock, or the "
 "product for one shared count."
 msgstr ""
-"Наличност от стикери за продукт или вариация — намалява с поръчаното "
+"Наличност от стикери за продукт или вариация - намалява с поръчаното "
 "количество. Добавете продукт по-долу: изберете вариация за наличност по "
 "вариация или продукта за една обща бройка."
 
@@ -358,8 +358,8 @@ msgid "New sheet name"
 msgstr "Име на нова листовка"
 
 #: includes/class-ordelist-print-stock.php:192
-msgid "OLE — time to print more consumables"
-msgstr "OLE — време е за печат на консумативи"
+msgid "OLE - time to print more consumables"
+msgstr "OLE - време е за печат на консумативи"
 
 #: includes/class-ordelist-print-stock.php:193
 msgid "These items dropped to their low threshold:"
@@ -372,8 +372,8 @@ msgstr "Стикер"
 #. translators: 1: type, 2: name, 3: remaining stock.
 #: includes/class-ordelist-print-stock.php:199
 #, php-format
-msgid "%1$s \"%2$s\" — %3$d left"
-msgstr "%1$s „%2$s“ — остават %3$d"
+msgid "%1$s \"%2$s\" - %3$d left"
+msgstr "%1$s „%2$s“ - остават %3$d"
 
 #: includes/class-ordelist-print-stock.php:220
 #: includes/class-ordelist-print-stock.php:250
@@ -391,10 +391,10 @@ msgstr ""
 #. translators: %d: number of low items.
 #: includes/class-ordelist-print-stock.php:292
 #, php-format
-msgid "%d print consumable is low — time to print more."
-msgid_plural "%d print consumables are low — time to print more."
-msgstr[0] "%d консуматив за печат е на изчерпване — време е за печат."
-msgstr[1] "%d консуматива за печат са на изчерпване — време е за печат."
+msgid "%d print consumable is low - time to print more."
+msgid_plural "%d print consumables are low - time to print more."
+msgstr[0] "%d консуматив за печат е на изчерпване - време е за печат."
+msgstr[1] "%d консуматива за печат са на изчерпване - време е за печат."
 
 #: includes/class-ordelist-print-stock.php:294
 msgid "Open stock"
@@ -423,8 +423,8 @@ msgid "Save failed."
 msgstr "Неуспешно запазване."
 
 #: includes/class-ordelist-settings-page.php:67
-msgid "Session expired — reload the page and try again."
-msgstr "Сесията е изтекла — презаредете страницата и опитайте отново."
+msgid "Session expired - reload the page and try again."
+msgstr "Сесията е изтекла - презаредете страницата и опитайте отново."
 
 #: includes/class-ordelist-settings-page.php:152
 msgid "Orders"
@@ -481,12 +481,12 @@ msgstr "Лимит на сканиране"
 #: includes/class-ordelist-settings-page.php:208
 msgid ""
 "How many of the newest orders (all statuses) are scanned on every list load. "
-"Allowed range 100–5000, default 1500. An empty or out-of-range value is "
-"clamped when saving — empty becomes 100, not unlimited."
+"Allowed range 100-5000, default 1500. An empty or out-of-range value is "
+"clamped when saving - empty becomes 100, not unlimited."
 msgstr ""
 "Колко от най-новите поръчки (всички статуси) се сканират при всяко зареждане "
-"на списъка. Допустим диапазон 100–5000, по подразбиране 1500. Празна или "
-"извън диапазона стойност се ограничава при запазване — празно става 100, а "
+"на списъка. Допустим диапазон 100-5000, по подразбиране 1500. Празна или "
+"извън диапазона стойност се ограничава при запазване - празно става 100, а "
 "не без лимит."
 
 #: includes/class-ordelist-settings-page.php:211
@@ -496,11 +496,11 @@ msgstr "Прозорец за дубликат (дни)"
 #: includes/class-ordelist-settings-page.php:213
 msgid ""
 "Two orders from the same customer within this many days (or 2+ still in "
-"processing) are flagged as likely duplicates. Allowed range 1–60, default 3; "
+"processing) are flagged as likely duplicates. Allowed range 1-60, default 3; "
 "empty or out-of-range values are clamped when saving."
 msgstr ""
 "Две поръчки от един и същ клиент в рамките на толкова дни (или 2+ още в "
-"обработка) се маркират като вероятни дубликати. Допустим диапазон 1–60, по "
+"обработка) се маркират като вероятни дубликати. Допустим диапазон 1-60, по "
 "подразбиране 3; празни или извън диапазона стойности се ограничават при "
 "запазване."
 
@@ -583,11 +583,11 @@ msgstr "Оцветяване по сума на поръчката"
 #: includes/class-ordelist-settings-page.php:271
 msgid ""
 "Ring an order (row + address panel) when its total reaches a threshold; the "
-"highest matching threshold wins. Drawn on top of any shipping color — both "
+"highest matching threshold wins. Drawn on top of any shipping color - both "
 "stay visible."
 msgstr ""
 "Очертава поръчка (ред + панел с адреса), когато сумата ѝ достигне праг; "
-"печели най-високият достигнат праг. Рисува се върху цвета на доставката — и "
+"печели най-високият достигнат праг. Рисува се върху цвета на доставката - и "
 "двете остават видими."
 
 #: includes/class-ordelist-settings-page.php:277
@@ -674,15 +674,15 @@ msgid "Pre-selected action"
 msgstr "Предварително избрано действие"
 
 #: includes/class-ordelist-settings-page.php:366
-msgid "— (none)"
-msgstr "— (няма)"
+msgid "- (none)"
+msgstr "- (няма)"
 
 #: includes/class-ordelist-settings-page.php:371
 msgid ""
-"The list is filled from your Orders screen — open the Orders list once if it "
+"The list is filled from your Orders screen - open the Orders list once if it "
 "looks empty."
 msgstr ""
-"Списъкът се попълва от екрана с поръчки — отворете списъка с поръчки веднъж, "
+"Списъкът се попълва от екрана с поръчки - отворете списъка с поръчки веднъж, "
 "ако изглежда празен."
 
 #: includes/class-ordelist-settings-page.php:379
@@ -703,11 +703,11 @@ msgstr "Интервал по подразбиране (секунди)"
 
 #: includes/class-ordelist-settings-page.php:388
 msgid ""
-"Editable on the button too. Allowed range 1–300 seconds, default 7; empty or "
+"Editable on the button too. Allowed range 1-300 seconds, default 7; empty or "
 "out-of-range values are clamped when saving. Your browser must allow pop-ups "
 "for this site, or only the first tab opens."
 msgstr ""
-"Може да се редактира и на бутона. Допустим диапазон 1–300 секунди, по "
+"Може да се редактира и на бутона. Допустим диапазон 1-300 секунди, по "
 "подразбиране 7; празни или извън диапазона стойности се ограничават при "
 "запазване. Браузърът трябва да разрешава изскачащи прозорци за този сайт, "
 "иначе се отваря само първият раздел."
@@ -784,11 +784,11 @@ msgstr "Прозорец (минути)"
 #: includes/class-ordelist-settings-page.php:445
 msgid ""
 "Same phone + same cart within this many minutes counts as a duplicate. "
-"Allowed range 1–120, default 5; empty or out-of-range values are clamped "
+"Allowed range 1-120, default 5; empty or out-of-range values are clamped "
 "when saving."
 msgstr ""
 "Същият телефон + същата количка в рамките на толкова минути се брои за "
-"дубликат. Допустим диапазон 1–120, по подразбиране 5; празни или извън "
+"дубликат. Допустим диапазон 1-120, по подразбиране 5; празни или извън "
 "диапазона стойности се ограничават при запазване."
 
 #: includes/class-ordelist-settings-page.php:453
@@ -915,11 +915,11 @@ msgstr "Праг за стикери"
 #: includes/class-ordelist-settings-page.php:558
 msgid ""
 "Warn (\"time to print\") when a sticker stock drops to this or below. "
-"Allowed range 0–100000, default 20; empty or out-of-range values are clamped "
+"Allowed range 0-100000, default 20; empty or out-of-range values are clamped "
 "when saving."
 msgstr ""
 "Предупреждава („време за печат“), когато наличността на стикери падне до "
-"тази стойност или под нея. Допустим диапазон 0–100000, по подразбиране 20; "
+"тази стойност или под нея. Допустим диапазон 0-100000, по подразбиране 20; "
 "празни или извън диапазона стойности се ограничават при запазване."
 
 #: includes/class-ordelist-settings-page.php:561
@@ -928,11 +928,11 @@ msgstr "Праг за инструкции"
 
 #: includes/class-ordelist-settings-page.php:563
 msgid ""
-"Warn when an instruction sheet stock drops to this or below. Allowed range 0–"
+"Warn when an instruction sheet stock drops to this or below. Allowed range 0-"
 "100000, default 5; empty or out-of-range values are clamped when saving."
 msgstr ""
 "Предупреждава, когато наличността на листове с инструкции падне до тази "
-"стойност или под нея. Допустим диапазон 0–100000, по подразбиране 5; празни "
+"стойност или под нея. Допустим диапазон 0-100000, по подразбиране 5; празни "
 "или извън диапазона стойности се ограничават при запазване."
 
 #: includes/class-ordelist-settings-page.php:566
@@ -961,14 +961,14 @@ msgstr "Код на държавата по подразбиране"
 
 #: includes/class-ordelist-settings-page.php:585
 msgid ""
-"Digits only, e.g. 359 — anything else is stripped when saving. Added to "
+"Digits only, e.g. 359 - anything else is stripped when saving. Added to "
 "numbers that have no country code."
 msgstr ""
-"Само цифри (напр. 359) — всичко останало се премахва при запазване. Добавя "
+"Само цифри (напр. 359) - всичко останало се премахва при запазване. Добавя "
 "се към номера, който не съдържа код за държавата."
 
-msgid "OLE — product expiry dates need attention"
-msgstr "OLE — срокове на годност изискват внимание"
+msgid "OLE - product expiry dates need attention"
+msgstr "OLE - срокове на годност изискват внимание"
 
 msgid "Expired:"
 msgstr "Изтекли:"
@@ -978,8 +978,8 @@ msgid "Expiring within %d days:"
 msgstr "Изтичат до %d дни:"
 
 #. translators: 1: product name, 2: expiry date, 3: quantity left.
-msgid "%1$s — %2$s, %3$d left"
-msgstr "%1$s — %2$s, остават %3$d"
+msgid "%1$s - %2$s, %3$d left"
+msgstr "%1$s - %2$s, остават %3$d"
 
 #. translators: 1: number of batches, 2: warning window in days.
 msgid "%1$d product batch expires within %2$d days"
@@ -1027,8 +1027,8 @@ msgstr "Следи партиди стока с дата „валидно до�
 msgid "Warn ahead, days"
 msgstr "Предупреждение, дни"
 
-msgid "Email + banner when a batch is within this many days of its date. Allowed range 1–365, default 30; empty or out-of-range values are clamped when saving."
-msgstr "Имейл + банер, когато партида е на толкова дни от датата си. Позволен диапазон 1–365, по подразбиране 30; празни или извън диапазона стойности се ограничават при запис."
+msgid "Email + banner when a batch is within this many days of its date. Allowed range 1-365, default 30; empty or out-of-range values are clamped when saving."
+msgstr "Имейл + банер, когато партида е на толкова дни от датата си. Позволен диапазон 1-365, по подразбиране 30; празни или извън диапазона стойности се ограничават при запис."
 
 msgid "Batches page"
 msgstr "Страница с партиди"
@@ -1087,14 +1087,14 @@ msgstr "Продадено за избрания отрязък"
 msgid "Year"
 msgstr "Година"
 
-msgid "no weight set — pieces only"
-msgstr "без тегло — само бройки"
+msgid "no weight set - pieces only"
+msgstr "без тегло - само бройки"
 
-msgid "Stock not subtracted — no batches are tracked for this product."
-msgstr "Наличността не е приспадната — за този продукт не се водят партиди."
+msgid "Stock not subtracted - no batches are tracked for this product."
+msgstr "Наличността не е приспадната - за този продукт не се водят партиди."
 
-msgid "Reference year has no sales in this slice — coefficient set to 1."
-msgstr "Опорната година няма продажби в този отрязък — коефициентът е 1."
+msgid "Reference year has no sales in this slice - coefficient set to 1."
+msgstr "Опорната година няма продажби в този отрязък - коефициентът е 1."
 
 #. translators: %s: amount with unit, e.g. "3 kg".
 msgid "of which %s expires before the period ends"
@@ -1115,8 +1115,8 @@ msgstr "Графика на продажбите по години с препо
 msgid "Safety margin, %"
 msgstr "Резерв за сигурност, %"
 
-msgid "Added on top of the forecast. Allowed range 0–100, default 20; empty or out-of-range values are clamped when saving. Adjustable on the page per calculation."
-msgstr "Добавя се върху прогнозата. Позволен диапазон 0–100, по подразбиране 20; празни или извън диапазона стойности се ограничават при запис. Може да се променя на страницата при всяко изчисление."
+msgid "Added on top of the forecast. Allowed range 0-100, default 20; empty or out-of-range values are clamped when saving. Adjustable on the page per calculation."
+msgstr "Добавя се върху прогнозата. Позволен диапазон 0-100, по подразбиране 20; празни или извън диапазона стойности се ограничават при запис. Може да се променя на страницата при всяко изчисление."
 
 msgid "Planning page"
 msgstr "Страница за планиране"
@@ -1131,5 +1131,5 @@ msgid "projection"
 msgstr "прогноза"
 
 #, php-format
-msgid "%s variations have no weight — counted in pieces only"
-msgstr "%s варианта са без тегло — броят се само в бройки"
+msgid "%s variations have no weight - counted in pieces only"
+msgstr "%s варианта са без тегло - броят се само в бройки"

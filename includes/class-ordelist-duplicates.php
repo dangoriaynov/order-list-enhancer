@@ -12,7 +12,7 @@ class ORDELIST_Duplicates {
 		$orders = self::fetch( $opts );
 		$map    = self::group( $orders );
 
-		// Прозорец за „дубликат" (поръчки близо във времето), в дни — от настройките.
+		// Прозорец за „дубликат" (поръчки близо във времето), в дни - от настройките.
 		$win_days = isset( $opts['dup_window_days'] ) ? (int) $opts['dup_window_days'] : 3;
 		$win_days = (int) apply_filters( 'ordelist_duplicate_window_days', $win_days );
 		$win      = max( 1, $win_days ) * DAY_IN_SECONDS;
@@ -61,7 +61,7 @@ class ORDELIST_Duplicates {
 			$last  = ! empty( $tsAll ) ? end( $tsAll ) : 0;
 			$count = $m['n'];
 
-			// Флаг „дубликат" — за всяка поръчка поотделно: има ли ДРУГА поръчка
+			// Флаг „дубликат" - за всяка поръчка поотделно: има ли ДРУГА поръчка
 			// на същия клиент в рамките на прозореца (или 2+ в обработка).
 			$any_dup = false;
 			foreach ( $list as $it ) {
@@ -149,7 +149,7 @@ class ORDELIST_Duplicates {
 			if ( '' !== $nn ) {
 				$keys[] = 'n:' . $nn;
 			}
-		} else { // name_phone — изисква И телефон, И име (AND).
+		} else { // name_phone - изисква И телефон, И име (AND).
 			if ( '' !== $phone && '' !== $nn ) {
 				$keys[] = 'c:' . $phone . '|' . $nn;
 			}
@@ -167,7 +167,7 @@ class ORDELIST_Duplicates {
 		$limit = (int) $opts['scan_limit'];
 
 		// Дублі шукаємо по ВСІХ статусах (окрім кошика/чернеток), а не лише в
-		// поточному фільтрі — щоб ловити клієнтів, що повертаються, навіть коли
+		// поточному фільтрі - щоб ловити клієнтів, що повертаються, навіть коли
 		// попереднє замовлення ще не завершене або не позначене як некоректне.
 		$rows = array();
 		if ( self::hpos() ) {
