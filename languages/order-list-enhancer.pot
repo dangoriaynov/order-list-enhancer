@@ -1101,3 +1101,9 @@ msgstr ""
 #: includes/class-ordelist-forecast-admin.php
 msgid "projection"
 msgstr ""
+
+#. translators: %s: number of variations.
+#: includes/class-ordelist-forecast-admin.php
+#, php-format
+msgid "%s variations have no weight — counted in pieces only"
+msgstr ""

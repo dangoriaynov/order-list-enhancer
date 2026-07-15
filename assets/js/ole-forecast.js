@@ -279,12 +279,19 @@
 		$buy.addClass( 'ole-fc-buy' );
 		if ( expiring > 0 ) { note( $out, ORDELIST_FC.i18n.expiring.replace( '%s', fmt( expiring, state.unit ) ) ); }
 		// У кг-режимі позначаємо варіації без ваги — вони рахуються лише в штуках.
+		// Кілька таких — згортаємо в один рядок, що розкривається (список імен усередині).
 		if ( 'kg' === state.unit ) {
+			var noW = [];
 			for ( var wi = 0; wi < state.data.variations.length; wi++ ) {
 				var wv = state.data.variations[ wi ];
 				if ( null === wv.weight_kg && ( 'product' === state.target.type || wv.id === state.target.id ) ) {
-					note( $out, wv.name + ' — ' + ORDELIST_FC.i18n.noWeight );
+					noW.push( wv.name );
 				}
+			}
+			if ( 1 === noW.length ) {
+				note( $out, noW[ 0 ] + ' — ' + ORDELIST_FC.i18n.noWeight );
+			} else if ( noW.length > 1 ) {
+				noteDetails( $out, ORDELIST_FC.i18n.noWeightMany.replace( '%s', noW.length ), noW.join( ', ' ) );
 			}
 		}
 
@@ -315,6 +322,13 @@
 	function note( $box, text ) {
 		$( '<div class="ole-fc-note"/>' ).text( text ).appendTo( $box );
 	}
+	// Згорнута примітка: підсумок видно завжди, деталі — по кліку.
+	function noteDetails( $box, summary, detail ) {
+		var $d = $( '<details class="ole-fc-note"/>' );
+		$( '<summary/>' ).text( summary ).appendTo( $d );
+		$( '<div/>' ).text( detail ).appendTo( $d );
+		$d.appendTo( $box );
+	}
 
 	// Таблиця «продано за відрізок»: рік | кг | шт (кг лише якщо є ваги).
 	function renderTotals( p ) {
@@ -330,10 +344,13 @@
 		$( '<th/>' ).text( ORDELIST_FC.i18n.pcs ).appendTo( $tr );
 		$head.append( $tr );
 		for ( var i = 0; i < ys.length; i++ ) {
+			var kgSum  = Math.round( C.rangeSum( kgS[ ys[ i ] ], p.startMMDD, p.endMMDD ) * 10 ) / 10;
+			var pcsSum = C.rangeSum( pcsS[ ys[ i ] ], p.startMMDD, p.endMMDD );
+			if ( 0 === kgSum && 0 === pcsSum ) { continue; } // нема продажів у відрізку — рядок лише шумить
 			var $r = $( '<tr/>' );
 			$( '<td/>' ).text( ys[ i ] ).appendTo( $r );
-			$( '<td/>' ).text( Math.round( C.rangeSum( kgS[ ys[ i ] ], p.startMMDD, p.endMMDD ) * 10 ) / 10 ).appendTo( $r );
-			$( '<td/>' ).text( C.rangeSum( pcsS[ ys[ i ] ], p.startMMDD, p.endMMDD ) ).appendTo( $r );
+			$( '<td/>' ).text( kgSum ).appendTo( $r );
+			$( '<td/>' ).text( pcsSum ).appendTo( $r );
 			$body.append( $r );
 		}
 	}
