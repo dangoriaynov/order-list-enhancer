@@ -69,4 +69,38 @@ class ORDELIST_Print_Stock_Calc {
 	public static function is_live( $status ) {
 		return ! in_array( (string) $status, self::DEAD_STATUSES, true );
 	}
+
+	/** Позитивні унікальні int-ID вкладень; порядок збережено, ключі переіндексовано. */
+	public static function sanitize_attachment_ids( $ids ) {
+		if ( ! is_array( $ids ) ) {
+			return array();
+		}
+		$out = array();
+		foreach ( $ids as $id ) {
+			$id = (int) $id;
+			if ( $id > 0 && ! in_array( $id, $out, true ) ) {
+				$out[] = $id;
+			}
+		}
+		return $out;
+	}
+
+	/** JSON-рядок з БД (колонка attachments) -> масив ID; будь-яке сміття -> array(). */
+	public static function decode_attachments( $raw ) {
+		if ( ! is_string( $raw ) || '' === $raw ) {
+			return array();
+		}
+		$decoded = json_decode( $raw, true );
+
+		if ( ! is_array( $decoded ) ) {
+			return array();
+		}
+
+		// Ensure it came from a JSON array, not an object (only accept numeric-keyed arrays)
+		if ( ! empty( $decoded ) && array_keys( $decoded ) !== range( 0, count( $decoded ) - 1 ) ) {
+			return array();
+		}
+
+		return self::sanitize_attachment_ids( $decoded );
+	}
 }
