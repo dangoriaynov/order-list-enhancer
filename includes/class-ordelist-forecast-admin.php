@@ -62,6 +62,7 @@ class ORDELIST_Forecast_Admin {
 					'noWeight'  => __( 'no weight set — pieces only', 'order-list-enhancer' ),
 					'noBatches' => __( 'Stock not subtracted — no batches are tracked for this product.', 'order-list-enhancer' ),
 					'noSales'   => __( 'No sales recorded for this product yet.', 'order-list-enhancer' ),
+					'projection' => __( 'projection', 'order-list-enhancer' ),
 					'refZero'   => __( 'Reference year has no sales in this slice — coefficient set to 1.', 'order-list-enhancer' ),
 					/* translators: %s: amount with unit, e.g. "3 kg". */
 					'expiring'  => __( 'of which %s expires before the period ends', 'order-list-enhancer' ),

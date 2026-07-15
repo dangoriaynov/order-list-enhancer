@@ -6,6 +6,16 @@
 	var C = OrdelistForecastCalc;
 	var MMDD = C.mmddList();
 	var COLORS = [ '#2271b1', '#d63638', '#00a32a', '#b26a00', '#8c5e58', '#3c434a', '#7f54b3' ];
+	// Короткі назви місяців мовою адмінки — для підписів осі X.
+	var MONTHS = ( function () {
+		var lang = document.documentElement.lang || 'en';
+		var out = [];
+		for ( var m = 0; m < 12; m++ ) {
+			try { out.push( new Date( Date.UTC( 2000, m, 1 ) ).toLocaleDateString( lang, { month: 'short', timeZone: 'UTC' } ) ); }
+			catch ( e ) { out.push( String( m + 1 ) ); }
+		}
+		return out;
+	} )();
 
 	var state = {
 		data: null,          // payload з сервера
@@ -61,6 +71,24 @@
 		return w;
 	}
 	function series() { return C.unitSeries( state.data.variations, state.target, state.unit ); }
+	// Поточний коефіцієнт: авто (поле оновлюється) або ручне значення з поля.
+	function coefValue( s ) {
+		var auto = C.autoCoefficient( s, curYear(), state.refYear, mmddOf( todayYMD() ) );
+		if ( state.coefAuto ) { $( '.ole-fc-coef' ).val( Math.round( auto.value * 100 ) / 100 ); }
+		var coef = parseFloat( $( '.ole-fc-coef' ).val() );
+		if ( isNaN( coef ) || coef < 0 ) { coef = auto.value; }
+		return { coef: coef, auto: auto };
+	}
+	// Оновлює дані прогнозного датасету (створює його drawChart).
+	function refreshProjection( s, coef ) {
+		if ( ! state.chart ) { return; }
+		var ds = state.chart.data.datasets;
+		for ( var i = 0; i < ds.length; i++ ) {
+			if ( ds[ i ].oleProjection ) {
+				ds[ i ].data = C.projection( s[ curYear() ], s[ state.refYear ], mmddOf( todayYMD() ), coef, MMDD );
+			}
+		}
+	}
 	function yearsOf( s ) {
 		var ys = [];
 		for ( var y in s ) { if ( Object.prototype.hasOwnProperty.call( s, y ) ) { ys.push( y ); } }
@@ -146,14 +174,36 @@
 	function drawChart() {
 		var s = series();
 		var ys = yearsOf( s );
+		var todayIdx = MMDD.indexOf( mmddOf( todayYMD() ) );
+		var curColor = null;
 		var datasets = [];
 		for ( var i = 0; i < ys.length; i++ ) {
+			var cum = C.cumulative( s[ ys[ i ] ], MMDD );
+			var isCur = ( ys[ i ] === curYear() );
+			if ( isCur ) {
+				curColor = COLORS[ i % COLORS.length ];
+				// після сьогодні даних нема — далі малює пунктирний датасет прогнозу
+				for ( var j = todayIdx + 1; j < cum.length; j++ ) { cum[ j ] = null; }
+			}
 			datasets.push( {
 				label: ys[ i ],
-				data: C.cumulative( s[ ys[ i ] ], MMDD ),
+				data: cum,
 				borderColor: COLORS[ i % COLORS.length ],
 				backgroundColor: 'transparent',
-				borderWidth: ( ys[ i ] === curYear() ) ? 3 : 1.5,
+				borderWidth: isCur ? 3 : 1.5,
+				pointRadius: 0,
+				tension: 0
+			} );
+		}
+		if ( null !== curColor && state.refYear ) {
+			datasets.push( {
+				label: curYear() + ' — ' + ORDELIST_FC.i18n.projection,
+				oleProjection: true,
+				data: [],
+				borderColor: curColor,
+				backgroundColor: 'transparent',
+				borderDash: [ 6, 4 ],
+				borderWidth: 1.5,
 				pointRadius: 0,
 				tension: 0
 			} );
@@ -166,7 +216,21 @@
 				animation: false,
 				maintainAspectRatio: false,
 				interaction: { mode: 'index', intersect: false },
-				scales: { x: { ticks: { maxTicksLimit: 12 } }, y: { beginAtZero: true } }
+				plugins: { legend: { labels: { filter: function ( item, data ) {
+					return ! data.datasets[ item.datasetIndex ].oleProjection;
+				} } } },
+				scales: {
+					x: { ticks: {
+						autoSkip: false,
+						maxRotation: 0,
+						callback: function ( value, index ) {
+							var mmdd = MMDD[ index ];
+							if ( ! mmdd || '-01' !== mmdd.slice( 2 ) ) { return null; }
+							return MONTHS[ parseInt( mmdd.slice( 0, 2 ), 10 ) - 1 ];
+						}
+					} },
+					y: { beginAtZero: true }
+				}
 			},
 			plugins: [ slicePlugin ]
 		} );
@@ -185,15 +249,15 @@
 		} else {
 			state.highlight = null;
 		}
+		var s = series();
+		var ci = state.refYear ? coefValue( s ) : null;
+		if ( ci ) { refreshProjection( s, ci.coef ); }
 		if ( state.chart ) { state.chart.update( 'none' ); }
 		var $out = $( '.ole-fc-result' );
 		if ( ! p || ! state.refYear ) { $out.attr( 'hidden', true ); return; }
 
-		var s = series();
-		var auto = C.autoCoefficient( s, curYear(), state.refYear, mmddOf( todayYMD() ) );
-		if ( state.coefAuto ) { $( '.ole-fc-coef' ).val( Math.round( auto.value * 100 ) / 100 ); }
-		var coef = parseFloat( $( '.ole-fc-coef' ).val() );
-		if ( isNaN( coef ) || coef < 0 ) { coef = auto.value; }
+		var coef = ci.coef;
+		var auto = ci.auto;
 		if ( ! $( '.ole-fc-margin' ).val() ) { $( '.ole-fc-margin' ).val( ORDELIST_FC.margin ); }
 		var margin = Math.max( 0, Math.min( 100, parseInt( $( '.ole-fc-margin' ).val(), 10 ) || 0 ) );
 
