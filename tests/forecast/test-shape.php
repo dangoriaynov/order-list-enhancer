@@ -31,5 +31,16 @@ check( $out[13]['2025']['03-01'] === 5, 'refund rows pass through as negatives' 
 check( $out[13]['2025']['03-05'] === -2, 'refund rows pass through as negatives' );
 check( ORDELIST_Forecast_Data::shape_rows( array() ) === array(), 'empty input -> empty array' );
 
+// ---- parse_weight_kg_from_name: тегло от историческото име на позицията ----
+check( ORDELIST_Forecast_Data::parse_weight_kg_from_name( 'Янтарна киселина на прах - 25 г' ) === 0.025, 'grams parsed from name tail (25 g -> 0.025 kg)' );
+check( ORDELIST_Forecast_Data::parse_weight_kg_from_name( 'Янтарна киселина на прах - 1 кг' ) === 1.0, 'kilograms parsed (1 kg)' );
+check( ORDELIST_Forecast_Data::parse_weight_kg_from_name( 'Amber acid - 400 g' ) === 0.4, 'latin g parsed' );
+check( ORDELIST_Forecast_Data::parse_weight_kg_from_name( 'Something - 1,5 кг' ) === 1.5, 'decimal comma parsed' );
+check( ORDELIST_Forecast_Data::parse_weight_kg_from_name( 'Product - 2.5 KG' ) === 2.5, 'case-insensitive kg' );
+check( ORDELIST_Forecast_Data::parse_weight_kg_from_name( 'Цитокининова паста' ) === null, 'no amount -> null' );
+check( ORDELIST_Forecast_Data::parse_weight_kg_from_name( '' ) === null, 'empty -> null' );
+check( ORDELIST_Forecast_Data::parse_weight_kg_from_name( 'Тор 5 л бутилка' ) === null, 'non-weight unit -> null' );
+check( ORDELIST_Forecast_Data::parse_weight_kg_from_name( 'Гама 200 г + 50 г подарък' ) === 0.05, 'last amount in the name wins' );
+
 echo $fails ? "\n$fails FAILED\n" : "\nALL PASS\n";
 exit( $fails ? 1 : 0 );
