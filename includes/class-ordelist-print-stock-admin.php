@@ -25,8 +25,8 @@ class ORDELIST_Print_Stock_Admin {
 	public static function menu() {
 		add_submenu_page(
 			'woocommerce',
-			__( 'Print consumables', 'order-list-enhancer' ),
-			__( 'Print consumables', 'order-list-enhancer' ),
+			__( 'Print consumables', 'ordelist' ),
+			__( 'Print consumables', 'ordelist' ),
 			'manage_woocommerce',
 			self::SLUG,
 			array( __CLASS__, 'render' )
@@ -55,18 +55,18 @@ class ORDELIST_Print_Stock_Admin {
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'ordelist_ps' ),
 				'i18n'    => array(
-					'saved'       => __( 'Saved.', 'order-list-enhancer' ),
-					'error'       => __( 'Failed.', 'order-list-enhancer' ),
-					'confirm'     => __( 'Delete this instruction sheet?', 'order-list-enhancer' ),
-					'confirmSticker' => __( 'Delete this sticker?', 'order-list-enhancer' ),
-					'addQ'        => __( 'How many printed copies to add?', 'order-list-enhancer' ),
-					'save'        => __( 'Save', 'order-list-enhancer' ),
-					'instruction' => __( 'Instruction', 'order-list-enhancer' ),
-					'set'         => __( 'Set', 'order-list-enhancer' ),
-					'addPrinted'  => __( '+ printed', 'order-list-enhancer' ),
-					'addFile'     => __( '+ File', 'order-list-enhancer' ),
-					'filesTitle'  => __( 'Choose printable files', 'order-list-enhancer' ),
-					'filesButton' => __( 'Attach', 'order-list-enhancer' ),
+					'saved'       => __( 'Saved.', 'ordelist' ),
+					'error'       => __( 'Failed.', 'ordelist' ),
+					'confirm'     => __( 'Delete this instruction sheet?', 'ordelist' ),
+					'confirmSticker' => __( 'Delete this sticker?', 'ordelist' ),
+					'addQ'        => __( 'How many printed copies to add?', 'ordelist' ),
+					'save'        => __( 'Save', 'ordelist' ),
+					'instruction' => __( 'Instruction', 'ordelist' ),
+					'set'         => __( 'Set', 'ordelist' ),
+					'addPrinted'  => __( '+ printed', 'ordelist' ),
+					'addFile'     => __( '+ File', 'ordelist' ),
+					'filesTitle'  => __( 'Choose printable files', 'ordelist' ),
+					'filesButton' => __( 'Attach', 'ordelist' ),
 				),
 				'thresholds' => array(
 					'sticker'     => (int) $o['print_stock_threshold_sticker'],
@@ -186,14 +186,14 @@ class ORDELIST_Print_Stock_Admin {
 				$name  = '' !== $name ? $name : wp_basename( $url );
 				$html .= '<span class="ole-ps-file" data-att="' . esc_attr( (string) $att_id ) . '">'
 					. '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html( $name ) . '</a>'
-					. ' <button type="button" class="ole-ps-file-remove" aria-label="' . esc_attr__( 'Remove file', 'order-list-enhancer' ) . '">&times;</button></span> ';
+					. ' <button type="button" class="ole-ps-file-remove" aria-label="' . esc_attr__( 'Remove file', 'ordelist' ) . '">&times;</button></span> ';
 			} else {
 				$html .= '<span class="ole-ps-file ole-ps-file-missing" data-att="' . esc_attr( (string) $att_id ) . '">'
-					. esc_html__( '(file deleted)', 'order-list-enhancer' )
-					. ' <button type="button" class="ole-ps-file-remove" aria-label="' . esc_attr__( 'Remove file', 'order-list-enhancer' ) . '">&times;</button></span> ';
+					. esc_html__( '(file deleted)', 'ordelist' )
+					. ' <button type="button" class="ole-ps-file-remove" aria-label="' . esc_attr__( 'Remove file', 'ordelist' ) . '">&times;</button></span> ';
 			}
 		}
-		$html .= '<button type="button" class="button ole-ps-file-add">' . esc_html__( '+ File', 'order-list-enhancer' ) . '</button>';
+		$html .= '<button type="button" class="button ole-ps-file-add">' . esc_html__( '+ File', 'ordelist' ) . '</button>';
 		return $html;
 	}
 
@@ -233,16 +233,16 @@ class ORDELIST_Print_Stock_Admin {
 		$sheets   = ORDELIST_Print_Stock_Store::sheets();
 		?>
 		<div class="wrap ole-ps-wrap">
-			<h1><?php esc_html_e( 'Print consumables', 'order-list-enhancer' ); ?></h1>
+			<h1><?php esc_html_e( 'Print consumables', 'ordelist' ); ?></h1>
 
-			<h2><?php esc_html_e( 'Stickers', 'order-list-enhancer' ); ?></h2>
-			<p class="description"><?php esc_html_e( 'Sticker stock per product or variation — decreases by the ordered quantity. Add a product below: pick a variation for per-variation stock, or the product for one shared count.', 'order-list-enhancer' ); ?></p>
+			<h2><?php esc_html_e( 'Stickers', 'ordelist' ); ?></h2>
+			<p class="description"><?php esc_html_e( 'Sticker stock per product or variation — decreases by the ordered quantity. Add a product below: pick a variation for per-variation stock, or the product for one shared count.', 'ordelist' ); ?></p>
 			<table class="widefat striped ole-ps-stickers">
 				<thead><tr>
-					<th><?php esc_html_e( 'Name', 'order-list-enhancer' ); ?></th>
-					<th style="width:120px"><?php esc_html_e( 'Stock', 'order-list-enhancer' ); ?></th>
-					<th style="width:22%"><?php esc_html_e( 'Files', 'order-list-enhancer' ); ?></th>
-					<th style="width:300px"><?php esc_html_e( 'Actions', 'order-list-enhancer' ); ?></th>
+					<th><?php esc_html_e( 'Name', 'ordelist' ); ?></th>
+					<th style="width:120px"><?php esc_html_e( 'Stock', 'ordelist' ); ?></th>
+					<th style="width:22%"><?php esc_html_e( 'Files', 'ordelist' ); ?></th>
+					<th style="width:300px"><?php esc_html_e( 'Actions', 'ordelist' ); ?></th>
 				</tr></thead>
 				<tbody>
 				<?php foreach ( $stickers as $r ) : ?>
@@ -251,39 +251,39 @@ class ORDELIST_Print_Stock_Admin {
 						<td><input type="number" step="1" class="ole-ps-stock" value="<?php echo esc_attr( (string) (int) $r['stock'] ); ?>" style="width:90px"/></td>
 						<td class="ole-ps-files"><?php echo self::files_cell_html( ORDELIST_Print_Stock_Calc::decode_attachments( $r['attachments'] ?? null ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts ?></td>
 						<td>
-							<button type="button" class="button ole-ps-save"><?php esc_html_e( 'Set', 'order-list-enhancer' ); ?></button>
-							<button type="button" class="button ole-ps-add"><?php esc_html_e( '+ printed', 'order-list-enhancer' ); ?></button>
-							<button type="button" class="button ole-ps-sticker-delete" aria-label="<?php esc_attr_e( 'Delete', 'order-list-enhancer' ); ?>">&times;</button>
+							<button type="button" class="button ole-ps-save"><?php esc_html_e( 'Set', 'ordelist' ); ?></button>
+							<button type="button" class="button ole-ps-add"><?php esc_html_e( '+ printed', 'ordelist' ); ?></button>
+							<button type="button" class="button ole-ps-sticker-delete" aria-label="<?php esc_attr_e( 'Delete', 'ordelist' ); ?>">&times;</button>
 						</td>
 					</tr>
 				<?php endforeach; ?>
 					<tr class="ole-ps-sticker-new">
 						<td>
-							<select class="wc-product-search ole-ps-sticker-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%"></select>
+							<select class="wc-product-search ole-ps-sticker-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%"></select>
 						</td>
 						<td><input type="number" step="1" class="ole-ps-sticker-stock" value="0" style="width:90px"/></td>
 						<td class="ole-ps-files"></td>
-						<td><button type="button" class="button button-primary ole-ps-sticker-add"><?php esc_html_e( 'Add', 'order-list-enhancer' ); ?></button></td>
+						<td><button type="button" class="button button-primary ole-ps-sticker-add"><?php esc_html_e( 'Add', 'ordelist' ); ?></button></td>
 					</tr>
 				</tbody>
 			</table>
 
-			<h2 style="margin-top:2em"><?php esc_html_e( 'Instruction sheets', 'order-list-enhancer' ); ?></h2>
-			<p class="description"><?php esc_html_e( 'One sheet can cover several products. Each order containing any of its products consumes one copy.', 'order-list-enhancer' ); ?></p>
+			<h2 style="margin-top:2em"><?php esc_html_e( 'Instruction sheets', 'ordelist' ); ?></h2>
+			<p class="description"><?php esc_html_e( 'One sheet can cover several products. Each order containing any of its products consumes one copy.', 'ordelist' ); ?></p>
 			<table class="widefat ole-ps-sheets">
 				<thead><tr>
-					<th style="width:22%"><?php esc_html_e( 'Name', 'order-list-enhancer' ); ?></th>
-					<th><?php esc_html_e( 'Products', 'order-list-enhancer' ); ?></th>
-					<th style="width:100px"><?php esc_html_e( 'Stock', 'order-list-enhancer' ); ?></th>
-					<th style="width:20%"><?php esc_html_e( 'Files', 'order-list-enhancer' ); ?></th>
-					<th style="width:160px"><?php esc_html_e( 'Actions', 'order-list-enhancer' ); ?></th>
+					<th style="width:22%"><?php esc_html_e( 'Name', 'ordelist' ); ?></th>
+					<th><?php esc_html_e( 'Products', 'ordelist' ); ?></th>
+					<th style="width:100px"><?php esc_html_e( 'Stock', 'ordelist' ); ?></th>
+					<th style="width:20%"><?php esc_html_e( 'Files', 'ordelist' ); ?></th>
+					<th style="width:160px"><?php esc_html_e( 'Actions', 'ordelist' ); ?></th>
 				</tr></thead>
 				<tbody>
 				<?php foreach ( $sheets as $s ) : ?>
 					<tr class="ole-ps-sheet <?php echo esc_attr( self::status_class( $s ) ); ?>" data-id="<?php echo esc_attr( $s['id'] ); ?>">
 						<td><input type="text" class="ole-ps-sheet-name regular-text" value="<?php echo esc_attr( $s['name'] ); ?>"/></td>
 						<td>
-							<select multiple class="wc-product-search ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products" style="width:100%">
+							<select multiple class="wc-product-search ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products" style="width:100%">
 								<?php foreach ( $s['product_ids'] as $pid ) : ?>
 									<?php $p = wc_get_product( $pid ); if ( ! $p ) { continue; } ?>
 									<option value="<?php echo esc_attr( $pid ); ?>" selected><?php echo esc_html( wp_strip_all_tags( $p->get_formatted_name() ) ); ?></option>
@@ -293,19 +293,19 @@ class ORDELIST_Print_Stock_Admin {
 						<td><input type="number" step="1" class="ole-ps-sheet-stock" value="<?php echo esc_attr( (string) (int) $s['stock'] ); ?>" style="width:90px"/></td>
 						<td class="ole-ps-files"><?php echo self::files_cell_html( ORDELIST_Print_Stock_Calc::decode_attachments( $s['attachments'] ?? null ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts ?></td>
 						<td>
-							<button type="button" class="button ole-ps-sheet-save"><?php esc_html_e( 'Save', 'order-list-enhancer' ); ?></button>
+							<button type="button" class="button ole-ps-sheet-save"><?php esc_html_e( 'Save', 'ordelist' ); ?></button>
 							<button type="button" class="button ole-ps-sheet-delete">&times;</button>
 						</td>
 					</tr>
 				<?php endforeach; ?>
 					<tr class="ole-ps-sheet ole-ps-sheet-new" data-id="0">
-						<td><input type="text" class="ole-ps-sheet-name regular-text" placeholder="<?php esc_attr_e( 'New sheet name', 'order-list-enhancer' ); ?>"/></td>
+						<td><input type="text" class="ole-ps-sheet-name regular-text" placeholder="<?php esc_attr_e( 'New sheet name', 'ordelist' ); ?>"/></td>
 						<td>
-							<select multiple class="wc-product-search ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products" style="width:100%"></select>
+							<select multiple class="wc-product-search ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products" style="width:100%"></select>
 						</td>
 						<td><input type="number" step="1" class="ole-ps-sheet-stock" value="0" style="width:90px"/></td>
 						<td class="ole-ps-files"></td>
-						<td><button type="button" class="button button-primary ole-ps-sheet-save"><?php esc_html_e( 'Add', 'order-list-enhancer' ); ?></button></td>
+						<td><button type="button" class="button button-primary ole-ps-sheet-save"><?php esc_html_e( 'Add', 'ordelist' ); ?></button></td>
 					</tr>
 				</tbody>
 			</table>

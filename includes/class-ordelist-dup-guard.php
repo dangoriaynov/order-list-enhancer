@@ -172,7 +172,7 @@ class ORDELIST_Dup_Guard {
 		if ( 'block' === ORDELIST_Settings::get()['dup_guard_mode'] ) {
 			$msg = sprintf(
 				/* translators: 1: order number, 2: minutes ago */
-				__( 'You already placed a similar order %2$d min ago (#%1$s). To place another one, please contact us.', 'order-list-enhancer' ),
+				__( 'You already placed a similar order %2$d min ago (#%1$s). To place another one, please contact us.', 'ordelist' ),
 				$match['number'],
 				$match['mins']
 			);
@@ -189,7 +189,7 @@ class ORDELIST_Dup_Guard {
 
 		$msg = 'OLEDUP|' . sprintf(
 			/* translators: 1: order number, 2: minutes ago */
-			__( 'You already placed a similar order %2$d min ago (#%1$s). Are you sure you want to place another one?', 'order-list-enhancer' ),
+			__( 'You already placed a similar order %2$d min ago (#%1$s). Are you sure you want to place another one?', 'ordelist' ),
 			$match['number'],
 			$match['mins']
 		);
@@ -226,8 +226,8 @@ class ORDELIST_Dup_Guard {
 				'action'  => 'ordelist_dup_confirm',
 				'nonce'   => wp_create_nonce( 'ordelist_dup_confirm' ),
 				'i18n'    => array(
-					'confirm' => __( 'Yes, order again', 'order-list-enhancer' ),
-					'cancel'  => __( 'Cancel', 'order-list-enhancer' ),
+					'confirm' => __( 'Yes, order again', 'ordelist' ),
+					'cancel'  => __( 'Cancel', 'ordelist' ),
 				),
 			)
 		);

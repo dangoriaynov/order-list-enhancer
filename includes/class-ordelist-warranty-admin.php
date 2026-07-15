@@ -21,8 +21,8 @@ class ORDELIST_Warranty_Admin {
 	public static function menu() {
 		add_submenu_page(
 			'woocommerce',
-			__( 'Warranty dates', 'order-list-enhancer' ),
-			__( 'Warranty dates', 'order-list-enhancer' ),
+			__( 'Warranty dates', 'ordelist' ),
+			__( 'Warranty dates', 'ordelist' ),
 			'manage_woocommerce',
 			self::SLUG,
 			array( __CLASS__, 'render' )
@@ -49,10 +49,10 @@ class ORDELIST_Warranty_Admin {
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'ordelist_wr' ),
 				'i18n'    => array(
-					'error'   => __( 'Failed.', 'order-list-enhancer' ),
-					'confirm' => __( 'Delete this batch?', 'order-list-enhancer' ),
-					'save'    => __( 'Save', 'order-list-enhancer' ),
-					'del'     => __( 'Delete', 'order-list-enhancer' ),
+					'error'   => __( 'Failed.', 'ordelist' ),
+					'confirm' => __( 'Delete this batch?', 'ordelist' ),
+					'save'    => __( 'Save', 'ordelist' ),
+					'del'     => __( 'Delete', 'ordelist' ),
 				),
 			)
 		);
@@ -174,19 +174,19 @@ class ORDELIST_Warranty_Admin {
 	/** Текстова мітка статусу (колонка «Статус» + доступність) — той самий пріоритет, що й у status_class(). */
 	public static function status_label( $row, $o = null, $today = null ) {
 		if ( (int) $row['qty'] < 0 ) {
-			return __( 'Expired', 'order-list-enhancer' );
+			return __( 'Expired', 'ordelist' );
 		}
 		if ( 0 === (int) $row['qty'] ) {
-			return __( 'Sold out', 'order-list-enhancer' );
+			return __( 'Sold out', 'ordelist' );
 		}
 		$o      = null === $o ? ORDELIST_Settings::get() : $o;
 		$today  = null === $today ? current_time( 'Y-m-d' ) : $today;
 		$status = ORDELIST_Warranty_Calc::status( (string) $row['expiry'], $today, (int) $o['warranty_days'] );
 		if ( 'expired' === $status ) {
-			return __( 'Expired', 'order-list-enhancer' );
+			return __( 'Expired', 'ordelist' );
 		}
 		if ( 'soon' === $status ) {
-			return __( 'Expiring soon', 'order-list-enhancer' );
+			return __( 'Expiring soon', 'ordelist' );
 		}
 		return '—';
 	}
@@ -199,25 +199,25 @@ class ORDELIST_Warranty_Admin {
 		$today = current_time( 'Y-m-d' );
 		?>
 		<div class="wrap ole-wr-wrap">
-			<h1><?php esc_html_e( 'Warranty dates', 'order-list-enhancer' ); ?></h1>
-			<p class="description"><?php esc_html_e( 'Batches of stock with their "valid until" dates. Sales reduce the oldest batch first; cancelled or refunded orders put the units back.', 'order-list-enhancer' ); ?></p>
+			<h1><?php esc_html_e( 'Warranty dates', 'ordelist' ); ?></h1>
+			<p class="description"><?php esc_html_e( 'Batches of stock with their "valid until" dates. Sales reduce the oldest batch first; cancelled or refunded orders put the units back.', 'ordelist' ); ?></p>
 			<table class="widefat striped ole-wr-table">
 				<thead><tr>
-					<th><?php esc_html_e( 'Product', 'order-list-enhancer' ); ?></th>
-					<th style="width:160px"><?php esc_html_e( 'Valid until', 'order-list-enhancer' ); ?></th>
-					<th style="width:110px"><?php esc_html_e( 'Quantity', 'order-list-enhancer' ); ?></th>
-					<th><?php esc_html_e( 'Note', 'order-list-enhancer' ); ?></th>
-					<th style="width:110px"><?php esc_html_e( 'Status', 'order-list-enhancer' ); ?></th>
-					<th style="width:170px"><?php esc_html_e( 'Actions', 'order-list-enhancer' ); ?></th>
+					<th><?php esc_html_e( 'Product', 'ordelist' ); ?></th>
+					<th style="width:160px"><?php esc_html_e( 'Valid until', 'ordelist' ); ?></th>
+					<th style="width:110px"><?php esc_html_e( 'Quantity', 'ordelist' ); ?></th>
+					<th><?php esc_html_e( 'Note', 'ordelist' ); ?></th>
+					<th style="width:110px"><?php esc_html_e( 'Status', 'ordelist' ); ?></th>
+					<th style="width:170px"><?php esc_html_e( 'Actions', 'ordelist' ); ?></th>
 				</tr></thead>
 				<tbody>
 					<tr class="ole-wr-new">
-						<td><select class="wc-product-search ole-wr-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" data-exclude_type="variable" style="width:100%"></select></td>
+						<td><select class="wc-product-search ole-wr-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" data-exclude_type="variable" style="width:100%"></select></td>
 						<td><input type="date" class="ole-wr-expiry"/></td>
 						<td><input type="number" step="1" class="ole-wr-qty" value="0" style="width:80px"/></td>
-						<td><input type="text" class="ole-wr-note regular-text" maxlength="200" placeholder="<?php esc_attr_e( 'Note (lot number…)', 'order-list-enhancer' ); ?>"/></td>
+						<td><input type="text" class="ole-wr-note regular-text" maxlength="200" placeholder="<?php esc_attr_e( 'Note (lot number…)', 'ordelist' ); ?>"/></td>
 						<td></td>
-						<td><button type="button" class="button button-primary ole-wr-add" disabled><?php esc_html_e( 'Add', 'order-list-enhancer' ); ?></button></td>
+						<td><button type="button" class="button button-primary ole-wr-add" disabled><?php esc_html_e( 'Add', 'ordelist' ); ?></button></td>
 					</tr>
 				<?php foreach ( $rows as $r ) : ?>
 					<tr class="<?php echo esc_attr( self::status_class( $r, $o, $today ) ); ?>" data-id="<?php echo esc_attr( $r['id'] ); ?>">
@@ -227,8 +227,8 @@ class ORDELIST_Warranty_Admin {
 						<td><input type="text" class="ole-wr-note regular-text" maxlength="200" value="<?php echo esc_attr( $r['note'] ); ?>"/></td>
 						<td class="ole-wr-status"><?php echo esc_html( self::status_label( $r, $o, $today ) ); ?></td>
 						<td>
-							<button type="button" class="button ole-wr-save"><?php esc_html_e( 'Save', 'order-list-enhancer' ); ?></button>
-							<button type="button" class="button ole-wr-delete" aria-label="<?php esc_attr_e( 'Delete', 'order-list-enhancer' ); ?>">&times;</button>
+							<button type="button" class="button ole-wr-save"><?php esc_html_e( 'Save', 'ordelist' ); ?></button>
+							<button type="button" class="button ole-wr-delete" aria-label="<?php esc_attr_e( 'Delete', 'ordelist' ); ?>">&times;</button>
 						</td>
 					</tr>
 				<?php endforeach; ?>
@@ -236,7 +236,7 @@ class ORDELIST_Warranty_Admin {
 			</table>
 
 			<details class="ole-wr-gaps">
-				<summary><?php echo esc_html( sprintf( /* translators: %d: number of products/variations without batches. */ __( 'Products without batch data (%d)', 'order-list-enhancer' ), count( $gaps ) ) ); ?></summary>
+				<summary><?php echo esc_html( sprintf( /* translators: %d: number of products/variations without batches. */ __( 'Products without batch data (%d)', 'ordelist' ), count( $gaps ) ) ); ?></summary>
 				<ul>
 					<?php foreach ( $gaps as $g ) : ?>
 						<li><a href="<?php echo esc_url( $g['url'] ); ?>"><?php echo esc_html( $g['name'] ); ?></a></li>

@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Order List Enhancer 1.0.24\n"
+"Project-Id-Version: Ordelist 1.0.53\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-12 01:53+0300\n"
 "Language: bg_BG\n"

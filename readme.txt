@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.52
+Stable tag: 1.0.53
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,7 +55,7 @@ Every feature has its own on/off switch on a tabbed settings page that saves ins
 
 == Installation ==
 
-1. Upload the plugin to `/wp-content/plugins/order-list-enhancer/` or install it via the Plugins screen.
+1. Upload the plugin to `/wp-content/plugins/ordelist/` or install it via the Plugins screen.
 2. Activate it.
 3. Configure it under WooCommerce → Order List Enhancer.
 
@@ -78,6 +78,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.53 =
+* Text domain renamed to `ordelist` to match the plugin slug assigned on WordPress.org; translation files renamed accordingly. No functional changes.
 
 = 1.0.52 =
 * Purchase planning: multiple weightless variations collapse into one expandable note, and the per-year totals table hides years with no sales in the selected period.

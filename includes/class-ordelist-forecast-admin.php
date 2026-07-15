@@ -22,8 +22,8 @@ class ORDELIST_Forecast_Admin {
 	public static function menu() {
 		add_submenu_page(
 			'woocommerce',
-			__( 'Purchase planning', 'order-list-enhancer' ),
-			__( 'Purchase planning', 'order-list-enhancer' ),
+			__( 'Purchase planning', 'ordelist' ),
+			__( 'Purchase planning', 'ordelist' ),
 			'manage_woocommerce',
 			self::SLUG,
 			array( __CLASS__, 'render' )
@@ -55,22 +55,22 @@ class ORDELIST_Forecast_Admin {
 				'today'   => current_time( 'Y-m-d' ),
 				'margin'  => (int) $o['forecast_margin'],
 				'i18n'    => array(
-					'error'     => __( 'Failed.', 'order-list-enhancer' ),
-					'kg'        => __( 'kg', 'order-list-enhancer' ),
-					'pcs'       => __( 'pcs', 'order-list-enhancer' ),
-					'year'      => __( 'Year', 'order-list-enhancer' ),
-					'noWeight'  => __( 'no weight set — pieces only', 'order-list-enhancer' ),
+					'error'     => __( 'Failed.', 'ordelist' ),
+					'kg'        => __( 'kg', 'ordelist' ),
+					'pcs'       => __( 'pcs', 'ordelist' ),
+					'year'      => __( 'Year', 'ordelist' ),
+					'noWeight'  => __( 'no weight set — pieces only', 'ordelist' ),
 					/* translators: %s: number of variations. */
-					'noWeightMany' => __( '%s variations have no weight — counted in pieces only', 'order-list-enhancer' ),
-					'noBatches' => __( 'Stock not subtracted — no batches are tracked for this product.', 'order-list-enhancer' ),
-					'noSales'   => __( 'No sales recorded for this product yet.', 'order-list-enhancer' ),
-					'projection' => __( 'projection', 'order-list-enhancer' ),
-					'refZero'   => __( 'Reference year has no sales in this slice — coefficient set to 1.', 'order-list-enhancer' ),
+					'noWeightMany' => __( '%s variations have no weight — counted in pieces only', 'ordelist' ),
+					'noBatches' => __( 'Stock not subtracted — no batches are tracked for this product.', 'ordelist' ),
+					'noSales'   => __( 'No sales recorded for this product yet.', 'ordelist' ),
+					'projection' => __( 'projection', 'ordelist' ),
+					'refZero'   => __( 'Reference year has no sales in this slice — coefficient set to 1.', 'ordelist' ),
 					/* translators: %s: amount with unit, e.g. "3 kg". */
-					'expiring'  => __( 'of which %s expires before the period ends', 'order-list-enhancer' ),
-					'forecastL' => __( 'Forecast demand', 'order-list-enhancer' ),
-					'stockL'    => __( 'Sellable stock', 'order-list-enhancer' ),
-					'buyL'      => __( 'Recommended purchase', 'order-list-enhancer' ),
+					'expiring'  => __( 'of which %s expires before the period ends', 'ordelist' ),
+					'forecastL' => __( 'Forecast demand', 'ordelist' ),
+					'stockL'    => __( 'Sellable stock', 'ordelist' ),
+					'buyL'      => __( 'Recommended purchase', 'ordelist' ),
 				),
 			)
 		);
@@ -98,31 +98,31 @@ class ORDELIST_Forecast_Admin {
 	public static function render() {
 		?>
 		<div class="wrap ole-fc-wrap">
-			<h1><?php esc_html_e( 'Purchase planning', 'order-list-enhancer' ); ?></h1>
-			<p class="description"><?php esc_html_e( 'Pick a product or a single variation: yearly sales curves overlay on the chart, the table compares the selected slice across years, and the panel computes how much to order for the chosen period.', 'order-list-enhancer' ); ?></p>
+			<h1><?php esc_html_e( 'Purchase planning', 'ordelist' ); ?></h1>
+			<p class="description"><?php esc_html_e( 'Pick a product or a single variation: yearly sales curves overlay on the chart, the table compares the selected slice across years, and the panel computes how much to order for the chosen period.', 'ordelist' ); ?></p>
 
 			<div class="ole-fc-controls">
-				<select class="wc-product-search ole-fc-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'order-list-enhancer' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:360px"></select>
-				<label><input type="radio" name="ole-fc-unit" value="kg" checked/> <?php esc_html_e( 'kg', 'order-list-enhancer' ); ?></label>
-				<label><input type="radio" name="ole-fc-unit" value="pcs"/> <?php esc_html_e( 'pcs', 'order-list-enhancer' ); ?></label>
+				<select class="wc-product-search ole-fc-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:360px"></select>
+				<label><input type="radio" name="ole-fc-unit" value="kg" checked/> <?php esc_html_e( 'kg', 'ordelist' ); ?></label>
+				<label><input type="radio" name="ole-fc-unit" value="pcs"/> <?php esc_html_e( 'pcs', 'ordelist' ); ?></label>
 			</div>
 
 			<div class="ole-fc-chart"><canvas id="ole-fc-canvas"></canvas></div>
 
 			<div class="ole-fc-controls">
-				<label><?php esc_html_e( 'Period', 'order-list-enhancer' ); ?> <input type="date" class="ole-fc-start"/> — <input type="date" class="ole-fc-end"/></label>
-				<button type="button" class="button ole-fc-preset" data-days="30"><?php esc_html_e( 'Month', 'order-list-enhancer' ); ?></button>
-				<button type="button" class="button ole-fc-preset" data-days="91"><?php esc_html_e( 'Quarter', 'order-list-enhancer' ); ?></button>
-				<button type="button" class="button ole-fc-preset" data-days="182"><?php esc_html_e( 'Half-year', 'order-list-enhancer' ); ?></button>
-				<label><?php esc_html_e( 'Reference year', 'order-list-enhancer' ); ?> <select class="ole-fc-ref"></select></label>
-				<label><?php esc_html_e( 'Coefficient', 'order-list-enhancer' ); ?> <input type="number" step="0.01" min="0" class="ole-fc-coef" style="width:90px"/></label>
-				<button type="button" class="button ole-fc-coef-auto"><?php esc_html_e( 'auto', 'order-list-enhancer' ); ?></button>
-				<label><?php esc_html_e( 'Margin, %', 'order-list-enhancer' ); ?> <input type="number" step="1" min="0" max="100" class="ole-fc-margin" style="width:80px"/></label>
+				<label><?php esc_html_e( 'Period', 'ordelist' ); ?> <input type="date" class="ole-fc-start"/> — <input type="date" class="ole-fc-end"/></label>
+				<button type="button" class="button ole-fc-preset" data-days="30"><?php esc_html_e( 'Month', 'ordelist' ); ?></button>
+				<button type="button" class="button ole-fc-preset" data-days="91"><?php esc_html_e( 'Quarter', 'ordelist' ); ?></button>
+				<button type="button" class="button ole-fc-preset" data-days="182"><?php esc_html_e( 'Half-year', 'ordelist' ); ?></button>
+				<label><?php esc_html_e( 'Reference year', 'ordelist' ); ?> <select class="ole-fc-ref"></select></label>
+				<label><?php esc_html_e( 'Coefficient', 'ordelist' ); ?> <input type="number" step="0.01" min="0" class="ole-fc-coef" style="width:90px"/></label>
+				<button type="button" class="button ole-fc-coef-auto"><?php esc_html_e( 'auto', 'ordelist' ); ?></button>
+				<label><?php esc_html_e( 'Margin, %', 'ordelist' ); ?> <input type="number" step="1" min="0" max="100" class="ole-fc-margin" style="width:80px"/></label>
 			</div>
 
 			<div class="ole-fc-result" hidden></div>
 
-			<h2><?php esc_html_e( 'Sold in the selected slice', 'order-list-enhancer' ); ?></h2>
+			<h2><?php esc_html_e( 'Sold in the selected slice', 'ordelist' ); ?></h2>
 			<table class="widefat striped ole-fc-totals"><thead></thead><tbody></tbody></table>
 		</div>
 		<?php

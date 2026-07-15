@@ -90,9 +90,9 @@ class ORDELIST_Duplicates {
 					$interval = 1;
 				}
 				/* translators: %d: average number of days between orders. */
-				$freq = sprintf( __( 'once every %d days', 'order-list-enhancer' ), $interval );
+				$freq = sprintf( __( 'once every %d days', 'ordelist' ), $interval );
 			} elseif ( $first && $last <= $first ) {
-				$freq = __( 'same day', 'order-list-enhancer' );
+				$freq = __( 'same day', 'ordelist' );
 			}
 
 			$ids = array();
@@ -101,7 +101,7 @@ class ORDELIST_Duplicates {
 			}
 
 			$groups[ $g ] = array(
-				'name'   => '' !== $name ? $name : __( 'Customer', 'order-list-enhancer' ),
+				'name'   => '' !== $name ? $name : __( 'Customer', 'ordelist' ),
 				'n'      => $count,
 				'reason' => $m['reason'],
 				'first'  => $first ? wp_date( 'd.m.Y', $first ) : '',
@@ -303,11 +303,11 @@ class ORDELIST_Duplicates {
 		);
 
 		$labels = array(
-			'p' => __( 'phone', 'order-list-enhancer' ),
-			'e' => __( 'e-mail', 'order-list-enhancer' ),
-			'n' => __( 'name', 'order-list-enhancer' ),
-			'a' => __( 'address', 'order-list-enhancer' ),
-			'c' => __( 'phone + name', 'order-list-enhancer' ),
+			'p' => __( 'phone', 'ordelist' ),
+			'e' => __( 'e-mail', 'ordelist' ),
+			'n' => __( 'name', 'ordelist' ),
+			'a' => __( 'address', 'ordelist' ),
+			'c' => __( 'phone + name', 'ordelist' ),
 		);
 
 		$map  = array();
