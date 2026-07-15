@@ -92,5 +92,21 @@ var vsNeg = [
 var splitNeg = C.variationSplit( 10, vsNeg, '2025', '01-01', '12-31' );
 check( splitNeg[ 0 ].pcs === 10 && splitNeg[ 1 ].pcs === 0, 'negative ref share clamped to zero, others not inflated' );
 
+// ---- projection ----
+var pjCur = { '01-01': 10, '01-02': 5 };                       // факт: 10,15,15,…
+var pjRef = { '01-01': 100, '01-03': 20, '01-04': 30 };        // опорний: 100,100,120,150,…
+var pj = C.projection( pjCur, pjRef, '01-02', 0.5 );
+check( pj[ 0 ] === null, 'projection is null before today' );
+check( pj[ 1 ] === 15, 'projection starts at actual cumulative today' );
+check( pj[ 2 ] === 25, 'projection adds ref growth × coefficient (15 + 20×0.5)' );
+check( pj[ 3 ] === 40, 'projection accumulates ref growth (15 + 50×0.5)' );
+check( pj[ 364 ] === 40, 'projection flat when reference has no later sales' );
+var pjNoRef = C.projection( pjCur, null, '01-02', 0.5 );
+check( pjNoRef[ 200 ] === 15, 'empty reference year -> flat projection' );
+var pjEnd = C.projection( pjCur, pjRef, '12-31', 2 );
+check( pjEnd[ 363 ] === null && pjEnd[ 364 ] === 15, 'today at year end -> single point' );
+var pjZero = C.projection( pjCur, pjRef, '01-02', 0 );
+check( pjZero[ 300 ] === 15, 'coefficient 0 -> flat projection' );
+
 console.log( fails ? '\n' + fails + ' FAILED' : '\nALL PASS' );
 process.exit( fails ? 1 : 0 );
