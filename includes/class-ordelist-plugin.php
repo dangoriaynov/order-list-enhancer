@@ -203,34 +203,34 @@ class ORDELIST_Plugin {
 			),
 			'i18n'     => array(
 				/* translators: %s: number of orders. */
-				'badge'       => __( 'customer · %s orders', 'order-list-enhancer' ),
+				'badge'       => __( 'customer · %s orders', 'ordelist' ),
 				/* translators: %s: matching criteria (phone, name, etc.). */
-				'badgeTitle'  => __( "Show this customer's orders. Matches: %s", 'order-list-enhancer' ),
+				'badgeTitle'  => __( "Show this customer's orders. Matches: %s", 'ordelist' ),
 				/* translators: %s: number of orders. */
-				'dupBadge'    => __( 'duplicate · %s orders', 'order-list-enhancer' ),
+				'dupBadge'    => __( 'duplicate · %s orders', 'ordelist' ),
 				/* translators: %s: number of orders. */
-				'ordersCount' => __( '%s orders', 'order-list-enhancer' ),
+				'ordersCount' => __( '%s orders', 'ordelist' ),
 				/* translators: %s: date of the first order. */
-				'since'       => __( 'first on %s', 'order-list-enhancer' ),
-				'close'       => __( 'Close', 'order-list-enhancer' ),
-				'noItems'     => __( '—', 'order-list-enhancer' ),
+				'since'       => __( 'first on %s', 'ordelist' ),
+				'close'       => __( 'Close', 'ordelist' ),
+				'noItems'     => __( '—', 'ordelist' ),
 				/* translators: %s: delivery method label. */
-				'shipTitle'   => __( 'Delivery: %s', 'order-list-enhancer' ),
-				'loading'     => __( 'Loading…', 'order-list-enhancer' ),
-				'error'       => __( 'Failed to load.', 'order-list-enhancer' ),
-				'copy'        => __( 'Copy', 'order-list-enhancer' ),
-				'copied'      => __( 'Copied', 'order-list-enhancer' ),
-				'phoneBadge'  => __( 'invalid phone', 'order-list-enhancer' ),
+				'shipTitle'   => __( 'Delivery: %s', 'ordelist' ),
+				'loading'     => __( 'Loading…', 'ordelist' ),
+				'error'       => __( 'Failed to load.', 'ordelist' ),
+				'copy'        => __( 'Copy', 'ordelist' ),
+				'copied'      => __( 'Copied', 'ordelist' ),
+				'phoneBadge'  => __( 'invalid phone', 'ordelist' ),
 				/* translators: %s: number of selected orders. */
-				'seqOpen'     => __( 'Open selected (%s)', 'order-list-enhancer' ),
-				'seqStop'     => __( 'Stop', 'order-list-enhancer' ),
-				'seqSec'      => __( 'sec', 'order-list-enhancer' ),
+				'seqOpen'     => __( 'Open selected (%s)', 'ordelist' ),
+				'seqStop'     => __( 'Stop', 'ordelist' ),
+				'seqSec'      => __( 'sec', 'ordelist' ),
 				/* translators: %1$s: current number, %2$s: total. */
-				'seqProgress' => __( 'Opening %1$s / %2$s…', 'order-list-enhancer' ),
+				'seqProgress' => __( 'Opening %1$s / %2$s…', 'ordelist' ),
 				/* translators: %s: number of orders opened. */
-				'seqDone'     => __( 'Done (%s)', 'order-list-enhancer' ),
-				'seqNone'     => __( 'Select some orders first.', 'order-list-enhancer' ),
-				'seqBlocked'  => __( 'Pop-ups are blocked — allow them for this site, then try again.', 'order-list-enhancer' ),
+				'seqDone'     => __( 'Done (%s)', 'ordelist' ),
+				'seqNone'     => __( 'Select some orders first.', 'ordelist' ),
+				'seqBlocked'  => __( 'Pop-ups are blocked — allow them for this site, then try again.', 'ordelist' ),
 			),
 		);
 

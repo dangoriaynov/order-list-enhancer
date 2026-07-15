@@ -24,12 +24,12 @@ class ORDELIST_Phone_Checkout {
 	/** Перекладені повідомлення за кодом причини. */
 	public static function messages() {
 		return array(
-			'ok'            => __( 'Looks valid', 'order-list-enhancer' ),
-			'empty'         => __( 'Please enter a phone number.', 'order-list-enhancer' ),
-			'too_short'     => __( 'The phone number looks too short. Example: 0888 123 456.', 'order-list-enhancer' ),
-			'too_long'      => __( 'The phone number looks too long. Example: 0888 123 456.', 'order-list-enhancer' ),
-			'not_bulgarian' => __( 'Please enter a Bulgarian number (e.g. 0888 123 456).', 'order-list-enhancer' ),
-			'invalid'       => __( 'Invalid phone number. Example: 0888 123 456 or +359 888 123 456.', 'order-list-enhancer' ),
+			'ok'            => __( 'Looks valid', 'ordelist' ),
+			'empty'         => __( 'Please enter a phone number.', 'ordelist' ),
+			'too_short'     => __( 'The phone number looks too short. Example: 0888 123 456.', 'ordelist' ),
+			'too_long'      => __( 'The phone number looks too long. Example: 0888 123 456.', 'ordelist' ),
+			'not_bulgarian' => __( 'Please enter a Bulgarian number (e.g. 0888 123 456).', 'ordelist' ),
+			'invalid'       => __( 'Invalid phone number. Example: 0888 123 456 or +359 888 123 456.', 'ordelist' ),
 		);
 	}
 
@@ -94,7 +94,7 @@ class ORDELIST_Phone_Checkout {
 		$why  = isset( $msgs[ $res['reason'] ] ) ? $msgs[ $res['reason'] ] : $msgs['invalid'];
 		printf(
 			'<p class="ole-phone-invalid">⚠ %s<br><span class="ole-phone-why">%s</span></p>',
-			esc_html__( 'Phone may be invalid — please verify.', 'order-list-enhancer' ),
+			esc_html__( 'Phone may be invalid — please verify.', 'ordelist' ),
 			esc_html( $why )
 		);
 	}

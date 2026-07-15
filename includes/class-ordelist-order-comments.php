@@ -31,11 +31,11 @@ class ORDELIST_Order_Comments {
 		foreach ( $columns as $key => $label ) {
 			$out[ $key ] = $label;
 			if ( 'order_number' === $key ) {
-				$out[ self::COL ] = __( 'Comment', 'order-list-enhancer' );
+				$out[ self::COL ] = __( 'Comment', 'ordelist' );
 			}
 		}
 		if ( ! isset( $out[ self::COL ] ) ) {
-			$out[ self::COL ] = __( 'Comment', 'order-list-enhancer' );
+			$out[ self::COL ] = __( 'Comment', 'ordelist' );
 		}
 		return $out;
 	}

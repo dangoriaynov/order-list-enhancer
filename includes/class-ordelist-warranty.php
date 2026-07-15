@@ -179,10 +179,10 @@ class ORDELIST_Warranty {
 	}
 
 	private static function send_email( $lists, $window ) {
-		$subject = __( 'OLE — product expiry dates need attention', 'order-list-enhancer' );
+		$subject = __( 'OLE — product expiry dates need attention', 'ordelist' );
 		$lines   = array();
 		if ( $lists['expired'] ) {
-			$lines[] = __( 'Expired:', 'order-list-enhancer' );
+			$lines[] = __( 'Expired:', 'ordelist' );
 			foreach ( $lists['expired'] as $r ) {
 				$lines[] = self::email_line( $r );
 			}
@@ -190,7 +190,7 @@ class ORDELIST_Warranty {
 		}
 		if ( $lists['soon'] ) {
 			/* translators: %d: warning window in days. */
-			$lines[] = sprintf( __( 'Expiring within %d days:', 'order-list-enhancer' ), (int) $window );
+			$lines[] = sprintf( __( 'Expiring within %d days:', 'ordelist' ), (int) $window );
 			foreach ( $lists['soon'] as $r ) {
 				$lines[] = self::email_line( $r );
 			}
@@ -204,7 +204,7 @@ class ORDELIST_Warranty {
 			$name .= ' (' . $row['note'] . ')';
 		}
 		/* translators: 1: product name, 2: expiry date, 3: quantity left. */
-		return sprintf( __( '%1$s — %2$s, %3$d left', 'order-list-enhancer' ), $name, $row['expiry'], (int) $row['qty'] );
+		return sprintf( __( '%1$s — %2$s, %3$d left', 'ordelist' ), $name, $row['expiry'], (int) $row['qty'] );
 	}
 
 	/* ---------- банер ---------- */
@@ -228,17 +228,17 @@ class ORDELIST_Warranty {
 		$bits = array();
 		if ( $counts['soon'] ) {
 			/* translators: 1: number of batches, 2: warning window in days. */
-			$bits[] = sprintf( _n( '%1$d product batch expires within %2$d days', '%1$d product batches expire within %2$d days', $counts['soon'], 'order-list-enhancer' ), (int) $counts['soon'], (int) $o['warranty_days'] );
+			$bits[] = sprintf( _n( '%1$d product batch expires within %2$d days', '%1$d product batches expire within %2$d days', $counts['soon'], 'ordelist' ), (int) $counts['soon'], (int) $o['warranty_days'] );
 		}
 		if ( $counts['expired'] ) {
 			/* translators: %d: number of batches. */
-			$bits[] = sprintf( _n( '%d batch already expired', '%d batches already expired', $counts['expired'], 'order-list-enhancer' ), (int) $counts['expired'] );
+			$bits[] = sprintf( _n( '%d batch already expired', '%d batches already expired', $counts['expired'], 'ordelist' ), (int) $counts['expired'] );
 		}
 		printf(
 			'<div class="notice notice-warning"><p>%s — <a href="%s">%s</a></p></div>',
 			esc_html( implode( ', ', $bits ) ),
 			esc_url( admin_url( 'admin.php?page=' . ORDELIST_Warranty_Admin::SLUG ) ),
-			esc_html__( 'Open warranty dates', 'order-list-enhancer' )
+			esc_html__( 'Open warranty dates', 'ordelist' )
 		);
 	}
 }

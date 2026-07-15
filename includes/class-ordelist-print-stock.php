@@ -189,14 +189,14 @@ class ORDELIST_Print_Stock {
 
 	private static function send_low_email( $crossed ) {
 		$to      = get_option( 'admin_email' );
-		$subject = __( 'OLE — time to print more consumables', 'order-list-enhancer' );
-		$lines   = array( __( 'These items dropped to their low threshold:', 'order-list-enhancer' ), '' );
+		$subject = __( 'OLE — time to print more consumables', 'ordelist' );
+		$lines   = array( __( 'These items dropped to their low threshold:', 'ordelist' ), '' );
 		foreach ( $crossed as $c ) {
 			$label = ( 'instruction' === $c['type'] )
-				? __( 'Instruction', 'order-list-enhancer' )
-				: __( 'Sticker', 'order-list-enhancer' );
+				? __( 'Instruction', 'ordelist' )
+				: __( 'Sticker', 'ordelist' );
 			/* translators: 1: type, 2: name, 3: remaining stock. */
-			$lines[] = sprintf( __( '%1$s "%2$s" — %3$d left', 'order-list-enhancer' ), $label, $c['name'], (int) $c['stock'] );
+			$lines[] = sprintf( __( '%1$s "%2$s" — %3$d left', 'ordelist' ), $label, $c['name'], (int) $c['stock'] );
 			if ( ! empty( $c['id'] ) ) {
 				foreach ( ORDELIST_Print_Stock_Store::get_attachments( (int) $c['id'] ) as $att_id ) {
 					$url = wp_get_attachment_url( $att_id );
@@ -225,9 +225,9 @@ class ORDELIST_Print_Stock {
 		woocommerce_wp_text_input(
 			array(
 				'id'                => '_ordelist_sticker_stock',
-				'label'             => __( 'Sticker stock', 'order-list-enhancer' ),
+				'label'             => __( 'Sticker stock', 'ordelist' ),
 				'desc_tip'          => true,
-				'description'       => __( 'Printed stickers on hand for this product. Decreases by the quantity ordered. Leave blank to not track.', 'order-list-enhancer' ),
+				'description'       => __( 'Printed stickers on hand for this product. Decreases by the quantity ordered. Leave blank to not track.', 'ordelist' ),
 				'type'              => 'number',
 				'custom_attributes' => array( 'step' => '1' ),
 				'value'             => $val,
@@ -255,7 +255,7 @@ class ORDELIST_Print_Stock {
 			array(
 				'id'                => '_ordelist_sticker_stock_' . $loop,
 				'name'              => '_ordelist_sticker_stock_var[' . $loop . ']',
-				'label'             => __( 'Sticker stock', 'order-list-enhancer' ),
+				'label'             => __( 'Sticker stock', 'ordelist' ),
 				'wrapper_class'     => 'form-row form-row-first',
 				'type'              => 'number',
 				'custom_attributes' => array( 'step' => '1' ),
@@ -297,14 +297,14 @@ class ORDELIST_Print_Stock {
 		$url = admin_url( 'admin.php?page=' . ORDELIST_Print_Stock_Admin::SLUG );
 		printf(
 			'<div class="notice notice-warning"><p>%s <a href="%s">%s</a></p></div>',
-			esc_html( sprintf( /* translators: %d: number of low items. */ _n( '%d print consumable is low — time to print more.', '%d print consumables are low — time to print more.', $count, 'order-list-enhancer' ), $count ) ),
+			esc_html( sprintf( /* translators: %d: number of low items. */ _n( '%d print consumable is low — time to print more.', '%d print consumables are low — time to print more.', $count, 'ordelist' ), $count ) ),
 			esc_url( $url ),
-			esc_html__( 'Open stock', 'order-list-enhancer' )
+			esc_html__( 'Open stock', 'ordelist' )
 		);
 	}
 
 	public static function add_order_column( $columns ) {
-		$columns['ordelist_depleted'] = __( 'Print', 'order-list-enhancer' );
+		$columns['ordelist_depleted'] = __( 'Print', 'ordelist' );
 		return $columns;
 	}
 
