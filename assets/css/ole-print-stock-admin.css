@@ -14,3 +14,25 @@
 .ole-ps-sheets   td:last-child .button { margin-bottom: 2px; }
 .ole-ps-sheets .select2-container { min-width: 260px; }
 .ole-ps-wrap h2 { margin-top: 1.5em; }
+/* Printable-file chips */
+.ole-ps-files .ole-ps-file {
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+	margin: 0 4px 4px 0;
+	padding: 1px 6px;
+	background: #f0f0f1;
+	border: 1px solid #c3c4c7;
+	border-radius: 10px;
+	font-size: 12px;
+	line-height: 1.8;
+}
+.ole-ps-files .ole-ps-file-missing { color: #b32d2e; font-style: italic; }
+.ole-ps-files .ole-ps-file-remove {
+	border: 0;
+	background: none;
+	cursor: pointer;
+	color: #787c82;
+	padding: 0 2px;
+}
+.ole-ps-files .ole-ps-file-remove:hover { color: #b32d2e; }
