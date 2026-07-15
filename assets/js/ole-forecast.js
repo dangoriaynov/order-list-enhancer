@@ -90,11 +90,16 @@
 			if ( ! hasWeight ) { $( 'input[name="ole-fc-unit"][value="pcs"]' ).prop( 'checked', true ); }
 			fillRefYears();
 			state.coefAuto = true;
+			// Жодного року з продажами: recalcPanel() сховав би примітку — малюємо
+			// порожній графік і таблицю-шапку та показуємо примітку замість панелі.
 			if ( ! state.refYear ) {
+				drawChart();
+				renderTotals( period() );
 				$( '.ole-fc-result' ).empty().removeAttr( 'hidden' );
 				$( '<div class="ole-fc-note"/>' ).text( ORDELIST_FC.i18n.noSales ).appendTo( '.ole-fc-result' );
+			} else {
+				recalc();
 			}
-			recalc();
 		} ).fail( function () { window.alert( ORDELIST_FC.i18n.error ); } );
 	} );
 

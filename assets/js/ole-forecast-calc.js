@@ -85,7 +85,9 @@
 		var cur = C.rangeSum( series[ currentYear ], '01-01', todayMMDD );
 		var ref = C.rangeSum( series[ refYear ], '01-01', todayMMDD );
 		if ( ref <= 0 ) { return { value: 1, refZero: true }; }
-		return { value: cur / ref, refZero: false };
+		var value = cur / ref;
+		if ( value < 0 ) { value = 0; } // чистий мінус цього року — коефіцієнт 0, прогноз нульовий
+		return { value: value, refZero: false };
 	};
 
 	C.forecast = function ( refSliceSum, coefficient, marginPct ) {
@@ -134,6 +136,7 @@
 			if ( null !== v.weight_kg && undefined !== v.weight_kg ) {
 				kg = C.rangeSum( C.foldFeb29( v.series[ refYear ] || {} ), startMMDD, endMMDD ) * v.weight_kg;
 			}
+			if ( kg < 0 ) { kg = 0; } // повернень більше ніж продажів — частка нульова, не спотворює інших
 			shares.push( kg );
 			total += kg;
 		}
