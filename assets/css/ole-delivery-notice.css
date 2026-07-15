@@ -1,4 +1,4 @@
-/* Order List Enhancer — checkout delivery-date notice (orddd field) */
+/* Order List Enhancer - checkout delivery-date notice (orddd field) */
 .ole-deliv {
 	box-sizing: border-box;
 	width: 100%;
@@ -20,14 +20,14 @@
 .ole-deliv-body {
 	font-size: .95em;
 }
-/* Статичний блок — янтарний «увага». */
+/* Статичний блок - янтарний «увага». */
 .ole-deliv-ship {
 	background: #fff8e6;
 	border-color: #e6c98a;
 	border-left: 4px solid #b26a00;
 	color: #5a4300;
 }
-/* Банер відпустки — тепло-червоний, помітніший, над статичним блоком. */
+/* Банер відпустки - тепло-червоний, помітніший, над статичним блоком. */
 .ole-deliv-vacation {
 	background: #fdecea;
 	border-color: #f0b3ac;

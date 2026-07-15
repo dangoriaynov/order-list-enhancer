@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Чиста логіка партій з термінами придатності (без WordPress).
- * Тестується ізольовано — див. tests/warranty/test-calc.php.
+ * Тестується ізольовано - див. tests/warranty/test-calc.php.
  */
 class ORDELIST_Warranty_Calc {
 
@@ -40,7 +40,7 @@ class ORDELIST_Warranty_Calc {
 			$left                   -= $take;
 		}
 		if ( $left > 0 ) {
-			// Решта попиту — в найновішу партію: нехай іде в мінус, це сигнал розбіжності з полицею.
+			// Решта попиту - в найновішу партію: нехай іде в мінус, це сигнал розбіжності з полицею.
 			$last                       = $batches[ count( $batches ) - 1 ];
 			$takes[ (int) $last['id'] ] = ( $takes[ (int) $last['id'] ] ?? 0 ) + $left;
 		}

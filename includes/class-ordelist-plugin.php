@@ -24,7 +24,7 @@ class ORDELIST_Plugin {
 		add_action( 'wp_ajax_ordelist_group_details', array( $this, 'ajax_group_details' ) );
 		add_action( 'wp_ajax_ordelist_save_bulk_actions', array( $this, 'ajax_save_bulk_actions' ) );
 
-		// Нормализация на телефон — само за показване (view context); БД не се пипа.
+		// Нормализация на телефон - само за показване (view context); БД не се пипа.
 		$opts = ORDELIST_Settings::get();
 		if ( ORDELIST_Settings::is_yes( $opts, 'normalize_phone' ) ) {
 			$cc   = preg_replace( '/\D+/', '', (string) $opts['phone_cc'] );
@@ -106,7 +106,7 @@ class ORDELIST_Plugin {
 
 	/**
 	 * Повертає контекст екрана: 'list' (список), 'edit' (редагування) або '' (інше).
-	 * HPOS використовує один screen id для обох — розрізняємо за ?action=edit.
+	 * HPOS використовує один screen id для обох - розрізняємо за ?action=edit.
 	 */
 	private function screen_context() {
 		if ( ! function_exists( 'get_current_screen' ) ) {
@@ -213,7 +213,7 @@ class ORDELIST_Plugin {
 				/* translators: %s: date of the first order. */
 				'since'       => __( 'first on %s', 'ordelist' ),
 				'close'       => __( 'Close', 'ordelist' ),
-				'noItems'     => __( '—', 'ordelist' ),
+				'noItems'     => __( '-', 'ordelist' ),
 				/* translators: %s: delivery method label. */
 				'shipTitle'   => __( 'Delivery: %s', 'ordelist' ),
 				'loading'     => __( 'Loading…', 'ordelist' ),
@@ -230,7 +230,7 @@ class ORDELIST_Plugin {
 				/* translators: %s: number of orders opened. */
 				'seqDone'     => __( 'Done (%s)', 'ordelist' ),
 				'seqNone'     => __( 'Select some orders first.', 'ordelist' ),
-				'seqBlocked'  => __( 'Pop-ups are blocked — allow them for this site, then try again.', 'ordelist' ),
+				'seqBlocked'  => __( 'Pop-ups are blocked - allow them for this site, then try again.', 'ordelist' ),
 			),
 		);
 

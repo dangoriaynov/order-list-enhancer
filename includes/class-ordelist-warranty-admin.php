@@ -97,7 +97,7 @@ class ORDELIST_Warranty_Admin {
 			$variation_id = 0;
 		}
 		$id = ORDELIST_Warranty_Store::add_batch( $product_id, $variation_id, $expiry, $qty, $note );
-		ORDELIST_Warranty::run_check(); // нова партія може вже бути у вікні — маркуємо/шлемо одразу
+		ORDELIST_Warranty::run_check(); // нова партія може вже бути у вікні - маркуємо/шлемо одразу
 		$row = ORDELIST_Warranty_Store::get_batch( $id );
 		wp_send_json_success(
 			array(
@@ -171,7 +171,7 @@ class ORDELIST_Warranty_Admin {
 		return '';
 	}
 
-	/** Текстова мітка статусу (колонка «Статус» + доступність) — той самий пріоритет, що й у status_class(). */
+	/** Текстова мітка статусу (колонка «Статус» + доступність) - той самий пріоритет, що й у status_class(). */
 	public static function status_label( $row, $o = null, $today = null ) {
 		if ( (int) $row['qty'] < 0 ) {
 			return __( 'Expired', 'ordelist' );
@@ -188,7 +188,7 @@ class ORDELIST_Warranty_Admin {
 		if ( 'soon' === $status ) {
 			return __( 'Expiring soon', 'ordelist' );
 		}
-		return '—';
+		return '-';
 	}
 
 	public static function render() {

@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Чиста логіка обліку витратних матеріалів (без WordPress).
- * Тестується ізольовано — див. tests/print-stock/test-calc.php.
+ * Тестується ізольовано - див. tests/print-stock/test-calc.php.
  */
 class ORDELIST_Print_Stock_Calc {
 

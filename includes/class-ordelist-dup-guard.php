@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Захист від дублікатів замовлень на чекауті.
- * find_match — чиста функція (без WordPress), тестується ізольовано.
+ * find_match - чиста функція (без WordPress), тестується ізольовано.
  * WP-glue (хуки/сесія/AJAX) додається в Task A4.
  */
 class ORDELIST_Dup_Guard {
@@ -149,14 +149,14 @@ class ORDELIST_Dup_Guard {
 		return $out;
 	}
 
-	/** Класичний чекаут: не блокуємо — просимо підтвердження через сесію + модалку. */
+	/** Класичний чекаут: не блокуємо - просимо підтвердження через сесію + модалку. */
 	public static function validate_classic( $data, $errors = null ) {
 		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
 			return;
 		}
 		$current = self::current_from_checkout( $data );
 
-		// Клієнт уже підтвердив дубль саме для цього кошика — пропускаємо й чистимо прапорець.
+		// Клієнт уже підтвердив дубль саме для цього кошика - пропускаємо й чистимо прапорець.
 		$confirmed = (string) WC()->session->get( self::SESS_CONFIRMED, '' );
 		if ( '' !== $confirmed && $confirmed === $current['cart_hash'] ) {
 			WC()->session->set( self::SESS_CONFIRMED, '' );
@@ -200,7 +200,7 @@ class ORDELIST_Dup_Guard {
 		}
 	}
 
-	/** Клієнт натиснув «Да, поръчай отново» — переносимо pending → confirmed. */
+	/** Клієнт натиснув «Да, поръчай отново» - переносимо pending → confirmed. */
 	public static function ajax_confirm() {
 		check_ajax_referer( 'ordelist_dup_confirm', 'nonce' );
 		if ( ! function_exists( 'WC' ) || ! WC()->session ) {

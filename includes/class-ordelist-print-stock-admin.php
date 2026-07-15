@@ -236,7 +236,7 @@ class ORDELIST_Print_Stock_Admin {
 			<h1><?php esc_html_e( 'Print consumables', 'ordelist' ); ?></h1>
 
 			<h2><?php esc_html_e( 'Stickers', 'ordelist' ); ?></h2>
-			<p class="description"><?php esc_html_e( 'Sticker stock per product or variation — decreases by the ordered quantity. Add a product below: pick a variation for per-variation stock, or the product for one shared count.', 'ordelist' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Sticker stock per product or variation - decreases by the ordered quantity. Add a product below: pick a variation for per-variation stock, or the product for one shared count.', 'ordelist' ); ?></p>
 			<table class="widefat striped ole-ps-stickers">
 				<thead><tr>
 					<th><?php esc_html_e( 'Name', 'ordelist' ); ?></th>

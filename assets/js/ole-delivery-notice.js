@@ -34,7 +34,7 @@
 			wrap.setAttribute( 'data-ole-deliv', '1' );
 			var frag = document.createDocumentFragment();
 			if ( D.vacation && D.vacation.text ) {
-				// Банер відпустки — над статичним блоком; весь текст в body-рядку.
+				// Банер відпустки - над статичним блоком; весь текст в body-рядку.
 				frag.appendChild( buildBlock( 'ole-deliv-vacation', '', D.vacation.text ) );
 			}
 			frag.appendChild( buildBlock( 'ole-deliv-ship', D.title || '', D.body || '' ) );
@@ -44,6 +44,6 @@
 	}
 
 	decorate();
-	// Чекаут перерендерюється на оновленнях — ребайнд через подію WooCommerce.
+	// Чекаут перерендерюється на оновленнях - ребайнд через подію WooCommerce.
 	if ( window.jQuery ) { window.jQuery( document.body ).on( 'updated_checkout', decorate ); }
 } )();

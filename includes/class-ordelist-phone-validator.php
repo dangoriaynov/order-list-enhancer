@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Чиста перевірка болгарського телефону (без WordPress) — юніт-тестована;
+ * Чиста перевірка болгарського телефону (без WordPress) - юніт-тестована;
  * правила дзеркалить JS-порт у assets/js/ole-phone-checkout.js.
  */
 class ORDELIST_Phone_Validator {

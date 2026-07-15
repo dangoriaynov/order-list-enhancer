@@ -6,7 +6,7 @@
 	var C = OrdelistForecastCalc;
 	var MMDD = C.mmddList();
 	var COLORS = [ '#2271b1', '#d63638', '#00a32a', '#b26a00', '#8c5e58', '#3c434a', '#7f54b3' ];
-	// Короткі назви місяців мовою адмінки — для підписів осі X.
+	// Короткі назви місяців мовою адмінки - для підписів осі X.
 	var MONTHS = ( function () {
 		var lang = document.documentElement.lang || 'en';
 		var out = [];
@@ -24,7 +24,7 @@
 		refYear: null,
 		coefAuto: true,
 		chart: null,
-		highlight: null      // [[startIdx,endIdx],…] — підсвітка відрізка на графіку
+		highlight: null      // [[startIdx,endIdx],…] - підсвітка відрізка на графіку
 	};
 
 	// Підсвічує вибраний календарний відрізок на кривих (без плагінів-залежностей).
@@ -104,10 +104,10 @@
 			var d = r && r.data;
 			if ( ! d ) { return; }
 			state.data = d;
-			// Вибрали варіацію — режим варіації; вибрали товар — увесь препарат.
+			// Вибрали варіацію - режим варіації; вибрали товар - увесь препарат.
 			state.target = ( picked !== d.product_id ) ? { type: 'variation', id: picked } : { type: 'product' };
-			// Одиницю визначаємо за ЦІЛЛЮ: у режимі варіації — за вагою саме цієї варіації;
-			// у режимі товару — чи є вага хоч у якоїсь варіації.
+			// Одиницю визначаємо за ЦІЛЛЮ: у режимі варіації - за вагою саме цієї варіації;
+			// у режимі товару - чи є вага хоч у якоїсь варіації.
 			var hasWeight;
 			if ( 'variation' === state.target.type ) {
 				hasWeight = d.variations.some( function ( v ) { return v.id === state.target.id && null !== v.weight_kg; } );
@@ -118,7 +118,7 @@
 			if ( ! hasWeight ) { $( 'input[name="ole-fc-unit"][value="pcs"]' ).prop( 'checked', true ); }
 			fillRefYears();
 			state.coefAuto = true;
-			// Жодного року з продажами: recalcPanel() сховав би примітку — малюємо
+			// Жодного року з продажами: recalcPanel() сховав би примітку - малюємо
 			// порожній графік і таблицю-шапку та показуємо примітку замість панелі.
 			if ( ! state.refYear ) {
 				drawChart();
@@ -132,7 +132,7 @@
 	} );
 
 	function fillRefYears() {
-		// роки — з штучного ряду: він завжди повний, кг-ряд може бути порожній без ваги.
+		// роки - з штучного ряду: він завжди повний, кг-ряд може бути порожній без ваги.
 		var ys = yearsOf( C.unitSeries( state.data.variations, state.target, 'pcs' ) );
 		var $ref = $( '.ole-fc-ref' ).empty();
 		var def = null;
@@ -182,7 +182,7 @@
 			var isCur = ( ys[ i ] === curYear() );
 			if ( isCur ) {
 				curColor = COLORS[ i % COLORS.length ];
-				// після сьогодні даних нема — далі малює пунктирний датасет прогнозу
+				// після сьогодні даних нема - далі малює пунктирний датасет прогнозу
 				for ( var j = todayIdx + 1; j < cum.length; j++ ) { cum[ j ] = null; }
 			}
 			datasets.push( {
@@ -197,7 +197,7 @@
 		}
 		if ( null !== curColor && state.refYear ) {
 			datasets.push( {
-				label: curYear() + ' — ' + ORDELIST_FC.i18n.projection,
+				label: curYear() + ' - ' + ORDELIST_FC.i18n.projection,
 				oleProjection: true,
 				data: [],
 				borderColor: curColor,
@@ -241,7 +241,7 @@
 		if ( ! state.data ) { return; }
 		var p = period();
 		renderTotals( p );
-		// Підсвітка відрізка на графіку; перехід через Новий рік — двома сегментами.
+		// Підсвітка відрізка на графіку; перехід через Новий рік - двома сегментами.
 		if ( p ) {
 			var si = MMDD.indexOf( p.startMMDD );
 			var ei = MMDD.indexOf( p.endMMDD );
@@ -273,13 +273,13 @@
 		row( $out, ORDELIST_FC.i18n.stockL, fmt( stock, state.unit ) );
 		if ( 0 === state.data.batches.length ) { note( $out, ORDELIST_FC.i18n.noBatches ); }
 		if ( auto.refZero && state.coefAuto ) { note( $out, ORDELIST_FC.i18n.refZero ); }
-		// У штуках округлюємо ВГОРУ — округлення вниз недозамовляє.
+		// У штуках округлюємо ВГОРУ - округлення вниз недозамовляє.
 		var buyShow = ( 'pcs' === state.unit ) ? Math.ceil( buy ) : buy;
 		var $buy = row( $out, ORDELIST_FC.i18n.buyL, fmt( buyShow, state.unit ) );
 		$buy.addClass( 'ole-fc-buy' );
 		if ( expiring > 0 ) { note( $out, ORDELIST_FC.i18n.expiring.replace( '%s', fmt( expiring, state.unit ) ) ); }
-		// У кг-режимі позначаємо варіації без ваги — вони рахуються лише в штуках.
-		// Кілька таких — згортаємо в один рядок, що розкривається (список імен усередині).
+		// У кг-режимі позначаємо варіації без ваги - вони рахуються лише в штуках.
+		// Кілька таких - згортаємо в один рядок, що розкривається (список імен усередині).
 		if ( 'kg' === state.unit ) {
 			var noW = [];
 			for ( var wi = 0; wi < state.data.variations.length; wi++ ) {
@@ -289,7 +289,7 @@
 				}
 			}
 			if ( 1 === noW.length ) {
-				note( $out, noW[ 0 ] + ' — ' + ORDELIST_FC.i18n.noWeight );
+				note( $out, noW[ 0 ] + ' - ' + ORDELIST_FC.i18n.noWeight );
 			} else if ( noW.length > 1 ) {
 				noteDetails( $out, ORDELIST_FC.i18n.noWeightMany.replace( '%s', noW.length ), noW.join( ', ' ) );
 			}
@@ -322,7 +322,7 @@
 	function note( $box, text ) {
 		$( '<div class="ole-fc-note"/>' ).text( text ).appendTo( $box );
 	}
-	// Згорнута примітка: підсумок видно завжди, деталі — по кліку.
+	// Згорнута примітка: підсумок видно завжди, деталі - по кліку.
 	function noteDetails( $box, summary, detail ) {
 		var $d = $( '<details class="ole-fc-note"/>' );
 		$( '<summary/>' ).text( summary ).appendTo( $d );
@@ -346,7 +346,7 @@
 		for ( var i = 0; i < ys.length; i++ ) {
 			var kgSum  = Math.round( C.rangeSum( kgS[ ys[ i ] ], p.startMMDD, p.endMMDD ) * 10 ) / 10;
 			var pcsSum = C.rangeSum( pcsS[ ys[ i ] ], p.startMMDD, p.endMMDD );
-			if ( 0 === kgSum && 0 === pcsSum ) { continue; } // нема продажів у відрізку — рядок лише шумить
+			if ( 0 === kgSum && 0 === pcsSum ) { continue; } // нема продажів у відрізку - рядок лише шумить
 			var $r = $( '<tr/>' );
 			$( '<td/>' ).text( ys[ i ] ).appendTo( $r );
 			$( '<td/>' ).text( kgSum ).appendTo( $r );

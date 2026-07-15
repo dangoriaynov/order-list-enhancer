@@ -19,7 +19,7 @@ class ORDELIST_Forecast_Data {
 	public static function rows_for_product( $product_id ) {
 		global $wpdb;
 		// Чисті продажі за семантикою WooCommerce Analytics: неоплачені/скасовані/невдалі
-		// не рахуються; wc-refunded лишаються — їх компенсують від'ємні рядки повернень.
+		// не рахуються; wc-refunded лишаються - їх компенсують від'ємні рядки повернень.
 		return (array) $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT l.variation_id, DATE(l.date_created) d, SUM(l.product_qty) qty
@@ -55,7 +55,7 @@ class ORDELIST_Forecast_Data {
 		return $out;
 	}
 
-	/** Вага в кг або null (порожнє поле ваги) — конвертація з одиниці ваги магазину. */
+	/** Вага в кг або null (порожнє поле ваги) - конвертація з одиниці ваги магазину. */
 	private static function weight_kg( $product ) {
 		$w = $product ? $product->get_weight() : '';
 		if ( '' === (string) $w ) {
@@ -83,7 +83,7 @@ class ORDELIST_Forecast_Data {
 			foreach ( $parent->get_children() as $vid ) {
 				$targets[ (int) $vid ] = wc_get_product( $vid );
 			}
-			// Варіації з продажами, але вже видалені — показуємо як '#id'.
+			// Варіації з продажами, але вже видалені - показуємо як '#id'.
 			foreach ( array_keys( $shaped ) as $vid ) {
 				if ( $vid > 0 && ! isset( $targets[ $vid ] ) ) {
 					$targets[ $vid ] = null;

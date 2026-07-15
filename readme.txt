@@ -1,4 +1,4 @@
-=== Ordelist – Order List Enhancer for WooCommerce ===
+=== Ordelist - Order List Enhancer for WooCommerce ===
 Contributors: winter2007d
 Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
@@ -8,50 +8,50 @@ Stable tag: 1.0.53
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Spot repeat customers, flag likely duplicates, color the shipping column and show the order total — right in the WooCommerce orders admin.
+Spot repeat customers, flag likely duplicates, color the shipping column and show the order total - right in the WooCommerce orders admin.
 
 == Description ==
 
-Order List Enhancer adds the order insights you actually need to the WooCommerce admin — right where you manage orders, without opening each one.
+Order List Enhancer adds the order insights you actually need to the WooCommerce admin - right where you manage orders, without opening each one.
 
 **Spot returning customers and accidental duplicates.**
-As you browse the orders list, orders that belong to the same customer (matched by phone, by name, or by both) are outlined in a shared color and marked with a badge. Matching looks across every order status, so a repeat customer is recognised even if their previous order is still processing or was never completed. Click the badge — on the list or from inside an order — to open a popup with that customer's history: each order links to itself and shows its date, items, total and status, plus a quick summary (first order date and how often they buy). Orders placed within a few days of each other, or several still in processing, are flagged in red as likely duplicates, so you can catch double orders before you ship them.
+As you browse the orders list, orders that belong to the same customer (matched by phone, by name, or by both) are outlined in a shared color and marked with a badge. Matching looks across every order status, so a repeat customer is recognised even if their previous order is still processing or was never completed. Click the badge - on the list or from inside an order - to open a popup with that customer's history: each order links to itself and shows its date, items, total and status, plus a quick summary (first order date and how often they buy). Orders placed within a few days of each other, or several still in processing, are flagged in red as likely duplicates, so you can catch double orders before you ship them.
 
 **Color your delivery column.**
-Define simple "keyword → color" rules (for example your couriers, or pickup vs. delivery to address) and the "Ship to" cell in the list — and the address block on the order screen — is colored automatically, so you can scan deliveries at a glance.
+Define simple "keyword → color" rules (for example your couriers, or pickup vs. delivery to address) and the "Ship to" cell in the list - and the address block on the order screen - is colored automatically, so you can scan deliveries at a glance.
 
 **Work faster inside an order.**
-Show the order total next to the billing address, copy the customer's name, phone or total to the clipboard with one click, and tidy phone numbers for display (leading 00 → +, add the country code when it is missing) — all without ever changing what is stored in the database.
+Show the order total next to the billing address, copy the customer's name, phone or total to the clipboard with one click, and tidy phone numbers for display (leading 00 → +, add the country code when it is missing) - all without ever changing what is stored in the database.
 
 **Convert order "extras" into real products.**
-If you sell add-ons through Product Add-Ons or Checkout Add-Ons, map each extra to a product and Order List Enhancer turns it into a real line item the moment the order is created — priced at exactly what the customer paid (the order total never changes), counted in stock, with an admin-only note showing which extra it came from (never printed on invoices). No more moving an order to an editable status and rebuilding it by hand. Off by default.
+If you sell add-ons through Product Add-Ons or Checkout Add-Ons, map each extra to a product and Order List Enhancer turns it into a real line item the moment the order is created - priced at exactly what the customer paid (the order total never changes), counted in stock, with an admin-only note showing which extra it came from (never printed on invoices). No more moving an order to an editable status and rebuilding it by hand. Off by default.
 
 **Pick a default bulk action.**
 Choose which entry is pre-selected in the orders-list bulk-actions menu; the list of choices fills itself from your own orders screen.
 
 **Flag high-value orders.**
-Set order-total thresholds, each with its own color. When an order's total reaches a threshold, its row in the list — and its address panel on the order screen — gets a colored ring, so big orders stand out at a glance. The ring is independent of the shipping color (both show at once), and when several thresholds apply the highest one wins. Off by default.
+Set order-total thresholds, each with its own color. When an order's total reaches a threshold, its row in the list - and its address panel on the order screen - gets a colored ring, so big orders stand out at a glance. The ring is independent of the shipping color (both show at once), and when several thresholds apply the highest one wins. Off by default.
 
 **Validate phone numbers at checkout.**
-Turn on checkout phone validation and customers get instant, clear feedback on whether their Bulgarian number is valid — and why — as they type, backed by server-side enforcement you can set to *warn* (let the order through but flag it) or *block* (stop it until fixed). Orders with an unusable number are flagged on the order screen and with a badge in the list, so you catch them before you ship. Off by default.
+Turn on checkout phone validation and customers get instant, clear feedback on whether their Bulgarian number is valid - and why - as they type, backed by server-side enforcement you can set to *warn* (let the order through but flag it) or *block* (stop it until fixed). Orders with an unusable number are flagged on the order screen and with a badge in the list, so you catch them before you ship. Off by default.
 
 **Open many orders without crashing your shop.**
-Tick the orders you want to review and click "Open selected" — each one opens in its own tab, one every few seconds (you set the interval), so only a single order ever loads at a time. A Stop button and a live "3 / 12" counter keep you in control. Handy when opening many orders at once would overwhelm the server. (Your browser must allow pop-ups for the admin site.)
+Tick the orders you want to review and click "Open selected" - each one opens in its own tab, one every few seconds (you set the interval), so only a single order ever loads at a time. A Stop button and a live "3 / 12" counter keep you in control. Handy when opening many orders at once would overwhelm the server. (Your browser must allow pop-ups for the admin site.)
 
 **Stop accidental double orders at checkout.**
-Optionally guard the checkout against a customer placing the same order twice: if an identical recent order (same phone and cart) is detected within a short window, the plugin either asks the customer to confirm in a popup or blocks the duplicate outright — your choice. Off by default.
+Optionally guard the checkout against a customer placing the same order twice: if an identical recent order (same phone and cart) is detected within a short window, the plugin either asks the customer to confirm in a popup or blocks the duplicate outright - your choice. Off by default.
 
 **Explain the delivery date at checkout.**
 If your checkout has a delivery-date field, show a clear, highlighted note above it (for example, that the date is when the order ships, not when it arrives), plus an optional "we're away until…" vacation banner that hides itself once the date passes. Fully editable text. Off by default.
 
 **Never run out of stickers or printed instructions.**
-Track the printed consumables you pack with each order: give every product a sticker stock and group products under shared "instruction sheets." As orders come in, stock is drawn down automatically — and restored if an order is cancelled or refunded — with per-type low thresholds that warn you on a dedicated stock page, an admin banner, an orders-list badge and an email when it is time to print more. Off by default.
+Track the printed consumables you pack with each order: give every product a sticker stock and group products under shared "instruction sheets." As orders come in, stock is drawn down automatically - and restored if an order is cancelled or refunded - with per-type low thresholds that warn you on a dedicated stock page, an admin banner, an orders-list badge and an email when it is time to print more. Off by default.
 
 **See order comments without opening the order.**
-Optionally show the customer's checkout note and the most recent internal admin note right under the order number in the orders list, so special instructions are never missed. Long notes truncate to a couple of lines — hover or click to read the rest. Off by default.
+Optionally show the customer's checkout note and the most recent internal admin note right under the order number in the orders list, so special instructions are never missed. Long notes truncate to a couple of lines - hover or click to read the rest. Off by default.
 
 **Built to fit in.**
-Every feature has its own on/off switch on a tabbed settings page that saves instantly, with no page reload, a color picker for every color, and a Settings link right on the Plugins screen. Everything runs in the admin only, for users who can edit orders — no external services and no tracking. Compatible with WooCommerce HPOS (High-Performance Order Storage) and sequential order numbers, and fully translatable (English and Bulgarian included).
+Every feature has its own on/off switch on a tabbed settings page that saves instantly, with no page reload, a color picker for every color, and a Settings link right on the Plugins screen. Everything runs in the admin only, for users who can edit orders - no external services and no tracking. Compatible with WooCommerce HPOS (High-Performance Order Storage) and sequential order numbers, and fully translatable (English and Bulgarian included).
 
 == Installation ==
 
@@ -73,9 +73,9 @@ No. It only reads orders in your admin and renders the UI locally.
 == Screenshots ==
 
 1. Repeat customers and likely duplicates highlighted right in the orders list.
-2. The customer popup — every order with date, items, total and status, plus a summary.
+2. The customer popup - every order with date, items, total and status, plus a summary.
 3. The order screen: colored delivery, order total and one-click copy buttons.
-4. Settings — every feature has a toggle, with color pickers, saved without a reload.
+4. Settings - every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
 
@@ -89,13 +89,13 @@ No. It only reads orders in your admin and renders the UI locally.
 * Purchase planning: the current-year curve now continues past today as a dashed projection (reference-year pace × coefficient), and the chart's X axis marks the start of each month instead of arbitrary dates.
 
 = 1.0.50 =
-* Print consumables: attach printable files (PDF/JPG/PNG from the Media Library) to any sticker or instruction sheet — open them in one click from the stock page; low-stock emails now include direct links to the files that need printing.
+* Print consumables: attach printable files (PDF/JPG/PNG from the Media Library) to any sticker or instruction sheet - open them in one click from the stock page; low-stock emails now include direct links to the files that need printing.
 
 = 1.0.49 =
 * All internal identifiers (options, database tables, meta keys, AJAX actions, script handles, classes, constants) renamed from the 3-character `ole_` prefix to `ordelist_`, per the WordPress.org guideline requiring prefixes of at least 4 characters. No functional changes.
 
 = 1.0.48 =
-* Renamed to "Ordelist – Order List Enhancer for WooCommerce" per the WordPress.org plugin-naming policy (generic names must be prefixed with a unique term). No functional changes.
+* Renamed to "Ordelist - Order List Enhancer for WooCommerce" per the WordPress.org plugin-naming policy (generic names must be prefixed with a unique term). No functional changes.
 
 = 1.0.47 =
 * Plugin Check: consumables DB layer now passes table names through `%i` prepared placeholders (requires WordPress 6.2+, which WooCommerce 8 already needs); direct-query use on the plugin's own tables is documented in place. Added `bin/build-zip.sh` so release zips never include dev files.
@@ -105,7 +105,7 @@ No. It only reads orders in your admin and renders the UI locally.
 
 = 1.0.45 =
 * New: each copy button on the order edit screen (name, phone, total) now has its own on/off switch instead of one shared toggle.
-* Fix: saving settings no longer fails after the settings tab has been open for over a day — the expired security token is refreshed and the save retried automatically; a clear "session expired" message shows if that is not possible.
+* Fix: saving settings no longer fails after the settings tab has been open for over a day - the expired security token is refreshed and the save retried automatically; a clear "session expired" message shows if that is not possible.
 * Fix: the shipping-coloring and total-threshold rule tables no longer overflow the settings card on narrow screens.
 * Improved: the delivery-date notice and vacation-banner text fields now show the actual default texts instead of being blank, so what customers see at checkout is explicit.
 * i18n: checkout duplicate-guard messages are now English in the source (translated output unchanged); translation template and Bulgarian catalog refreshed to 100% coverage.
@@ -132,7 +132,7 @@ No. It only reads orders in your admin and renders the UI locally.
 * Print consumables: fixed low/negative stock highlighting on the stickers table and added it to instruction sheets; the low-stock email now also fires when you set/add a consumable below its threshold on the stock page (not only from orders).
 
 = 1.0.37 =
-* Print consumables page: the top table is now "Stickers" only (with an inline "add a product/variation" row to set sticker stock right there); instruction sheets are managed only in their own section — no more duplication.
+* Print consumables page: the top table is now "Stickers" only (with an inline "add a product/variation" row to set sticker stock right there); instruction sheets are managed only in their own section - no more duplication.
 
 = 1.0.36 =
 * Print consumables: the "Add" button for a new instruction sheet stays disabled until you enter a name, so an empty sheet can't be submitted.
@@ -147,22 +147,22 @@ No. It only reads orders in your admin and renders the UI locally.
 * Settings page redesigned: 4 tabbed categories, feature cards with on/off switches, tightened copy.
 
 = 1.0.32 =
-* New: Print consumables — track sticker + instruction-sheet stock, auto-decrement at order placement with restore, per-type low thresholds, stock page, admin banner, order-list badge and email.
+* New: Print consumables - track sticker + instruction-sheet stock, auto-decrement at order placement with restore, per-type low thresholds, stock page, admin banner, order-list badge and email.
 
 = 1.0.31 =
-* New: checkout duplicate-order guard — detect an identical recent order (same phone + cart) within a short window and either ask the customer to confirm or block the duplicate. Off by default.
+* New: checkout duplicate-order guard - detect an identical recent order (same phone + cart) within a short window and either ask the customer to confirm or block the duplicate. Off by default.
 
 = 1.0.30 =
 * Delivery-date notice: place the note directly below the delivery-date field and hide the third-party field note for a cleaner checkout.
 
 = 1.0.29 =
-* New: checkout delivery-date notice — a highlighted, editable note above the delivery-date field (e.g. ship-date vs. arrival), plus an optional auto-expiring vacation banner. Off by default.
+* New: checkout delivery-date notice - a highlighted, editable note above the delivery-date field (e.g. ship-date vs. arrival), plus an optional auto-expiring vacation banner. Off by default.
 
 = 1.0.28 =
-* New: "Open selected one-by-one" button on the orders list — opens each checkbox-selected order's edit page in its own tab, one every N seconds (editable, default 20), with a Stop button and a progress counter, so the server never loads more than one order at a time. Needs pop-ups allowed for the site. On by default.
+* New: "Open selected one-by-one" button on the orders list - opens each checkbox-selected order's edit page in its own tab, one every N seconds (editable, default 20), with a Stop button and a progress counter, so the server never loads more than one order at a time. Needs pop-ups allowed for the site. On by default.
 
 = 1.0.24 =
-* New: optional order-total coloring — set value thresholds, each with a color; an order whose total reaches a threshold gets a colored ring on its list row and its order-screen address panel (highest threshold wins). Drawn on top of the shipping color, so both stay visible. Off by default.
+* New: optional order-total coloring - set value thresholds, each with a color; an order whose total reaches a threshold gets a colored ring on its list row and its order-screen address panel (highest threshold wins). Drawn on top of the shipping color, so both stay visible. Off by default.
 
 = 1.0.19 =
 * Extras → products: a quantity extra such as “2 бр …” now converts to a product line with quantity N (price unchanged), so the picked quantity is correct.
@@ -171,10 +171,10 @@ No. It only reads orders in your admin and renders the UI locally.
 * Checkout phone validation: the phone field now shows the standard WooCommerce red "invalid" state (green when valid), the message is clearly styled, and all validation messages are translated to Bulgarian.
 
 = 1.0.17 =
-* New: optional checkout phone-number validation (Bulgarian numbers). Live ✓/✗ feedback under the phone field as the customer types, plus server-side enforcement — choose "warn" (allow the order, flag it) or "block" (stop it until fixed). Invalid numbers are flagged on the order page and with a badge in the orders list. Off by default.
+* New: optional checkout phone-number validation (Bulgarian numbers). Live ✓/✗ feedback under the phone field as the customer types, plus server-side enforcement - choose "warn" (allow the order, flag it) or "block" (stop it until fixed). Invalid numbers are flagged on the order page and with a badge in the orders list. Off by default.
 
 = 1.0.16 =
-* New: convert add-on "extras" (Product Add-Ons & Checkout Add-Ons) into real product line items at order creation, priced at what the customer paid — net-zero (order total unchanged), idempotent, with admin-only provenance under each converted line that never reaches the invoice. Off by default; map each extra to a product in Settings.
+* New: convert add-on "extras" (Product Add-Ons & Checkout Add-Ons) into real product line items at order creation, priced at what the customer paid - net-zero (order total unchanged), idempotent, with admin-only provenance under each converted line that never reaches the invoice. Off by default; map each extra to a product in Settings.
 * New: "default bulk action" setting that pre-selects an action in the orders-list bulk menu, self-populated from your orders screen.
 * Details popup: the "first order · frequency" summary now wraps to its own line, and the loading spinner is centered.
 

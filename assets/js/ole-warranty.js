@@ -27,7 +27,7 @@
 	$( syncAddBtn );
 	$( document ).on( 'change input', '.ole-wr-new .ole-wr-product, .ole-wr-new .ole-wr-expiry', syncAddBtn );
 
-	// Додати партію — рядок з'являється без перезавантаження сторінки.
+	// Додати партію - рядок з'являється без перезавантаження сторінки.
 	$( document ).on( 'click', '.ole-wr-add', function () {
 		var $btn = $( this );
 		var $row = $btn.closest( 'tr' );
@@ -77,7 +77,7 @@
 			.fail( function () { window.alert( ORDELIST_WR.i18n.error ); } );
 	} );
 
-	// Новий збережений рядок (текст — через .text()/val(), XSS-safe); стане на місце за датою після перезавантаження.
+	// Новий збережений рядок (текст - через .text()/val(), XSS-safe); стане на місце за датою після перезавантаження.
 	function appendRow( d ) {
 		if ( ! d || ! d.id ) { return; }
 		var $tr = $(

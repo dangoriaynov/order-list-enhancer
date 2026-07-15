@@ -89,12 +89,12 @@
 			.always( function () { $btn.prop( 'disabled', false ); } );
 	} );
 
-	// Save / add an instruction sheet — update in place instead of reloading the whole (slow) wp-admin page.
+	// Save / add an instruction sheet - update in place instead of reloading the whole (slow) wp-admin page.
 	$( document ).on( 'click', '.ole-ps-sheet-save', function () {
 		var $btn  = $( this );
 		var row   = $btn.closest( 'tr' );
 		var name  = $.trim( row.find( '.ole-ps-sheet-name' ).val() || '' );
-		if ( '' === name ) { row.find( '.ole-ps-sheet-name' ).focus(); return; } // a sheet needs a name — skip the doomed round-trip
+		if ( '' === name ) { row.find( '.ole-ps-sheet-name' ).focus(); return; } // a sheet needs a name - skip the doomed round-trip
 		var isNew = row.hasClass( 'ole-ps-sheet-new' );
 		var stock = row.find( '.ole-ps-sheet-stock' ).val();
 		$btn.prop( 'disabled', true );
@@ -195,7 +195,7 @@
 	$( document ).on( 'click', '.ole-ps-file-add', function () {
 		var $cell = $( this ).closest( '.ole-ps-files' );
 		var $row  = $cell.closest( 'tr' );
-		if ( ! $row.data( 'id' ) ) { return; } // unsaved row — create it first
+		if ( ! $row.data( 'id' ) ) { return; } // unsaved row - create it first
 		var frame = wp.media( {
 			title: ORDELIST_PS.i18n.filesTitle,
 			button: { text: ORDELIST_PS.i18n.filesButton },

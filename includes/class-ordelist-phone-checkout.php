@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Перевірка телефону на чекауті (frontend + server) та позначки в адмінці.
- * Чисті правила — у [[ORDELIST_Phone_Validator]].
+ * Чисті правила - у [[ORDELIST_Phone_Validator]].
  */
 class ORDELIST_Phone_Checkout {
 
@@ -94,7 +94,7 @@ class ORDELIST_Phone_Checkout {
 		$why  = isset( $msgs[ $res['reason'] ] ) ? $msgs[ $res['reason'] ] : $msgs['invalid'];
 		printf(
 			'<p class="ole-phone-invalid">⚠ %s<br><span class="ole-phone-why">%s</span></p>',
-			esc_html__( 'Phone may be invalid — please verify.', 'ordelist' ),
+			esc_html__( 'Phone may be invalid - please verify.', 'ordelist' ),
 			esc_html( $why )
 		);
 	}

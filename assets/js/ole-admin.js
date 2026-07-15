@@ -148,7 +148,7 @@
 			b.textContent = isDup
 				? ( '⚠️ ' + fmt( I18N.dupBadge, [ info.n ] ) + ' 🔍' )
 				: ( '👥 ' + fmt( I18N.badge, [ info.n ] ) + ' 🔍' );
-			b.title = fmt( I18N.badgeTitle, [ info.r || '—' ] );
+			b.title = fmt( I18N.badgeTitle, [ info.r || '-' ] );
 			cell.appendChild( document.createElement( 'br' ) );
 			cell.appendChild( b );
 		} );
@@ -177,7 +177,7 @@
 
 	function renderOrders( body, orders ) {
 		body.innerHTML = '';
-		if ( ! orders || ! orders.length ) { body.textContent = I18N.noItems || '—'; return; }
+		if ( ! orders || ! orders.length ) { body.textContent = I18N.noItems || '-'; return; }
 		orders.forEach( function ( o ) {
 			var row = document.createElement( 'div' ); row.className = 'ole-o';
 			var head = document.createElement( 'div' ); head.className = 'ole-o__head';
@@ -330,7 +330,7 @@
 	function addCopyButtons() {
 		var C = FLAGS.copy || {};
 		if ( ! C.name && ! C.phone && ! C.total ) { return; }
-		// Full name — first line of the first address block.
+		// Full name - first line of the first address block.
 		var addr = document.querySelector( '#order_data .address' );
 		if ( C.name && addr && ! addr.getAttribute( 'data-ole-copy' ) ) {
 			addr.setAttribute( 'data-ole-copy', '1' );
@@ -344,7 +344,7 @@
 				}
 			}
 		}
-		// Phone — the tel: link.
+		// Phone - the tel: link.
 		var tel = document.querySelector( '#order_data a[href^="tel:"]' );
 		if ( C.phone && tel && ! tel.getAttribute( 'data-ole-copy' ) ) {
 			tel.setAttribute( 'data-ole-copy', '1' );
@@ -354,7 +354,7 @@
 				tel.parentNode.insertBefore( pb, tel.nextSibling );
 			}
 		}
-		// Order total — the numeric amount.
+		// Order total - the numeric amount.
 		var tot = document.querySelector( '.ole-order-total' );
 		if ( C.total && tot && ! tot.getAttribute( 'data-ole-copy' ) ) {
 			tot.setAttribute( 'data-ole-copy', '1' );
@@ -378,7 +378,7 @@
 	}
 
 	// Display-only phone normalization (the WC meta box renders the raw phone via
-	// the 'edit' context, bypassing the server view filter — so we tidy the text here).
+	// the 'edit' context, bypassing the server view filter - so we tidy the text here).
 	function normalizePhone( raw, cc ) {
 		raw = String( raw == null ? '' : raw );
 		var s = raw.trim();
@@ -438,7 +438,7 @@
 	}
 
 	// Orders list bulk-actions menu: capture its entries (for the settings dropdown)
-	// and pre-select the configured default. Runs once — re-applying on every tbody
+	// and pre-select the configured default. Runs once - re-applying on every tbody
 	// mutation would overwrite a selection the user made by hand.
 	var bulkDone = false;
 	function captureBulkActions( sel ) {
@@ -500,7 +500,7 @@
 			var tr = cb.closest ? cb.closest( 'tr' ) : null;
 			var href = '';
 			if ( tr ) {
-				// Only the real edit link — never the "#"-href preview eye (whose
+				// Only the real edit link - never the "#"-href preview eye (whose
 				// .href resolves to the current orders-list page).
 				var a = tr.querySelector( 'a[href*="action=edit"], a[href*="post.php?post="]' );
 				if ( a ) { href = a.href; }
@@ -549,7 +549,7 @@
 		function stopSeq() { seqTimers.forEach( function ( t ) { clearTimeout( t ); } ); seqTimers = []; setRunning( false ); }
 		function openUrl( url, idx, total ) {
 			var w = window.open( url, '_blank' );
-			if ( ! w ) { info.textContent = ( I18N.seqBlocked || 'Pop-ups are blocked — allow them for this site, then try again.' ); stopSeq(); return false; }
+			if ( ! w ) { info.textContent = ( I18N.seqBlocked || 'Pop-ups are blocked - allow them for this site, then try again.' ); stopSeq(); return false; }
 			info.textContent = fmt( I18N.seqProgress || 'Opening %1$s / %2$s…', [ idx + 1, total ] );
 			return true;
 		}
