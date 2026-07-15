@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.49
+Stable tag: 1.0.50
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings — every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.50 =
+* Print consumables: attach printable files (PDF/JPG/PNG from the Media Library) to any sticker or instruction sheet — open them in one click from the stock page; low-stock emails now include direct links to the files that need printing.
 
 = 1.0.49 =
 * All internal identifiers (options, database tables, meta keys, AJAX actions, script handles, classes, constants) renamed from the 3-character `ole_` prefix to `ordelist_`, per the WordPress.org guideline requiring prefixes of at least 4 characters. No functional changes.
