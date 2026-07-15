@@ -80,6 +80,21 @@
 		return out;
 	};
 
+	// Прогнозна крива поточного року: до сьогодні — null (там малює фактична лінія),
+	// від сьогодні — факт + приріст опорного року за той самий відрізок × коефіцієнт.
+	C.projection = function ( curSeries, refSeries, todayMMDD, coefficient, mmdd ) {
+		mmdd = mmdd || C.mmddList();
+		var cumCur = C.cumulative( curSeries, mmdd );
+		var cumRef = C.cumulative( refSeries, mmdd );
+		var ti = mmdd.indexOf( todayMMDD );
+		if ( -1 === ti ) { ti = mmdd.length - 1; }
+		var out = [];
+		for ( var i = 0; i < mmdd.length; i++ ) {
+			out.push( i < ti ? null : cumCur[ ti ] + ( cumRef[ i ] - cumRef[ ti ] ) * coefficient );
+		}
+		return out;
+	};
+
 	// Авто-коефіцієнт: цей рік [01-01..сьогодні] ÷ опорний рік за той самий відрізок.
 	C.autoCoefficient = function ( series, currentYear, refYear, todayMMDD ) {
 		var cur = C.rangeSum( series[ currentYear ], '01-01', todayMMDD );
