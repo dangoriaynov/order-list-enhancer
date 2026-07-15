@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- dedicated DB layer for the plugin's own tables; no WP API exists and result sets are tiny, admin-side only.
 class ORDELIST_Print_Stock_Store {
 
-	const DB_VERSION    = '1';
+	const DB_VERSION    = '2';
 	const DB_VERSION_OPT = 'ordelist_print_stock_db';
 
 	public static function table_consumable() {
@@ -53,6 +53,7 @@ class ORDELIST_Print_Stock_Store {
 				ref_id BIGINT NOT NULL DEFAULT 0,
 				stock INT NOT NULL DEFAULT 0,
 				low_notified TINYINT(1) NOT NULL DEFAULT 0,
+				attachments TEXT NULL,
 				updated_at DATETIME NULL,
 				PRIMARY KEY  (id),
 				KEY type_ref (type, ref_id)
@@ -97,6 +98,25 @@ class ORDELIST_Print_Stock_Store {
 		$c = self::table_consumable();
 		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE type = 'sticker' AND ref_id = %d", $c, (int) $ref_id ), ARRAY_A );
 		return $row ?: null;
+	}
+
+	/** ID вкладень витратного (JSON-колонка attachments). */
+	public static function get_attachments( $consumable_id ) {
+		$row = self::get_consumable( (int) $consumable_id );
+		return ORDELIST_Print_Stock_Calc::decode_attachments( $row['attachments'] ?? null );
+	}
+
+	/** Зберігає повний список ID вкладень (порожній список -> NULL). */
+	public static function set_attachments( $consumable_id, $ids ) {
+		global $wpdb;
+		$ids = ORDELIST_Print_Stock_Calc::sanitize_attachment_ids( $ids );
+		$wpdb->update(
+			self::table_consumable(),
+			array( 'attachments' => $ids ? wp_json_encode( $ids ) : null, 'updated_at' => self::now() ),
+			array( 'id' => (int) $consumable_id ),
+			array( '%s', '%s' ),
+			array( '%d' )
+		);
 	}
 
 	/** Створює/оновлює наліпку для товару/варіації, встановлює абсолютний запас. */
