@@ -58,6 +58,29 @@ class ORDELIST_Warranty_Calc {
 		return 'ok';
 	}
 
+	/** '' або валідна календарна дата Y-m-d (regex + checkdate). */
+	public static function clean_date( $raw ) {
+		$raw = (string) $raw;
+		if ( 1 !== preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ) {
+			return '';
+		}
+		list( $y, $m, $d ) = array_map( 'intval', explode( '-', $raw ) );
+		return checkdate( $m, $d, $y ) ? $raw : '';
+	}
+
+	/**
+	 * Термін для швидкого запису наличності: валідна дата - як є, порожньо -
+	 * далекий страж 2099-12-31 (без термінів і попереджень), сміття - null.
+	 */
+	public static function stock_expiry( $raw ) {
+		$raw = (string) $raw;
+		if ( '' === $raw ) {
+			return '2099-12-31';
+		}
+		$date = self::clean_date( $raw );
+		return ( '' === $date ) ? null : $date;
+	}
+
 	/** Y-m-d + N днів (чистий PHP). */
 	public static function add_days( $ymd, $days ) {
 		$d = DateTime::createFromFormat( 'Y-m-d', (string) $ymd );

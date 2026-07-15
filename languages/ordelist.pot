@@ -1107,3 +1107,21 @@ msgstr ""
 #, php-format
 msgid "%s variations have no weight - counted in pieces only"
 msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Variation"
+msgstr ""
+
+#. translators: %s: year.
+#: includes/class-ordelist-forecast-admin.php
+#, php-format
+msgid "Sold in %s"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Good until (optional)"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Stock and sales by variation"
+msgstr ""

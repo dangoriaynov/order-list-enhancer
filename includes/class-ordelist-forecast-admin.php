@@ -17,6 +17,7 @@ class ORDELIST_Forecast_Admin {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'assets' ) );
 		add_action( 'wp_ajax_ordelist_fc_series', array( __CLASS__, 'ajax_series' ) );
+		add_action( 'wp_ajax_ordelist_fc_add_batch', array( __CLASS__, 'ajax_add_batch' ) );
 	}
 
 	public static function menu() {
@@ -71,6 +72,12 @@ class ORDELIST_Forecast_Admin {
 					'forecastL' => __( 'Forecast demand', 'ordelist' ),
 					'stockL'    => __( 'Sellable stock', 'ordelist' ),
 					'buyL'      => __( 'Recommended purchase', 'ordelist' ),
+					'varL'      => __( 'Variation', 'ordelist' ),
+					/* translators: %s: year. */
+					'soldIn'    => __( 'Sold in %s', 'ordelist' ),
+					'stockCol'  => __( 'Stock', 'ordelist' ),
+					'goodUntil' => __( 'Good until (optional)', 'ordelist' ),
+					'add'       => __( 'Add', 'ordelist' ),
 				),
 			)
 		);
@@ -93,6 +100,29 @@ class ORDELIST_Forecast_Admin {
 		}
 		wp_send_json_success( $payload );
 	}
+
+	/** Швидкий запис наличності: створює партію (порожня дата - страж 2099-12-31). */
+	public static function ajax_add_batch() {
+		self::guard();
+		$target = isset( $_POST['target'] ) ? absint( $_POST['target'] ) : 0;
+		$qty    = isset( $_POST['qty'] ) ? (int) $_POST['qty'] : 0;
+		$raw    = isset( $_POST['expiry'] ) ? sanitize_text_field( wp_unslash( $_POST['expiry'] ) ) : '';
+		$expiry = ORDELIST_Warranty_Calc::stock_expiry( $raw );
+		$p      = $target ? wc_get_product( $target ) : null;
+		if ( ! $p || $qty <= 0 || null === $expiry || $p->is_type( 'variable' ) ) {
+			wp_send_json_error( array( 'message' => 'bad_input' ), 400 );
+		}
+		if ( $p->is_type( 'variation' ) ) {
+			$product_id   = (int) $p->get_parent_id();
+			$variation_id = (int) $p->get_id();
+		} else {
+			$product_id   = (int) $p->get_id();
+			$variation_id = 0;
+		}
+		ORDELIST_Warranty_Store::add_batch( $product_id, $variation_id, $expiry, $qty, '' );
+		ORDELIST_Warranty::run_check(); // нова партія може вже бути у вікні попередження
+		wp_send_json_success( array( 'ok' => true ) );
+	}
 	// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 	public static function render() {
@@ -105,9 +135,8 @@ class ORDELIST_Forecast_Admin {
 				<select class="wc-product-search ole-fc-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:360px"></select>
 				<label><input type="radio" name="ole-fc-unit" value="kg" checked/> <?php esc_html_e( 'kg', 'ordelist' ); ?></label>
 				<label><input type="radio" name="ole-fc-unit" value="pcs"/> <?php esc_html_e( 'pcs', 'ordelist' ); ?></label>
+				<span class="ole-fc-loader" hidden></span>
 			</div>
-
-			<div class="ole-fc-loader" hidden></div>
 
 			<div class="ole-fc-chart ole-fc-needs-product" hidden><canvas id="ole-fc-canvas"></canvas></div>
 
@@ -126,6 +155,9 @@ class ORDELIST_Forecast_Admin {
 
 			<h2 class="ole-fc-needs-product" hidden><?php esc_html_e( 'Sold in the selected slice', 'ordelist' ); ?></h2>
 			<table class="widefat striped ole-fc-totals ole-fc-needs-product" hidden><thead></thead><tbody></tbody></table>
+
+			<h2 class="ole-fc-needs-product" hidden><?php esc_html_e( 'Stock and sales by variation', 'ordelist' ); ?></h2>
+			<table class="widefat striped ole-fc-vars ole-fc-needs-product" hidden><thead></thead><tbody></tbody></table>
 		</div>
 		<?php
 	}
