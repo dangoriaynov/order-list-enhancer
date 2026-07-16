@@ -135,8 +135,8 @@ class ORDELIST_Forecast_Admin {
 
 			<div class="ole-fc-controls">
 				<select class="wc-product-search ole-fc-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:360px"></select>
-				<label><input type="radio" name="ole-fc-unit" value="kg" checked/> <?php esc_html_e( 'kg', 'ordelist' ); ?></label>
-				<label><input type="radio" name="ole-fc-unit" value="pcs"/> <?php esc_html_e( 'pcs', 'ordelist' ); ?></label>
+				<label class="ole-fc-needs-product" hidden><input type="radio" name="ole-fc-unit" value="kg" checked/> <?php esc_html_e( 'kg', 'ordelist' ); ?></label>
+				<label class="ole-fc-needs-product" hidden><input type="radio" name="ole-fc-unit" value="pcs"/> <?php esc_html_e( 'pcs', 'ordelist' ); ?></label>
 				<span class="ole-fc-loader" hidden></span>
 			</div>
 

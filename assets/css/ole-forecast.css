@@ -8,6 +8,10 @@
 .ole-fc-totals { max-width: 560px; }
 .ole-fc-loader { display: inline-block; width: 22px; height: 22px; border: 3px solid #c3c4c7; border-top-color: #2271b1; border-radius: 50%; animation: ole-fc-spin .8s linear infinite; vertical-align: middle; }
 @keyframes ole-fc-spin { to { transform: rotate(360deg); } }
+/* The `hidden` attribute must win over the display rules above (display:flex / inline-block otherwise
+   override it), so on page load the loader and every product-dependent block stay hidden until a product is
+   picked - then JS reveals the loader while data loads, and the blocks once it arrives. */
+.ole-fc-loader[hidden], .ole-fc-needs-product[hidden] { display: none !important; }
 details.ole-fc-note summary { cursor: pointer; }
 .ole-fc-vars { max-width: 980px; }
 .ole-fc-vars .ole-fc-add-qty { width: 70px; }
