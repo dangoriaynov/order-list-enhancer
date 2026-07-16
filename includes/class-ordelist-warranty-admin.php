@@ -75,7 +75,7 @@ class ORDELIST_Warranty_Admin {
 	public static function ajax_add() {
 		self::guard();
 		$picked = isset( $_POST['product'] ) ? absint( $_POST['product'] ) : 0;
-		$expiry = isset( $_POST['expiry'] ) ? self::clean_date( wp_unslash( $_POST['expiry'] ) ) : '';
+		$expiry = isset( $_POST['expiry'] ) ? self::clean_date( sanitize_text_field( wp_unslash( $_POST['expiry'] ) ) ) : '';
 		$qty    = isset( $_POST['qty'] ) ? (int) $_POST['qty'] : 0;
 		$note   = isset( $_POST['note'] ) ? mb_substr( sanitize_text_field( wp_unslash( $_POST['note'] ) ), 0, 200 ) : '';
 		$p      = $picked ? wc_get_product( $picked ) : null;
@@ -112,7 +112,7 @@ class ORDELIST_Warranty_Admin {
 	public static function ajax_save() {
 		self::guard();
 		$id     = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
-		$expiry = isset( $_POST['expiry'] ) ? self::clean_date( wp_unslash( $_POST['expiry'] ) ) : '';
+		$expiry = isset( $_POST['expiry'] ) ? self::clean_date( sanitize_text_field( wp_unslash( $_POST['expiry'] ) ) ) : '';
 		$qty    = isset( $_POST['qty'] ) ? (int) $_POST['qty'] : 0;
 		$note   = isset( $_POST['note'] ) ? mb_substr( sanitize_text_field( wp_unslash( $_POST['note'] ) ), 0, 200 ) : '';
 		if ( ! $id || '' === $expiry ) {
