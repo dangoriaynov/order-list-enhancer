@@ -41,7 +41,8 @@ class ORDELIST_Warranty_Admin {
 		wp_enqueue_script( 'wc-enhanced-select' );
 		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_enqueue_style( 'ordelist-warranty', ORDELIST_URL . 'assets/css/ole-warranty.css', array(), ORDELIST_VERSION );
-		wp_enqueue_script( 'ordelist-warranty', ORDELIST_URL . 'assets/js/ole-warranty.js', array( 'jquery', 'wc-enhanced-select' ), ORDELIST_VERSION, true );
+		wp_enqueue_script( 'ordelist-datepicker', ORDELIST_URL . 'assets/js/ole-datepicker.js', array( 'jquery', 'jquery-ui-datepicker' ), ORDELIST_VERSION, true );
+		wp_enqueue_script( 'ordelist-warranty', ORDELIST_URL . 'assets/js/ole-warranty.js', array( 'jquery', 'wc-enhanced-select', 'ordelist-datepicker' ), ORDELIST_VERSION, true );
 		wp_localize_script(
 			'ordelist-warranty',
 			'ORDELIST_WR',
@@ -208,7 +209,7 @@ class ORDELIST_Warranty_Admin {
 				<tbody>
 					<tr class="ole-wr-new">
 						<td><select class="wc-product-search ole-wr-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" data-exclude_type="variable" style="width:100%"></select></td>
-						<td><input type="date" class="ole-wr-expiry"/></td>
+						<td><input type="hidden" class="ole-wr-expiry ole-date"/></td>
 						<td><input type="number" step="1" class="ole-wr-qty" value="0" style="width:80px"/></td>
 						<td><input type="text" class="ole-wr-note regular-text" maxlength="200" placeholder="<?php esc_attr_e( 'Note (lot number…)', 'ordelist' ); ?>"/></td>
 						<td></td>
@@ -217,7 +218,7 @@ class ORDELIST_Warranty_Admin {
 				<?php foreach ( $rows as $r ) : ?>
 					<tr class="<?php echo esc_attr( self::status_class( $r, $o, $today ) ); ?>" data-id="<?php echo esc_attr( $r['id'] ); ?>">
 						<td><a href="<?php echo esc_url( (string) get_edit_post_link( (int) $r['product_id'], 'raw' ) ); ?>"><?php echo esc_html( ORDELIST_Warranty::target_name( $r ) ); ?></a></td>
-						<td><input type="date" class="ole-wr-expiry" value="<?php echo esc_attr( $r['expiry'] ); ?>"/></td>
+						<td><input type="hidden" class="ole-wr-expiry ole-date" value="<?php echo esc_attr( $r['expiry'] ); ?>"/></td>
 						<td><input type="number" step="1" class="ole-wr-qty" value="<?php echo esc_attr( (string) (int) $r['qty'] ); ?>" style="width:80px"/></td>
 						<td><input type="text" class="ole-wr-note regular-text" maxlength="200" value="<?php echo esc_attr( $r['note'] ); ?>"/></td>
 						<td class="ole-wr-status"><?php echo esc_html( self::status_label( $r, $o, $today ) ); ?></td>

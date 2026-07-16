@@ -40,7 +40,7 @@
 		} ).done( function ( r ) {
 			appendRow( ( r && r.data ) || {} );
 			$row.find( '.ole-wr-product' ).val( null ).trigger( 'change' );
-			$row.find( '.ole-wr-expiry' ).val( '' );
+			$row.find( '.ole-wr-expiry' ).val( '' ).trigger( 'ole-sync' );
 			$row.find( '.ole-wr-qty' ).val( 0 );
 			$row.find( '.ole-wr-note' ).val( '' );
 		} ).fail( function () {
@@ -83,7 +83,7 @@
 		var $tr = $(
 			'<tr data-id="' + parseInt( d.id, 10 ) + '">' +
 			'<td><a></a></td>' +
-			'<td><input type="date" class="ole-wr-expiry"/></td>' +
+			'<td><input type="hidden" class="ole-wr-expiry ole-date"/></td>' +
 			'<td><input type="number" step="1" class="ole-wr-qty" style="width:80px"/></td>' +
 			'<td><input type="text" class="ole-wr-note regular-text" maxlength="200"/></td>' +
 			'<td class="ole-wr-status"></td>' +
@@ -93,6 +93,8 @@
 		);
 		$tr.find( 'a' ).text( d.name || ( '#' + d.id ) ).attr( 'href', d.url || '#' );
 		$tr.find( '.ole-wr-expiry' ).val( d.expiry || '' );
+		if ( window.ordelistDates ) { window.ordelistDates.init( $tr[ 0 ] ); }
+		$tr.find( '.ole-wr-expiry' ).trigger( 'ole-sync' );
 		$tr.find( '.ole-wr-qty' ).val( parseInt( d.qty, 10 ) || 0 );
 		$tr.find( '.ole-wr-note' ).val( d.note || '' );
 		$tr.find( '.ole-wr-status' ).text( d.status_label || '' );

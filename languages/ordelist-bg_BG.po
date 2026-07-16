@@ -1146,3 +1146,6 @@ msgstr "Годно до (незадължително)"
 
 msgid "Stock and sales by variation"
 msgstr "Наличност и продажби по варианти"
+
+msgid "Period longer than a year - the comparison uses its first 365 days."
+msgstr "Период по-дълъг от година - сравнението използва първите му 365 дни."

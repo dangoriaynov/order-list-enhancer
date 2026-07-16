@@ -157,9 +157,11 @@
 	$( document ).on( 'click', '.ole-fc-coef-auto', function () { state.coefAuto = true; recalcPanel(); } );
 	$( document ).on( 'input', '.ole-fc-margin', recalcPanel );
 	$( document ).on( 'change', '.ole-fc-start, .ole-fc-end', recalcPanel );
+	// Пресети якоряться на КІНЦЕВІЙ даті (за замовчуванням - сьогодні): назад на N днів.
 	$( document ).on( 'click', '.ole-fc-preset', function () {
-		$( '.ole-fc-start' ).val( todayYMD() );
-		$( '.ole-fc-end' ).val( addDays( todayYMD(), parseInt( $( this ).data( 'days' ), 10 ) || 30 ) );
+		var end = $( '.ole-fc-end' ).val() || todayYMD();
+		$( '.ole-fc-end' ).val( end ).trigger( 'ole-sync' );
+		$( '.ole-fc-start' ).val( addDays( end, -( parseInt( $( this ).data( 'days' ), 10 ) || 30 ) ) ).trigger( 'ole-sync' );
 		recalcPanel();
 	} );
 
@@ -167,7 +169,15 @@
 		var s = $( '.ole-fc-start' ).val();
 		var e = $( '.ole-fc-end' ).val();
 		if ( ! s || ! e ) { return null; }
-		return { startYMD: s, endYMD: e, startMMDD: mmddOf( s ), endMMDD: mmddOf( e ) };
+		// Модель порівнює календарний відрізок МІЖ роками, тому довше за 365 днів
+		// не представиться: обрізаємо і чесно кажемо про це приміткою.
+		var capped = false;
+		var maxEnd = addDays( s, 364 );
+		if ( e > maxEnd ) {
+			e      = maxEnd;
+			capped = true;
+		}
+		return { startYMD: s, endYMD: e, startMMDD: mmddOf( s ), endMMDD: mmddOf( e ), capped: capped };
 	}
 
 	// ---- повний перерахунок (графік + таблиця + панель) ----
@@ -285,6 +295,7 @@
 		var $buy = row( $out, ORDELIST_FC.i18n.buyL, fmt( buyShow, state.unit ) );
 		$buy.addClass( 'ole-fc-buy' );
 		if ( expiring > 0 ) { note( $out, ORDELIST_FC.i18n.expiring.replace( '%s', fmt( expiring, state.unit ) ) ); }
+		if ( p.capped ) { note( $out, ORDELIST_FC.i18n.periodCapped ); }
 		// У кг-режимі позначаємо варіації без ваги - вони рахуються лише в штуках.
 		// Кілька таких - згортаємо в один рядок, що розкривається (список імен усередині).
 		if ( 'kg' === state.unit ) {
@@ -369,7 +380,7 @@
 				// Швидкий запис: кількість + необов'язкова дата придатності.
 				$( '<input type="number" min="1" step="1" class="ole-fc-add-qty"/>' ).appendTo( $cell );
 				$cell.append( ' ' );
-				$( '<input type="date" class="ole-fc-add-exp"/>' ).attr( 'title', ORDELIST_FC.i18n.goodUntil ).appendTo( $cell );
+				$( '<input type="hidden" class="ole-fc-add-exp ole-date"/>' ).attr( 'title', ORDELIST_FC.i18n.goodUntil ).appendTo( $cell );
 				$cell.append( ' ' );
 				$( '<button type="button" class="button ole-fc-add-batch"/>' )
 					.text( ORDELIST_FC.i18n.add )
@@ -379,6 +390,7 @@
 			$cell.appendTo( $r );
 			$body.append( $r );
 		}
+		if ( window.ordelistDates ) { window.ordelistDates.init( $body[ 0 ] ); }
 	}
 
 	$( document ).on( 'click', '.ole-fc-add-batch', function () {
@@ -426,10 +438,10 @@
 		}
 	}
 
-	// ---- старт: місяць уперед за замовчуванням ----
+	// ---- старт: останній місяць до сьогодні за замовчуванням ----
 	$( function () {
-		$( '.ole-fc-start' ).val( todayYMD() );
-		$( '.ole-fc-end' ).val( addDays( todayYMD(), 30 ) );
+		$( '.ole-fc-end' ).val( todayYMD() ).trigger( 'ole-sync' );
+		$( '.ole-fc-start' ).val( addDays( todayYMD(), -30 ) ).trigger( 'ole-sync' );
 		$( '.ole-fc-margin' ).val( ORDELIST_FC.margin );
 	} );
 } )( jQuery );

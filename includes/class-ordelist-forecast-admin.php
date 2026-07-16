@@ -46,7 +46,8 @@ class ORDELIST_Forecast_Admin {
 		wp_enqueue_style( 'ordelist-forecast', ORDELIST_URL . 'assets/css/ole-forecast.css', array(), ORDELIST_VERSION );
 		wp_enqueue_script( 'ordelist-chartjs', ORDELIST_URL . 'assets/vendor/chartjs/chart.umd.js', array(), '4.5.1', true );
 		wp_enqueue_script( 'ordelist-forecast-calc', ORDELIST_URL . 'assets/js/ole-forecast-calc.js', array(), ORDELIST_VERSION, true );
-		wp_enqueue_script( 'ordelist-forecast', ORDELIST_URL . 'assets/js/ole-forecast.js', array( 'jquery', 'wc-enhanced-select', 'ordelist-chartjs', 'ordelist-forecast-calc' ), ORDELIST_VERSION, true );
+		wp_enqueue_script( 'ordelist-datepicker', ORDELIST_URL . 'assets/js/ole-datepicker.js', array( 'jquery', 'jquery-ui-datepicker' ), ORDELIST_VERSION, true );
+		wp_enqueue_script( 'ordelist-forecast', ORDELIST_URL . 'assets/js/ole-forecast.js', array( 'jquery', 'wc-enhanced-select', 'ordelist-chartjs', 'ordelist-forecast-calc', 'ordelist-datepicker' ), ORDELIST_VERSION, true );
 		wp_localize_script(
 			'ordelist-forecast',
 			'ORDELIST_FC',
@@ -78,6 +79,7 @@ class ORDELIST_Forecast_Admin {
 					'stockCol'  => __( 'Stock', 'ordelist' ),
 					'goodUntil' => __( 'Good until (optional)', 'ordelist' ),
 					'add'       => __( 'Add', 'ordelist' ),
+					'periodCapped' => __( 'Period longer than a year - the comparison uses its first 365 days.', 'ordelist' ),
 				),
 			)
 		);
@@ -141,7 +143,7 @@ class ORDELIST_Forecast_Admin {
 			<div class="ole-fc-chart ole-fc-needs-product" hidden><canvas id="ole-fc-canvas"></canvas></div>
 
 			<div class="ole-fc-controls ole-fc-needs-product" hidden>
-				<label><?php esc_html_e( 'Period', 'ordelist' ); ?> <input type="date" class="ole-fc-start"/> - <input type="date" class="ole-fc-end"/></label>
+				<label><?php esc_html_e( 'Period', 'ordelist' ); ?> <input type="hidden" class="ole-fc-start ole-date"/> - <input type="hidden" class="ole-fc-end ole-date"/></label>
 				<button type="button" class="button ole-fc-preset" data-days="30"><?php esc_html_e( 'Month', 'ordelist' ); ?></button>
 				<button type="button" class="button ole-fc-preset" data-days="91"><?php esc_html_e( 'Quarter', 'ordelist' ); ?></button>
 				<button type="button" class="button ole-fc-preset" data-days="182"><?php esc_html_e( 'Half-year', 'ordelist' ); ?></button>

@@ -1125,3 +1125,7 @@ msgstr ""
 #: includes/class-ordelist-forecast-admin.php
 msgid "Stock and sales by variation"
 msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Period longer than a year - the comparison uses its first 365 days."
+msgstr ""
