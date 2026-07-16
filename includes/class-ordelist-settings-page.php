@@ -51,7 +51,8 @@ class ORDELIST_Settings_Page {
 		}
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_style( 'ordelist-settings', ORDELIST_URL . 'assets/css/ole-settings.css', array(), ORDELIST_VERSION );
-		wp_enqueue_script( 'ordelist-settings', ORDELIST_URL . 'assets/js/ole-settings.js', array( 'jquery', 'wp-color-picker' ), ORDELIST_VERSION, true );
+		wp_enqueue_script( 'ordelist-datepicker', ORDELIST_URL . 'assets/js/ole-datepicker.js', array( 'jquery', 'jquery-ui-datepicker' ), ORDELIST_VERSION, true );
+		wp_enqueue_script( 'ordelist-settings', ORDELIST_URL . 'assets/js/ole-settings.js', array( 'jquery', 'wp-color-picker', 'ordelist-datepicker' ), ORDELIST_VERSION, true );
 		wp_enqueue_script( 'wc-enhanced-select' );
 		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_localize_script(
@@ -480,7 +481,7 @@ class ORDELIST_Settings_Page {
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Away until', 'ordelist' ); ?></th>
-				<td><input type="date" name="delivery_vacation_until" value="<?php echo esc_attr( $o['delivery_vacation_until'] ); ?>"/>
+				<td><input type="hidden" class="ole-date" name="delivery_vacation_until" value="<?php echo esc_attr( $o['delivery_vacation_until'] ); ?>"/>
 				<p class="description"><?php esc_html_e( 'The banner hides automatically after this date; with no date set it never shows.', 'ordelist' ); ?></p></td>
 			</tr>
 			<tr>
