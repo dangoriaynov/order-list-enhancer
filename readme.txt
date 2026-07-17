@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.56
+Stable tag: 1.0.57
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings - every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.57 =
+* Security hardening for the WordPress.org review: every POST field is sanitized at the moment it is read, and all generated HTML is passed through wp_kses with explicit allowlists when echoed.
 
 = 1.0.56 =
 * All plugin date fields now use a dd/mm/yyyy date picker. Purchase planning: the month/quarter/half-year presets count back from the chosen end date (default today), and periods longer than a year are compared by their first 365 days, with a note.
