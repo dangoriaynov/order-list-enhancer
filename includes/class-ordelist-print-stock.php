@@ -11,6 +11,14 @@ class ORDELIST_Print_Stock {
 	const STATE_META    = '_ordelist_ps_state';    // '' | 'consumed' | 'restored'
 	const DEPLETED_META = '_ordelist_depleted';    // [ ['name'=>str,'stock'=>int], ... ]
 
+	/** Дозволені теги для wp_kses при echo бейджа (escape late; style фільтрує safecss). */
+	private const KSES_BADGE = array(
+		'span' => array(
+			'title' => true,
+			'style' => true,
+		),
+	);
+
 	public static function init() {
 		ORDELIST_Print_Stock_Store::maybe_upgrade();
 
@@ -239,8 +247,8 @@ class ORDELIST_Print_Stock {
 		if ( ! isset( $_POST['_ordelist_sticker_stock'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
-		$raw = wp_unslash( $_POST['_ordelist_sticker_stock'] ); // phpcs:ignore WordPress.Security
-		if ( '' === trim( (string) $raw ) ) {
+		$raw = sanitize_text_field( wp_unslash( $_POST['_ordelist_sticker_stock'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies its product-save nonce before this hook.
+		if ( '' === trim( $raw ) ) {
 			return; // не трекаємо / не чіпаємо існуючий запас
 		}
 		$product = wc_get_product( $post_id );
@@ -268,8 +276,8 @@ class ORDELIST_Print_Stock {
 		if ( ! isset( $_POST['_ordelist_sticker_stock_var'][ $i ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
-		$raw = wp_unslash( $_POST['_ordelist_sticker_stock_var'][ $i ] ); // phpcs:ignore WordPress.Security
-		if ( '' === trim( (string) $raw ) ) {
+		$raw = sanitize_text_field( wp_unslash( $_POST['_ordelist_sticker_stock_var'][ $i ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies its product-save nonce before this hook.
+		if ( '' === trim( $raw ) ) {
 			return;
 		}
 		$variation = wc_get_product( $variation_id );
@@ -328,7 +336,7 @@ class ORDELIST_Print_Stock {
 		if ( 'ordelist_depleted' !== $column ) {
 			return;
 		}
-		echo self::badge_html( $order->get_meta( self::DEPLETED_META ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_kses( self::badge_html( $order->get_meta( self::DEPLETED_META ) ), self::KSES_BADGE );
 	}
 
 	public static function render_order_column_legacy( $column, $post_id ) {
@@ -337,7 +345,7 @@ class ORDELIST_Print_Stock {
 		}
 		$order = wc_get_order( $post_id );
 		if ( $order ) {
-			echo self::badge_html( $order->get_meta( self::DEPLETED_META ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo wp_kses( self::badge_html( $order->get_meta( self::DEPLETED_META ) ), self::KSES_BADGE );
 		}
 	}
 }

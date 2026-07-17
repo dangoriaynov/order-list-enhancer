@@ -11,6 +11,25 @@ class ORDELIST_Settings_Page {
 
 	const SLUG = 'ordelist-settings';
 
+	/** Дозволені теги для wp_kses при echo готових контролів (escape late). */
+	private const KSES_SWITCH = array(
+		'label' => array( 'class' => true ),
+		'span'  => array( 'class' => true ),
+		'input' => array(
+			'type'    => true,
+			'name'    => true,
+			'checked' => true,
+		),
+	);
+	private const KSES_HELP = array(
+		'a' => array(
+			'href'       => true,
+			'class'      => true,
+			'title'      => true,
+			'aria-label' => true,
+		),
+	);
+
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'assets' ) );
@@ -122,16 +141,16 @@ class ORDELIST_Settings_Page {
 	 * @param array|null $switch ['name'=>string,'checked'=>bool] для перемикача в шапці, або null
 	 */
 	private static function card_open( $title, $help = '', $switch = null ) {
-		$attr = '';
 		if ( is_array( $switch ) ) {
-			$attr = ' data-switch="' . esc_attr( $switch['name'] ) . '"';
+			printf( '<div class="ole-card" data-switch="%s">', esc_attr( $switch['name'] ) );
+		} else {
+			echo '<div class="ole-card">';
 		}
-		echo '<div class="ole-card"' . $attr . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<div class="ole-card-head">';
 		echo '<h2 class="ole-card-title">' . esc_html( $title ) . '</h2>';
-		echo self::help_html( $help ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_kses( self::help_html( $help ), self::KSES_HELP );
 		if ( is_array( $switch ) ) {
-			echo self::switch_html( $switch['name'], (bool) $switch['checked'], $title ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo wp_kses( self::switch_html( $switch['name'], (bool) $switch['checked'], $title ), self::KSES_SWITCH );
 		}
 		echo '</div><div class="ole-card-body">';
 	}
@@ -226,11 +245,11 @@ class ORDELIST_Settings_Page {
 		<table class="form-table"><tbody>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Color in orders list', 'ordelist' ); ?></th>
-				<td><?php echo self::switch_html( 'ship_enabled', ORDELIST_Settings::is_yes( $o, 'ship_enabled' ), __( 'Color the “Ship to” cell in the orders list.', 'ordelist' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Color the “Ship to” cell in the orders list.', 'ordelist' ); ?></td>
+				<td><?php echo wp_kses( self::switch_html( 'ship_enabled', ORDELIST_Settings::is_yes( $o, 'ship_enabled' ), __( 'Color the “Ship to” cell in the orders list.', 'ordelist' ) ), self::KSES_SWITCH ); ?> <?php esc_html_e( 'Color the “Ship to” cell in the orders list.', 'ordelist' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Color on edit page', 'ordelist' ); ?></th>
-				<td><?php echo self::switch_html( 'ship_color_edit', ORDELIST_Settings::is_yes( $o, 'ship_color_edit' ), __( 'Color the address block on the single order edit screen.', 'ordelist' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Color the address block on the single order edit screen.', 'ordelist' ); ?></td>
+				<td><?php echo wp_kses( self::switch_html( 'ship_color_edit', ORDELIST_Settings::is_yes( $o, 'ship_color_edit' ), __( 'Color the address block on the single order edit screen.', 'ordelist' ) ), self::KSES_SWITCH ); ?> <?php esc_html_e( 'Color the address block on the single order edit screen.', 'ordelist' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Coloring rules', 'ordelist' ); ?></th>
@@ -321,15 +340,15 @@ class ORDELIST_Settings_Page {
 		<table class="form-table"><tbody>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Copy button: name', 'ordelist' ); ?></th>
-				<td><?php echo self::switch_html( 'copy_name', ORDELIST_Settings::is_yes( $o, 'copy_name' ), __( 'Show a copy-to-clipboard button for the customer name on the order edit screen.', 'ordelist' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the customer name on the order edit screen.', 'ordelist' ); ?></td>
+				<td><?php echo wp_kses( self::switch_html( 'copy_name', ORDELIST_Settings::is_yes( $o, 'copy_name' ), __( 'Show a copy-to-clipboard button for the customer name on the order edit screen.', 'ordelist' ) ), self::KSES_SWITCH ); ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the customer name on the order edit screen.', 'ordelist' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Copy button: phone', 'ordelist' ); ?></th>
-				<td><?php echo self::switch_html( 'copy_phone', ORDELIST_Settings::is_yes( $o, 'copy_phone' ), __( 'Show a copy-to-clipboard button for the phone number on the order edit screen.', 'ordelist' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the phone number on the order edit screen.', 'ordelist' ); ?></td>
+				<td><?php echo wp_kses( self::switch_html( 'copy_phone', ORDELIST_Settings::is_yes( $o, 'copy_phone' ), __( 'Show a copy-to-clipboard button for the phone number on the order edit screen.', 'ordelist' ) ), self::KSES_SWITCH ); ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the phone number on the order edit screen.', 'ordelist' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Copy button: total', 'ordelist' ); ?></th>
-				<td><?php echo self::switch_html( 'copy_total', ORDELIST_Settings::is_yes( $o, 'copy_total' ), __( 'Show a copy-to-clipboard button for the order total on the order edit screen.', 'ordelist' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the order total on the order edit screen.', 'ordelist' ); ?></td>
+				<td><?php echo wp_kses( self::switch_html( 'copy_total', ORDELIST_Settings::is_yes( $o, 'copy_total' ), __( 'Show a copy-to-clipboard button for the order total on the order edit screen.', 'ordelist' ) ), self::KSES_SWITCH ); ?> <?php esc_html_e( 'Show a copy-to-clipboard button for the order total on the order edit screen.', 'ordelist' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Decimal separator', 'ordelist' ); ?></th>
@@ -477,7 +496,7 @@ class ORDELIST_Settings_Page {
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Vacation banner', 'ordelist' ); ?></th>
-				<td><?php echo self::switch_html( 'delivery_vacation_enabled', ORDELIST_Settings::is_yes( $o, 'delivery_vacation_enabled' ), __( 'Also show a red "we are away" banner above the notice, until the date below.', 'ordelist' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php esc_html_e( 'Also show a red "we are away" banner above the notice, until the date below.', 'ordelist' ); ?></td>
+				<td><?php echo wp_kses( self::switch_html( 'delivery_vacation_enabled', ORDELIST_Settings::is_yes( $o, 'delivery_vacation_enabled' ), __( 'Also show a red "we are away" banner above the notice, until the date below.', 'ordelist' ) ), self::KSES_SWITCH ); ?> <?php esc_html_e( 'Also show a red "we are away" banner above the notice, until the date below.', 'ordelist' ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Away until', 'ordelist' ); ?></th>
@@ -646,47 +665,66 @@ class ORDELIST_Settings_Page {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
-		$in   = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized per field below.
-		$bool = function ( $k ) use ( $in ) {
-			return ( ! empty( $in[ $k ] ) && 'false' !== $in[ $k ] ) ? 'yes' : 'no';
+		// Кожне поле unslash+sanitize у момент читання (sanitize early); типи й межі - тут же.
+		$str = function ( $k ) {
+			return isset( $_POST[ $k ] ) ? sanitize_text_field( wp_unslash( $_POST[ $k ] ) ) : '';
+		};
+		$ta = function ( $k ) {
+			return isset( $_POST[ $k ] ) ? sanitize_textarea_field( wp_unslash( $_POST[ $k ] ) ) : '';
+		};
+		$list = function ( $k ) {
+			if ( ! isset( $_POST[ $k ] ) || ! is_array( $_POST[ $k ] ) ) {
+				return array();
+			}
+			return array_map( 'sanitize_text_field', wp_unslash( $_POST[ $k ] ) );
+		};
+		$bool = function ( $k ) use ( $str ) {
+			$v = $str( $k );
+			return ( '' !== $v && '0' !== $v && 'false' !== $v ) ? 'yes' : 'no';
+		};
+		$int = function ( $k, $min, $max, $def ) use ( $str ) {
+			$v = $str( $k );
+			return ( '' === $v ) ? $def : max( $min, min( $max, (int) $v ) );
 		};
 
-		$rules = array();
-		if ( isset( $in['rule_keyword'] ) && is_array( $in['rule_keyword'] ) ) {
-			$co = isset( $in['rule_color'] ) ? (array) $in['rule_color'] : array();
-			$la = isset( $in['rule_label'] ) ? (array) $in['rule_label'] : array();
-			foreach ( $in['rule_keyword'] as $i => $k ) {
-				$k = sanitize_text_field( $k );
+		$rules    = array();
+		$keywords = $list( 'rule_keyword' );
+		if ( $keywords ) {
+			$co = $list( 'rule_color' );
+			$la = $list( 'rule_label' );
+			foreach ( $keywords as $i => $k ) {
 				if ( '' === $k ) {
 					continue;
 				}
 				$rules[] = array(
 					'keyword' => $k,
 					'color'   => isset( $co[ $i ] ) ? (string) sanitize_hex_color( $co[ $i ] ) : '',
-					'label'   => isset( $la[ $i ] ) ? sanitize_text_field( $la[ $i ] ) : '',
+					'label'   => isset( $la[ $i ] ) ? $la[ $i ] : '',
 				);
 			}
 		}
 
 		$extras_map = array();
-		if ( isset( $in['extra_match'] ) && is_array( $in['extra_match'] ) ) {
-			$eprod = isset( $in['extra_product'] ) ? (array) $in['extra_product'] : array();
-			foreach ( $in['extra_match'] as $i => $mtext ) {
+		$matches    = $list( 'extra_match' );
+		if ( $matches ) {
+			$eprod = $list( 'extra_product' );
+			foreach ( $matches as $i => $mtext ) {
 				$extras_map[] = array(
 					'match'   => $mtext,
-					'product' => isset( $eprod[ $i ] ) ? $eprod[ $i ] : 0,
+					'product' => isset( $eprod[ $i ] ) ? absint( $eprod[ $i ] ) : 0,
 				);
 			}
 		}
 		$extras_map = ORDELIST_Settings::clean_extras_map( $extras_map );
 
 		$total_color_rules = array();
-		if ( isset( $in['total_threshold'] ) && is_array( $in['total_threshold'] ) ) {
-			$tc = isset( $in['total_color'] ) ? (array) $in['total_color'] : array();
-			$tl = isset( $in['total_label'] ) ? (array) $in['total_label'] : array();
-			foreach ( $in['total_threshold'] as $i => $th ) {
+		$thresholds        = $list( 'total_threshold' );
+		if ( $thresholds ) {
+			$tc = $list( 'total_color' );
+			$tl = $list( 'total_label' );
+			foreach ( $thresholds as $i => $th ) {
 				$total_color_rules[] = array(
-					'threshold' => $th,
+					'threshold' => (float) $th,
 					'color'     => isset( $tc[ $i ] ) ? $tc[ $i ] : '',
 					'label'     => isset( $tl[ $i ] ) ? $tl[ $i ] : '',
 				);
@@ -694,49 +732,52 @@ class ORDELIST_Settings_Page {
 		}
 		$total_color_rules = ORDELIST_Settings::clean_total_color_rules( $total_color_rules );
 
+		$match_mode = $str( 'match_mode' );
+		$vac_until  = $str( 'delivery_vacation_until' );
+
 		$opts = array(
 			'extras_enabled'         => $bool( 'extras_enabled' ),
 			'extras_map'             => $extras_map,
 			'dup_enabled'           => $bool( 'dup_enabled' ),
-			'match_mode'            => ( isset( $in['match_mode'] ) && in_array( $in['match_mode'], array( 'phone', 'names', 'name_phone' ), true ) ) ? $in['match_mode'] : 'phone',
-			'scan_limit'            => isset( $in['scan_limit'] ) ? max( 100, min( 5000, (int) $in['scan_limit'] ) ) : 1500,
-			'dup_window_days'       => isset( $in['dup_window_days'] ) ? max( 1, min( 60, (int) $in['dup_window_days'] ) ) : 3,
+			'match_mode'            => in_array( $match_mode, array( 'phone', 'names', 'name_phone' ), true ) ? $match_mode : 'phone',
+			'scan_limit'            => $int( 'scan_limit', 100, 5000, 1500 ),
+			'dup_window_days'       => $int( 'dup_window_days', 1, 60, 3 ),
 			'ship_enabled'          => $bool( 'ship_enabled' ),
 			'ship_color_edit'       => $bool( 'ship_color_edit' ),
 			'ship_rules'            => $rules,
-			'ship_default_color'    => isset( $in['ship_default_color'] ) ? (string) sanitize_hex_color( $in['ship_default_color'] ) : '',
-			'ship_default_label'    => isset( $in['ship_default_label'] ) ? sanitize_text_field( $in['ship_default_label'] ) : '',
+			'ship_default_color'    => (string) sanitize_hex_color( $str( 'ship_default_color' ) ),
+			'ship_default_label'    => $str( 'ship_default_label' ),
 			'total_on_edit'         => $bool( 'total_on_edit' ),
-			'total_decimal_sep'     => ( isset( $in['total_decimal_sep'] ) && '.' === $in['total_decimal_sep'] ) ? '.' : ',',
+			'total_decimal_sep'     => ( '.' === $str( 'total_decimal_sep' ) ) ? '.' : ',',
 			'copy_name'             => $bool( 'copy_name' ),
 			'copy_phone'            => $bool( 'copy_phone' ),
 			'copy_total'            => $bool( 'copy_total' ),
 			'normalize_phone'       => $bool( 'normalize_phone' ),
-			'phone_cc'              => isset( $in['phone_cc'] ) ? preg_replace( '/\D+/', '', (string) $in['phone_cc'] ) : '',
+			'phone_cc'              => preg_replace( '/\D+/', '', $str( 'phone_cc' ) ),
 			'phone_validate_enabled' => $bool( 'phone_validate_enabled' ),
-			'phone_validate_mode'    => ( isset( $in['phone_validate_mode'] ) && 'block' === $in['phone_validate_mode'] ) ? 'block' : 'warn',
+			'phone_validate_mode'    => ( 'block' === $str( 'phone_validate_mode' ) ) ? 'block' : 'warn',
 			'dup_guard_enabled'      => $bool( 'dup_guard_enabled' ),
-			'dup_guard_mode'         => ( isset( $in['dup_guard_mode'] ) && 'block' === $in['dup_guard_mode'] ) ? 'block' : 'confirm',
-			'dup_guard_window_min'   => isset( $in['dup_guard_window_min'] ) ? max( 1, min( 120, (int) $in['dup_guard_window_min'] ) ) : 5,
-			'bulk_default_action'    => isset( $in['bulk_default_action'] ) ? sanitize_text_field( (string) $in['bulk_default_action'] ) : '',
+			'dup_guard_mode'         => ( 'block' === $str( 'dup_guard_mode' ) ) ? 'block' : 'confirm',
+			'dup_guard_window_min'   => $int( 'dup_guard_window_min', 1, 120, 5 ),
+			'bulk_default_action'    => $str( 'bulk_default_action' ),
 			'total_color_enabled'    => $bool( 'total_color_enabled' ),
 			'total_color_rules'      => $total_color_rules,
 			'seq_open_enabled'       => $bool( 'seq_open_enabled' ),
-			'seq_open_interval'      => isset( $in['seq_open_interval'] ) ? max( 1, min( 300, (int) $in['seq_open_interval'] ) ) : 7,
+			'seq_open_interval'      => $int( 'seq_open_interval', 1, 300, 7 ),
 			'list_comments_enabled'  => $bool( 'list_comments_enabled' ),
 			'delivery_notice_enabled'   => $bool( 'delivery_notice_enabled' ),
-			'delivery_notice_title'     => isset( $in['delivery_notice_title'] ) ? sanitize_text_field( (string) $in['delivery_notice_title'] ) : '',
-			'delivery_notice_body'      => isset( $in['delivery_notice_body'] ) ? sanitize_textarea_field( (string) $in['delivery_notice_body'] ) : '',
+			'delivery_notice_title'     => $str( 'delivery_notice_title' ),
+			'delivery_notice_body'      => $ta( 'delivery_notice_body' ),
 			'delivery_vacation_enabled' => $bool( 'delivery_vacation_enabled' ),
-			'delivery_vacation_until'   => ( isset( $in['delivery_vacation_until'] ) && 1 === preg_match( '/^\d{4}-\d{2}-\d{2}$/', (string) $in['delivery_vacation_until'] ) ) ? (string) $in['delivery_vacation_until'] : '',
-			'delivery_vacation_text'    => isset( $in['delivery_vacation_text'] ) ? sanitize_textarea_field( (string) $in['delivery_vacation_text'] ) : '',
+			'delivery_vacation_until'   => ( 1 === preg_match( '/^\d{4}-\d{2}-\d{2}$/', $vac_until ) ) ? $vac_until : '',
+			'delivery_vacation_text'    => $ta( 'delivery_vacation_text' ),
 			'print_stock_enabled'               => $bool( 'print_stock_enabled' ),
-			'print_stock_threshold_sticker'     => isset( $in['print_stock_threshold_sticker'] ) ? max( 0, min( 100000, (int) $in['print_stock_threshold_sticker'] ) ) : 20,
-			'print_stock_threshold_instruction' => isset( $in['print_stock_threshold_instruction'] ) ? max( 0, min( 100000, (int) $in['print_stock_threshold_instruction'] ) ) : 5,
+			'print_stock_threshold_sticker'     => $int( 'print_stock_threshold_sticker', 0, 100000, 20 ),
+			'print_stock_threshold_instruction' => $int( 'print_stock_threshold_instruction', 0, 100000, 5 ),
 			'warranty_enabled'                  => $bool( 'warranty_enabled' ),
-			'warranty_days'                     => isset( $in['warranty_days'] ) ? max( 1, min( 365, (int) $in['warranty_days'] ) ) : 30,
+			'warranty_days'                     => $int( 'warranty_days', 1, 365, 30 ),
 			'forecast_enabled'                  => $bool( 'forecast_enabled' ),
-			'forecast_margin'                   => isset( $in['forecast_margin'] ) ? max( 0, min( 100, (int) $in['forecast_margin'] ) ) : 20,
+			'forecast_margin'                   => $int( 'forecast_margin', 0, 100, 20 ),
 		);
 		update_option( ORDELIST_Settings::OPTION, $opts );
 		ORDELIST_Warranty::sync_schedule( $opts );

@@ -176,6 +176,24 @@ class ORDELIST_Print_Stock_Admin {
 
 	const ALLOWED_MIMES = array( 'application/pdf', 'image/jpeg', 'image/png' );
 
+	/** Дозволені теги для wp_kses при echo клітинки файлів (escape late). */
+	private const KSES_FILES = array(
+		'span'   => array(
+			'class'    => true,
+			'data-att' => true,
+		),
+		'a'      => array(
+			'href'   => true,
+			'target' => true,
+			'rel'    => true,
+		),
+		'button' => array(
+			'type'       => true,
+			'class'      => true,
+			'aria-label' => true,
+		),
+	);
+
 	/** Внутрішній HTML комірки "Files": чіпи + кнопка додавання. */
 	public static function files_cell_html( $ids ) {
 		$html = '';
@@ -249,7 +267,7 @@ class ORDELIST_Print_Stock_Admin {
 					<tr class="<?php echo esc_attr( self::status_class( $r ) ); ?>" data-id="<?php echo esc_attr( $r['id'] ); ?>">
 						<td><?php echo esc_html( $r['name'] ); ?></td>
 						<td><input type="number" step="1" class="ole-ps-stock" value="<?php echo esc_attr( (string) (int) $r['stock'] ); ?>" style="width:90px"/></td>
-						<td class="ole-ps-files"><?php echo self::files_cell_html( ORDELIST_Print_Stock_Calc::decode_attachments( $r['attachments'] ?? null ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts ?></td>
+						<td class="ole-ps-files"><?php echo wp_kses( self::files_cell_html( ORDELIST_Print_Stock_Calc::decode_attachments( $r['attachments'] ?? null ) ), self::KSES_FILES ); ?></td>
 						<td>
 							<button type="button" class="button ole-ps-save"><?php esc_html_e( 'Set', 'ordelist' ); ?></button>
 							<button type="button" class="button ole-ps-add"><?php esc_html_e( '+ printed', 'ordelist' ); ?></button>
@@ -291,7 +309,7 @@ class ORDELIST_Print_Stock_Admin {
 							</select>
 						</td>
 						<td><input type="number" step="1" class="ole-ps-sheet-stock" value="<?php echo esc_attr( (string) (int) $s['stock'] ); ?>" style="width:90px"/></td>
-						<td class="ole-ps-files"><?php echo self::files_cell_html( ORDELIST_Print_Stock_Calc::decode_attachments( $s['attachments'] ?? null ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts ?></td>
+						<td class="ole-ps-files"><?php echo wp_kses( self::files_cell_html( ORDELIST_Print_Stock_Calc::decode_attachments( $s['attachments'] ?? null ) ), self::KSES_FILES ); ?></td>
 						<td>
 							<button type="button" class="button ole-ps-sheet-save"><?php esc_html_e( 'Save', 'ordelist' ); ?></button>
 							<button type="button" class="button ole-ps-sheet-delete">&times;</button>

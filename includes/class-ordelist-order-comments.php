@@ -12,6 +12,18 @@ class ORDELIST_Order_Comments {
 
 	const COL = 'ordelist_comment';
 
+	/** Дозволені теги для wp_kses при echo блоку нотаток (escape late). */
+	private const KSES_NOTE = array(
+		'div'  => array(
+			'class' => true,
+			'title' => true,
+		),
+		'span' => array(
+			'class'       => true,
+			'aria-hidden' => true,
+		),
+	);
+
 	public static function init() {
 		// HPOS (custom order tables) orders screen.
 		add_filter( 'woocommerce_shop_order_list_table_columns', array( __CLASS__, 'add_column' ) );
@@ -42,7 +54,7 @@ class ORDELIST_Order_Comments {
 
 	public static function render_column( $column, $order ) {
 		if ( self::COL === $column && $order instanceof WC_Order ) {
-			echo self::note_block( $order ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in note_line().
+			echo wp_kses( self::note_block( $order ), self::KSES_NOTE );
 		}
 	}
 
@@ -52,7 +64,7 @@ class ORDELIST_Order_Comments {
 		}
 		$order = wc_get_order( $post_id );
 		if ( $order ) {
-			echo self::note_block( $order ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in note_line().
+			echo wp_kses( self::note_block( $order ), self::KSES_NOTE );
 		}
 	}
 
