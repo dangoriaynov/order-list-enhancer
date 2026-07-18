@@ -667,6 +667,7 @@ class ORDELIST_Settings_Page {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
 		// Кожне поле unslash+sanitize у момент читання (sanitize early); типи й межі - тут же.
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- nonce verified at the top of ajax_save() via check_ajax_referer(); these helpers only run after that check.
 		$str = function ( $k ) {
 			return isset( $_POST[ $k ] ) ? sanitize_text_field( wp_unslash( $_POST[ $k ] ) ) : '';
 		};
@@ -687,6 +688,7 @@ class ORDELIST_Settings_Page {
 			$v = $str( $k );
 			return ( '' === $v ) ? $def : max( $min, min( $max, (int) $v ) );
 		};
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		$rules    = array();
 		$keywords = $list( 'rule_keyword' );

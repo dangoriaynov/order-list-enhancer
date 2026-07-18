@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.64
+Stable tag: 1.0.65
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings - every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.65 =
+* Settings save: documented for static analysis that the field-reading helpers run only after the nonce check, clearing the remaining Plugin Check warnings.
 
 = 1.0.64 =
 * Purchase planning: the product search sorts its results alphabetically on the client (browsers reorder numeric JSON keys, so a server-side sort never reached the screen) and leaves out bundle products.
