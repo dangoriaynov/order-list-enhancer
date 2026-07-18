@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.66
+Stable tag: 1.0.67
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings - every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.67 =
+* Purchase planning: each year keeps a fixed chart color regardless of the product or how many years it has, so the legend looks the same on every load.
 
 = 1.0.66 =
 * All product-search fields across the plugin (planning page, warranty batches, print consumables, extras mapping) sort their results alphabetically via a shared module.
