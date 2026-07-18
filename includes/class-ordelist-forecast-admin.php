@@ -71,7 +71,8 @@ class ORDELIST_Forecast_Admin {
 					'refZero'   => __( 'Reference year has no sales in this slice - coefficient set to 1.', 'ordelist' ),
 					/* translators: %s: amount with unit, e.g. "3 kg". */
 					'expiring'  => __( 'of which %s expires before the period ends', 'ordelist' ),
-					'forecastL' => __( 'Forecast demand', 'ordelist' ),
+					'forecastPeriodL' => __( 'Forecast for the period', 'ordelist' ),
+					'forecastYearL'   => __( 'Forecast to the end of the year', 'ordelist' ),
 					'stockL'    => __( 'Sellable stock', 'ordelist' ),
 					'buyL'      => __( 'Recommended purchase', 'ordelist' ),
 					'varL'      => __( 'Variation', 'ordelist' ),

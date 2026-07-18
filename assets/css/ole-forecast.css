@@ -1,4 +1,4 @@
-.ole-fc-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 12px 0; }
+.ole-fc-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin: 12px 0; max-width: 1100px; }
 .ole-fc-chart { position: relative; height: 340px; max-width: 1100px; background: #fff; border: 1px solid #dcdcde; padding: 8px; }
 .ole-fc-result { max-width: 560px; background: #fff; border: 1px solid #dcdcde; padding: 12px 16px; margin: 12px 0; }
 .ole-fc-row { display: flex; justify-content: space-between; padding: 3px 0; }

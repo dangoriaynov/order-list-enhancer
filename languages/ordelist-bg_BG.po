@@ -1155,3 +1155,9 @@ msgstr "Периодът е започнал в миналото - прогно�
 
 msgid "Year to date"
 msgstr "От началото на годината"
+
+msgid "Forecast for the period"
+msgstr "Прогноза за периода"
+
+msgid "Forecast to the end of the year"
+msgstr "Прогноза до края на годината"

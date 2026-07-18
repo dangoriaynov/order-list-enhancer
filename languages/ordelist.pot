@@ -1137,3 +1137,11 @@ msgstr ""
 #: includes/class-ordelist-forecast-admin.php
 msgid "Year to date"
 msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Forecast for the period"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Forecast to the end of the year"
+msgstr ""
