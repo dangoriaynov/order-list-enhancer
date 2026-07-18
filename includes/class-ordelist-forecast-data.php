@@ -138,20 +138,29 @@ class ORDELIST_Forecast_Data {
 				// Поле ваги порожнє, але кількість зашита в назві - беремо звідти.
 				$weight = self::parse_weight_kg_from_name( $name );
 			}
+			// Склад WooCommerce - фолбек наявності, коли партії не ведуться. Лише ВЛАСНИЙ
+			// облік цілі (не успадкований від батька), інакше спільний пул порахувався б двічі.
+			$wc_stock = null;
+			if ( $prod && true === $prod->managing_stock() && null !== $prod->get_stock_quantity() ) {
+				$wc_stock = (int) $prod->get_stock_quantity();
+			}
 			$variations[] = array(
 				'id'        => (int) $vid,
 				'name'      => $name,
 				'exists'    => (bool) $prod,
 				'weight_kg' => $weight,
+				'wc_stock'  => $wc_stock,
 				'series'    => isset( $shaped[ $vid ] ) ? $shaped[ $vid ] : array(),
 			);
 			$target_id = ( $vid > 0 ) ? (int) $vid : (int) $parent->get_id();
+			// Прострочені партії теж віддаємо (з прапорцем): клієнт показує їх окремо.
 			foreach ( ORDELIST_Warranty_Store::batches_for_target( $target_id, $vid > 0 ) as $b ) {
-				if ( (int) $b['qty'] > 0 && (string) $b['expiry'] >= $today ) {
+				if ( (int) $b['qty'] > 0 ) {
 					$batches[] = array(
 						'variation_id' => (int) $vid,
 						'expiry'       => (string) $b['expiry'],
 						'qty'          => (int) $b['qty'],
+						'expired'      => ( (string) $b['expiry'] < $today ),
 					);
 				}
 			}

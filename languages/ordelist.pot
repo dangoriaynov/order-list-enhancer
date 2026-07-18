@@ -1145,3 +1145,11 @@ msgstr ""
 #: includes/class-ordelist-forecast-admin.php
 msgid "Forecast to the end of the year"
 msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Expired stock"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Stock comes from the WooCommerce inventory - no batches are tracked, expiry dates are unknown."
+msgstr ""
