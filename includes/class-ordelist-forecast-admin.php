@@ -46,6 +46,7 @@ class ORDELIST_Forecast_Admin {
 		wp_enqueue_style( 'ordelist-forecast', ORDELIST_URL . 'assets/css/ole-forecast.css', array(), ORDELIST_VERSION );
 		wp_enqueue_script( 'ordelist-chartjs', ORDELIST_URL . 'assets/vendor/chartjs/chart.umd.js', array(), '4.5.1', true );
 		wp_enqueue_script( 'ordelist-forecast-calc', ORDELIST_URL . 'assets/js/ole-forecast-calc.js', array(), ORDELIST_VERSION, true );
+		wp_enqueue_style( 'ordelist-datepicker', ORDELIST_URL . 'assets/css/ole-datepicker.css', array(), ORDELIST_VERSION );
 		wp_enqueue_script( 'ordelist-datepicker', ORDELIST_URL . 'assets/js/ole-datepicker.js', array( 'jquery', 'jquery-ui-datepicker' ), ORDELIST_VERSION, true );
 		wp_enqueue_script( 'ordelist-forecast', ORDELIST_URL . 'assets/js/ole-forecast.js', array( 'jquery', 'wc-enhanced-select', 'ordelist-chartjs', 'ordelist-forecast-calc', 'ordelist-datepicker' ), ORDELIST_VERSION, true );
 		wp_localize_script(
@@ -80,6 +81,7 @@ class ORDELIST_Forecast_Admin {
 					'goodUntil' => __( 'Good until (optional)', 'ordelist' ),
 					'add'       => __( 'Add', 'ordelist' ),
 					'periodCapped' => __( 'Period longer than a year - the comparison uses its first 365 days.', 'ordelist' ),
+					'periodPast'   => __( 'The period started in the past - the forecast and recommendation cover only the days from today to its end.', 'ordelist' ),
 				),
 			)
 		);
@@ -134,7 +136,7 @@ class ORDELIST_Forecast_Admin {
 			<p class="description"><?php esc_html_e( 'Pick a product or a single variation: yearly sales curves overlay on the chart, the table compares the selected slice across years, and the panel computes how much to order for the chosen period.', 'ordelist' ); ?></p>
 
 			<div class="ole-fc-controls">
-				<select class="wc-product-search ole-fc-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:360px"></select>
+				<select class="wc-product-search ole-fc-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:640px;max-width:100%"></select>
 				<label class="ole-fc-needs-product" hidden><input type="radio" name="ole-fc-unit" value="kg" checked/> <?php esc_html_e( 'kg', 'ordelist' ); ?></label>
 				<label class="ole-fc-needs-product" hidden><input type="radio" name="ole-fc-unit" value="pcs"/> <?php esc_html_e( 'pcs', 'ordelist' ); ?></label>
 				<span class="ole-fc-loader" hidden></span>
@@ -145,8 +147,8 @@ class ORDELIST_Forecast_Admin {
 			<div class="ole-fc-controls ole-fc-needs-product" hidden>
 				<label><?php esc_html_e( 'Period', 'ordelist' ); ?> <input type="hidden" class="ole-fc-start ole-date"/> - <input type="hidden" class="ole-fc-end ole-date"/></label>
 				<button type="button" class="button ole-fc-preset" data-days="30"><?php esc_html_e( 'Month', 'ordelist' ); ?></button>
-				<button type="button" class="button ole-fc-preset" data-days="91"><?php esc_html_e( 'Quarter', 'ordelist' ); ?></button>
 				<button type="button" class="button ole-fc-preset" data-days="182"><?php esc_html_e( 'Half-year', 'ordelist' ); ?></button>
+				<button type="button" class="button ole-fc-preset" data-ytd="1"><?php esc_html_e( 'Year to date', 'ordelist' ); ?></button>
 				<label><?php esc_html_e( 'Reference year', 'ordelist' ); ?> <select class="ole-fc-ref"></select></label>
 				<label><?php esc_html_e( 'Coefficient', 'ordelist' ); ?> <input type="number" step="0.01" min="0" class="ole-fc-coef" style="width:90px"/></label>
 				<button type="button" class="button ole-fc-coef-auto"><?php esc_html_e( 'auto', 'ordelist' ); ?></button>

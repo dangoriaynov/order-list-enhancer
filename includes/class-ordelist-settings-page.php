@@ -70,6 +70,7 @@ class ORDELIST_Settings_Page {
 		}
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_style( 'ordelist-settings', ORDELIST_URL . 'assets/css/ole-settings.css', array(), ORDELIST_VERSION );
+		wp_enqueue_style( 'ordelist-datepicker', ORDELIST_URL . 'assets/css/ole-datepicker.css', array(), ORDELIST_VERSION );
 		wp_enqueue_script( 'ordelist-datepicker', ORDELIST_URL . 'assets/js/ole-datepicker.js', array( 'jquery', 'jquery-ui-datepicker' ), ORDELIST_VERSION, true );
 		wp_enqueue_script( 'ordelist-settings', ORDELIST_URL . 'assets/js/ole-settings.js', array( 'jquery', 'wp-color-picker', 'ordelist-datepicker' ), ORDELIST_VERSION, true );
 		wp_enqueue_script( 'wc-enhanced-select' );

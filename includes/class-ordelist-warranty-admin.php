@@ -41,6 +41,7 @@ class ORDELIST_Warranty_Admin {
 		wp_enqueue_script( 'wc-enhanced-select' );
 		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_enqueue_style( 'ordelist-warranty', ORDELIST_URL . 'assets/css/ole-warranty.css', array(), ORDELIST_VERSION );
+		wp_enqueue_style( 'ordelist-datepicker', ORDELIST_URL . 'assets/css/ole-datepicker.css', array(), ORDELIST_VERSION );
 		wp_enqueue_script( 'ordelist-datepicker', ORDELIST_URL . 'assets/js/ole-datepicker.js', array( 'jquery', 'jquery-ui-datepicker' ), ORDELIST_VERSION, true );
 		wp_enqueue_script( 'ordelist-warranty', ORDELIST_URL . 'assets/js/ole-warranty.js', array( 'jquery', 'wc-enhanced-select', 'ordelist-datepicker' ), ORDELIST_VERSION, true );
 		wp_localize_script(

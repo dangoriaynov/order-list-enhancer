@@ -1149,3 +1149,9 @@ msgstr "Наличност и продажби по варианти"
 
 msgid "Period longer than a year - the comparison uses its first 365 days."
 msgstr "Период по-дълъг от година - сравнението използва първите му 365 дни."
+
+msgid "The period started in the past - the forecast and recommendation cover only the days from today to its end."
+msgstr "Периодът е започнал в миналото - прогнозата и препоръката покриват само дните от днес до края му."
+
+msgid "Year to date"
+msgstr "От началото на годината"
