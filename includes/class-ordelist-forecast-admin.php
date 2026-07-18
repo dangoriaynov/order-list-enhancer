@@ -50,7 +50,8 @@ class ORDELIST_Forecast_Admin {
 		wp_enqueue_script( 'ordelist-forecast-calc', ORDELIST_URL . 'assets/js/ole-forecast-calc.js', array(), ORDELIST_VERSION, true );
 		wp_enqueue_style( 'ordelist-datepicker', ORDELIST_URL . 'assets/css/ole-datepicker.css', array(), ORDELIST_VERSION );
 		wp_enqueue_script( 'ordelist-datepicker', ORDELIST_URL . 'assets/js/ole-datepicker.js', array( 'jquery', 'jquery-ui-datepicker' ), ORDELIST_VERSION, true );
-		wp_enqueue_script( 'ordelist-forecast', ORDELIST_URL . 'assets/js/ole-forecast.js', array( 'jquery', 'wc-enhanced-select', 'ordelist-chartjs', 'ordelist-forecast-calc', 'ordelist-datepicker' ), ORDELIST_VERSION, true );
+		wp_enqueue_script( 'ordelist-product-search', ORDELIST_URL . 'assets/js/ole-product-search.js', array( 'jquery', 'wc-enhanced-select' ), ORDELIST_VERSION, true );
+		wp_enqueue_script( 'ordelist-forecast', ORDELIST_URL . 'assets/js/ole-forecast.js', array( 'jquery', 'wc-enhanced-select', 'ordelist-chartjs', 'ordelist-forecast-calc', 'ordelist-datepicker', 'ordelist-product-search' ), ORDELIST_VERSION, true );
 		wp_localize_script(
 			'ordelist-forecast',
 			'ORDELIST_FC',
@@ -190,7 +191,7 @@ class ORDELIST_Forecast_Admin {
 			<p class="description"><?php esc_html_e( 'Pick a product or a single variation: yearly sales curves overlay on the chart, the table compares the selected slice across years, and the panel computes how much to order for the chosen period.', 'ordelist' ); ?></p>
 
 			<div class="ole-fc-controls">
-				<select class="ole-fc-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" style="width:640px;max-width:100%"></select>
+				<select class="ole-psearch ole-fc-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-exclude_type="bundle" style="width:640px;max-width:100%"></select>
 				<label class="ole-fc-needs-product" hidden><input type="radio" name="ole-fc-unit" value="kg" checked/> <?php esc_html_e( 'kg', 'ordelist' ); ?></label>
 				<label class="ole-fc-needs-product" hidden><input type="radio" name="ole-fc-unit" value="pcs"/> <?php esc_html_e( 'pcs', 'ordelist' ); ?></label>
 				<span class="ole-fc-loader" hidden></span>
