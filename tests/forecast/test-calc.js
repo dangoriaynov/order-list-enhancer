@@ -114,5 +114,15 @@ check( C.futureSliceStart( '2026-08-01', '2026-09-01', '2026-07-17' ) === '2026-
 check( C.futureSliceStart( '2026-01-01', '2026-06-30', '2026-07-17' ) === null, 'fully past period -> null (nothing to buy)' );
 check( C.futureSliceStart( '2026-07-17', '2026-07-17', '2026-07-17' ) === '2026-07-17', 'single-day today period -> today' );
 
+// ---- usableStock: партія покриває лише попит, що настане до її строку ----
+var demandCurve = { '2026-09-01': 30, '2026-12-31': 100 }; // кумулятивний попит до дати
+var dTo = function ( ymd ) { return demandCurve[ ymd > '2026-12-31' ? '2026-12-31' : ymd ] || 0; };
+check( C.usableStock( [], dTo ) === 0, 'usable: no batches -> 0' );
+check( C.usableStock( [ { qty: 50, expiry: '2099-12-31' } ], dTo ) === 50, 'usable: unexpiring batch below demand -> full qty' );
+check( C.usableStock( [ { qty: 200, expiry: '2099-12-31' } ], dTo ) === 100, 'usable: capped by total demand' );
+check( C.usableStock( [ { qty: 100, expiry: '2026-09-01' } ], dTo ) === 30, 'usable: early expiry serves only demand before it' );
+check( C.usableStock( [ { qty: 100, expiry: '2026-09-01' }, { qty: 100, expiry: '2099-12-31' } ], dTo ) === 100, 'usable: later batch covers the remaining demand' );
+check( C.usableStock( [ { qty: 10, expiry: '2026-09-01' }, { qty: 15, expiry: '2026-09-01' } ], dTo ) === 25, 'usable: same-expiry batches share the early demand' );
+
 console.log( fails ? '\n' + fails + ' FAILED' : '\nALL PASS' );
 process.exit( fails ? 1 : 0 );

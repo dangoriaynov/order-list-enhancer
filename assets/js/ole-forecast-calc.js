@@ -147,6 +147,19 @@
 		return Math.max( 0, forecastVal - stockVal );
 	};
 
+	// FIFO проти строків: партія покриває лише попит, що настане ДО її строку.
+	// batches: [{qty, expiry}] в одиницях виміру, ВІДСОРТОВАНІ за строком ASC;
+	// demandTo(expiryYMD) - кумулятивний попит від сьогодні до min(строку, горизонту).
+	C.usableStock = function ( batches, demandTo ) {
+		var covered = 0;
+		for ( var i = 0; i < batches.length; i++ ) {
+			var limit = demandTo( batches[ i ].expiry );
+			var use   = Math.min( batches[ i ].qty, Math.max( 0, limit - covered ) );
+			covered  += use;
+		}
+		return covered;
+	};
+
 	// Розбивка прогнозу (кг) по варіаціях у штуках за кг-частками опорного року.
 	C.variationSplit = function ( forecastKg, variations, refYear, startMMDD, endMMDD ) {
 		var shares = [];
