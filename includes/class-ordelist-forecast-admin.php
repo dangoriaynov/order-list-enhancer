@@ -19,6 +19,7 @@ class ORDELIST_Forecast_Admin {
 		add_action( 'wp_ajax_ordelist_fc_series', array( __CLASS__, 'ajax_series' ) );
 		add_action( 'wp_ajax_ordelist_fc_add_batch', array( __CLASS__, 'ajax_add_batch' ) );
 		add_action( 'wp_ajax_ordelist_fc_save_tuning', array( __CLASS__, 'ajax_save_tuning' ) );
+		add_filter( 'woocommerce_json_search_found_products', array( __CLASS__, 'filter_search_results' ) );
 	}
 
 	public static function menu() {
@@ -93,6 +94,24 @@ class ORDELIST_Forecast_Admin {
 				),
 			)
 		);
+	}
+
+	/**
+	 * Пошук товарів ЛИШЕ на сторінці планування (за referer): без комплектів
+	 * (їх складові продаються окремо) і за алфавітом.
+	 */
+	public static function filter_search_results( $products ) {
+		if ( ! is_array( $products ) || false === strpos( (string) wp_get_referer(), self::SLUG ) ) {
+			return $products;
+		}
+		foreach ( array_keys( $products ) as $pid ) {
+			$prod = wc_get_product( $pid );
+			if ( $prod && $prod->is_type( 'bundle' ) ) {
+				unset( $products[ $pid ] );
+			}
+		}
+		natcasesort( $products );
+		return $products;
 	}
 
 	private static function guard() {
@@ -171,7 +190,7 @@ class ORDELIST_Forecast_Admin {
 			<p class="description"><?php esc_html_e( 'Pick a product or a single variation: yearly sales curves overlay on the chart, the table compares the selected slice across years, and the panel computes how much to order for the chosen period.', 'ordelist' ); ?></p>
 
 			<div class="ole-fc-controls">
-				<select class="wc-product-search ole-fc-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:640px;max-width:100%"></select>
+				<select class="wc-product-search ole-fc-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" data-exclude_type="bundle" style="width:640px;max-width:100%"></select>
 				<label class="ole-fc-needs-product" hidden><input type="radio" name="ole-fc-unit" value="kg" checked/> <?php esc_html_e( 'kg', 'ordelist' ); ?></label>
 				<label class="ole-fc-needs-product" hidden><input type="radio" name="ole-fc-unit" value="pcs"/> <?php esc_html_e( 'pcs', 'ordelist' ); ?></label>
 				<span class="ole-fc-loader" hidden></span>
