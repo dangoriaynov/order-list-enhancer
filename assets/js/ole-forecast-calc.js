@@ -95,6 +95,13 @@
 		return out;
 	};
 
+	// Початок майбутньої частини періоду: купується лише те, що ще попереду.
+	// Період цілком у минулому - null (купувати на минуле нема сенсу).
+	C.futureSliceStart = function ( startYMD, endYMD, todayYMD ) {
+		if ( endYMD < todayYMD ) { return null; }
+		return ( startYMD > todayYMD ) ? startYMD : todayYMD;
+	};
+
 	// Авто-коефіцієнт: цей рік [01-01..сьогодні] ÷ опорний рік за той самий відрізок.
 	C.autoCoefficient = function ( series, currentYear, refYear, todayMMDD ) {
 		var cur = C.rangeSum( series[ currentYear ], '01-01', todayMMDD );

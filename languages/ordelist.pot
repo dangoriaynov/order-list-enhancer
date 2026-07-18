@@ -1129,3 +1129,11 @@ msgstr ""
 #: includes/class-ordelist-forecast-admin.php
 msgid "Period longer than a year - the comparison uses its first 365 days."
 msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "The period started in the past - the forecast and recommendation cover only the days from today to its end."
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
+msgid "Year to date"
+msgstr ""

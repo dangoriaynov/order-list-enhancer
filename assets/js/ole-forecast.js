@@ -102,6 +102,7 @@
 		if ( ! picked ) { return; }
 		// Поки дані в дорозі: все нижче ховаємо, крутиться лише спінер біля вибору товару.
 		$( '.ole-fc-needs-product' ).attr( 'hidden', true );
+		$( '.ole-fc-result' ).attr( 'hidden', true );
 		$( '.ole-fc-loader' ).removeAttr( 'hidden' );
 		post( { product: picked } ).done( function ( r ) {
 			var d = r && r.data;
@@ -157,11 +158,15 @@
 	$( document ).on( 'click', '.ole-fc-coef-auto', function () { state.coefAuto = true; recalcPanel(); } );
 	$( document ).on( 'input', '.ole-fc-margin', recalcPanel );
 	$( document ).on( 'change', '.ole-fc-start, .ole-fc-end', recalcPanel );
-	// Пресети якоряться на КІНЦЕВІЙ даті (за замовчуванням - сьогодні): назад на N днів.
+	// Пресети якоряться на КІНЦЕВІЙ даті (за замовчуванням - сьогодні): назад на N днів
+	// або до 1 січня того ж року ("з початку року").
 	$( document ).on( 'click', '.ole-fc-preset', function () {
 		var end = $( '.ole-fc-end' ).val() || todayYMD();
 		$( '.ole-fc-end' ).val( end ).trigger( 'ole-sync' );
-		$( '.ole-fc-start' ).val( addDays( end, -( parseInt( $( this ).data( 'days' ), 10 ) || 30 ) ) ).trigger( 'ole-sync' );
+		var start = $( this ).data( 'ytd' )
+			? end.slice( 0, 4 ) + '-01-01'
+			: addDays( end, -( parseInt( $( this ).data( 'days' ), 10 ) || 30 ) );
+		$( '.ole-fc-start' ).val( start ).trigger( 'ole-sync' );
 		recalcPanel();
 	} );
 
@@ -278,7 +283,9 @@
 		if ( ! $( '.ole-fc-margin' ).val() ) { $( '.ole-fc-margin' ).val( ORDELIST_FC.margin ); }
 		var margin = Math.max( 0, Math.min( 100, parseInt( $( '.ole-fc-margin' ).val(), 10 ) || 0 ) );
 
-		var refSlice = C.rangeSum( s[ state.refYear ], p.startMMDD, p.endMMDD );
+		// Купуємо лише на майбутню частину періоду: минулі дні вже не потребують закупки.
+		var futureStart = C.futureSliceStart( p.startYMD, p.endYMD, todayYMD() );
+		var refSlice    = ( null === futureStart ) ? 0 : C.rangeSum( s[ state.refYear ], mmddOf( futureStart ), p.endMMDD );
 		var fc = C.forecast( refSlice, coef, margin );
 		var weights = weightsMap();
 		var stock = C.stockTotal( state.data.batches, state.target, state.unit, weights );
@@ -296,6 +303,7 @@
 		$buy.addClass( 'ole-fc-buy' );
 		if ( expiring > 0 ) { note( $out, ORDELIST_FC.i18n.expiring.replace( '%s', fmt( expiring, state.unit ) ) ); }
 		if ( p.capped ) { note( $out, ORDELIST_FC.i18n.periodCapped ); }
+		if ( p.startYMD < todayYMD() ) { note( $out, ORDELIST_FC.i18n.periodPast ); }
 		// У кг-режимі позначаємо варіації без ваги - вони рахуються лише в штуках.
 		// Кілька таких - згортаємо в один рядок, що розкривається (список імен усередині).
 		if ( 'kg' === state.unit ) {
@@ -315,7 +323,7 @@
 
 		// Розбивка по варіаціях у штуках (лише в кг-режимі всього препарату).
 		if ( 'product' === state.target.type && 'kg' === state.unit && buy > 0 ) {
-			var split = C.variationSplit( buy, state.data.variations, state.refYear, p.startMMDD, p.endMMDD );
+			var split = C.variationSplit( buy, state.data.variations, state.refYear, mmddOf( futureStart || p.startYMD ), p.endMMDD );
 			for ( var i = 0; i < split.length; i++ ) {
 				if ( split[ i ].pcs > 0 ) {
 					row( $out, nameOf( split[ i ].id ), split[ i ].pcs + ' ' + ORDELIST_FC.i18n.pcs ).addClass( 'ole-fc-split' );

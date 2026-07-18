@@ -108,5 +108,11 @@ check( pjEnd[ 363 ] === null && pjEnd[ 364 ] === 15, 'today at year end -> singl
 var pjZero = C.projection( pjCur, pjRef, '01-02', 0 );
 check( pjZero[ 300 ] === 15, 'coefficient 0 -> flat projection' );
 
+// ---- futureSliceStart: купуємо лише на майбутню частину періоду ----
+check( C.futureSliceStart( '2026-01-01', '2026-07-18', '2026-07-17' ) === '2026-07-17', 'period spanning today -> starts today' );
+check( C.futureSliceStart( '2026-08-01', '2026-09-01', '2026-07-17' ) === '2026-08-01', 'fully future period -> keeps its start' );
+check( C.futureSliceStart( '2026-01-01', '2026-06-30', '2026-07-17' ) === null, 'fully past period -> null (nothing to buy)' );
+check( C.futureSliceStart( '2026-07-17', '2026-07-17', '2026-07-17' ) === '2026-07-17', 'single-day today period -> today' );
+
 console.log( fails ? '\n' + fails + ' FAILED' : '\nALL PASS' );
 process.exit( fails ? 1 : 0 );
