@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.61
+Stable tag: 1.0.62
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings - every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.62 =
+* Purchase planning: a "Sold in the period" row sits next to the period forecast so plan and reality can be compared, and the hand-tuned coefficient and margin can be saved per product and reference year - picking that year loads them back exactly as saved.
 
 = 1.0.61 =
 * Purchase planning: the recommendation now answers whether the stock lasts to the end of the year - each batch only covers demand that arrives before its expiry date, so stock that expires too early triggers a purchase even when the total quantity looks sufficient.

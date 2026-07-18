@@ -166,10 +166,28 @@ class ORDELIST_Forecast_Data {
 			}
 		}
 
+		// Збережені ручні коефіцієнт+резерв цього товару: ключі 'target:рік'.
+		$tuning = array();
+		$map    = get_option( 'ordelist_fc_tuning', array() );
+		if ( is_array( $map ) && $map ) {
+			$ids   = array_map( 'intval', array_keys( $targets ) );
+			$ids[] = (int) $parent->get_id();
+			foreach ( $map as $key => $val ) {
+				$parts = explode( ':', (string) $key, 2 );
+				if ( 2 === count( $parts ) && in_array( (int) $parts[0], $ids, true ) && is_array( $val ) ) {
+					$tuning[ $key ] = array(
+						'coef'   => (float) ( $val['coef'] ?? 1 ),
+						'margin' => (int) ( $val['margin'] ?? 20 ),
+					);
+				}
+			}
+		}
+
 		return array(
 			'product_id' => (int) $parent->get_id(),
 			'variations' => $variations,
 			'batches'    => $batches,
+			'tuning'     => $tuning,
 		);
 	}
 }

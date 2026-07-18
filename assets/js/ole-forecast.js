@@ -89,6 +89,19 @@
 			}
 		}
 	}
+	// Ціль для збережених налаштувань: варіація або сам товар.
+	function targetId() {
+		return ( 'variation' === state.target.type ) ? state.target.id : state.data.product_id;
+	}
+	// Підтягує збережені коефіцієнт+резерв для пари ціль+опорний рік (якщо є).
+	function applyTuning() {
+		if ( ! state.data || ! state.refYear ) { return; }
+		var t = state.data.tuning && state.data.tuning[ targetId() + ':' + state.refYear ];
+		if ( ! t ) { return; }
+		state.coefAuto = false;
+		$( '.ole-fc-coef' ).val( t.coef );
+		$( '.ole-fc-margin' ).val( t.margin );
+	}
 	function yearsOf( s ) {
 		var ys = [];
 		for ( var y in s ) { if ( Object.prototype.hasOwnProperty.call( s, y ) ) { ys.push( y ); } }
@@ -124,6 +137,7 @@
 			if ( ! hasWeight ) { $( 'input[name="ole-fc-unit"][value="pcs"]' ).prop( 'checked', true ); }
 			fillRefYears();
 			state.coefAuto = true;
+			applyTuning();
 			// Жодного року з продажами: recalcPanel() сховав би примітку - малюємо
 			// порожній графік і таблицю-шапку та показуємо примітку замість панелі.
 			if ( ! state.refYear ) {
@@ -152,8 +166,33 @@
 	}
 
 	// ---- контролі ----
-	$( document ).on( 'change', 'input[name="ole-fc-unit"]', function () { state.unit = this.value; state.coefAuto = true; recalc(); } );
-	$( document ).on( 'change', '.ole-fc-ref', function () { state.refYear = $( this ).val(); state.coefAuto = true; recalc(); } );
+	$( document ).on( 'change', 'input[name="ole-fc-unit"]', function () { state.unit = this.value; state.coefAuto = true; applyTuning(); recalc(); } );
+	$( document ).on( 'change', '.ole-fc-ref', function () { state.refYear = $( this ).val(); state.coefAuto = true; applyTuning(); recalc(); } );
+	$( document ).on( 'click', '.ole-fc-save-tuning', function () {
+		if ( ! state.data || ! state.refYear ) { return; }
+		var $btn = $( this );
+		$btn.prop( 'disabled', true );
+		post( {
+			action: 'ordelist_fc_save_tuning',
+			target: targetId(),
+			year:   state.refYear,
+			coef:   parseFloat( $( '.ole-fc-coef' ).val() ) || 0,
+			margin: parseInt( $( '.ole-fc-margin' ).val(), 10 ) || 0
+		} ).done( function ( r ) {
+			if ( r && r.success ) {
+				state.data.tuning = state.data.tuning || {};
+				state.data.tuning[ targetId() + ':' + state.refYear ] = {
+					coef:   parseFloat( $( '.ole-fc-coef' ).val() ) || 0,
+					margin: parseInt( $( '.ole-fc-margin' ).val(), 10 ) || 0
+				};
+				$btn.text( ORDELIST_FC.i18n.saved );
+				setTimeout( function () { $btn.text( ORDELIST_FC.i18n.save ); }, 1500 );
+			} else {
+				window.alert( ORDELIST_FC.i18n.error );
+			}
+		} ).fail( function () { window.alert( ORDELIST_FC.i18n.error ); } )
+			.always( function () { $btn.prop( 'disabled', false ); } );
+	} );
 	$( document ).on( 'input', '.ole-fc-coef', function () { state.coefAuto = false; recalcPanel(); } );
 	$( document ).on( 'click', '.ole-fc-coef-auto', function () { state.coefAuto = true; recalcPanel(); } );
 	$( document ).on( 'input', '.ole-fc-margin', recalcPanel );
@@ -344,6 +383,9 @@
 		var buy    = Math.max( 0, fcYear - usable );
 
 		$out.empty().removeAttr( 'hidden' );
+		// Факт поточного року за той самий відрізок - поруч із прогнозом, щоб було
+		// видно, наскільки прогноз схибив, і підкрутити коефіцієнт/резерв.
+		row( $out, ORDELIST_FC.i18n.soldPeriodL, fmt( C.rangeSum( s[ curYear() ], p.startMMDD, p.endMMDD ), state.unit ) );
 		row( $out, ORDELIST_FC.i18n.forecastPeriodL, fmt( fcPeriod, state.unit ) );
 		row( $out, ORDELIST_FC.i18n.forecastYearL, fmt( fcYear, state.unit ) );
 		row( $out, ORDELIST_FC.i18n.stockL, fmt( effStock, state.unit ) );

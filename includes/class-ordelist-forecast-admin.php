@@ -18,6 +18,7 @@ class ORDELIST_Forecast_Admin {
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'assets' ) );
 		add_action( 'wp_ajax_ordelist_fc_series', array( __CLASS__, 'ajax_series' ) );
 		add_action( 'wp_ajax_ordelist_fc_add_batch', array( __CLASS__, 'ajax_add_batch' ) );
+		add_action( 'wp_ajax_ordelist_fc_save_tuning', array( __CLASS__, 'ajax_save_tuning' ) );
 	}
 
 	public static function menu() {
@@ -85,6 +86,9 @@ class ORDELIST_Forecast_Admin {
 					'goodUntil' => __( 'Good until (optional)', 'ordelist' ),
 					'add'       => __( 'Add', 'ordelist' ),
 					'periodCapped' => __( 'Period longer than a year - the comparison uses its first 365 days.', 'ordelist' ),
+					'soldPeriodL'  => __( 'Sold in the period', 'ordelist' ),
+					'save'         => __( 'Save', 'ordelist' ),
+					'saved'        => __( 'Saved.', 'ordelist' ),
 					'periodPast'   => __( 'The period started in the past - the forecast and recommendation cover only the days from today to its end.', 'ordelist' ),
 				),
 			)
@@ -131,6 +135,33 @@ class ORDELIST_Forecast_Admin {
 		ORDELIST_Warranty::run_check(); // нова партія може вже бути у вікні попередження
 		wp_send_json_success( array( 'ok' => true ) );
 	}
+	/**
+	 * Зберігає підкручені вручну коефіцієнт і резерв для пари ціль+опорний рік,
+	 * щоб при виборі того самого року вони підтягувались точно в цьому вигляді.
+	 */
+	public static function ajax_save_tuning() {
+		self::guard();
+		$target = isset( $_POST['target'] ) ? absint( $_POST['target'] ) : 0;
+		$year   = isset( $_POST['year'] ) ? sanitize_text_field( wp_unslash( $_POST['year'] ) ) : '';
+		$coef   = isset( $_POST['coef'] ) ? (float) $_POST['coef'] : -1;
+		$margin = isset( $_POST['margin'] ) ? (int) $_POST['margin'] : -1;
+		if ( ! $target || 1 !== preg_match( '/^\d{4}$/', $year ) || $coef < 0 || $coef > 99 || $margin < 0 || $margin > 100 ) {
+			wp_send_json_error( array( 'message' => 'bad_input' ), 400 );
+		}
+		$map = get_option( 'ordelist_fc_tuning', array() );
+		if ( ! is_array( $map ) ) {
+			$map = array();
+		}
+		$map[ $target . ':' . $year ] = array(
+			'coef'   => $coef,
+			'margin' => $margin,
+		);
+		if ( count( $map ) > 1000 ) {
+			$map = array_slice( $map, -1000, null, true );
+		}
+		update_option( 'ordelist_fc_tuning', $map, false );
+		wp_send_json_success( array( 'ok' => true ) );
+	}
 	// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 	public static function render() {
@@ -156,6 +187,7 @@ class ORDELIST_Forecast_Admin {
 				<label><?php esc_html_e( 'Reference year', 'ordelist' ); ?> <select class="ole-fc-ref"></select></label>
 				<label><?php esc_html_e( 'Coefficient', 'ordelist' ); ?> <input type="number" step="0.01" min="0" class="ole-fc-coef" style="width:90px"/></label>
 				<button type="button" class="button ole-fc-coef-auto"><?php esc_html_e( 'auto', 'ordelist' ); ?></button>
+				<button type="button" class="button ole-fc-save-tuning"><?php esc_html_e( 'Save', 'ordelist' ); ?></button>
 				<label><?php esc_html_e( 'Margin, %', 'ordelist' ); ?> <input type="number" step="1" min="0" max="100" class="ole-fc-margin" style="width:80px"/></label>
 			</div>
 

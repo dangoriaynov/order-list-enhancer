@@ -1171,5 +1171,8 @@ msgstr "Наличността е от склада на WooCommerce - парт�
 msgid "Recommended purchase to the end of the year"
 msgstr "Препоръчана поръчка до края на годината"
 
+msgid "Sold in the period"
+msgstr "Продадено за периода"
+
 msgid "Part of the stock expires before it can be sold - the recommendation covers the gap."
 msgstr "Част от наличността изтича преди да може да се продаде - препоръката покрива разликата."

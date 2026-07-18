@@ -1159,5 +1159,9 @@ msgid "Recommended purchase to the end of the year"
 msgstr ""
 
 #: includes/class-ordelist-forecast-admin.php
+msgid "Sold in the period"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php
 msgid "Part of the stock expires before it can be sold - the recommendation covers the gap."
 msgstr ""
