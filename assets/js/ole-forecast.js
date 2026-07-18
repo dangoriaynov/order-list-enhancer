@@ -283,10 +283,6 @@
 		if ( ! $( '.ole-fc-margin' ).val() ) { $( '.ole-fc-margin' ).val( ORDELIST_FC.margin ); }
 		var margin = Math.max( 0, Math.min( 100, parseInt( $( '.ole-fc-margin' ).val(), 10 ) || 0 ) );
 
-		// Купуємо лише на майбутню частину періоду: минулі дні вже не потребують закупки.
-		var futureStart = C.futureSliceStart( p.startYMD, p.endYMD, todayYMD() );
-		var refSlice    = ( null === futureStart ) ? 0 : C.rangeSum( s[ state.refYear ], mmddOf( futureStart ), p.endMMDD );
-		var fc = C.forecast( refSlice, coef, margin );
 		// Два стабільні прогнози ТІЛЬКИ з даних опорного року (факт їх не змінює):
 		// на весь обраний період і до кінця поточного року.
 		var fcPeriod = C.forecast( C.rangeSum( s[ state.refYear ], p.startMMDD, p.endMMDD ), coef, margin );
@@ -323,8 +319,29 @@
 			if ( wcAny ) { wcStock = wcSum; }
 		}
 		var effStock = ( null !== wcStock ) ? wcStock : stock;
-		var buy = C.recommendation( fc, effStock );
-		var expiring = C.expiringBy( validBatches, state.target, state.unit, weights, p.endYMD );
+		// Рекомендація - ДО КІНЦЯ РОКУ: скільки з наявного реально встигне продатись
+		// (партія покриває лише попит до свого строку), решту треба докупити.
+		var yearEnd  = curYear() + '-12-31';
+		var demandTo = function ( expiryYMD ) {
+			var capped = ( expiryYMD > yearEnd ) ? yearEnd : expiryYMD;
+			if ( capped <= todayYMD() ) { return 0; }
+			return C.forecast( C.rangeSum( s[ state.refYear ], mmddOf( todayYMD() ), mmddOf( capped ) ), coef, margin );
+		};
+		var unitBatches = [];
+		for ( var ubi = 0; ubi < validBatches.length; ubi++ ) {
+			var vb = validBatches[ ubi ];
+			if ( 'variation' === state.target.type && vb.variation_id !== state.target.id ) { continue; }
+			var uq = vb.qty;
+			if ( 'kg' === state.unit ) {
+				var uw = weights[ vb.variation_id ];
+				if ( null === uw || undefined === uw ) { continue; }
+				uq = vb.qty * uw;
+			}
+			unitBatches.push( { qty: uq, expiry: vb.expiry } );
+		}
+		unitBatches.sort( function ( a, b ) { return a.expiry < b.expiry ? -1 : ( a.expiry > b.expiry ? 1 : 0 ); } );
+		var usable = ( null !== wcStock ) ? Math.min( wcStock, fcYear ) : C.usableStock( unitBatches, demandTo );
+		var buy    = Math.max( 0, fcYear - usable );
 
 		$out.empty().removeAttr( 'hidden' );
 		row( $out, ORDELIST_FC.i18n.forecastPeriodL, fmt( fcPeriod, state.unit ) );
@@ -338,9 +355,8 @@
 		var buyShow = ( 'pcs' === state.unit ) ? Math.ceil( buy ) : buy;
 		var $buy = row( $out, ORDELIST_FC.i18n.buyL, fmt( buyShow, state.unit ) );
 		$buy.addClass( 'ole-fc-buy' );
-		if ( expiring > 0 ) { note( $out, ORDELIST_FC.i18n.expiring.replace( '%s', fmt( expiring, state.unit ) ) ); }
+		if ( buy > 0 && null === wcStock && effStock - usable > 0.005 ) { note( $out, ORDELIST_FC.i18n.shortExpiry ); }
 		if ( p.capped ) { note( $out, ORDELIST_FC.i18n.periodCapped ); }
-		if ( p.startYMD < todayYMD() ) { note( $out, ORDELIST_FC.i18n.periodPast ); }
 		// У кг-режимі позначаємо варіації без ваги - вони рахуються лише в штуках.
 		// Кілька таких - згортаємо в один рядок, що розкривається (список імен усередині).
 		if ( 'kg' === state.unit ) {
@@ -360,7 +376,8 @@
 
 		// Розбивка по варіаціях у штуках (лише в кг-режимі всього препарату).
 		if ( 'product' === state.target.type && 'kg' === state.unit && buy > 0 ) {
-			var split = C.variationSplit( buy, state.data.variations, state.refYear, mmddOf( futureStart || p.startYMD ), p.endMMDD );
+			// Частки варіацій - за опорним роком на тому самому горизонті, що й рекомендація.
+			var split = C.variationSplit( buy, state.data.variations, state.refYear, mmddOf( todayYMD() ), '12-31' );
 			for ( var i = 0; i < split.length; i++ ) {
 				if ( split[ i ].pcs > 0 ) {
 					row( $out, nameOf( split[ i ].id ), split[ i ].pcs + ' ' + ORDELIST_FC.i18n.pcs ).addClass( 'ole-fc-split' );
