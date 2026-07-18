@@ -15,9 +15,9 @@
 		return $.post( ORDELIST_PS.ajaxUrl, $.extend( { action: action, nonce: ORDELIST_PS.nonce }, data ) );
 	}
 
-	// WC only enhances not-yet-enhanced selects, so triggering this wires product search on new rows.
+	// Спільний модуль ініціалізує лише ще не розгорнуті селекти - можна кликати повторно.
 	function enhanceSelects() {
-		$( document.body ).trigger( 'wc-enhanced-select-init' );
+		if ( window.ordelistSearch ) { window.ordelistSearch.init(); }
 	}
 
 	// Recompute the low / negative highlight class for a row after its stock changes.

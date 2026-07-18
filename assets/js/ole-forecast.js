@@ -544,40 +544,9 @@
 		}
 	}
 
-	// Пошук товару: власна ініціалізація select2, бо порядок від сервера губиться -
-	// JSON-об'єкт з числовими ключами браузер перебирає за ID. Сортуємо на клієнті.
-	function initProductSearch() {
-		var $s = $( '.ole-fc-product' );
-		if ( ! $s.length || $s.data( 'select2' ) || ! $.fn.selectWoo ) { return; }
-		$s.selectWoo( {
-			ajax: {
-				url: ( window.wc_enhanced_select_params && window.wc_enhanced_select_params.ajax_url ) || window.ajaxurl,
-				dataType: 'json',
-				delay: 250,
-				data: function ( params ) {
-					return {
-						term: params.term,
-						action: 'woocommerce_json_search_products_and_variations',
-						security: ( window.wc_enhanced_select_params || {} ).search_products_nonce,
-						exclude_type: 'bundle'
-					};
-				},
-				processResults: function ( data ) {
-					var out = [];
-					$.each( data, function ( id, text ) { out.push( { id: id, text: text } ); } );
-					out.sort( function ( a, b ) { return a.text.localeCompare( b.text, document.documentElement.lang || undefined ); } );
-					return { results: out };
-				}
-			},
-			minimumInputLength: 2,
-			placeholder: $s.data( 'placeholder' ) || '',
-			dropdownAutoWidth: true
-		} );
-	}
-
 	// ---- старт: останній місяць до сьогодні за замовчуванням ----
+	// (пошук товару ініціалізує спільний модуль ole-product-search.js)
 	$( function () {
-		initProductSearch();
 		$( '.ole-fc-end' ).val( todayYMD() ).trigger( 'ole-sync' );
 		$( '.ole-fc-start' ).val( addDays( todayYMD(), -30 ) ).trigger( 'ole-sync' );
 		$( '.ole-fc-margin' ).val( ORDELIST_FC.margin );

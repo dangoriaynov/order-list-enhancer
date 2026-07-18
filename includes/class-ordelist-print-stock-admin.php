@@ -47,7 +47,8 @@ class ORDELIST_Print_Stock_Admin {
 		wp_enqueue_media();
 		wp_enqueue_style( 'woocommerce_admin_styles' );
 		wp_enqueue_style( 'ordelist-print-stock-admin', ORDELIST_URL . 'assets/css/ole-print-stock-admin.css', array(), ORDELIST_VERSION );
-		wp_enqueue_script( 'ordelist-print-stock-admin', ORDELIST_URL . 'assets/js/ole-print-stock-admin.js', array( 'jquery', 'wc-enhanced-select' ), ORDELIST_VERSION, true );
+		wp_enqueue_script( 'ordelist-product-search', ORDELIST_URL . 'assets/js/ole-product-search.js', array( 'jquery', 'wc-enhanced-select' ), ORDELIST_VERSION, true );
+		wp_enqueue_script( 'ordelist-print-stock-admin', ORDELIST_URL . 'assets/js/ole-print-stock-admin.js', array( 'jquery', 'wc-enhanced-select', 'ordelist-product-search' ), ORDELIST_VERSION, true );
 		wp_localize_script(
 			'ordelist-print-stock-admin',
 			'ORDELIST_PS',
@@ -277,7 +278,7 @@ class ORDELIST_Print_Stock_Admin {
 				<?php endforeach; ?>
 					<tr class="ole-ps-sticker-new">
 						<td>
-							<select class="wc-product-search ole-ps-sticker-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%"></select>
+							<select class="ole-psearch ole-ps-sticker-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%"></select>
 						</td>
 						<td><input type="number" step="1" class="ole-ps-sticker-stock" value="0" style="width:90px"/></td>
 						<td class="ole-ps-files"></td>
@@ -301,7 +302,7 @@ class ORDELIST_Print_Stock_Admin {
 					<tr class="ole-ps-sheet <?php echo esc_attr( self::status_class( $s ) ); ?>" data-id="<?php echo esc_attr( $s['id'] ); ?>">
 						<td><input type="text" class="ole-ps-sheet-name regular-text" value="<?php echo esc_attr( $s['name'] ); ?>"/></td>
 						<td>
-							<select multiple class="wc-product-search ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products" style="width:100%">
+							<select multiple class="ole-psearch ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products" style="width:100%">
 								<?php foreach ( $s['product_ids'] as $pid ) : ?>
 									<?php $p = wc_get_product( $pid ); if ( ! $p ) { continue; } ?>
 									<option value="<?php echo esc_attr( $pid ); ?>" selected><?php echo esc_html( wp_strip_all_tags( $p->get_formatted_name() ) ); ?></option>
@@ -319,7 +320,7 @@ class ORDELIST_Print_Stock_Admin {
 					<tr class="ole-ps-sheet ole-ps-sheet-new" data-id="0">
 						<td><input type="text" class="ole-ps-sheet-name regular-text" placeholder="<?php esc_attr_e( 'New sheet name', 'ordelist' ); ?>"/></td>
 						<td>
-							<select multiple class="wc-product-search ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products" style="width:100%"></select>
+							<select multiple class="ole-psearch ole-ps-sheet-products" data-placeholder="<?php esc_attr_e( 'Search for products…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products" style="width:100%"></select>
 						</td>
 						<td><input type="number" step="1" class="ole-ps-sheet-stock" value="0" style="width:90px"/></td>
 						<td class="ole-ps-files"></td>

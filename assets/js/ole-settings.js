@@ -107,6 +107,8 @@ jQuery( function ( $ ) {
 						processResults: function ( data ) {
 							var out = [];
 							jQuery.each( data, function ( id, text ) { out.push( { id: id, text: text } ); } );
+							// Сортуємо тут: серверний порядок губиться через числові ключі JSON.
+							out.sort( function ( a, b ) { return a.text.localeCompare( b.text, document.documentElement.lang || undefined ); } );
 							return { results: out };
 						}
 					},

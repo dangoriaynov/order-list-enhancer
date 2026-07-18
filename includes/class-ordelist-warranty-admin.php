@@ -43,7 +43,8 @@ class ORDELIST_Warranty_Admin {
 		wp_enqueue_style( 'ordelist-warranty', ORDELIST_URL . 'assets/css/ole-warranty.css', array(), ORDELIST_VERSION );
 		wp_enqueue_style( 'ordelist-datepicker', ORDELIST_URL . 'assets/css/ole-datepicker.css', array(), ORDELIST_VERSION );
 		wp_enqueue_script( 'ordelist-datepicker', ORDELIST_URL . 'assets/js/ole-datepicker.js', array( 'jquery', 'jquery-ui-datepicker' ), ORDELIST_VERSION, true );
-		wp_enqueue_script( 'ordelist-warranty', ORDELIST_URL . 'assets/js/ole-warranty.js', array( 'jquery', 'wc-enhanced-select', 'ordelist-datepicker' ), ORDELIST_VERSION, true );
+		wp_enqueue_script( 'ordelist-product-search', ORDELIST_URL . 'assets/js/ole-product-search.js', array( 'jquery', 'wc-enhanced-select' ), ORDELIST_VERSION, true );
+		wp_enqueue_script( 'ordelist-warranty', ORDELIST_URL . 'assets/js/ole-warranty.js', array( 'jquery', 'wc-enhanced-select', 'ordelist-datepicker', 'ordelist-product-search' ), ORDELIST_VERSION, true );
 		wp_localize_script(
 			'ordelist-warranty',
 			'ORDELIST_WR',
@@ -209,7 +210,7 @@ class ORDELIST_Warranty_Admin {
 				</tr></thead>
 				<tbody>
 					<tr class="ole-wr-new">
-						<td><select class="wc-product-search ole-wr-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" data-exclude_type="variable" style="width:100%"></select></td>
+						<td><select class="ole-psearch ole-wr-product" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" data-exclude_type="variable" style="width:100%"></select></td>
 						<td><input type="hidden" class="ole-wr-expiry ole-date"/></td>
 						<td><input type="number" step="1" class="ole-wr-qty" value="0" style="width:80px"/></td>
 						<td><input type="text" class="ole-wr-note regular-text" maxlength="200" placeholder="<?php esc_attr_e( 'Note (lot number…)', 'ordelist' ); ?>"/></td>
