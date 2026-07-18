@@ -240,15 +240,18 @@
 		for ( var i = 0; i < ys.length; i++ ) {
 			var cum = C.cumulative( s[ ys[ i ] ], MMDD );
 			var isCur = ( ys[ i ] === curYear() );
+			// Колір закріплений за САМИМ роком (а не за позицією у списку), щоб легенда
+			// була однакова для будь-якого товару і після оновлення сторінки.
+			var yearColor = COLORS[ parseInt( ys[ i ], 10 ) % COLORS.length ];
 			if ( isCur ) {
-				curColor = COLORS[ i % COLORS.length ];
+				curColor = yearColor;
 				// після сьогодні даних нема - далі малює пунктирний датасет прогнозу
 				for ( var j = todayIdx + 1; j < cum.length; j++ ) { cum[ j ] = null; }
 			}
 			datasets.push( {
 				label: ys[ i ],
 				data: cum,
-				borderColor: COLORS[ i % COLORS.length ],
+				borderColor: yearColor,
 				backgroundColor: 'transparent',
 				borderWidth: isCur ? 3 : 1.5,
 				pointRadius: 0,
