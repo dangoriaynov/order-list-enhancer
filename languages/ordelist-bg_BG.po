@@ -1161,3 +1161,9 @@ msgstr "Прогноза за периода"
 
 msgid "Forecast to the end of the year"
 msgstr "Прогноза до края на годината"
+
+msgid "Expired stock"
+msgstr "Просрочена наличност"
+
+msgid "Stock comes from the WooCommerce inventory - no batches are tracked, expiry dates are unknown."
+msgstr "Наличността е от склада на WooCommerce - партиди не се водят, сроковете са неизвестни."

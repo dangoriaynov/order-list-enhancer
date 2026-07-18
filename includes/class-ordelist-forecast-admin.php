@@ -74,6 +74,8 @@ class ORDELIST_Forecast_Admin {
 					'forecastPeriodL' => __( 'Forecast for the period', 'ordelist' ),
 					'forecastYearL'   => __( 'Forecast to the end of the year', 'ordelist' ),
 					'stockL'    => __( 'Sellable stock', 'ordelist' ),
+					'expiredL'  => __( 'Expired stock', 'ordelist' ),
+					'wcStockNote' => __( 'Stock comes from the WooCommerce inventory - no batches are tracked, expiry dates are unknown.', 'ordelist' ),
 					'buyL'      => __( 'Recommended purchase', 'ordelist' ),
 					'varL'      => __( 'Variation', 'ordelist' ),
 					/* translators: %s: year. */

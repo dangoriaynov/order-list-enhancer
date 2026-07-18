@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.59
+Stable tag: 1.0.60
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings - every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.60 =
+* Purchase planning: expired batches show as a separate red row instead of disappearing, and when no batches are tracked the sellable stock falls back to the WooCommerce inventory so the recommendation accounts for what is already on the shelf.
 
 = 1.0.59 =
 * Purchase planning: the panel shows two stable forecasts side by side, for the whole selected period and to the end of the year, both computed only from reference-year sales so plan and reality can be compared.

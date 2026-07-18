@@ -292,15 +292,47 @@
 		var fcPeriod = C.forecast( C.rangeSum( s[ state.refYear ], p.startMMDD, p.endMMDD ), coef, margin );
 		var fcYear   = C.forecast( C.rangeSum( s[ state.refYear ], mmddOf( todayYMD() ), '12-31' ), coef, margin );
 		var weights = weightsMap();
-		var stock = C.stockTotal( state.data.batches, state.target, state.unit, weights );
-		var buy = C.recommendation( fc, stock );
-		var expiring = C.expiringBy( state.data.batches, state.target, state.unit, weights, p.endYMD );
+		// Придатні й прострочені партії - окремо: прострочене видно, але не продається.
+		var validBatches   = [];
+		var expiredBatches = [];
+		for ( var bi = 0; bi < state.data.batches.length; bi++ ) {
+			( state.data.batches[ bi ].expired ? expiredBatches : validBatches ).push( state.data.batches[ bi ] );
+		}
+		var stock        = C.stockTotal( validBatches, state.target, state.unit, weights );
+		var expiredStock = C.stockTotal( expiredBatches, state.target, state.unit, weights );
+		// Партії для цілі не ведуться - фолбек на склад WooCommerce (без даних про строки).
+		var targetHasBatches = state.data.batches.some( function ( b ) {
+			return 'product' === state.target.type || b.variation_id === state.target.id;
+		} );
+		var wcStock = null;
+		if ( ! targetHasBatches ) {
+			var wcSum = 0;
+			var wcAny = false;
+			for ( var vi = 0; vi < state.data.variations.length; vi++ ) {
+				var vv = state.data.variations[ vi ];
+				if ( 'variation' === state.target.type && vv.id !== state.target.id ) { continue; }
+				if ( null === vv.wc_stock || undefined === vv.wc_stock ) { continue; }
+				if ( 'kg' === state.unit ) {
+					if ( null === vv.weight_kg || undefined === vv.weight_kg ) { continue; }
+					wcSum += vv.wc_stock * vv.weight_kg;
+				} else {
+					wcSum += vv.wc_stock;
+				}
+				wcAny = true;
+			}
+			if ( wcAny ) { wcStock = wcSum; }
+		}
+		var effStock = ( null !== wcStock ) ? wcStock : stock;
+		var buy = C.recommendation( fc, effStock );
+		var expiring = C.expiringBy( validBatches, state.target, state.unit, weights, p.endYMD );
 
 		$out.empty().removeAttr( 'hidden' );
 		row( $out, ORDELIST_FC.i18n.forecastPeriodL, fmt( fcPeriod, state.unit ) );
 		row( $out, ORDELIST_FC.i18n.forecastYearL, fmt( fcYear, state.unit ) );
-		row( $out, ORDELIST_FC.i18n.stockL, fmt( stock, state.unit ) );
-		if ( 0 === state.data.batches.length ) { note( $out, ORDELIST_FC.i18n.noBatches ); }
+		row( $out, ORDELIST_FC.i18n.stockL, fmt( effStock, state.unit ) );
+		if ( expiredStock > 0 ) { row( $out, ORDELIST_FC.i18n.expiredL, fmt( expiredStock, state.unit ) ).addClass( 'ole-fc-expired' ); }
+		if ( null !== wcStock ) { note( $out, ORDELIST_FC.i18n.wcStockNote ); }
+		else if ( ! targetHasBatches ) { note( $out, ORDELIST_FC.i18n.noBatches ); }
 		if ( auto.refZero && state.coefAuto ) { note( $out, ORDELIST_FC.i18n.refZero ); }
 		// У штуках округлюємо ВГОРУ - округлення вниз недозамовляє.
 		var buyShow = ( 'pcs' === state.unit ) ? Math.ceil( buy ) : buy;
@@ -381,8 +413,10 @@
 			var kg  = ( null === v.weight_kg || undefined === v.weight_kg ) ? null : Math.round( pcs * v.weight_kg * 10 ) / 10;
 			var stock = 0;
 			for ( var b = 0; b < state.data.batches.length; b++ ) {
-				if ( state.data.batches[ b ].variation_id === v.id ) { stock += state.data.batches[ b ].qty; }
+				if ( state.data.batches[ b ].variation_id === v.id && ! state.data.batches[ b ].expired ) { stock += state.data.batches[ b ].qty; }
 			}
+			// Без жодної партії в товару - показуємо склад WooCommerce (як і панель вище).
+			if ( 0 === state.data.batches.length && null !== v.wc_stock && undefined !== v.wc_stock ) { stock = v.wc_stock; }
 			var $r = $( '<tr/>' );
 			$( '<td/>' ).text( v.name ).appendTo( $r );
 			$( '<td/>' ).text( pcs ).appendTo( $r );
