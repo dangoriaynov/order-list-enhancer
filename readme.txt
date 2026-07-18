@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.58
+Stable tag: 1.0.59
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings - every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.59 =
+* Purchase planning: the panel shows two stable forecasts side by side, for the whole selected period and to the end of the year, both computed only from reference-year sales so plan and reality can be compared.
 
 = 1.0.58 =
 * Purchase planning: the recommendation now covers only the remaining days of the period (nothing is ordered for days already past); presets are month, half-year and year-to-date; the date picker has proper styling; the product search field is wider; switching products hides the previous product's numbers while loading.

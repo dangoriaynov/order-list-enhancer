@@ -287,13 +287,18 @@
 		var futureStart = C.futureSliceStart( p.startYMD, p.endYMD, todayYMD() );
 		var refSlice    = ( null === futureStart ) ? 0 : C.rangeSum( s[ state.refYear ], mmddOf( futureStart ), p.endMMDD );
 		var fc = C.forecast( refSlice, coef, margin );
+		// Два стабільні прогнози ТІЛЬКИ з даних опорного року (факт їх не змінює):
+		// на весь обраний період і до кінця поточного року.
+		var fcPeriod = C.forecast( C.rangeSum( s[ state.refYear ], p.startMMDD, p.endMMDD ), coef, margin );
+		var fcYear   = C.forecast( C.rangeSum( s[ state.refYear ], mmddOf( todayYMD() ), '12-31' ), coef, margin );
 		var weights = weightsMap();
 		var stock = C.stockTotal( state.data.batches, state.target, state.unit, weights );
 		var buy = C.recommendation( fc, stock );
 		var expiring = C.expiringBy( state.data.batches, state.target, state.unit, weights, p.endYMD );
 
 		$out.empty().removeAttr( 'hidden' );
-		row( $out, ORDELIST_FC.i18n.forecastL, fmt( fc, state.unit ) );
+		row( $out, ORDELIST_FC.i18n.forecastPeriodL, fmt( fcPeriod, state.unit ) );
+		row( $out, ORDELIST_FC.i18n.forecastYearL, fmt( fcYear, state.unit ) );
 		row( $out, ORDELIST_FC.i18n.stockL, fmt( stock, state.unit ) );
 		if ( 0 === state.data.batches.length ) { note( $out, ORDELIST_FC.i18n.noBatches ); }
 		if ( auto.refZero && state.coefAuto ) { note( $out, ORDELIST_FC.i18n.refZero ); }
