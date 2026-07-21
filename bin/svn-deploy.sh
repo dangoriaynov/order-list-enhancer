@@ -6,9 +6,12 @@
 # (icon/banner/screenshots) come from .wordpress-org/ and land in SVN /assets.
 #
 # Usage:
-#   bin/svn-deploy.sh            prepare trunk + tag + assets in the local SVN checkout,
-#                                show pending changes, but DO NOT commit (safe default)
-#   bin/svn-deploy.sh --commit   do all of the above, then `svn ci`
+#   bin/svn-deploy.sh               prepare trunk + tag + assets in the local SVN checkout,
+#                                   show pending changes, but DO NOT commit (safe default)
+#   bin/svn-deploy.sh --commit      do all of the above, then `svn ci`
+#   bin/svn-deploy.sh --assets-only push ONLY the WordPress.org page assets (icon/banner/
+#                                   screenshots) from .wordpress-org/ — no version bump/tag.
+#                                   Combine with --commit to actually commit.
 #
 # First commit needs SVN credentials for winter2007d. Either run once interactively so
 # Subversion caches them (~/.subversion/auth), or run the printed `svn ci` yourself.
@@ -19,7 +22,41 @@ SVN_USER="winter2007d"
 SVN_URL="https://plugins.svn.wordpress.org/ordelist"
 WC=".svn-wc"                       # local SVN working copy (gitignored)
 DO_COMMIT="no"
-[ "${1:-}" = "--commit" ] && DO_COMMIT="yes"
+ASSETS_ONLY="no"
+for arg in "$@"; do
+	case "$arg" in
+		--commit) DO_COMMIT="yes" ;;
+		--assets-only) ASSETS_ONLY="yes" ;;
+		*) echo "Unknown option: $arg"; exit 1 ;;
+	esac
+done
+
+sync_assets() {  # rsync .wordpress-org/ -> SVN assets/ (skip the README)
+	if [ -d ".wordpress-org" ] && [ -n "$(ls -A .wordpress-org 2>/dev/null | grep -v '^README' || true)" ]; then
+		rsync -a --delete --exclude='.svn/' --exclude='README*' .wordpress-org/ "$WC/assets/"
+	fi
+}
+
+if [ "$ASSETS_ONLY" = "yes" ]; then
+	if [ ! -d "$WC/.svn" ]; then
+		svn co --depth immediates "$SVN_URL" "$WC"
+	fi
+	svn up "$WC/assets" --set-depth infinity >/dev/null 2>&1 || true
+	mkdir -p "$WC/assets"
+	sync_assets
+	( cd "$WC/assets"
+		svn add --force . >/dev/null 2>&1 || true
+		svn status | awk '/^!/ { sub(/^![[:space:]]+/, ""); print }' | while IFS= read -r f; do svn rm --force "$f" >/dev/null; done
+	)
+	echo "Pending asset changes:"; svn status "$WC/assets" | sed "s#${WC}/##"
+	if [ "$DO_COMMIT" = "yes" ]; then
+		svn ci "$WC/assets" -m "Update plugin page assets" --username "$SVN_USER"
+		echo "Assets committed."
+	else
+		echo; echo "Dry run. Commit with:  svn ci $WC/assets -m \"Update plugin page assets\" --username $SVN_USER"
+	fi
+	exit 0
+fi
 
 ver=$(sed -n 's/^ \* Version:[[:space:]]*//p' order-list-enhancer.php | tr -d '[:space:]')
 [ -n "$ver" ] || { echo "ERROR: cannot read version from order-list-enhancer.php"; exit 1; }
