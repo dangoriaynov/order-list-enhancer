@@ -70,6 +70,30 @@ class ORDELIST_Extras_Matcher {
 		return abs( $sum - (float) $pao_total ) <= $epsilon;
 	}
 
+	/**
+	 * Пропорційно масштабує податки рядка (['subtotal'=>[rate=>amt],'total'=>[...]])
+	 * на частку $fraction. Використовується, щоб перенести частину податку
+	 * батьківського рядка на винесений товарний рядок, лишивши суму податку сталою.
+	 */
+	public static function scale_taxes( $taxes, $fraction ) {
+		$out = array(
+			'subtotal' => array(),
+			'total'    => array(),
+		);
+		if ( ! is_array( $taxes ) ) {
+			return $out;
+		}
+		foreach ( array( 'subtotal', 'total' ) as $kind ) {
+			if ( ! isset( $taxes[ $kind ] ) || ! is_array( $taxes[ $kind ] ) ) {
+				continue;
+			}
+			foreach ( $taxes[ $kind ] as $rate_id => $amt ) {
+				$out[ $kind ][ $rate_id ] = (float) $amt * (float) $fraction;
+			}
+		}
+		return $out;
+	}
+
 	/** Витягує кількість «N бр»/«N бройки» з тексту екстри; типово 1 (межі 1-99). */
 	public static function parse_qty( $text ) {
 		if ( preg_match( '/(\d+)\s*(?:бр|бройк)/u', (string) $text, $m ) ) {

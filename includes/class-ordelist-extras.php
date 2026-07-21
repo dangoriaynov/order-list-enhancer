@@ -73,20 +73,29 @@ class ORDELIST_Extras {
 			$moved      = array();   // provenance for the parent
 			$drop_label = array();   // visible field=>label rows to drop
 
+			// Знімок ДО змін: податок батьківського рядка ділимо пропорційно до ціни,
+			// щоб перенести його частку на винесені рядки й лишити суму податку сталою.
+			$orig_subtotal = (float) $item->get_subtotal();
+			$orig_taxes    = $item->get_taxes();
+			$moved_price   = 0.0;
+
 			foreach ( $addons as $idx => $a ) {
 				$pid = ORDELIST_Extras_Matcher::match( $index, $a['label'] );
 				if ( ! $pid || 'flat_fee' !== $a['price_type'] ) {
 					$keep_pao[] = $pao[ $idx ];
 					continue;
 				}
-				$price   = (float) $a['price'];
-				$qty     = ORDELIST_Extras_Matcher::parse_qty( $a['label'] );
-				$new_id  = self::add_product_line( $order, $pid, $price, array(
+				$price      = (float) $a['price'];
+				$qty        = ORDELIST_Extras_Matcher::parse_qty( $a['label'] );
+				$line_taxes = ( $orig_subtotal > 0 )
+					? ORDELIST_Extras_Matcher::scale_taxes( $orig_taxes, $price / $orig_subtotal )
+					: null;
+				$new_id     = self::add_product_line( $order, $pid, $price, array(
 					'source'   => 'pa',
 					'label'    => $a['label'],
 					'price'    => $price,
 					'src_item' => $item_id,
-				), $qty );
+				), $qty, $line_taxes );
 				if ( 0 === $new_id ) {
 					$keep_pao[] = $pao[ $idx ];
 					continue;
@@ -94,6 +103,7 @@ class ORDELIST_Extras {
 				// Reduce parent line by the add-on price.
 				$item->set_subtotal( (float) $item->get_subtotal() - $price );
 				$item->set_total( (float) $item->get_total() - $price );
+				$moved_price += $price;
 				$drop_label[ $a['field'] ][] = $a['label'];
 				$moved[] = array( 'label' => $a['label'], 'price' => $price, 'item' => $new_id );
 				$notes[] = sprintf( '«%s» → %s (%s)', $a['label'], self::product_name( $pid ), self::money( $price, $order ) );
@@ -102,6 +112,12 @@ class ORDELIST_Extras {
 
 			if ( empty( $moved ) ) {
 				continue;
+			}
+
+			// Лишаємо батьківському рядку тільки його частку податку (решта пішла на винесені).
+			if ( $orig_subtotal > 0 ) {
+				$remaining = max( 0.0, 1.0 - $moved_price / $orig_subtotal );
+				$item->set_taxes( ORDELIST_Extras_Matcher::scale_taxes( $orig_taxes, $remaining ) );
 			}
 
 			// Rewrite _pao_ids / _pao_total to keep only unconverted add-ons.
@@ -138,8 +154,12 @@ class ORDELIST_Extras {
 		return $count;
 	}
 
-	/** Додає новий товарний рядок із заданою ціною та provenance-метою. */
-	public static function add_product_line( WC_Order $order, $product_id, $price, $origin, $qty = 1 ) {
+	/**
+	 * Додає новий товарний рядок із заданою ціною та provenance-метою.
+	 * $taxes - масив податків ['subtotal'=>[rate=>amt],'total'=>[...]] для переносу
+	 * частки податку з джерела (щоб сума податку замовлення не змінилась); null - без податку.
+	 */
+	public static function add_product_line( WC_Order $order, $product_id, $price, $origin, $qty = 1, $taxes = null ) {
 		$product = wc_get_product( $product_id );
 		if ( ! $product ) {
 			return 0;
@@ -150,16 +170,22 @@ class ORDELIST_Extras {
 		$line->set_quantity( $qty );
 		$line->set_subtotal( (float) $price );
 		$line->set_total( (float) $price );
-		$line->set_subtotal_tax( 0 );
-		$line->set_total_tax( 0 );
+		if ( is_array( $taxes ) ) {
+			$line->set_taxes( $taxes ); // set_taxes і сам перерахує subtotal_tax/total_tax як суми
+		} else {
+			$line->set_subtotal_tax( 0 );
+			$line->set_total_tax( 0 );
+		}
 		$line->add_meta_data( '_ordelist_addon_origin', $origin, true );
-		$order->add_item( $line );
-		$line->save();
 
-		// If stock was already reduced for this order, reduce the new product manually.
+		// Якщо запас замовлення вже списаний - списуємо й новий товар ТА тегуємо рядок
+		// _reduced_stock, інакше WooCommerce не поверне цей запас при скасуванні/поверненні.
 		if ( 'yes' === $order->get_meta( '_order_stock_reduced' ) && $product->managing_stock() ) {
 			wc_update_product_stock( $product, $qty, 'decrease' );
+			$line->add_meta_data( '_reduced_stock', $qty, true );
 		}
+		$order->add_item( $line );
+		$line->save();
 		return $line->get_id();
 	}
 
@@ -215,14 +241,22 @@ class ORDELIST_Extras {
 			if ( ! $pid ) {
 				continue;
 			}
-			$price  = (float) $fee->get_total();
-			$qty    = ORDELIST_Extras_Matcher::parse_qty( (string) $fee->get_meta( '_wc_checkout_add_on_label' ) );
+			$price = (float) $fee->get_total();
+			$qty   = ORDELIST_Extras_Matcher::parse_qty( (string) $fee->get_meta( '_wc_checkout_add_on_label' ) );
+			// Увесь fee переноситься - віддаємо новому рядку весь його податок (fee має
+			// лише 'total'; для товарного рядка subtotal_tax == total_tax при відсутності знижки).
+			$fee_taxes = $fee->get_taxes();
+			$fee_total = ( isset( $fee_taxes['total'] ) && is_array( $fee_taxes['total'] ) ) ? $fee_taxes['total'] : array();
+			$taxes     = array(
+				'total'    => $fee_total,
+				'subtotal' => $fee_total,
+			);
 			$new_id = self::add_product_line( $order, $pid, $price, array(
 				'source'   => 'ca',
 				'label'    => $fee->get_name(),
 				'price'    => $price,
 				'src_item' => $fee->get_name(),
-			), $qty );
+			), $qty, $taxes );
 			if ( 0 === $new_id ) {
 				continue;
 			}
