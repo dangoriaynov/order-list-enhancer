@@ -36,9 +36,15 @@ class ORDELIST_Print_Stock_Calc {
 			if ( $pid > 0 ) {
 				$products[ $pid ] = true;
 			}
-			$ref = $vid > 0 ? $vid : $pid;
-			if ( $ref > 0 && isset( $stickers[ $ref ] ) ) {
-				$cid            = (int) $stickers[ $ref ];
+			// Наліпка конкретної варіації має пріоритет; інакше - наліпка батьківського
+			// товару (спільний лічильник на змінний товар), щоб облік не зупинявся мовчки.
+			$cid = 0;
+			if ( $vid > 0 && isset( $stickers[ $vid ] ) ) {
+				$cid = (int) $stickers[ $vid ];
+			} elseif ( $pid > 0 && isset( $stickers[ $pid ] ) ) {
+				$cid = (int) $stickers[ $pid ];
+			}
+			if ( $cid > 0 ) {
 				$deltas[ $cid ] = ( $deltas[ $cid ] ?? 0 ) - $qty;
 			}
 		}

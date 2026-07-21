@@ -23,10 +23,13 @@ ck( null === $r, "outside 5-min window -> no match" );
 $r = ORDELIST_Dup_Guard::find_match( $cur, array( cand( array( 'phone' => '+359999999999', 'created_ts' => $now - 60 ) ) ), 5, $now );
 ck( null === $r, "different phone -> no match" );
 
-foreach ( array( 'cancelled', 'failed', 'trash' ) as $dead ) {
+foreach ( array( 'cancelled', 'failed', 'trash', 'refunded', 'checkout-draft', 'auto-draft' ) as $dead ) {
 	$r = ORDELIST_Dup_Guard::find_match( $cur, array( cand( array( 'status' => $dead, 'created_ts' => $now - 60 ) ) ), 5, $now );
 	ck( null === $r, "dead status '$dead' -> no match" );
 }
+// 'pending' stays LIVE (COD/bank-transfer orders sit pending and are real duplicates).
+$r = ORDELIST_Dup_Guard::find_match( $cur, array( cand( array( 'status' => 'pending', 'created_ts' => $now - 60 ) ) ), 5, $now );
+ck( null !== $r, "pending status stays live -> matches" );
 
 $r = ORDELIST_Dup_Guard::find_match( $cur, array( cand( array( 'phone' => '', 'created_ts' => $now - 60 ) ) ), 5, $now );
 ck( null === $r, "candidate empty phone -> no match" );

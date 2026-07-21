@@ -12,7 +12,7 @@ function check( $cond, $msg ) {
 // Config: product 10 -> sticker cid 100, variation 21 -> sticker cid 101.
 // Sheet cid 200 covers products 10 and 30; sheet cid 201 covers product 99.
 $config = array(
-	'stickers'     => array( 10 => 100, 21 => 101 ),
+	'stickers'     => array( 10 => 100, 21 => 101, 40 => 102 ),
 	'instructions' => array(
 		array( 'id' => 200, 'product_ids' => array( 10, 30 ) ),
 		array( 'id' => 201, 'product_ids' => array( 99 ) ),
@@ -38,6 +38,24 @@ $lines2 = array(
 $d2 = ORDELIST_Print_Stock_Calc::compute( $lines2, $config );
 check( ( $d2[100] ?? 0 ) === -6, 'sticker sums across duplicate lines (-6)' );
 check( ( $d2[200] ?? 0 ) === -1, 'sheet still -1 for duplicate product lines' );
+
+// Case B2: sticker on a VARIABLE PARENT (pid 40) -> variation lines fall back to it.
+$linesP = array(
+	array( 'product_id' => 40, 'variation_id' => 4001, 'qty' => 2 ),
+	array( 'product_id' => 40, 'variation_id' => 4002, 'qty' => 3 ),
+);
+$dP = ORDELIST_Print_Stock_Calc::compute( $linesP, $config );
+check( ( $dP[102] ?? 0 ) === -5, 'variation lines fall back to the parent sticker (-5)' );
+// A variation-specific sticker still wins over the parent when both exist.
+$configBoth = array( 'stickers' => array( 40 => 102, 4001 => 103 ), 'instructions' => array() );
+$dBoth = ORDELIST_Print_Stock_Calc::compute(
+	array(
+		array( 'product_id' => 40, 'variation_id' => 4001, 'qty' => 1 ), // -> 103 (specific)
+		array( 'product_id' => 40, 'variation_id' => 4002, 'qty' => 1 ), // -> 102 (parent)
+	),
+	$configBoth
+);
+check( ( $dBoth[103] ?? 0 ) === -1 && ( $dBoth[102] ?? 0 ) === -1, 'variation-specific sticker wins, others fall back to parent' );
 
 // Case C: untracked product (no sticker row, in no sheet) -> no deltas.
 $d3 = ORDELIST_Print_Stock_Calc::compute( array( array( 'product_id' => 500, 'variation_id' => 0, 'qty' => 9 ) ), $config );
