@@ -36,20 +36,20 @@ msgid ""
 "date."
 msgstr ""
 
-#. translators: 1: order number, 2: minutes ago
+#. translators: %d: minutes ago
 #: includes/class-ordelist-dup-guard.php:175
 #, php-format
 msgid ""
-"You already placed a similar order %2$d min ago (#%1$s). To place another "
-"one, please contact us."
+"You already placed a similar order %d min ago. To place another one, please "
+"contact us."
 msgstr ""
 
-#. translators: 1: order number, 2: minutes ago
+#. translators: %d: minutes ago
 #: includes/class-ordelist-dup-guard.php:192
 #, php-format
 msgid ""
-"You already placed a similar order %2$d min ago (#%1$s). Are you sure you "
-"want to place another one?"
+"You already placed a similar order %d min ago. Are you sure you want to place "
+"another one?"
 msgstr ""
 
 #: includes/class-ordelist-dup-guard.php:229

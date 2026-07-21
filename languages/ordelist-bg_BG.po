@@ -34,21 +34,21 @@ msgstr ""
 #: includes/class-ordelist-dup-guard.php:175
 #, php-format
 msgid ""
-"You already placed a similar order %2$d min ago (#%1$s). To place another "
-"one, please contact us."
+"You already placed a similar order %d min ago. To place another one, please "
+"contact us."
 msgstr ""
-"Вече направихте подобна поръчка преди %2$d мин. (№%1$s). За нова поръчка, "
-"моля свържете се с нас."
+"Вече направихте подобна поръчка преди %d мин. За нова поръчка, моля свържете "
+"се с нас."
 
-#. translators: 1: order number, 2: minutes ago
+#. translators: %d: minutes ago
 #: includes/class-ordelist-dup-guard.php:192
 #, php-format
 msgid ""
-"You already placed a similar order %2$d min ago (#%1$s). Are you sure you "
-"want to place another one?"
+"You already placed a similar order %d min ago. Are you sure you want to place "
+"another one?"
 msgstr ""
-"Вече направихте подобна поръчка преди %2$d мин. (№%1$s). Сигурни ли сте, че "
-"искате да направите още една?"
+"Вече направихте подобна поръчка преди %d мин. Сигурни ли сте, че искате да "
+"направите още една?"
 
 #: includes/class-ordelist-dup-guard.php:229
 msgid "Yes, order again"

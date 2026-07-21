@@ -10,8 +10,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ORDELIST_Dup_Guard {
 
-	/** Статуси, які НЕ вважаємо «живим» замовленням (можна законно перезамовити). */
-	const DEAD_STATUSES = array( 'cancelled', 'failed', 'trash' );
+	/**
+	 * Статуси, які НЕ вважаємо «живим» замовленням (можна законно перезамовити).
+	 * 'pending' лишається живим НАВМИСНО: для наложеного платежу/банк.переказу
+	 * замовлення законно висить pending, і саме там трапляються дублікати. Власне
+	 * незавершене замовлення клієнта (повторна спроба оплати) виключається окремо
+	 * за order_awaiting_payment у candidates(), а не через цей список.
+	 */
+	const DEAD_STATUSES = array( 'cancelled', 'failed', 'trash', 'refunded', 'checkout-draft', 'auto-draft' );
 
 	/**
 	 * Чи дублює поточний сабміт нещодавнє замовлення-кандидат?
@@ -122,6 +128,10 @@ class ORDELIST_Dup_Guard {
 		if ( ! function_exists( 'wc_get_orders' ) ) {
 			return array();
 		}
+		// Власне незавершене замовлення клієнта (та сама сесія, повторна спроба
+		// оплати після невдачі/повернення з шлюзу) не має блокувати його ж повтор.
+		$skip_id = ( function_exists( 'WC' ) && WC()->session ) ? (int) WC()->session->get( 'order_awaiting_payment' ) : 0;
+
 		$since  = time() - self::window_min() * 60;
 		$orders = wc_get_orders(
 			array(
@@ -136,6 +146,9 @@ class ORDELIST_Dup_Guard {
 		$cc  = self::cc();
 		$out = array();
 		foreach ( $orders as $o ) {
+			if ( $skip_id && (int) $o->get_id() === $skip_id ) {
+				continue;
+			}
 			$out[] = array(
 				'number'     => $o->get_order_number(),
 				'phone'      => ORDELIST_Phone::normalize( (string) $o->get_billing_phone(), $cc ),
@@ -169,11 +182,12 @@ class ORDELIST_Dup_Guard {
 		}
 
 		// Block mode: hard stop, no confirm round-trip / no modal (plain error, no OLEDUP| marker).
+		// Не розкриваємо номер чужого замовлення - повідомлення бачить будь-який гість
+		// на чекауті (уникаємо перебору «телефон -> номер замовлення»).
 		if ( 'block' === ORDELIST_Settings::get()['dup_guard_mode'] ) {
 			$msg = sprintf(
-				/* translators: 1: order number, 2: minutes ago */
-				__( 'You already placed a similar order %2$d min ago (#%1$s). To place another one, please contact us.', 'ordelist' ),
-				$match['number'],
+				/* translators: %d: minutes ago */
+				__( 'You already placed a similar order %d min ago. To place another one, please contact us.', 'ordelist' ),
 				$match['mins']
 			);
 			if ( $errors instanceof WP_Error ) {
@@ -188,9 +202,8 @@ class ORDELIST_Dup_Guard {
 		WC()->session->set( self::SESS_PENDING, $current['cart_hash'] );
 
 		$msg = 'OLEDUP|' . sprintf(
-			/* translators: 1: order number, 2: minutes ago */
-			__( 'You already placed a similar order %2$d min ago (#%1$s). Are you sure you want to place another one?', 'ordelist' ),
-			$match['number'],
+			/* translators: %d: minutes ago */
+			__( 'You already placed a similar order %d min ago. Are you sure you want to place another one?', 'ordelist' ),
 			$match['mins']
 		);
 		if ( $errors instanceof WP_Error ) {

@@ -121,17 +121,23 @@ class ORDELIST_Warranty {
 			}
 		}
 
+		// Прапорець стану ставимо ПЕРШИМ і зберігаємо - він блокує повторне списання
+		// при повторі хука (reconcile бачить 'consumed' і не заходить у consume знову).
 		$order->update_meta_data( self::STATE_META, 'consumed' );
-		if ( $map ) {
-			$order->update_meta_data( self::CONSUMED_META, $map );
-		}
 		$order->save();
 
-		// Тільки після save() списуємо партії. Якщо процес впаде між save() і цим циклом -
-		// партії залишаться НЕсписаними (недосписання видно на сторінці і виправляється вручну),
-		// замість подвійного списання при повторі хука.
+		// Списуємо партії й записуємо ФАКТИЧНО застосоване. Мапу списання зберігаємо
+		// вже ПІСЛЯ циклу, тож restore відкочує реально застосоване, а не намір: якщо
+		// процес впаде посеред циклу, CONSUMED_META лишиться порожньою і restore не
+		// поверне зайвого (недосписання - безпечний бік, як і раніше; роздування - ні).
+		$applied = array();
 		foreach ( $map as $bid => $take ) {
 			ORDELIST_Warranty_Store::take_qty( (int) $bid, (int) $take );
+			$applied[ (int) $bid ] = (int) $take;
+		}
+		if ( $applied ) {
+			$order->update_meta_data( self::CONSUMED_META, $applied );
+			$order->save();
 		}
 	}
 
