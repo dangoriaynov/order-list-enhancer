@@ -52,5 +52,22 @@ check( ORDELIST_Extras_Matcher::parse_qty( '+ 500 г янтарна кисели
 check( ORDELIST_Extras_Matcher::parse_qty( '' ) === 1, 'parse_qty empty -> 1' );
 check( ORDELIST_Extras_Matcher::parse_qty( '+ 16 бр pH тест ленти (5 мм х 50 мм)' ) === 16, 'parse_qty picks the бр count, not the мм' );
 
+// scale_taxes: proportional split preserves the total across parent + moved line.
+$tx = array( 'subtotal' => array( 5 => 4.00 ), 'total' => array( 5 => 4.00 ) );
+$half = ORDELIST_Extras_Matcher::scale_taxes( $tx, 0.5 );
+check( $half['subtotal'][5] === 2.0 && $half['total'][5] === 2.0, 'scale_taxes halves each rate' );
+$full = ORDELIST_Extras_Matcher::scale_taxes( $tx, 1.0 );
+check( $full['total'][5] === 4.0, 'scale_taxes by 1 keeps amount' );
+$zero = ORDELIST_Extras_Matcher::scale_taxes( $tx, 0.0 );
+check( $zero['total'][5] === 0.0, 'scale_taxes by 0 zeros amount' );
+// moved fraction + remaining fraction == original, per rate (total conserved).
+$frac    = 1.5 / 6.0; // move 1.5 of a 6.00 line
+$moved   = ORDELIST_Extras_Matcher::scale_taxes( $tx, $frac );
+$remain  = ORDELIST_Extras_Matcher::scale_taxes( $tx, 1 - $frac );
+check( abs( ( $moved['total'][5] + $remain['total'][5] ) - 4.00 ) < 1e-9, 'moved + remaining tax == original' );
+check( ORDELIST_Extras_Matcher::scale_taxes( array(), 0.5 ) === array( 'subtotal' => array(), 'total' => array() ), 'scale_taxes of empty -> empty structure' );
+$multi = ORDELIST_Extras_Matcher::scale_taxes( array( 'total' => array( 5 => 3.0, 9 => 1.0 ) ), 0.5 );
+check( $multi['total'][5] === 1.5 && $multi['total'][9] === 0.5 && $multi['subtotal'] === array(), 'scale_taxes handles multiple rates and missing subtotal' );
+
 echo $fails ? "\n$fails FAILED\n" : "\nALL PASS\n";
 exit( $fails ? 1 : 0 );

@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.68
+Stable tag: 1.0.69
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ No. It only reads orders in your admin and renders the UI locally.
 4. Settings - every feature has a toggle, with color pickers, saved without a reload.
 
 == Changelog ==
+
+= 1.0.69 =
+* Extras conversion: a converted add-on now carries a proportional slice of the source line's tax (keeping the order's total tax attribution correct), and its stock is tagged so WooCommerce restocks it if the order is cancelled or refunded.
 
 = 1.0.68 =
 * Duplicate-order guard no longer blocks a customer's own retry after a failed or abandoned payment, and its checkout message no longer reveals another order's number. Print consumables: a sticker attached to a variable product's parent is now counted for its variations. Warranty batches: stock restored on cancellation now reverses exactly what was consumed.
