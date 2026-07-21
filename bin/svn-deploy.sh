@@ -31,9 +31,9 @@ for arg in "$@"; do
 	esac
 done
 
-sync_assets() {  # rsync .wordpress-org/ -> SVN assets/ (skip the README)
-	if [ -d ".wordpress-org" ] && [ -n "$(ls -A .wordpress-org 2>/dev/null | grep -v '^README' || true)" ]; then
-		rsync -a --delete --exclude='.svn/' --exclude='README*' .wordpress-org/ "$WC/assets/"
+sync_assets() {  # rsync .wordpress-org/ -> SVN assets/ (only the published files, not sources/README)
+	if [ -d ".wordpress-org" ] && [ -n "$(ls -A .wordpress-org 2>/dev/null | grep -vE '^(README|src)' || true)" ]; then
+		rsync -a --delete --exclude='.svn/' --exclude='README*' --exclude='src/' .wordpress-org/ "$WC/assets/"
 	fi
 }
 
