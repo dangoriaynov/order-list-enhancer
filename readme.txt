@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.69
+Stable tag: 1.0.70
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,8 +76,16 @@ No. It only reads orders in your admin and renders the UI locally.
 2. The customer popup - every order with date, items, total and status, plus a summary.
 3. The order screen: colored delivery, order total and one-click copy buttons.
 4. Settings - every feature has a toggle, with color pickers, saved without a reload.
+5. Purchase planning: every year's sales as cumulative curves, with a dashed projection of the current year.
+6. Purchase planning: forecast to year-end and a recommended order broken down by variation.
+7. Purchase planning: sold amounts and sellable stock per variation, with quick stock entry.
+8. Warranty dates: stock batches with best-before dates, consumed oldest first, with expiry alerts.
+9. Print consumables: sticker and instruction-sheet stock, drawn down per order, with low-stock alerts.
 
 == Changelog ==
+
+= 1.0.70 =
+* Added WordPress.org screenshots for purchase planning, warranty dates and print consumables. No code changes.
 
 = 1.0.69 =
 * Extras conversion: a converted add-on now carries a proportional slice of the source line's tax (keeping the order's total tax attribution correct), and its stock is tagged so WooCommerce restocks it if the order is cancelled or refunded.
