@@ -94,9 +94,7 @@ rsync -a --delete --exclude='.svn/' "$tmp/" "$WC/trunk/"
 rm -rf "$tmp"
 
 # 3. Sync WordPress.org page assets (icon / banner / screenshots), if provided.
-if [ -d ".wordpress-org" ] && [ -n "$(ls -A .wordpress-org 2>/dev/null | grep -v '^README' || true)" ]; then
-	rsync -a --delete --exclude='.svn/' --exclude='README*' .wordpress-org/ "$WC/assets/"
-fi
+sync_assets
 
 # 4. Reconcile SVN adds/removes to match the working tree.
 (
