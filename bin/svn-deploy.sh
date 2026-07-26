@@ -106,6 +106,13 @@ sync_assets
 )
 
 # 5. Tag the release: copy the prepared trunk to tags/<ver> (committed in the same revision).
+# A dry run leaves tags/<ver> behind uncommitted, and `svn cp src dst` with dst already a
+# directory copies INTO it - that is how 1.0.71 first shipped a nested tags/1.0.71/trunk
+# (r3623841, removed in r3623842). Drop the stale copy so dry-run-then-commit is safe.
+if [ -e "$WC/tags/$ver" ]; then
+	svn revert -R "$WC/tags/$ver" >/dev/null 2>&1 || true
+	rm -rf "$WC/tags/$ver"
+fi
 svn cp "$WC/trunk" "$WC/tags/$ver"
 
 echo
