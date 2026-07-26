@@ -86,6 +86,7 @@ class ORDELIST_Settings_Page {
 					'saved'   => __( 'Saved.', 'ordelist' ),
 					'error'   => __( 'Save failed.', 'ordelist' ),
 					'expired' => __( 'Session expired - reload the page and try again.', 'ordelist' ),
+					'unsaved' => __( 'Unsaved changes - click "Save changes".', 'ordelist' ),
 				),
 			)
 		);

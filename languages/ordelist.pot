@@ -419,6 +419,10 @@ msgstr ""
 msgid "Session expired - reload the page and try again."
 msgstr ""
 
+#: includes/class-ordelist-settings-page.php:67
+msgid "Unsaved changes - click \"Save changes\"."
+msgstr ""
+
 #: includes/class-ordelist-settings-page.php:152
 msgid "Orders"
 msgstr ""

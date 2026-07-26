@@ -37,27 +37,73 @@ jQuery( function ( $ ) {
 		}
 	} );
 
+	// Unsaved-changes guard. Flipping a switch only changes the form - nothing
+	// is stored until the save bar is used, and a switch that slid over reads
+	// as already applied. Mark the bar whenever the form differs from what was
+	// last stored, and hold the browser on the way out.
+	//
+	// Compared against a snapshot rather than latched on the first event: the
+	// color pickers and product selects fire change on the inputs they wrap
+	// while initialising, and a page that greets you already "unsaved" (and
+	// prompts on every exit) trains you to ignore the warning. Comparing also
+	// clears the mark when an edit is undone by hand.
+	var $status  = $form.find( '.ole-save-status' );
+	var $bar     = $form.find( '.ole-savebar' );
+	var dirty    = false;
+	var baseline = null; // form as last stored; null until the initial snapshot
+
+	function idleStatus() {
+		if ( dirty ) { $status.text( ORDELIST_SETTINGS.i18n.unsaved ).css( 'color', '#b26a00' ); }
+		else { $status.text( '' ).css( 'color', '' ); }
+	}
+	function setDirty( on ) {
+		if ( dirty === on ) { return; }
+		dirty = on;
+		$bar.toggleClass( 'is-dirty', on );
+		idleStatus();
+	}
+	function refresh() {
+		if ( null !== baseline ) { setDirty( $form.serialize() !== baseline ); }
+	}
+	// Deferred: the row add/remove handlers that rebuild the table are bound on
+	// document, so they run after this one - serialize only once they are done.
+	function refreshLater() { setTimeout( refresh, 0 ); }
+
+	setTimeout( function () {
+		baseline = $form.serialize();
+		$form.on( 'change input', ':input', refresh );
+		$form.on( 'click', '.ole-rule-add, .ole-rule-remove, .ole-extra-add, .ole-extra-remove', refreshLater );
+	}, 0 );
+
+	window.addEventListener( 'beforeunload', function ( e ) {
+		if ( ! dirty ) { return; }
+		e.preventDefault();
+		e.returnValue = ''; // Chrome only shows its native prompt when this is set.
+	} );
+
 	// AJAX save - no page reload. A nonce lives 24h; if the tab sat open longer
 	// the save 403s, so we fetch a fresh nonce once and retry before giving up.
 	$form.on( 'submit', function ( e ) {
 		e.preventDefault();
-		var $btn    = $form.find( 'button[type=submit]' );
-		var $status = $form.find( '.ole-save-status' );
+		var $btn = $form.find( 'button[type=submit]' );
 		$btn.prop( 'disabled', true );
 		$status.text( ORDELIST_SETTINGS.i18n.saving ).css( 'color', '' );
 
 		function finish( msg, color ) {
 			$status.text( msg ).css( 'color', color );
 			$btn.prop( 'disabled', false );
-			setTimeout( function () { $status.text( '' ); }, 4000 );
+			setTimeout( idleStatus, 4000 );
 		}
 		function send( isRetry ) {
 			var data = $form.serializeArray();
+			var sent = $form.serialize(); // what this request stores, not what the form holds when it answers
 			data.push( { name: 'action', value: 'ordelist_save_settings' } );
 			data.push( { name: 'nonce', value: ORDELIST_SETTINGS.nonce } );
 			$.post( ORDELIST_SETTINGS.ajaxUrl, data )
 				.done( function ( res ) {
 					if ( res && res.success ) {
+						baseline = sent;
+						refresh(); // an edit made while the request was in flight stays flagged
 						finish( ORDELIST_SETTINGS.i18n.saved, '#1a7a3c' );
 					} else {
 						finish( ORDELIST_SETTINGS.i18n.error, '#d63638' );

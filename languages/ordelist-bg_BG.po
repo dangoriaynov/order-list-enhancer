@@ -426,6 +426,10 @@ msgstr "Неуспешно запазване."
 msgid "Session expired - reload the page and try again."
 msgstr "Сесията е изтекла - презаредете страницата и опитайте отново."
 
+#: includes/class-ordelist-settings-page.php:67
+msgid "Unsaved changes - click \"Save changes\"."
+msgstr "Има незапазени промени - натиснете \"Запази промените\"."
+
 #: includes/class-ordelist-settings-page.php:152
 msgid "Orders"
 msgstr "Поръчки"

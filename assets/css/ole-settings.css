@@ -52,6 +52,9 @@
 	position: sticky; bottom: 0; background: #fff; border-top: 1px solid #dcdcde;
 	padding: 12px 0; margin-top: 8px; display: flex; align-items: center; gap: 12px;
 }
+/* Pending edits: the bar has to read as "not stored yet" at a glance. */
+.ole-savebar.is-dirty { border-top: 2px solid #dba617; background: #fcf9e8; }
+.ole-savebar.is-dirty .button-primary { box-shadow: 0 0 0 3px rgba( 219, 166, 23, .45 ); }
 
 /* Keep rule/mapping tables full width inside cards (migrated from the old inline <style>). */
 #ole-settings-form .form-table { width: 100%; }
