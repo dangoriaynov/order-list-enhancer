@@ -87,6 +87,7 @@ class ORDELIST_Settings_Page {
 					'error'   => __( 'Save failed.', 'ordelist' ),
 					'expired' => __( 'Session expired - reload the page and try again.', 'ordelist' ),
 					'unsaved' => __( 'Unsaved changes - click "Save changes".', 'ordelist' ),
+					'emoji'   => __( 'Not saved: this database cannot store emoji. Remove the emoji from the checkout texts, or convert the wp_options table to utf8mb4.', 'ordelist' ),
 				),
 			)
 		);
@@ -478,22 +479,22 @@ class ORDELIST_Settings_Page {
 		);
 		?>
 		<?php
-		// Show the effective checkout texts instead of empty fields, so what the
-		// customer sees is explicit; an emptied field still falls back to the default.
-		$dn_def   = ORDELIST_Delivery_Notice::defaults_copy();
-		$dn_title = '' !== trim( (string) $o['delivery_notice_title'] ) ? $o['delivery_notice_title'] : $dn_def['title'];
-		$dn_body  = '' !== trim( (string) $o['delivery_notice_body'] ) ? $o['delivery_notice_body'] : $dn_def['body'];
-		$dn_vac   = '' !== trim( (string) $o['delivery_vacation_text'] ) ? $o['delivery_vacation_text'] : $dn_def['vacation'];
+		// The effective texts go in as placeholders, not values. Showing them as
+		// values meant every save wrote the defaults back into the option - and
+		// they carry emoji, which a database whose option_value column is still
+		// utf8mb3 cannot store. wpdb rejects the whole row in that case, without
+		// an error, so one unrelated setting could silently discard the save.
+		$dn_def = ORDELIST_Delivery_Notice::defaults_copy();
 		?>
 		<table class="form-table"><tbody>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Notice title', 'ordelist' ); ?></th>
-				<td><input type="text" name="delivery_notice_title" value="<?php echo esc_attr( $dn_title ); ?>" class="regular-text" style="width:100%;max-width:680px"/>
+				<td><input type="text" name="delivery_notice_title" value="<?php echo esc_attr( $o['delivery_notice_title'] ); ?>" placeholder="<?php echo esc_attr( $dn_def['title'] ); ?>" class="regular-text" style="width:100%;max-width:680px"/>
 				<p class="description"><?php esc_html_e( 'Bold first line. Leave empty for the default.', 'ordelist' ); ?></p></td>
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Notice text', 'ordelist' ); ?></th>
-				<td><textarea name="delivery_notice_body" rows="2" class="large-text" style="max-width:680px"><?php echo esc_textarea( $dn_body ); ?></textarea>
+				<td><textarea name="delivery_notice_body" rows="2" class="large-text" style="max-width:680px" placeholder="<?php echo esc_attr( $dn_def['body'] ); ?>"><?php echo esc_textarea( $o['delivery_notice_body'] ); ?></textarea>
 				<p class="description"><?php esc_html_e( 'Explanation under the title. Leave empty for the default.', 'ordelist' ); ?></p></td>
 			</tr>
 			<tr>
@@ -507,7 +508,7 @@ class ORDELIST_Settings_Page {
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Vacation text', 'ordelist' ); ?></th>
-				<td><textarea name="delivery_vacation_text" rows="2" class="large-text" style="max-width:680px"><?php echo esc_textarea( $dn_vac ); ?></textarea>
+				<td><textarea name="delivery_vacation_text" rows="2" class="large-text" style="max-width:680px" placeholder="<?php echo esc_attr( $dn_def['vacation'] ); ?>"><?php echo esc_textarea( $o['delivery_vacation_text'] ); ?></textarea>
 				<p class="description"><?php /* translators: %s is a literal token the admin types into their text; it is not substituted here. */ esc_html_e( 'Use %s where the date should appear. Leave empty for the default.', 'ordelist' ); ?></p></td>
 			</tr>
 		</tbody></table>
@@ -791,7 +792,12 @@ class ORDELIST_Settings_Page {
 		// without anything, anywhere, showing an error.
 		$stored = get_option( ORDELIST_Settings::OPTION );
 		if ( ! is_array( $stored ) || $stored != $opts ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison -- key order is irrelevant; values round-trip through serialize().
-			wp_send_json_error( array( 'message' => 'not-stored' ) );
+			// A database whose option_value column is still utf8mb3 cannot hold a
+			// 4-byte character (an emoji, typically). wpdb rejects the whole row for
+			// it and reports no MySQL error, so name that case - otherwise a single
+			// character in one text field looks like the whole screen is broken.
+			$four_byte = 1 === preg_match( '/[\x{10000}-\x{10FFFF}]/u', maybe_serialize( $opts ) );
+			wp_send_json_error( array( 'message' => $four_byte ? 'not-stored-4byte' : 'not-stored' ) );
 		}
 		ORDELIST_Warranty::sync_schedule( $opts );
 		wp_send_json_success( array( 'message' => 'saved' ) );

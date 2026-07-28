@@ -114,6 +114,8 @@ jQuery( function ( $ ) {
 						baseline = sent;
 						refresh(); // an edit made while the request was in flight stays flagged
 						finish( ORDELIST_SETTINGS.i18n.saved, '#1a7a3c' );
+					} else if ( res && res.data && 'not-stored-4byte' === res.data.message ) {
+						finish( ORDELIST_SETTINGS.i18n.emoji, '#d63638' );
 					} else {
 						finish( ORDELIST_SETTINGS.i18n.error, '#d63638' );
 					}
