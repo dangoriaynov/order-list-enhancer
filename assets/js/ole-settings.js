@@ -81,6 +81,15 @@ jQuery( function ( $ ) {
 		e.returnValue = ''; // Chrome only shows its native prompt when this is set.
 	} );
 
+	// Drive the save from the button click and suppress the implicit submission,
+	// instead of waiting for the form's own submit event. If anything breaks that
+	// event - a stray handler on the page, an overlay, a form association the
+	// parser split - the click still saves, and exactly one request goes out.
+	$form.on( 'click', 'button[type=submit]', function ( e ) {
+		e.preventDefault();
+		$form.trigger( 'submit' );
+	} );
+
 	// AJAX save - no page reload. A nonce lives 24h; if the tab sat open longer
 	// the save 403s, so we fetch a fresh nonce once and retry before giving up.
 	$form.on( 'submit', function ( e ) {

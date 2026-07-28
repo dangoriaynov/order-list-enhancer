@@ -784,6 +784,15 @@ class ORDELIST_Settings_Page {
 			'forecast_margin'                   => $int( 'forecast_margin', 0, 100, 20 ),
 		);
 		update_option( ORDELIST_Settings::OPTION, $opts );
+		// Report success only if the option really holds what was submitted.
+		// update_option() also returns false for an unchanged value, so the write
+		// is confirmed by reading it back rather than by that return. Claiming
+		// "saved" unconditionally is how a settings change went missing twice
+		// without anything, anywhere, showing an error.
+		$stored = get_option( ORDELIST_Settings::OPTION );
+		if ( ! is_array( $stored ) || $stored != $opts ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison -- key order is irrelevant; values round-trip through serialize().
+			wp_send_json_error( array( 'message' => 'not-stored' ) );
+		}
 		ORDELIST_Warranty::sync_schedule( $opts );
 		wp_send_json_success( array( 'message' => 'saved' ) );
 	}

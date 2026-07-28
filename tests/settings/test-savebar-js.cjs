@@ -42,6 +42,12 @@ Col.prototype.text = function ( v ) {
 	return this;
 };
 Col.prototype.serialize = function () { return formState; };
+Col.prototype.trigger = function ( ev ) {
+	this.nodes.forEach( n => n.handlers
+		.filter( h => h.events === ev && ! h.selector )
+		.forEach( h => h.fn( { preventDefault: function () {} } ) ) );
+	return this;
+};
 Col.prototype.serializeArray = function () { return [ { name: 'ship_enabled', value: 'on' } ]; };
 Col.prototype.css = function () { return this; };
 Col.prototype.prop = function () { return this; };
@@ -118,6 +124,16 @@ function leavingPage() {
 }
 function submit() { submitH.fn( { preventDefault: function () {} } ); }
 
+// Clicking the save button must drive the save itself, not rely on the form
+// dispatching a submit event - and must suppress the implicit submission so the
+// request goes out exactly once.
+const saveClickH = form.handlers.find( h => 'click' === h.events && 'button[type=submit]' === h.selector );
+function clickSave() {
+	let prevented = false;
+	saveClickH.fn( { preventDefault: function () { prevented = true; } } );
+	return prevented;
+}
+
 // --- assertions ------------------------------------------------------------
 ck( !! changeH, 'a change/input listener is bound for form fields' );
 ck( addClicks.length >= 2, 'the add/remove row buttons re-check the form as well as rebuild it' );
@@ -181,7 +197,29 @@ flush( 4000 );
 ck( 'UNSAVED' === status.textVal, 'the in-flight edit is reported as unsaved once the status resets' );
 ck( leavingPage(), 'beforeunload still blocks for the in-flight edit' );
 
+// The button click alone must produce the save request.
+let postCalls = 0;
+$.post = function () {
+	postCalls++;
+	return {
+		done: function ( fn ) { posted = fn; return this; },
+		fail: function () { return this; },
+	};
+};
+formState = 'ship_enabled=off';
+changeH.fn();
+status.textVal = '';
+const prevented = clickSave();
+ck( prevented, 'the save click suppresses the implicit form submission' );
+ck( 1 === postCalls, 'the save click sends exactly one request' );
+ck( 'SAVING' === status.textVal, 'the save click reports that saving started' );
+posted( { success: true } );
+ck( ! bar.classes.has( 'is-dirty' ), 'the click-driven save clears the dirty mark' );
+flush( 4000 );
+
 // A failed save must keep the guard armed - the changes are still only local.
+formState = 'ship_enabled=off&rule_keyword%5B%5D=Econt';
+changeH.fn();
 $.post = function () {
 	return {
 		done: function ( fn ) { fn( { success: false } ); return this; },
