@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.71
+Stable tag: 1.0.72
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ No. It only reads orders in your admin and renders the UI locally.
 9. Print consumables: sticker and instruction-sheet stock, drawn down per order, with low-stock alerts.
 
 == Changelog ==
+
+= 1.0.72 =
+* Settings: saving no longer reports success unless the option really holds the submitted values, and the save button drives the request from its own click instead of relying on the form's submit event.
 
 = 1.0.71 =
 * Settings: the save bar now marks itself when a change has not been stored yet, and the browser asks before you leave the page with unsaved changes. A toggle no longer looks applied before it is saved.
