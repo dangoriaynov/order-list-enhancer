@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.72
+Stable tag: 1.0.73
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ No. It only reads orders in your admin and renders the UI locally.
 9. Print consumables: sticker and instruction-sheet stock, drawn down per order, with low-stock alerts.
 
 == Changelog ==
+
+= 1.0.73 =
+* Checkout notice texts are offered as placeholders instead of pre-filled values, so saving no longer writes the default texts (which contain emoji) into the database. On a site whose wp_options column is still utf8mb3 that made every save fail silently. If it does fail, the settings page now says why.
 
 = 1.0.72 =
 * Settings: saving no longer reports success unless the option really holds the submitted values, and the save button drives the request from its own click instead of relying on the form's submit event.
