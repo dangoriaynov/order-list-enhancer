@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: includes/class-ordelist-delivery-notice.php:37
-msgid "📦 This is the SHIPPING date"
+msgid "This is the SHIPPING date"
 msgstr ""
 
 #: includes/class-ordelist-delivery-notice.php:38
@@ -32,7 +32,7 @@ msgstr ""
 #: includes/class-ordelist-delivery-notice.php:40
 #, php-format
 msgid ""
-"🌴 We are on vacation until %s. Orders placed now will be shipped after that "
+"We are on vacation until %s. Orders placed now will be shipped after that "
 "date."
 msgstr ""
 

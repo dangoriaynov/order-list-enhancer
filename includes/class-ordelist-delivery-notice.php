@@ -34,10 +34,10 @@ class ORDELIST_Delivery_Notice {
 	/** Перекладні дефолти текстів (фолбек, коли налаштування порожні). */
 	public static function defaults_copy() {
 		return array(
-			'title'    => __( '📦 This is the SHIPPING date', 'ordelist' ),
+			'title'    => __( 'This is the SHIPPING date', 'ordelist' ),
 			'body'     => __( 'Not the date you receive it. Delivery to the courier office usually takes about 1 working day.', 'ordelist' ),
 			/* translators: %s: vacation end date. */
-			'vacation' => __( '🌴 We are on vacation until %s. Orders placed now will be shipped after that date.', 'ordelist' ),
+			'vacation' => __( 'We are on vacation until %s. Orders placed now will be shipped after that date.', 'ordelist' ),
 		);
 	}
 
