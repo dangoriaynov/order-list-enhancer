@@ -424,7 +424,7 @@ msgid "Unsaved changes - click \"Save changes\"."
 msgstr ""
 
 #: includes/class-ordelist-settings-page.php:67
-msgid "Not saved: this database cannot store emoji. Remove the emoji from the checkout texts, or convert the wp_options table to utf8mb4."
+msgid "Not saved: this database cannot store emoji. Remove them from the fields above, or convert the wp_options table to utf8mb4."
 msgstr ""
 
 #: includes/class-ordelist-settings-page.php:152

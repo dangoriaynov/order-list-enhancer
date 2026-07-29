@@ -98,7 +98,11 @@ class ORDELIST_Plugin {
 			if ( '' === $val || '-1' === $val ) {
 				continue;
 			}
-			$clean[ $val ] = sanitize_text_field( (string) $label );
+			// Labels come from other plugins and some carry emoji. On a database whose
+			// option columns are still utf8mb3, wpdb rejects the whole row for a 4-byte
+			// character and the cache would silently never populate; drop them instead.
+			// This value only feeds a dropdown, so losing an ornament costs nothing.
+			$clean[ $val ] = preg_replace( '/[\x{10000}-\x{10FFFF}]/u', '', sanitize_text_field( (string) $label ) );
 		}
 		update_option( ORDELIST_Settings::BULK_ACTIONS, $clean, false );
 		wp_send_json_success();

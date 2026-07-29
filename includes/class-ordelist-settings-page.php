@@ -87,7 +87,7 @@ class ORDELIST_Settings_Page {
 					'error'   => __( 'Save failed.', 'ordelist' ),
 					'expired' => __( 'Session expired - reload the page and try again.', 'ordelist' ),
 					'unsaved' => __( 'Unsaved changes - click "Save changes".', 'ordelist' ),
-					'emoji'   => __( 'Not saved: this database cannot store emoji. Remove the emoji from the checkout texts, or convert the wp_options table to utf8mb4.', 'ordelist' ),
+					'emoji'   => __( 'Not saved: this database cannot store emoji. Remove them from the fields above, or convert the wp_options table to utf8mb4.', 'ordelist' ),
 				),
 			)
 		);
