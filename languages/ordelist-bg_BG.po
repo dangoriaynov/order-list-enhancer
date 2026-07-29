@@ -1184,3 +1184,19 @@ msgstr "Продадено за периода"
 
 msgid "Part of the stock expires before it can be sold - the recommendation covers the gap."
 msgstr "Част от наличността изтича преди да може да се продаде - препоръката покрива разликата."
+
+#: includes/class-ordelist-settings-page.php:214
+msgid "Row coloring"
+msgstr "Оцветяване на реда"
+
+#: includes/class-ordelist-settings-page.php:214
+msgid "Outline and tint the rows of a repeat customer."
+msgstr "Огражда и оцветява редовете на повторен клиент."
+
+#: includes/class-ordelist-settings-page.php:214
+msgid "Customer badge"
+msgstr "Бейдж на клиента"
+
+#: includes/class-ordelist-settings-page.php:214
+msgid "Show the customer badge, which opens the list of their orders."
+msgstr "Показва бейджа на клиента, който отваря списъка с неговите поръчки."

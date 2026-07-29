@@ -215,6 +215,14 @@ class ORDELIST_Settings_Page {
 		?>
 		<table class="form-table"><tbody>
 			<tr>
+				<th scope="row"><?php esc_html_e( 'Row coloring', 'ordelist' ); ?></th>
+				<td><?php echo wp_kses( self::switch_html( 'dup_color_enabled', ORDELIST_Settings::is_yes( $o, 'dup_color_enabled' ), __( 'Outline and tint the rows of a repeat customer.', 'ordelist' ) ), self::KSES_SWITCH ); ?> <?php esc_html_e( 'Outline and tint the rows of a repeat customer.', 'ordelist' ); ?></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Customer badge', 'ordelist' ); ?></th>
+				<td><?php echo wp_kses( self::switch_html( 'dup_badge_enabled', ORDELIST_Settings::is_yes( $o, 'dup_badge_enabled' ), __( 'Show the customer badge, which opens the list of their orders.', 'ordelist' ) ), self::KSES_SWITCH ); ?> <?php esc_html_e( 'Show the customer badge, which opens the list of their orders.', 'ordelist' ); ?></td>
+			</tr>
+			<tr>
 				<th scope="row"><?php esc_html_e( 'Match mode', 'ordelist' ); ?></th>
 				<td>
 					<?php $mode = $o['match_mode']; ?>
@@ -744,6 +752,8 @@ class ORDELIST_Settings_Page {
 			'extras_enabled'         => $bool( 'extras_enabled' ),
 			'extras_map'             => $extras_map,
 			'dup_enabled'           => $bool( 'dup_enabled' ),
+			'dup_color_enabled'     => $bool( 'dup_color_enabled' ),
+			'dup_badge_enabled'     => $bool( 'dup_badge_enabled' ),
 			'match_mode'            => in_array( $match_mode, array( 'phone', 'names', 'name_phone' ), true ) ? $match_mode : 'phone',
 			'scan_limit'            => $int( 'scan_limit', 100, 5000, 1500 ),
 			'dup_window_days'       => $int( 'dup_window_days', 1, 60, 3 ),
