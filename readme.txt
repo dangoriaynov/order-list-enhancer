@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.75
+Stable tag: 1.0.76
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ No. It only reads orders in your admin and renders the UI locally.
 9. Print consumables: sticker and instruction-sheet stock, drawn down per order, with low-stock alerts.
 
 == Changelog ==
+
+= 1.0.76 =
+* Bulk-action labels captured from other plugins are stripped of 4-byte characters before caching, so one emoji in someone else's label cannot stop the cache from being stored on an older database.
 
 = 1.0.75 =
 * The default checkout notice texts no longer carry decorative emoji. They were cosmetic only, and a database that cannot store 4-byte characters rejects a whole option row because of them.

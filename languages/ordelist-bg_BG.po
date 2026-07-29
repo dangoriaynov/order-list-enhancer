@@ -431,8 +431,8 @@ msgid "Unsaved changes - click \"Save changes\"."
 msgstr "Има незапазени промени - натиснете \"Запази промените\"."
 
 #: includes/class-ordelist-settings-page.php:67
-msgid "Not saved: this database cannot store emoji. Remove the emoji from the checkout texts, or convert the wp_options table to utf8mb4."
-msgstr "Не е запазено: тази база данни не може да съхранява емоджи. Премахнете емоджитата от текстовете при поръчка или конвертирайте таблицата wp_options към utf8mb4."
+msgid "Not saved: this database cannot store emoji. Remove them from the fields above, or convert the wp_options table to utf8mb4."
+msgstr "Не е запазено: тази база данни не може да съхранява емоджи. Премахнете ги от полетата по-горе или конвертирайте таблицата wp_options към utf8mb4."
 
 #: includes/class-ordelist-settings-page.php:152
 msgid "Orders"
