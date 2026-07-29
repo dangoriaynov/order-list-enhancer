@@ -135,7 +135,11 @@ class ORDELIST_Plugin {
 			return;
 		}
 		$opts        = ORDELIST_Settings::get();
-		$dup_on      = ORDELIST_Settings::is_yes( $opts, 'dup_enabled' );
+		// The row coloring and the badge are separate settings. With both off there
+		// is nothing to draw from a scan, so the scan itself is skipped.
+		$dup_color   = ORDELIST_Settings::is_yes( $opts, 'dup_color_enabled' );
+		$dup_badge   = ORDELIST_Settings::is_yes( $opts, 'dup_badge_enabled' );
+		$dup_on      = ORDELIST_Settings::is_yes( $opts, 'dup_enabled' ) && ( $dup_color || $dup_badge );
 		$ship_active = ( 'list' === $context )
 			? ORDELIST_Settings::is_yes( $opts, 'ship_enabled' )
 			: ORDELIST_Settings::is_yes( $opts, 'ship_color_edit' );
@@ -149,7 +153,7 @@ class ORDELIST_Plugin {
 
 		// На екрана за редакция: групата на текущата поръчка (за да отворим същия модал).
 		$edit_group = null;
-		if ( 'edit' === $context && $dup_on ) {
+		if ( 'edit' === $context && $dup_on && $dup_badge ) {
 			$oid = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : ( isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( $oid ) {
 				$built = ORDELIST_Duplicates::build( $opts );
@@ -180,6 +184,8 @@ class ORDELIST_Plugin {
 			),
 			'flags'    => array(
 				'duplicates' => ( $dup_on && 'list' === $context ),
+				'dupColor'   => $dup_color,
+				'dupBadge'   => $dup_badge,
 				'shipping'   => $ship_active,
 				'copy'       => array(
 					'name'  => ( $copy_name && 'edit' === $context ),

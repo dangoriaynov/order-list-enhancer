@@ -1173,3 +1173,19 @@ msgstr ""
 #: includes/class-ordelist-forecast-admin.php
 msgid "Part of the stock expires before it can be sold - the recommendation covers the gap."
 msgstr ""
+
+#: includes/class-ordelist-settings-page.php:214
+msgid "Row coloring"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:214
+msgid "Outline and tint the rows of a repeat customer."
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:214
+msgid "Customer badge"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:214
+msgid "Show the customer badge, which opens the list of their orders."
+msgstr ""

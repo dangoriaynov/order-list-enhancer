@@ -134,10 +134,15 @@
 			tr.setAttribute( 'data-ole-dup', '1' );
 			var isDup = !! info.dup;
 			var color = isDup ? '#d63638' : PAL[ ( info.g - 1 ) % PAL.length ];
-			tr.classList.add( 'ole-dup' );
-			if ( isDup ) { tr.classList.add( 'ole-dup--flag' ); }
-			tr.style.setProperty( '--ole-bd', color );
-			tr.style.setProperty( '--ole-bg', rgba( color, isDup ? 0.14 : 0.09 ) );
+			// Row coloring and badge are independent settings - the badge keeps its
+			// group color either way, since that is what ties it to the modal.
+			if ( FLAGS.dupColor ) {
+				tr.classList.add( 'ole-dup' );
+				if ( isDup ) { tr.classList.add( 'ole-dup--flag' ); }
+				tr.style.setProperty( '--ole-bd', color );
+				tr.style.setProperty( '--ole-bg', rgba( color, isDup ? 0.14 : 0.09 ) );
+			}
+			if ( ! FLAGS.dupBadge ) { return; }
 
 			var cell = tr.querySelector( 'td.column-order_number, td.order_number' ) || tr.querySelectorAll( 'td' )[0];
 			if ( ! cell ) { return; }
