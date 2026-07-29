@@ -9,8 +9,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: includes/class-ordelist-delivery-notice.php:37
-msgid "📦 This is the SHIPPING date"
-msgstr "📦 Това е датата на ИЗПРАЩАНЕ"
+msgid "This is the SHIPPING date"
+msgstr "Това е датата на ИЗПРАЩАНЕ"
 
 #: includes/class-ordelist-delivery-notice.php:38
 msgid ""
@@ -24,10 +24,10 @@ msgstr ""
 #: includes/class-ordelist-delivery-notice.php:40
 #, php-format
 msgid ""
-"🌴 We are on vacation until %s. Orders placed now will be shipped after that "
+"We are on vacation until %s. Orders placed now will be shipped after that "
 "date."
 msgstr ""
-"🌴 В момента сме в отпуск до %s. Поръчките, направени сега, ще бъдат "
+"В момента сме в отпуск до %s. Поръчките, направени сега, ще бъдат "
 "изпратени след тази дата."
 
 #. translators: 1: order number, 2: minutes ago
