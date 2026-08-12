@@ -69,5 +69,41 @@ check( ORDELIST_Extras_Matcher::scale_taxes( array(), 0.5 ) === array( 'subtotal
 $multi = ORDELIST_Extras_Matcher::scale_taxes( array( 'total' => array( 5 => 3.0, 9 => 1.0 ) ), 0.5 );
 check( $multi['total'][5] === 1.5 && $multi['total'][9] === 0.5 && $multi['subtotal'] === array(), 'scale_taxes handles multiple rates and missing subtotal' );
 
+// combo_index: groups rows by combo, keeps the first base, drops incomplete rows.
+$cidx = ORDELIST_Extras_Matcher::combo_index( array(
+	array( 'combo' => 5102, 'base' => 5103, 'product' => 2191, 'qty' => 1 ),
+	array( 'combo' => 5102, 'base' => 5103, 'product' => 4072, 'qty' => 2 ),
+	array( 'combo' => 0,    'base' => 5103, 'product' => 2191, 'qty' => 1 ),
+	array( 'combo' => 7000, 'base' => 0,    'product' => 2191, 'qty' => 1 ),
+	array( 'combo' => 7001, 'base' => 5103, 'product' => 0,    'qty' => 1 ),
+) );
+check( count( $cidx ) === 1 && isset( $cidx[5102] ), 'combo_index keeps only complete rows' );
+check( $cidx[5102]['base'] === 5103 && count( $cidx[5102]['parts'] ) === 2, 'combo_index groups components under one combo' );
+check( $cidx[5102]['parts'][1]['qty'] === 2, 'combo_index keeps per-component qty' );
+$cqty = ORDELIST_Extras_Matcher::combo_index( array( array( 'combo' => 1, 'base' => 2, 'product' => 3, 'qty' => 0 ) ) );
+check( $cqty[1]['parts'][0]['qty'] === 1, 'combo_index clamps qty 0 to 1' );
+check( ORDELIST_Extras_Matcher::combo_index( 'nope' ) === array(), 'combo_index of a non-array -> empty' );
+
+// split_amount: proportional to catalogue prices, anchor takes the remainder.
+$sh = ORDELIST_Extras_Matcher::split_amount( 10.00, array( 'base' => 7.00, 0 => 2.05 ), 'base' );
+check( abs( $sh[0] - 2.27 ) < 1e-9, 'split_amount gives the component its catalogue share' );
+check( abs( $sh['base'] - 7.73 ) < 1e-9, 'split_amount anchor takes the remainder' );
+check( abs( ( $sh['base'] + $sh[0] ) - 10.00 ) < 1e-9, 'split_amount conserves the line amount' );
+// A three-decimal line (bundle discount) still sums exactly.
+$sh3 = ORDELIST_Extras_Matcher::split_amount( 5.115, array( 'base' => 7.00, 0 => 2.05 ), 'base' );
+check( abs( ( $sh3['base'] + $sh3[0] ) - 5.115 ) < 1e-9, 'split_amount conserves a 3-decimal amount' );
+// Several components: everything still adds up to the original.
+$shm = ORDELIST_Extras_Matcher::split_amount( 20.00, array( 'base' => 7.00, 0 => 2.05, 1 => 3.60 ), 'base' );
+check( abs( ( $shm['base'] + $shm[0] + $shm[1] ) - 20.00 ) < 1e-9, 'split_amount conserves across many components' );
+// No catalogue prices at all -> nothing is moved off the anchor.
+$sh0 = ORDELIST_Extras_Matcher::split_amount( 10.00, array( 'base' => 0.0, 0 => 0.0 ), 'base' );
+check( $sh0['base'] === 10.00 && $sh0[0] === 0.0, 'split_amount with no reference prices keeps all on the anchor' );
+// Zero-priced line (free bundle child) splits into zeros, not warnings.
+$shz = ORDELIST_Extras_Matcher::split_amount( 0.0, array( 'base' => 7.00, 0 => 2.05 ), 'base' );
+check( $shz['base'] === 0.0 && $shz[0] === 0.0, 'split_amount of 0 stays 0' );
+// The anchor is always present in the result, even if it has no reference price.
+$sha = ORDELIST_Extras_Matcher::split_amount( 4.00, array( 0 => 2.00 ), 'base' );
+check( array_key_exists( 'base', $sha ) && abs( ( $sha['base'] + $sha[0] ) - 4.00 ) < 1e-9, 'split_amount always yields the anchor key' );
+
 echo $fails ? "\n$fails FAILED\n" : "\nALL PASS\n";
 exit( $fails ? 1 : 0 );

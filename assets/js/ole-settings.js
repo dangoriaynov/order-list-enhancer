@@ -72,7 +72,7 @@ jQuery( function ( $ ) {
 	setTimeout( function () {
 		baseline = $form.serialize();
 		$form.on( 'change input', ':input', refresh );
-		$form.on( 'click', '.ole-rule-add, .ole-rule-remove, .ole-extra-add, .ole-extra-remove', refreshLater );
+		$form.on( 'click', '.ole-rule-add, .ole-rule-remove, .ole-extra-add, .ole-extra-remove, .ole-combo-add, .ole-combo-remove', refreshLater );
 	}, 0 );
 
 	window.addEventListener( 'beforeunload', function ( e ) {
@@ -149,7 +149,7 @@ jQuery( function ( $ ) {
 
 	// Extras mapping: add/remove rows + (re)init WC product search.
 	function oleInitProductSearch( $scope ) {
-		( $scope || jQuery( '.ole-extras' ) ).find( 'select.wc-product-search' ).each( function () {
+		( $scope || jQuery( '.ole-extras, .ole-combos' ) ).find( 'select.wc-product-search' ).each( function () {
 			var $s = jQuery( this );
 			if ( $s.data( 'select2' ) ) { return; }
 			if ( jQuery.fn.selectWoo ) {
@@ -198,6 +198,26 @@ jQuery( function ( $ ) {
 		var $rows = jQuery( '.ole-extras tbody tr' );
 		if ( $rows.length > 1 ) { jQuery( this ).closest( 'tr' ).remove(); }
 		else { jQuery( this ).closest( 'tr' ).find( 'input' ).val( '' ); jQuery( this ).closest( 'tr' ).find( 'select' ).val( null ); }
+	} );
+	// Комбо-мапінг: ті самі додати/прибрати, але з полем кількості (типово 1).
+	jQuery( document ).on( 'click', '.ole-combo-add', function ( e ) {
+		e.preventDefault();
+		var $tbody = jQuery( '.ole-combos tbody' );
+		var $row = $tbody.find( 'tr' ).first().clone();
+		$row.find( '.select2-container' ).remove(); // клон тягне вже відмальований select2
+		$row.find( 'select' ).each( function () {
+			jQuery( this ).removeClass( 'select2-hidden-accessible' ).removeAttr( 'data-select2-id tabindex aria-hidden' )
+				.empty().append( '<option value="" selected></option>' ).val( '' );
+		} );
+		$row.find( 'input[type=number]' ).val( 1 );
+		$tbody.append( $row );
+		oleInitProductSearch( $row );
+	} );
+	jQuery( document ).on( 'click', '.ole-combo-remove', function ( e ) {
+		e.preventDefault();
+		var $row = jQuery( this ).closest( 'tr' );
+		if ( jQuery( '.ole-combos tbody tr' ).length > 1 ) { $row.remove(); }
+		else { $row.find( 'select' ).val( null ).trigger( 'change' ); $row.find( 'input[type=number]' ).val( 1 ); }
 	} );
 } );
 

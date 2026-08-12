@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.76
+Stable tag: 1.0.77
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ No. It only reads orders in your admin and renders the UI locally.
 9. Print consumables: sticker and instruction-sheet stock, drawn down per order, with low-stock alerts.
 
 == Changelog ==
+
+= 1.0.77 =
+* Extras: a product whose variation already contains a second product (a "combo") can now be mapped to the base product plus its components. At order creation the sold line becomes the base product and each component is added as its own line, so stock and cost are counted per product. The line price is divided in proportion to the catalogue prices, so the order total never changes, and the order screen shows what the line was and what it became. An order action re-runs the conversion on orders placed earlier.
 
 = 1.0.76 =
 * Bulk-action labels captured from other plugins are stripped of 4-byte characters before caching, so one emoji in someone else's label cannot stop the cache from being stored on an older database.

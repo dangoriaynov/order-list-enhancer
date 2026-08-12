@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Ordelist 1.0.53\n"
+"Project-Id-Version: Ordelist 1.0.77\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-12 01:53+0300\n"
+"POT-Creation-Date: 2026-08-12 22:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 
 #. translators: %d: minutes ago
-#: includes/class-ordelist-dup-guard.php:175
+#: includes/class-ordelist-dup-guard.php:190
 #, php-format
 msgid ""
 "You already placed a similar order %d min ago. To place another one, please "
@@ -45,18 +45,18 @@ msgid ""
 msgstr ""
 
 #. translators: %d: minutes ago
-#: includes/class-ordelist-dup-guard.php:192
+#: includes/class-ordelist-dup-guard.php:206
 #, php-format
 msgid ""
-"You already placed a similar order %d min ago. Are you sure you want to place "
-"another one?"
+"You already placed a similar order %d min ago. Are you sure you want to "
+"place another one?"
 msgstr ""
 
-#: includes/class-ordelist-dup-guard.php:229
+#: includes/class-ordelist-dup-guard.php:242
 msgid "Yes, order again"
 msgstr ""
 
-#: includes/class-ordelist-dup-guard.php:230
+#: includes/class-ordelist-dup-guard.php:243
 msgid "Cancel"
 msgstr ""
 
@@ -94,24 +94,242 @@ msgstr ""
 msgid "phone + name"
 msgstr ""
 
-#: includes/class-ordelist-extras.php:48
+#: includes/class-ordelist-extras.php:32
+msgid "OLE - split combos / convert extras now"
+msgstr ""
+
+#: includes/class-ordelist-extras.php:74
 msgid "OLE - extras converted to product lines:"
 msgstr ""
 
+#. translators: 1: the combo product name, 2: the price the combo line had, 3: the resulting lines with their prices.
+#: includes/class-ordelist-extras.php:460
+#, php-format
+msgid "Was: «%1$s» (%2$s) - split into: %3$s"
+msgstr ""
+
+#. translators: 1: the combo product name, 2: the share of the combo price this line took.
+#: includes/class-ordelist-extras.php:468
+#, php-format
+msgid "Split out of combo «%1$s» (%2$s)"
+msgstr ""
+
 #. translators: 1: the add-on extra label, 2: the price it was converted from.
-#: includes/class-ordelist-extras.php:192
+#: includes/class-ordelist-extras.php:476
 #, php-format
 msgid "Converted from extra: «%1$s» (was %2$s)"
 msgstr ""
 
 #. translators: %s: the add-on extra label.
-#: includes/class-ordelist-extras.php:204
+#: includes/class-ordelist-extras.php:488
 #, php-format
 msgid "Extra «%s» moved to its own line"
 msgstr ""
 
-#: includes/class-ordelist-order-comments.php:34
-#: includes/class-ordelist-order-comments.php:38
+#: includes/class-ordelist-forecast-admin.php:28
+#: includes/class-ordelist-forecast-admin.php:29
+#: includes/class-ordelist-forecast-admin.php:190
+#: includes/class-ordelist-settings-page.php:676
+msgid "Purchase planning"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:64
+#: includes/class-ordelist-print-stock-admin.php:60
+#: includes/class-ordelist-warranty-admin.php:55
+msgid "Failed."
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:65
+#: includes/class-ordelist-forecast-admin.php:195
+msgid "kg"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:66
+#: includes/class-ordelist-forecast-admin.php:196
+msgid "pcs"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:67
+msgid "Year"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:68
+msgid "no weight set - pieces only"
+msgstr ""
+
+#. translators: %s: number of variations.
+#: includes/class-ordelist-forecast-admin.php:70
+#, php-format
+msgid "%s variations have no weight - counted in pieces only"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:71
+msgid "Stock not subtracted - no batches are tracked for this product."
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:72
+msgid "No sales recorded for this product yet."
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:73
+msgid "projection"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:74
+msgid "Reference year has no sales in this slice - coefficient set to 1."
+msgstr ""
+
+#. translators: %s: amount with unit, e.g. "3 kg".
+#: includes/class-ordelist-forecast-admin.php:76
+#, php-format
+msgid "of which %s expires before the period ends"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:77
+msgid "Forecast for the period"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:78
+msgid "Forecast to the end of the year"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:79
+msgid "Sellable stock"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:80
+msgid "Expired stock"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:81
+msgid ""
+"Stock comes from the WooCommerce inventory - no batches are tracked, expiry "
+"dates are unknown."
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:82
+msgid "Recommended purchase to the end of the year"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:83
+msgid ""
+"Part of the stock expires before it can be sold - the recommendation covers "
+"the gap."
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:84
+msgid "Variation"
+msgstr ""
+
+#. translators: %s: year.
+#: includes/class-ordelist-forecast-admin.php:86
+#, php-format
+msgid "Sold in %s"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:87
+#: includes/class-ordelist-print-stock-admin.php:262
+#: includes/class-ordelist-print-stock-admin.php:296
+msgid "Stock"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:88
+msgid "Good until (optional)"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:89
+#: includes/class-ordelist-print-stock-admin.php:285
+#: includes/class-ordelist-print-stock-admin.php:327
+#: includes/class-ordelist-warranty-admin.php:218
+msgid "Add"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:90
+msgid "Period longer than a year - the comparison uses its first 365 days."
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:91
+msgid "Sold in the period"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:92
+#: includes/class-ordelist-forecast-admin.php:210
+#: includes/class-ordelist-print-stock-admin.php:64
+#: includes/class-ordelist-print-stock-admin.php:315
+#: includes/class-ordelist-warranty-admin.php:57
+#: includes/class-ordelist-warranty-admin.php:228
+msgid "Save"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:93
+#: includes/class-ordelist-print-stock-admin.php:59
+#: includes/class-ordelist-settings-page.php:86
+msgid "Saved."
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:94
+msgid ""
+"The period started in the past - the forecast and recommendation cover only "
+"the days from today to its end."
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:191
+msgid ""
+"Pick a product or a single variation: yearly sales curves overlay on the "
+"chart, the table compares the selected slice across years, and the panel "
+"computes how much to order for the chosen period."
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:194
+#: includes/class-ordelist-print-stock-admin.php:281
+#: includes/class-ordelist-settings-page.php:555
+#: includes/class-ordelist-settings-page.php:591
+#: includes/class-ordelist-warranty-admin.php:213
+msgid "Search for a product…"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:203
+msgid "Period"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:204
+msgid "Month"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:205
+msgid "Half-year"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:206
+msgid "Year to date"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:207
+msgid "Reference year"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:208
+msgid "Coefficient"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:209
+msgid "auto"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:211
+msgid "Margin, %"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:216
+msgid "Sold in the selected slice"
+msgstr ""
+
+#: includes/class-ordelist-forecast-admin.php:219
+msgid "Stock and sales by variation"
+msgstr ""
+
+#: includes/class-ordelist-order-comments.php:46
+#: includes/class-ordelist-order-comments.php:50
 msgid "Comment"
 msgstr ""
 
@@ -144,1048 +362,955 @@ msgid "Phone may be invalid - please verify."
 msgstr ""
 
 #. translators: %s: number of orders.
-#: includes/class-ordelist-plugin.php:200
+#: includes/class-ordelist-plugin.php:216
 #, php-format
 msgid "customer · %s orders"
 msgstr ""
 
 #. translators: %s: matching criteria (phone, name, etc.).
-#: includes/class-ordelist-plugin.php:202
+#: includes/class-ordelist-plugin.php:218
 #, php-format
 msgid "Show this customer's orders. Matches: %s"
 msgstr ""
 
 #. translators: %s: number of orders.
-#: includes/class-ordelist-plugin.php:204
+#: includes/class-ordelist-plugin.php:220
 #, php-format
 msgid "duplicate · %s orders"
 msgstr ""
 
 #. translators: %s: number of orders.
-#: includes/class-ordelist-plugin.php:206
+#: includes/class-ordelist-plugin.php:222
 #, php-format
 msgid "%s orders"
 msgstr ""
 
 #. translators: %s: date of the first order.
-#: includes/class-ordelist-plugin.php:208
+#: includes/class-ordelist-plugin.php:224
 #, php-format
 msgid "first on %s"
 msgstr ""
 
-#: includes/class-ordelist-plugin.php:209
+#: includes/class-ordelist-plugin.php:225
 msgid "Close"
 msgstr ""
 
-#: includes/class-ordelist-plugin.php:210
+#: includes/class-ordelist-plugin.php:226
 msgid "-"
 msgstr ""
 
 #. translators: %s: delivery method label.
-#: includes/class-ordelist-plugin.php:212
+#: includes/class-ordelist-plugin.php:228
 #, php-format
 msgid "Delivery: %s"
 msgstr ""
 
-#: includes/class-ordelist-plugin.php:213
+#: includes/class-ordelist-plugin.php:229
 msgid "Loading…"
 msgstr ""
 
-#: includes/class-ordelist-plugin.php:214
+#: includes/class-ordelist-plugin.php:230
 msgid "Failed to load."
 msgstr ""
 
-#: includes/class-ordelist-plugin.php:215
+#: includes/class-ordelist-plugin.php:231
 msgid "Copy"
 msgstr ""
 
-#: includes/class-ordelist-plugin.php:216
+#: includes/class-ordelist-plugin.php:232
 msgid "Copied"
 msgstr ""
 
-#: includes/class-ordelist-plugin.php:217
+#: includes/class-ordelist-plugin.php:233
 msgid "invalid phone"
 msgstr ""
 
 #. translators: %s: number of selected orders.
-#: includes/class-ordelist-plugin.php:219
+#: includes/class-ordelist-plugin.php:235
 #, php-format
 msgid "Open selected (%s)"
 msgstr ""
 
-#: includes/class-ordelist-plugin.php:220
+#: includes/class-ordelist-plugin.php:236
 msgid "Stop"
 msgstr ""
 
-#: includes/class-ordelist-plugin.php:221
+#: includes/class-ordelist-plugin.php:237
 msgid "sec"
 msgstr ""
 
 #. translators: %1$s: current number, %2$s: total.
-#: includes/class-ordelist-plugin.php:223
+#: includes/class-ordelist-plugin.php:239
 #, php-format
 msgid "Opening %1$s / %2$s…"
 msgstr ""
 
 #. translators: %s: number of orders opened.
-#: includes/class-ordelist-plugin.php:225
+#: includes/class-ordelist-plugin.php:241
 #, php-format
 msgid "Done (%s)"
 msgstr ""
 
-#: includes/class-ordelist-plugin.php:226
+#: includes/class-ordelist-plugin.php:242
 msgid "Select some orders first."
 msgstr ""
 
-#: includes/class-ordelist-plugin.php:227
+#: includes/class-ordelist-plugin.php:243
 msgid "Pop-ups are blocked - allow them for this site, then try again."
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:27
 #: includes/class-ordelist-print-stock-admin.php:28
-#: includes/class-ordelist-print-stock-admin.php:190
-#: includes/class-ordelist-settings-page.php:549
+#: includes/class-ordelist-print-stock-admin.php:29
+#: includes/class-ordelist-print-stock-admin.php:255
+#: includes/class-ordelist-settings-page.php:631
 msgid "Print consumables"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:56
-#: includes/class-ordelist-settings-page.php:65
-msgid "Saved."
-msgstr ""
-
-#: includes/class-ordelist-print-stock-admin.php:57
-msgid "Failed."
-msgstr ""
-
-#: includes/class-ordelist-print-stock-admin.php:58
+#: includes/class-ordelist-print-stock-admin.php:61
 msgid "Delete this instruction sheet?"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:59
+#: includes/class-ordelist-print-stock-admin.php:62
 msgid "Delete this sticker?"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:60
+#: includes/class-ordelist-print-stock-admin.php:63
 msgid "How many printed copies to add?"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:61
-#: includes/class-ordelist-print-stock-admin.php:245
-msgid "Save"
-msgstr ""
-
-#: includes/class-ordelist-print-stock-admin.php:62
-#: includes/class-ordelist-print-stock.php:196
+#: includes/class-ordelist-print-stock-admin.php:65
+#: includes/class-ordelist-print-stock.php:204
 msgid "Instruction"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:63
-#: includes/class-ordelist-print-stock-admin.php:206
+#: includes/class-ordelist-print-stock-admin.php:66
+#: includes/class-ordelist-print-stock-admin.php:273
 msgid "Set"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:64
-#: includes/class-ordelist-print-stock-admin.php:207
+#: includes/class-ordelist-print-stock-admin.php:67
+#: includes/class-ordelist-print-stock-admin.php:274
 msgid "+ printed"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:192
+#: includes/class-ordelist-print-stock-admin.php:68
+#: includes/class-ordelist-print-stock-admin.php:215
+msgid "+ File"
+msgstr ""
+
+#: includes/class-ordelist-print-stock-admin.php:69
+msgid "Choose printable files"
+msgstr ""
+
+#: includes/class-ordelist-print-stock-admin.php:70
+msgid "Attach"
+msgstr ""
+
+#: includes/class-ordelist-print-stock-admin.php:208
+#: includes/class-ordelist-print-stock-admin.php:212
+msgid "Remove file"
+msgstr ""
+
+#: includes/class-ordelist-print-stock-admin.php:211
+msgid "(file deleted)"
+msgstr ""
+
+#: includes/class-ordelist-print-stock-admin.php:257
 msgid "Stickers"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:193
+#: includes/class-ordelist-print-stock-admin.php:258
 msgid ""
 "Sticker stock per product or variation - decreases by the ordered quantity. "
 "Add a product below: pick a variation for per-variation stock, or the "
 "product for one shared count."
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:196
-#: includes/class-ordelist-print-stock-admin.php:226
+#: includes/class-ordelist-print-stock-admin.php:261
+#: includes/class-ordelist-print-stock-admin.php:294
 msgid "Name"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:197
-#: includes/class-ordelist-print-stock-admin.php:228
-msgid "Stock"
+#: includes/class-ordelist-print-stock-admin.php:263
+#: includes/class-ordelist-print-stock-admin.php:297
+msgid "Files"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:198
-#: includes/class-ordelist-print-stock-admin.php:229
+#: includes/class-ordelist-print-stock-admin.php:264
+#: includes/class-ordelist-print-stock-admin.php:298
+#: includes/class-ordelist-warranty-admin.php:209
 msgid "Actions"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:208
+#: includes/class-ordelist-print-stock-admin.php:275
+#: includes/class-ordelist-warranty-admin.php:58
+#: includes/class-ordelist-warranty-admin.php:229
 msgid "Delete"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:214
-#: includes/class-ordelist-settings-page.php:524
-msgid "Search for a product…"
-msgstr ""
-
-#: includes/class-ordelist-print-stock-admin.php:217
-#: includes/class-ordelist-print-stock-admin.php:256
-msgid "Add"
-msgstr ""
-
-#: includes/class-ordelist-print-stock-admin.php:222
+#: includes/class-ordelist-print-stock-admin.php:290
 msgid "Instruction sheets"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:223
+#: includes/class-ordelist-print-stock-admin.php:291
 msgid ""
 "One sheet can cover several products. Each order containing any of its "
 "products consumes one copy."
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:227
+#: includes/class-ordelist-print-stock-admin.php:295
 msgid "Products"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:236
-#: includes/class-ordelist-print-stock-admin.php:253
+#: includes/class-ordelist-print-stock-admin.php:305
+#: includes/class-ordelist-print-stock-admin.php:323
 msgid "Search for products…"
 msgstr ""
 
-#: includes/class-ordelist-print-stock-admin.php:251
+#: includes/class-ordelist-print-stock-admin.php:321
 msgid "New sheet name"
 msgstr ""
 
-#: includes/class-ordelist-print-stock.php:192
+#: includes/class-ordelist-print-stock.php:200
 msgid "OLE - time to print more consumables"
 msgstr ""
 
-#: includes/class-ordelist-print-stock.php:193
+#: includes/class-ordelist-print-stock.php:201
 msgid "These items dropped to their low threshold:"
 msgstr ""
 
-#: includes/class-ordelist-print-stock.php:197
+#: includes/class-ordelist-print-stock.php:205
 msgid "Sticker"
 msgstr ""
 
 #. translators: 1: type, 2: name, 3: remaining stock.
-#: includes/class-ordelist-print-stock.php:199
+#: includes/class-ordelist-print-stock.php:207
 #, php-format
 msgid "%1$s \"%2$s\" - %3$d left"
 msgstr ""
 
-#: includes/class-ordelist-print-stock.php:220
-#: includes/class-ordelist-print-stock.php:250
+#: includes/class-ordelist-print-stock.php:236
+#: includes/class-ordelist-print-stock.php:266
 msgid "Sticker stock"
 msgstr ""
 
-#: includes/class-ordelist-print-stock.php:222
+#: includes/class-ordelist-print-stock.php:238
 msgid ""
 "Printed stickers on hand for this product. Decreases by the quantity "
 "ordered. Leave blank to not track."
 msgstr ""
 
 #. translators: %d: number of low items.
-#: includes/class-ordelist-print-stock.php:292
+#: includes/class-ordelist-print-stock.php:308
 #, php-format
 msgid "%d print consumable is low - time to print more."
 msgid_plural "%d print consumables are low - time to print more."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-ordelist-print-stock.php:294
+#: includes/class-ordelist-print-stock.php:310
 msgid "Open stock"
 msgstr ""
 
-#: includes/class-ordelist-print-stock.php:299
+#: includes/class-ordelist-print-stock.php:315
 msgid "Print"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:27
+#: includes/class-ordelist-settings-page.php:46
 msgid "Settings"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:35
-#: includes/class-ordelist-settings-page.php:36
-#: includes/class-ordelist-settings-page.php:146
+#: includes/class-ordelist-settings-page.php:54
+#: includes/class-ordelist-settings-page.php:55
+#: includes/class-ordelist-settings-page.php:169
 msgid "Order List Enhancer"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:64
+#: includes/class-ordelist-settings-page.php:85
 msgid "Saving…"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:66
+#: includes/class-ordelist-settings-page.php:87
 msgid "Save failed."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:67
+#: includes/class-ordelist-settings-page.php:88
 msgid "Session expired - reload the page and try again."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:67
+#: includes/class-ordelist-settings-page.php:89
 msgid "Unsaved changes - click \"Save changes\"."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:67
-msgid "Not saved: this database cannot store emoji. Remove them from the fields above, or convert the wp_options table to utf8mb4."
+#: includes/class-ordelist-settings-page.php:90
+msgid ""
+"Not saved: this database cannot store emoji. Remove them from the fields "
+"above, or convert the wp_options table to utf8mb4."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:152
+#: includes/class-ordelist-settings-page.php:175
 msgid "Orders"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:153
+#: includes/class-ordelist-settings-page.php:176
 msgid "Checkout"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:154
+#: includes/class-ordelist-settings-page.php:177
 msgid "Inventory"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:155
+#: includes/class-ordelist-settings-page.php:178
 msgid "Phone"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:167
+#: includes/class-ordelist-settings-page.php:190
 msgid "Save changes"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:188
+#: includes/class-ordelist-settings-page.php:211
 msgid "Repeat customers"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:189
+#: includes/class-ordelist-settings-page.php:212
 msgid ""
 "Outline & badge orders from the same customer in the list, with a details "
 "modal. Choose how a match is decided and how far back to scan."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:195
+#: includes/class-ordelist-settings-page.php:218
+msgid "Row coloring"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:219
+msgid "Outline and tint the rows of a repeat customer."
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:222
+msgid "Customer badge"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:223
+msgid "Show the customer badge, which opens the list of their orders."
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:226
 msgid "Match mode"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:199
+#: includes/class-ordelist-settings-page.php:230
 msgid "By phone"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:200
+#: includes/class-ordelist-settings-page.php:231
 msgid "By name"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:201
+#: includes/class-ordelist-settings-page.php:232
 msgid "By name + phone"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:206
+#: includes/class-ordelist-settings-page.php:237
 msgid "Scan limit"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:208
+#: includes/class-ordelist-settings-page.php:239
 msgid ""
 "How many of the newest orders (all statuses) are scanned on every list load. "
 "Allowed range 100-5000, default 1500. An empty or out-of-range value is "
 "clamped when saving - empty becomes 100, not unlimited."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:211
+#: includes/class-ordelist-settings-page.php:242
 msgid "Duplicate window (days)"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:213
+#: includes/class-ordelist-settings-page.php:244
 msgid ""
 "Two orders from the same customer within this many days (or 2+ still in "
 "processing) are flagged as likely duplicates. Allowed range 1-60, default 3; "
 "empty or out-of-range values are clamped when saving."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:220
+#: includes/class-ordelist-settings-page.php:251
 msgid "Shipping coloring"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:221
+#: includes/class-ordelist-settings-page.php:252
 msgid ""
 "Color the \"Ship to\" cell in the list and the address block on the order "
 "screen, by keyword rules."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:227
+#: includes/class-ordelist-settings-page.php:258
 msgid "Color in orders list"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:228
+#: includes/class-ordelist-settings-page.php:259
 msgid "Color the “Ship to” cell in the orders list."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:231
+#: includes/class-ordelist-settings-page.php:262
 msgid "Color on edit page"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:232
+#: includes/class-ordelist-settings-page.php:263
 msgid "Color the address block on the single order edit screen."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:235
+#: includes/class-ordelist-settings-page.php:266
 msgid "Coloring rules"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:238
+#: includes/class-ordelist-settings-page.php:269
 msgid "Keyword (in shipping address)"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:239
-#: includes/class-ordelist-settings-page.php:293
+#: includes/class-ordelist-settings-page.php:270
+#: includes/class-ordelist-settings-page.php:324
 msgid "Color"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:240
-#: includes/class-ordelist-settings-page.php:294
+#: includes/class-ordelist-settings-page.php:271
+#: includes/class-ordelist-settings-page.php:325
 msgid "Label"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:252
-#: includes/class-ordelist-settings-page.php:306
+#: includes/class-ordelist-settings-page.php:283
+#: includes/class-ordelist-settings-page.php:337
 msgid "Add rule"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:253
+#: includes/class-ordelist-settings-page.php:284
 msgid ""
 "Rows without a keyword are removed when saving; an invalid color value is "
 "cleared."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:257
+#: includes/class-ordelist-settings-page.php:288
 msgid "Default color"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:259
+#: includes/class-ordelist-settings-page.php:290
 msgid "Used when no rule matches. Leave empty to not color unmatched rows."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:262
+#: includes/class-ordelist-settings-page.php:293
 msgid "Default label"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:270
+#: includes/class-ordelist-settings-page.php:301
 msgid "Order-total coloring"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:271
+#: includes/class-ordelist-settings-page.php:302
 msgid ""
 "Ring an order (row + address panel) when its total reaches a threshold; the "
 "highest matching threshold wins. Drawn on top of any shipping color - both "
 "stay visible."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:277
+#: includes/class-ordelist-settings-page.php:308
 msgid "Threshold rules"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:292
+#: includes/class-ordelist-settings-page.php:323
 msgid "Order total ≥"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:307
+#: includes/class-ordelist-settings-page.php:338
 msgid ""
 "Only rows with a threshold above 0 and a valid color are kept when saving; "
 "the rest are removed."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:315
+#: includes/class-ordelist-settings-page.php:346
 msgid "Order total on the edit screen"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:316
+#: includes/class-ordelist-settings-page.php:347
 msgid ""
 "Show the total near the billing address on the order screen, with copy "
 "buttons."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:322
+#: includes/class-ordelist-settings-page.php:353
 msgid "Copy button: name"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:323
+#: includes/class-ordelist-settings-page.php:354
 msgid ""
 "Show a copy-to-clipboard button for the customer name on the order edit "
 "screen."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:326
+#: includes/class-ordelist-settings-page.php:357
 msgid "Copy button: phone"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:327
+#: includes/class-ordelist-settings-page.php:358
 msgid ""
 "Show a copy-to-clipboard button for the phone number on the order edit "
 "screen."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:330
+#: includes/class-ordelist-settings-page.php:361
 msgid "Copy button: total"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:331
+#: includes/class-ordelist-settings-page.php:362
 msgid ""
 "Show a copy-to-clipboard button for the order total on the order edit screen."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:334
+#: includes/class-ordelist-settings-page.php:365
 msgid "Decimal separator"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:338
+#: includes/class-ordelist-settings-page.php:369
 msgid "Comma (,)"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:339
+#: includes/class-ordelist-settings-page.php:370
 msgid "Dot (.)"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:348
+#: includes/class-ordelist-settings-page.php:379
 msgid "Default bulk action"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:349
+#: includes/class-ordelist-settings-page.php:380
 msgid "Pre-select an entry in the orders-list bulk-actions menu on page load."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:355
+#: includes/class-ordelist-settings-page.php:386
 msgid "Pre-selected action"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:366
+#: includes/class-ordelist-settings-page.php:397
 msgid "- (none)"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:371
+#: includes/class-ordelist-settings-page.php:402
 msgid ""
 "The list is filled from your Orders screen - open the Orders list once if it "
 "looks empty."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:379
+#: includes/class-ordelist-settings-page.php:410
 msgid "Open selected one-by-one"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:380
+#: includes/class-ordelist-settings-page.php:411
 msgid ""
 "Add a button that opens each checkbox-selected order in its own tab, one at "
 "a time, waiting a configurable interval between tabs."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:386
+#: includes/class-ordelist-settings-page.php:417
 msgid "Default interval (seconds)"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:388
+#: includes/class-ordelist-settings-page.php:419
 msgid ""
 "Editable on the button too. Allowed range 1-300 seconds, default 7; empty or "
 "out-of-range values are clamped when saving. Your browser must allow pop-ups "
 "for this site, or only the first tab opens."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:395
+#: includes/class-ordelist-settings-page.php:426
 msgid "Order comment in the list"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:396
+#: includes/class-ordelist-settings-page.php:427
 msgid ""
 "Show the customer note left at checkout and the most recent internal admin "
 "note right under the order number in the orders list, so you never miss "
 "them. Click a note to expand it."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:404
+#: includes/class-ordelist-settings-page.php:435
 msgid "Checkout phone validation"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:405
+#: includes/class-ordelist-settings-page.php:436
 msgid ""
 "Validate the billing phone (Bulgarian numbers) at checkout and flag invalid "
 "ones in admin. Country code comes from the Phone tab (default 359); orders "
 "are flagged either way."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:411
+#: includes/class-ordelist-settings-page.php:442
 msgid "When invalid"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:415
+#: includes/class-ordelist-settings-page.php:446
 msgid "Warn only (allow the order, flag it)"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:416
+#: includes/class-ordelist-settings-page.php:447
 msgid "Block the order until fixed"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:425
+#: includes/class-ordelist-settings-page.php:456
 msgid "Duplicate-order guard"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:426
+#: includes/class-ordelist-settings-page.php:457
 msgid ""
 "Detect an identical recent order (same phone + cart) at checkout and confirm "
 "or block it; also disables the place-order button after the first tap."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:432
+#: includes/class-ordelist-settings-page.php:463
 msgid "When a duplicate is found"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:436
+#: includes/class-ordelist-settings-page.php:467
 msgid "Ask the customer to confirm in a popup"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:437
+#: includes/class-ordelist-settings-page.php:468
 msgid "Block the duplicate order"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:442
+#: includes/class-ordelist-settings-page.php:473
 msgid "Window (minutes)"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:445
+#: includes/class-ordelist-settings-page.php:476
 msgid ""
 "Same phone + same cart within this many minutes counts as a duplicate. "
 "Allowed range 1-120, default 5; empty or out-of-range values are clamped "
 "when saving."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:453
+#: includes/class-ordelist-settings-page.php:484
 msgid "Delivery-date notice"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:454
+#: includes/class-ordelist-settings-page.php:485
 msgid ""
 "Show a highlighted note above the delivery-date field at checkout; optional "
 "vacation banner. Requires the Order Delivery Date plugin field on checkout; "
 "does nothing if that field is absent."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:468
+#: includes/class-ordelist-settings-page.php:499
 msgid "Notice title"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:470
+#: includes/class-ordelist-settings-page.php:501
 msgid "Bold first line. Leave empty for the default."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:473
+#: includes/class-ordelist-settings-page.php:504
 msgid "Notice text"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:475
+#: includes/class-ordelist-settings-page.php:506
 msgid "Explanation under the title. Leave empty for the default."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:478
+#: includes/class-ordelist-settings-page.php:509
 msgid "Vacation banner"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:479
+#: includes/class-ordelist-settings-page.php:510
 msgid ""
 "Also show a red \"we are away\" banner above the notice, until the date "
 "below."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:482
+#: includes/class-ordelist-settings-page.php:513
 msgid "Away until"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:484
+#: includes/class-ordelist-settings-page.php:515
 msgid ""
 "The banner hides automatically after this date; with no date set it never "
 "shows."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:487
+#: includes/class-ordelist-settings-page.php:518
 msgid "Vacation text"
 msgstr ""
 
 #. translators: %s is a literal token the admin types into their text; it is not substituted here.
-#: includes/class-ordelist-settings-page.php:489
+#: includes/class-ordelist-settings-page.php:520
 #, php-format
 msgid "Use %s where the date should appear. Leave empty for the default."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:496
+#: includes/class-ordelist-settings-page.php:527
 msgid "Extras → products"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:497
+#: includes/class-ordelist-settings-page.php:528
 msgid ""
 "At order creation, turn each mapped add-on extra into a real product line at "
 "the price paid; order total stays unchanged."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:503
+#: includes/class-ordelist-settings-page.php:534
 msgid "Mapping (extra → product)"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:512
+#: includes/class-ordelist-settings-page.php:543
 msgid "Extra text (as shown on the order)"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:513
+#: includes/class-ordelist-settings-page.php:544
+#: includes/class-ordelist-warranty-admin.php:204
 msgid "Product"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:537
+#: includes/class-ordelist-settings-page.php:568
+#: includes/class-ordelist-settings-page.php:619
 msgid "Add row"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:538
+#: includes/class-ordelist-settings-page.php:569
 msgid "Rows without both an extra text and a product are removed when saving."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:539
+#: includes/class-ordelist-settings-page.php:570
 msgid ""
 "Match is the exact extra label as it appears on the order/checkout (Product "
 "Add-On label like \"+ 500 г …\", or the Checkout Add-On name)."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:550
+#: includes/class-ordelist-settings-page.php:574
+msgid "Combos (combo → base + component)"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:603
+msgid "Combo product/variation sold"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:604
+msgid "Base product (what the line becomes)"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:605
+msgid "Component to add"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:606
+msgid "Qty"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:620
+msgid ""
+"For a product whose variation already contains another product (for example "
+"\"Fitasio - 1 pc + cytokinin paste\"): the sold line becomes the base "
+"product and each component is added as its own line, so stock and cost are "
+"counted per product."
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:621
+msgid ""
+"The line price is split between them in proportion to their catalogue "
+"prices, so the order total never changes. Add one row per component; rows "
+"missing any of the three products are removed when saving."
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:632
 msgid ""
 "Track sticker & instruction-sheet stock, auto-decrement at order placement, "
 "and warn when low."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:556
+#: includes/class-ordelist-settings-page.php:638
 msgid "Sticker low threshold"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:558
+#: includes/class-ordelist-settings-page.php:640
 msgid ""
 "Warn (\"time to print\") when a sticker stock drops to this or below. "
 "Allowed range 0-100000, default 20; empty or out-of-range values are clamped "
 "when saving."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:561
+#: includes/class-ordelist-settings-page.php:643
 msgid "Instruction low threshold"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:563
+#: includes/class-ordelist-settings-page.php:645
 msgid ""
-"Warn when an instruction sheet stock drops to this or below. Allowed range 0-"
-"100000, default 5; empty or out-of-range values are clamped when saving."
+"Warn when an instruction sheet stock drops to this or below. Allowed range "
+"0-100000, default 5; empty or out-of-range values are clamped when saving."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:566
+#: includes/class-ordelist-settings-page.php:648
 msgid "Stock page"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:567
+#: includes/class-ordelist-settings-page.php:649
 msgid "Open consumables stock"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:576
+#: includes/class-ordelist-settings-page.php:656
+#: includes/class-ordelist-warranty-admin.php:24
+#: includes/class-ordelist-warranty-admin.php:25
+#: includes/class-ordelist-warranty-admin.php:200
+msgid "Warranty dates"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:657
+msgid ""
+"Track stock batches with their \"valid until\" dates, auto-consume the "
+"oldest batch as orders come in, and get an email + admin banner before dates "
+"arrive."
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:663
+msgid "Warn ahead, days"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:665
+msgid ""
+"Email + banner when a batch is within this many days of its date. Allowed "
+"range 1-365, default 30; empty or out-of-range values are clamped when "
+"saving."
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:668
+msgid "Batches page"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:669
+#: includes/class-ordelist-warranty.php:247
+msgid "Open warranty dates"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:677
+msgid ""
+"Multi-year sales chart with a purchase recommendation for a chosen period. "
+"Uses WooCommerce sales history; subtracts warranty-batch stock when batches "
+"are tracked."
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:683
+msgid "Safety margin, %"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:685
+msgid ""
+"Added on top of the forecast. Allowed range 0-100, default 20; empty or out-"
+"of-range values are clamped when saving. Adjustable on the page per "
+"calculation."
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:688
+msgid "Planning page"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:689
+msgid "Open purchase planning"
+msgstr ""
+
+#: includes/class-ordelist-settings-page.php:698
 msgid "Phone numbers"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:577
+#: includes/class-ordelist-settings-page.php:699
 msgid ""
 "Tidy phone numbers for display (leading 00 → +, add country code when "
 "missing). Never changes the database."
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:583
+#: includes/class-ordelist-settings-page.php:705
 msgid "Default country code"
 msgstr ""
 
-#: includes/class-ordelist-settings-page.php:585
+#: includes/class-ordelist-settings-page.php:707
 msgid ""
 "Digits only, e.g. 359 - anything else is stripped when saving. Added to "
 "numbers that have no country code."
 msgstr ""
 
-#: includes/class-ordelist-warranty.php
+#: includes/class-ordelist-warranty-admin.php:56
+msgid "Delete this batch?"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php:175
+#: includes/class-ordelist-warranty-admin.php:184
+msgid "Expired"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php:178
+msgid "Sold out"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php:187
+msgid "Expiring soon"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php:201
+msgid ""
+"Batches of stock with their \"valid until\" dates. Sales reduce the oldest "
+"batch first; cancelled or refunded orders put the units back."
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php:205
+msgid "Valid until"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php:206
+msgid "Quantity"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php:207
+msgid "Note"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php:208
+msgid "Status"
+msgstr ""
+
+#: includes/class-ordelist-warranty-admin.php:216
+msgid "Note (lot number…)"
+msgstr ""
+
+#. translators: %d: number of products/variations without batches.
+#: includes/class-ordelist-warranty-admin.php:237
+#, php-format
+msgid "Products without batch data (%d)"
+msgstr ""
+
+#: includes/class-ordelist-warranty.php:188
 msgid "OLE - product expiry dates need attention"
 msgstr ""
 
-#: includes/class-ordelist-warranty.php
+#: includes/class-ordelist-warranty.php:191
 msgid "Expired:"
 msgstr ""
 
 #. translators: %d: warning window in days.
-#: includes/class-ordelist-warranty.php
+#: includes/class-ordelist-warranty.php:199
+#, php-format
 msgid "Expiring within %d days:"
 msgstr ""
 
 #. translators: 1: product name, 2: expiry date, 3: quantity left.
-#: includes/class-ordelist-warranty.php
+#: includes/class-ordelist-warranty.php:213
+#, php-format
 msgid "%1$s - %2$s, %3$d left"
 msgstr ""
 
 #. translators: 1: number of batches, 2: warning window in days.
-#: includes/class-ordelist-warranty.php
+#: includes/class-ordelist-warranty.php:237
+#, php-format
 msgid "%1$d product batch expires within %2$d days"
 msgid_plural "%1$d product batches expire within %2$d days"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of batches.
-#: includes/class-ordelist-warranty.php
+#: includes/class-ordelist-warranty.php:241
+#, php-format
 msgid "%d batch already expired"
 msgid_plural "%d batches already expired"
 msgstr[0] ""
 msgstr[1] ""
-
-#: includes/class-ordelist-warranty.php includes/class-ordelist-settings-page.php
-msgid "Open warranty dates"
-msgstr ""
-
-#: includes/class-ordelist-warranty-admin.php includes/class-ordelist-settings-page.php
-msgid "Warranty dates"
-msgstr ""
-
-#: includes/class-ordelist-warranty-admin.php
-msgid "Delete this batch?"
-msgstr ""
-
-#: includes/class-ordelist-warranty-admin.php
-msgid "Batches of stock with their \"valid until\" dates. Sales reduce the oldest batch first; cancelled or refunded orders put the units back."
-msgstr ""
-
-#: includes/class-ordelist-warranty-admin.php
-msgid "Valid until"
-msgstr ""
-
-#: includes/class-ordelist-warranty-admin.php
-msgid "Quantity"
-msgstr ""
-
-#: includes/class-ordelist-warranty-admin.php
-msgid "Note"
-msgstr ""
-
-#: includes/class-ordelist-warranty-admin.php
-msgid "Note (lot number…)"
-msgstr ""
-
-#. translators: %d: number of products/variations without batches.
-#: includes/class-ordelist-warranty-admin.php
-msgid "Products without batch data (%d)"
-msgstr ""
-
-#: includes/class-ordelist-settings-page.php
-msgid "Track stock batches with their \"valid until\" dates, auto-consume the oldest batch as orders come in, and get an email + admin banner before dates arrive."
-msgstr ""
-
-#: includes/class-ordelist-settings-page.php
-msgid "Warn ahead, days"
-msgstr ""
-
-#: includes/class-ordelist-settings-page.php
-msgid "Email + banner when a batch is within this many days of its date. Allowed range 1-365, default 30; empty or out-of-range values are clamped when saving."
-msgstr ""
-
-#: includes/class-ordelist-settings-page.php
-msgid "Batches page"
-msgstr ""
-
-#: includes/class-ordelist-warranty-admin.php
-msgid "Status"
-msgstr ""
-
-#: includes/class-ordelist-warranty-admin.php
-msgid "Expired"
-msgstr ""
-
-#: includes/class-ordelist-warranty-admin.php
-msgid "Sold out"
-msgstr ""
-
-#: includes/class-ordelist-warranty-admin.php
-msgid "Expiring soon"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php includes/class-ordelist-settings-page.php
-msgid "Purchase planning"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Pick a product or a single variation: yearly sales curves overlay on the chart, the table compares the selected slice across years, and the panel computes how much to order for the chosen period."
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "kg"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "pcs"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Period"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Month"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Quarter"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Half-year"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Reference year"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Coefficient"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "auto"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Margin, %"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Sold in the selected slice"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Year"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "no weight set - pieces only"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Stock not subtracted - no batches are tracked for this product."
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Reference year has no sales in this slice - coefficient set to 1."
-msgstr ""
-
-#. translators: %s: amount with unit, e.g. "3 kg".
-#: includes/class-ordelist-forecast-admin.php
-msgid "of which %s expires before the period ends"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Forecast demand"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Sellable stock"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Recommended purchase"
-msgstr ""
-
-#: includes/class-ordelist-settings-page.php
-msgid "Multi-year sales chart with a purchase recommendation for a chosen period. Uses WooCommerce sales history; subtracts warranty-batch stock when batches are tracked."
-msgstr ""
-
-#: includes/class-ordelist-settings-page.php
-msgid "Safety margin, %"
-msgstr ""
-
-#: includes/class-ordelist-settings-page.php
-msgid "Added on top of the forecast. Allowed range 0-100, default 20; empty or out-of-range values are clamped when saving. Adjustable on the page per calculation."
-msgstr ""
-
-#: includes/class-ordelist-settings-page.php
-msgid "Planning page"
-msgstr ""
-
-#: includes/class-ordelist-settings-page.php
-msgid "Open purchase planning"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "No sales recorded for this product yet."
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "projection"
-msgstr ""
-
-#. translators: %s: number of variations.
-#: includes/class-ordelist-forecast-admin.php
-#, php-format
-msgid "%s variations have no weight - counted in pieces only"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Variation"
-msgstr ""
-
-#. translators: %s: year.
-#: includes/class-ordelist-forecast-admin.php
-#, php-format
-msgid "Sold in %s"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Good until (optional)"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Stock and sales by variation"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Period longer than a year - the comparison uses its first 365 days."
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "The period started in the past - the forecast and recommendation cover only the days from today to its end."
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Year to date"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Forecast for the period"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Forecast to the end of the year"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Expired stock"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Stock comes from the WooCommerce inventory - no batches are tracked, expiry dates are unknown."
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Recommended purchase to the end of the year"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Sold in the period"
-msgstr ""
-
-#: includes/class-ordelist-forecast-admin.php
-msgid "Part of the stock expires before it can be sold - the recommendation covers the gap."
-msgstr ""
-
-#: includes/class-ordelist-settings-page.php:214
-msgid "Row coloring"
-msgstr ""
-
-#: includes/class-ordelist-settings-page.php:214
-msgid "Outline and tint the rows of a repeat customer."
-msgstr ""
-
-#: includes/class-ordelist-settings-page.php:214
-msgid "Customer badge"
-msgstr ""
-
-#: includes/class-ordelist-settings-page.php:214
-msgid "Show the customer badge, which opens the list of their orders."
-msgstr ""
