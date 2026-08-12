@@ -505,24 +505,24 @@ msgstr "+ отпечатани"
 #: includes/class-ordelist-print-stock-admin.php:68
 #: includes/class-ordelist-print-stock-admin.php:215
 msgid "+ File"
-msgstr ""
+msgstr "+ Файл"
 
 #: includes/class-ordelist-print-stock-admin.php:69
 msgid "Choose printable files"
-msgstr ""
+msgstr "Изберете файлове за печат"
 
 #: includes/class-ordelist-print-stock-admin.php:70
 msgid "Attach"
-msgstr ""
+msgstr "Прикачи"
 
 #: includes/class-ordelist-print-stock-admin.php:208
 #: includes/class-ordelist-print-stock-admin.php:212
 msgid "Remove file"
-msgstr ""
+msgstr "Премахни файла"
 
 #: includes/class-ordelist-print-stock-admin.php:211
 msgid "(file deleted)"
-msgstr ""
+msgstr "(файлът е изтрит)"
 
 #: includes/class-ordelist-print-stock-admin.php:257
 msgid "Stickers"
@@ -546,7 +546,7 @@ msgstr "Име"
 #: includes/class-ordelist-print-stock-admin.php:263
 #: includes/class-ordelist-print-stock-admin.php:297
 msgid "Files"
-msgstr ""
+msgstr "Файлове"
 
 #: includes/class-ordelist-print-stock-admin.php:264
 #: includes/class-ordelist-print-stock-admin.php:298
