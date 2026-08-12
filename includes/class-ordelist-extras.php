@@ -211,7 +211,7 @@ class ORDELIST_Extras {
 
 		// Якщо запас замовлення вже списаний - списуємо й новий товар ТА тегуємо рядок
 		// _reduced_stock, інакше WooCommerce не поверне цей запас при скасуванні/поверненні.
-		if ( 'yes' === $order->get_meta( '_order_stock_reduced' ) && $product->managing_stock() ) {
+		if ( self::stock_reduced( $order ) && $product->managing_stock() ) {
 			wc_update_product_stock( $product, $qty, 'decrease' );
 			$line->add_meta_data( '_reduced_stock', $qty, true );
 		}
@@ -228,7 +228,7 @@ class ORDELIST_Extras {
 	private static function convert_combo_lines( WC_Order $order, $combos, &$notes ) {
 		$count     = 0;
 		$precision = function_exists( 'wc_get_price_decimals' ) ? wc_get_price_decimals() : 2;
-		$reduced   = 'yes' === $order->get_meta( '_order_stock_reduced' );
+		$reduced   = self::stock_reduced( $order );
 
 		foreach ( $order->get_items( 'line_item' ) as $item_id => $item ) {
 			if ( $item->get_meta( '_ordelist_combo_split' ) ) {
@@ -357,6 +357,18 @@ class ORDELIST_Extras {
 			$notes[] = sprintf( '«%s» (%s) → %s', $orig_name, self::money( $orig_total, $order ), implode( ' + ', $summary ) );
 		}
 		return $count;
+	}
+
+	/**
+	 * Чи вже списано запас за цим замовленням. Під HPOS це колонка order_stock_reduced,
+	 * а не мета - get_meta( '_order_stock_reduced' ) там завжди порожній, тож питаємо дата-стор.
+	 */
+	private static function stock_reduced( WC_Order $order ) {
+		$store = $order->get_data_store();
+		if ( $store && is_callable( array( $store, 'get_stock_reduced' ) ) ) {
+			return (bool) $store->get_stock_reduced( $order );
+		}
+		return 'yes' === $order->get_meta( '_order_stock_reduced' );
 	}
 
 	/**

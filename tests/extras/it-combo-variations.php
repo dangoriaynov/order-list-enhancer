@@ -43,9 +43,12 @@ $item->add_meta_data( '_wc_cog_item_total_cost', '5.73', true );
 $item->add_meta_data( '_reduced_stock', 1, true );
 $order->add_item( $item );
 $order->set_total( 10.00 );
-$order->update_meta_data( '_order_stock_reduced', 'yes' );
 $order->update_meta_data( '_wc_cog_order_total_cost', '5.73' );
 $order->save();
+// Under HPOS this flag is a column, not order meta - it has to go through the data store.
+$order->get_data_store()->set_stock_reduced( $order, true );
+$order = wc_get_order( $order->get_id() );
+ck( (bool) $order->get_data_store()->get_stock_reduced( $order ), 'test order is marked stock-reduced' );
 $before_total = (float) $order->get_total();
 $comp_stock   = (int) wc_get_product( $comp_id )->get_stock_quantity();
 
