@@ -94,6 +94,75 @@ class ORDELIST_Extras_Matcher {
 		return $out;
 	}
 
+	/**
+	 * Будує індекс комбо: combo_id => ['base'=>id, 'parts'=>[ ['product'=>id,'qty'=>n], ... ]].
+	 * Кілька рядків з тим самим combo описують кілька компонентів; base беремо з першого,
+	 * де він заданий. Рядки без combo/base/product ігноруються.
+	 */
+	public static function combo_index( $map ) {
+		$idx = array();
+		if ( ! is_array( $map ) ) {
+			return $idx;
+		}
+		foreach ( $map as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+			$combo   = isset( $row['combo'] ) ? (int) $row['combo'] : 0;
+			$base    = isset( $row['base'] ) ? (int) $row['base'] : 0;
+			$product = isset( $row['product'] ) ? (int) $row['product'] : 0;
+			$qty     = isset( $row['qty'] ) ? (int) $row['qty'] : 1;
+			if ( $combo <= 0 || $base <= 0 || $product <= 0 ) {
+				continue;
+			}
+			if ( ! isset( $idx[ $combo ] ) ) {
+				$idx[ $combo ] = array(
+					'base'  => $base,
+					'parts' => array(),
+				);
+			}
+			$idx[ $combo ]['parts'][] = array(
+				'product' => $product,
+				'qty'     => ( $qty >= 1 && $qty <= 99 ) ? $qty : 1,
+			);
+		}
+		return $idx;
+	}
+
+	/**
+	 * Ділить суму рядка пропорційно до опорних (каталожних) цін $refs = [ключ => ціна].
+	 * Кожна частка, крім якірної, округлюється до $precision знаків, а якірна ($anchor)
+	 * забирає залишок - тому сума часток ТОЧНО дорівнює $amount за будь-яких округлень.
+	 * Якщо опорних цін немає (сума <= 0), усе лишається на якорі.
+	 */
+	public static function split_amount( $amount, $refs, $anchor, $precision = 2 ) {
+		$amount    = (float) $amount;
+		$out       = array();
+		$total_ref = 0.0;
+		foreach ( (array) $refs as $k => $v ) {
+			$out[ $k ]  = 0.0;
+			$total_ref += max( 0.0, (float) $v );
+		}
+		if ( ! array_key_exists( $anchor, $out ) ) {
+			$out[ $anchor ] = 0.0;
+		}
+		if ( $total_ref <= 0 ) {
+			$out[ $anchor ] = $amount;
+			return $out;
+		}
+		$assigned = 0.0;
+		foreach ( $out as $k => $unused ) {
+			if ( $k === $anchor ) {
+				continue;
+			}
+			$share      = round( $amount * ( max( 0.0, (float) $refs[ $k ] ) / $total_ref ), max( 0, (int) $precision ) );
+			$out[ $k ]  = $share;
+			$assigned  += $share;
+		}
+		$out[ $anchor ] = $amount - $assigned;
+		return $out;
+	}
+
 	/** Витягує кількість «N бр»/«N бройки» з тексту екстри; типово 1 (межі 1-99). */
 	public static function parse_qty( $text ) {
 		if ( preg_match( '/(\d+)\s*(?:бр|бройк)/u', (string) $text, $m ) ) {

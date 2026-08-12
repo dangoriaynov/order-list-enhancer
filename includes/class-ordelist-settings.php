@@ -34,6 +34,7 @@ class ORDELIST_Settings {
 			'bulk_default_action' => '', // pre-selected entry in the orders-list bulk-actions menu ('' = none)
 			'extras_enabled'      => 'no', // convert mapped add-on extras into real product lines at order creation
 			'extras_map'          => array(), // [ ['match'=>'<extra label>','product'=>123], ... ]
+			'combo_map'           => array(), // [ ['combo'=>5102,'base'=>5103,'product'=>2191,'qty'=>1], ... ]
 			'phone_validate_enabled' => 'no', // checkout phone-number validation
 			'phone_validate_mode'    => 'warn', // 'warn' (allow + flag) | 'block' (stop order)
 			'dup_guard_enabled'      => 'no', // checkout duplicate-order guard
@@ -86,6 +87,35 @@ class ORDELIST_Settings {
 				$out[] = array(
 					'match'   => $match,
 					'product' => $product,
+				);
+			}
+		}
+		return $out;
+	}
+
+	/**
+	 * Нормалізує таблицю комбо: лишає рядки, де задані комбо-товар, базовий товар і компонент.
+	 * Кількість затискається до 1-99.
+	 */
+	public static function clean_combo_map( $rows ) {
+		$out = array();
+		if ( ! is_array( $rows ) ) {
+			return $out;
+		}
+		foreach ( $rows as $r ) {
+			if ( ! is_array( $r ) ) {
+				continue;
+			}
+			$combo   = isset( $r['combo'] ) ? absint( $r['combo'] ) : 0;
+			$base    = isset( $r['base'] ) ? absint( $r['base'] ) : 0;
+			$product = isset( $r['product'] ) ? absint( $r['product'] ) : 0;
+			$qty     = isset( $r['qty'] ) ? absint( $r['qty'] ) : 1;
+			if ( $combo > 0 && $base > 0 && $product > 0 ) {
+				$out[] = array(
+					'combo'   => $combo,
+					'base'    => $base,
+					'product' => $product,
+					'qty'     => max( 1, min( 99, $qty ) ),
 				);
 			}
 		}
@@ -150,6 +180,7 @@ class ORDELIST_Settings {
 		$opts['phone_cc'] = preg_replace( '/\D+/', '', (string) $opts['phone_cc'] );
 		$opts['bulk_default_action'] = sanitize_text_field( (string) $opts['bulk_default_action'] );
 		$opts['extras_map'] = self::clean_extras_map( $opts['extras_map'] );
+		$opts['combo_map']  = self::clean_combo_map( $opts['combo_map'] );
 		$opts['total_color_rules'] = self::clean_total_color_rules( $opts['total_color_rules'] );
 		$opts['phone_validate_mode'] = ( 'block' === $opts['phone_validate_mode'] ) ? 'block' : 'warn';
 		$opts['dup_guard_mode']       = ( 'block' === $opts['dup_guard_mode'] ) ? 'block' : 'confirm';

@@ -570,6 +570,57 @@ class ORDELIST_Settings_Page {
 					<p class="description"><?php esc_html_e( 'Match is the exact extra label as it appears on the order/checkout (Product Add-On label like "+ 500 г …", or the Checkout Add-On name).', 'ordelist' ); ?></p>
 				</td>
 			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Combos (combo → base + component)', 'ordelist' ); ?></th>
+				<td>
+					<?php
+					$cmap = $o['combo_map'];
+					if ( empty( $cmap ) ) {
+						$cmap = array(
+							array(
+								'combo'   => 0,
+								'base'    => 0,
+								'product' => 0,
+								'qty'     => 1,
+							),
+						);
+					}
+					$csearch = static function ( $name, $id ) {
+						$product = $id ? wc_get_product( $id ) : null;
+						?>
+						<select class="wc-product-search ole-combo-product" name="<?php echo esc_attr( $name ); ?>[]" data-placeholder="<?php esc_attr_e( 'Search for a product…', 'ordelist' ); ?>" data-action="woocommerce_json_search_products_and_variations" style="width:100%">
+							<?php if ( $product ) : ?>
+								<?php $plabel = self::extra_product_label( $product ); ?>
+								<option value="<?php echo esc_attr( (string) $id ); ?>" selected title="<?php echo esc_attr( $plabel ); ?>"><?php echo esc_html( $plabel ); ?></option>
+							<?php else : ?>
+								<option value="" selected></option>
+							<?php endif; ?>
+						</select>
+						<?php
+					};
+					?>
+					<table class="widefat ole-combos" style="width:100%;max-width:1000px"><thead><tr>
+						<th style="text-align:center;width:33%"><?php esc_html_e( 'Combo product/variation sold', 'ordelist' ); ?></th>
+						<th style="text-align:center;width:31%"><?php esc_html_e( 'Base product (what the line becomes)', 'ordelist' ); ?></th>
+						<th style="text-align:center;width:31%"><?php esc_html_e( 'Component to add', 'ordelist' ); ?></th>
+						<th style="text-align:center;width:5%"><?php esc_html_e( 'Qty', 'ordelist' ); ?></th>
+						<th style="width:1%"></th>
+					</tr></thead><tbody>
+					<?php foreach ( $cmap as $row ) : ?>
+						<tr>
+							<td><?php $csearch( 'combo_combo', isset( $row['combo'] ) ? (int) $row['combo'] : 0 ); ?></td>
+							<td><?php $csearch( 'combo_base', isset( $row['base'] ) ? (int) $row['base'] : 0 ); ?></td>
+							<td><?php $csearch( 'combo_product', isset( $row['product'] ) ? (int) $row['product'] : 0 ); ?></td>
+							<td><input type="number" name="combo_qty[]" min="1" max="99" step="1" value="<?php echo esc_attr( (string) ( isset( $row['qty'] ) ? (int) $row['qty'] : 1 ) ); ?>" style="width:100%"/></td>
+							<td><button type="button" class="button ole-combo-remove">&times;</button></td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody></table>
+					<p><button type="button" class="button ole-combo-add"><?php esc_html_e( 'Add row', 'ordelist' ); ?></button></p>
+					<p class="description"><?php esc_html_e( 'For a product whose variation already contains another product (for example "Fitasio - 1 pc + cytokinin paste"): the sold line becomes the base product and each component is added as its own line, so stock and cost are counted per product.', 'ordelist' ); ?></p>
+					<p class="description"><?php esc_html_e( 'The line price is split between them in proportion to their catalogue prices, so the order total never changes. Add one row per component; rows missing any of the three products are removed when saving.', 'ordelist' ); ?></p>
+				</td>
+			</tr>
 		</tbody></table>
 		<?php
 		self::card_close();
@@ -730,6 +781,23 @@ class ORDELIST_Settings_Page {
 		}
 		$extras_map = ORDELIST_Settings::clean_extras_map( $extras_map );
 
+		$combo_map = array();
+		$combos    = $list( 'combo_combo' );
+		if ( $combos ) {
+			$cbase = $list( 'combo_base' );
+			$cprod = $list( 'combo_product' );
+			$cqty  = $list( 'combo_qty' );
+			foreach ( $combos as $i => $cid ) {
+				$combo_map[] = array(
+					'combo'   => absint( $cid ),
+					'base'    => isset( $cbase[ $i ] ) ? absint( $cbase[ $i ] ) : 0,
+					'product' => isset( $cprod[ $i ] ) ? absint( $cprod[ $i ] ) : 0,
+					'qty'     => isset( $cqty[ $i ] ) ? absint( $cqty[ $i ] ) : 1,
+				);
+			}
+		}
+		$combo_map = ORDELIST_Settings::clean_combo_map( $combo_map );
+
 		$total_color_rules = array();
 		$thresholds        = $list( 'total_threshold' );
 		if ( $thresholds ) {
@@ -751,6 +819,7 @@ class ORDELIST_Settings_Page {
 		$opts = array(
 			'extras_enabled'         => $bool( 'extras_enabled' ),
 			'extras_map'             => $extras_map,
+			'combo_map'              => $combo_map,
 			'dup_enabled'           => $bool( 'dup_enabled' ),
 			'dup_color_enabled'     => $bool( 'dup_color_enabled' ),
 			'dup_badge_enabled'     => $bool( 'dup_badge_enabled' ),
