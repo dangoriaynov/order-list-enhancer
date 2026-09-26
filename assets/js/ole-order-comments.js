@@ -7,8 +7,10 @@
 		$( '.ole-oc-wrap' ).each( function () {
 			var $wrap = $( this );
 			var $tr   = $wrap.closest( 'tr' );
-			var $cell = $tr.find( 'td.order_number' ).first();
-			if ( ! $cell.length ) { $cell = $tr.find( '.order-view' ).first().closest( 'td' ); }
+			// The order-number cell is a <th scope="row"> (WP_List_Table marks the primary
+			// column as the row header), so the lookup must not be restricted to td.
+			var $cell = $tr.find( '.column-order_number, .order_number' ).first();
+			if ( ! $cell.length ) { $cell = $tr.find( '.order-view' ).first().closest( 'td, th' ); }
 			if ( $cell.length ) { $cell.append( $wrap ); }
 		} );
 	} );

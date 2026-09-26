@@ -1,0 +1,115 @@
+# Publish a tagged release to WordPress.org.
+#
+# Why this exists: the release used to be possible only from the owner's own machine, because that is
+# where the Subversion working copy and its cached WordPress.org credentials live (bin/svn-deploy.sh).
+# Anyone else - a second machine, the dev box, an assistant - could prepare a release to the last comma
+# and then not ship it. The credentials belong in exactly one place that is not a laptop: this
+# repository's secrets. bin/svn-deploy.sh still works and stays the manual path.
+#
+# Triggered by pushing an annotated tag `v<version>` - the tag IS the release decision, and it has to
+# agree with the version in the code or nothing is published:
+#
+#   git tag -a v1.0.78 -m "1.0.78" && git push origin v1.0.78
+#
+# Required once, in repository settings → Secrets:
+#   SVN_USERNAME, SVN_PASSWORD   (the WordPress.org account that owns the plugin)
+name: Release to WordPress.org
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  SLUG: ordelist
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # --- The version is one number in four places; the tag is the fourth --------------------------
+      # WordPress.org serves whatever "Stable tag" points at, and the update notice quotes the plugin
+      # header. A tag that disagrees with either would publish something nobody named.
+      - name: Version agrees with the tag
+        run: |
+          VERSION="$(sed -n 's/^ \* Version:[[:space:]]*//p' order-list-enhancer.php | tr -d '[:space:]')"
+          CONST="$(sed -n "s/.*ORDELIST_VERSION', '\([0-9.]*\)'.*/\1/p" order-list-enhancer.php | head -1)"
+          STABLE="$(sed -n 's/^Stable tag:[[:space:]]*//p' readme.txt | tr -d '[:space:]')"
+          TAG="${GITHUB_REF_NAME#v}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "header=$VERSION constant=$CONST stable=$STABLE tag=$TAG"
+          [ "$VERSION" = "$CONST" ] && [ "$VERSION" = "$STABLE" ] || { echo "::error::the three version places disagree"; exit 1; }
+          case "$GITHUB_REF_TYPE" in
+            tag) [ "$VERSION" = "$TAG" ] || { echo "::error::tag ${GITHUB_REF_NAME} is not version ${VERSION}"; exit 1; } ;;
+          esac
+          grep -q "^= ${VERSION} =" readme.txt || { echo "::error::readme.txt has no changelog entry for ${VERSION}"; exit 1; }
+
+      # --- The admin-side logic, as the browser runs it ---------------------------------------------
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Browser-side tests
+        run: |
+          for f in tests/*/*.cjs tests/*/*.js; do
+            echo "--- $f"
+            node "$f" || exit 1
+          done
+
+      # --- The server-side logic ---------------------------------------------------------------------
+      # tests/extras/it-*.php are integration tests: they need a booted WordPress with WooCommerce and
+      # are run on the dev site, not here.
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: PHP tests
+        run: |
+          for f in $(ls tests/*/*.php | grep -v '/it-'); do
+            echo "--- $f"
+            php "$f" || exit 1
+          done
+
+      # --- Bulgarian, compiled from what the .po actually says ---------------------------------------
+      # A .mo built from an older .po is a translation WordPress never reads. The comparison is on
+      # CONTENT, not on file dates: a fresh clone has no mtimes worth comparing - git writes every file
+      # at checkout time, so "the .po is newer than the .mo" would be a coin toss.
+      - name: Translations
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq gettext
+          PO=languages/${SLUG}-bg_BG.po
+          MO=languages/${SLUG}-bg_BG.mo
+          msgfmt -o "${RUNNER_TEMP}/fresh.mo" "$PO"
+          # POT-Creation-Date is a timestamp in the header, not a translation; msgfmt stamps the fresh
+          # one with today. Everything else must match.
+          norm() { msgunfmt "$1" | msgattrib --translated --no-wrap | grep -v '^"POT-Creation'; }
+          norm "${RUNNER_TEMP}/fresh.mo" > "${RUNNER_TEMP}/fresh.po"
+          norm "$MO" > "${RUNNER_TEMP}/shipped.po"
+          diff -u "${RUNNER_TEMP}/shipped.po" "${RUNNER_TEMP}/fresh.po" \
+            || { echo "::error::${MO} does not match ${PO} - recompile it"; exit 1; }
+
+      # --- What gets published is only what runs -----------------------------------------------------
+      # The deploy below follows .distignore; this proves, before anything is published, that the
+      # whitelist in bin/build-zip.sh and that ignore list agree on the same set of files.
+      - name: The package holds only what ships
+        run: |
+          bash bin/build-zip.sh
+          LIST="$(unzip -Z1 dist/${SLUG}-${VERSION}.zip)"
+          echo "$LIST" | head -20
+          echo "$LIST" | grep -qE '^ordelist/(tests|docs|bin|\.github)/' && { echo "::error::the package carries development files"; exit 1; }
+          for f in order-list-enhancer.php readme.txt uninstall.php; do
+            echo "$LIST" | grep -qx "ordelist/$f" || { echo "::error::${f} is missing from the package"; exit 1; }
+          done
+
+      - name: Deploy to WordPress.org
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        with:
+          generate-zip: false
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: ordelist
