@@ -122,6 +122,31 @@
 		} );
 	}
 
+	// The orders list prints its primary column as <th scope="row">, not <td>: that is
+	// how WP_List_Table marks the row header. A lookup restricted to td therefore found
+	// nothing and fell back to the first <td> - the checkbox cell - where the badge came
+	// out under the checkbox, left of and on top of the customer name.
+	function orderCell( tr ) {
+		return tr.querySelector( '.column-order_number, .order_number' )
+			|| tr.querySelector( '.column-primary' )
+			|| tr.querySelector( 'td:not(.check-column), th:not(.check-column)' );
+	}
+
+	// One badge strip per row, on its own line under the order number: badges keep their
+	// distance from the name, and a second badge joins the first instead of starting yet
+	// another line. On small screens WooCommerce prints the date and the status under the
+	// number - the strip is inserted above them, next to the name it talks about.
+	function badgeStrip( cell ) {
+		var strip = cell.querySelector( '.ole-badges' );
+		if ( strip ) { return strip; }
+		strip = document.createElement( 'div' );
+		strip.className = 'ole-badges';
+		var link = cell.querySelector( 'a.order-view' ) || cell.querySelector( 'strong' );
+		var next = link ? link.nextSibling : cell.querySelector( '.small-screen-only' );
+		if ( next ) { cell.insertBefore( strip, next ); } else { cell.appendChild( strip ); }
+		return strip;
+	}
+
 	function markDuplicates() {
 		if ( ! FLAGS.duplicates ) { return; }
 		var rows = document.querySelectorAll( '.wp-list-table tbody tr' );
@@ -144,7 +169,7 @@
 			}
 			if ( ! FLAGS.dupBadge ) { return; }
 
-			var cell = tr.querySelector( 'td.column-order_number, td.order_number' ) || tr.querySelectorAll( 'td' )[0];
+			var cell = orderCell( tr );
 			if ( ! cell ) { return; }
 			var b = document.createElement( 'span' );
 			b.className = 'ole-badge ole-badge--click' + ( isDup ? ' ole-badge--dup' : '' );
@@ -154,8 +179,7 @@
 				? ( '⚠️ ' + fmt( I18N.dupBadge, [ info.n ] ) + ' 🔍' )
 				: ( '👥 ' + fmt( I18N.badge, [ info.n ] ) + ' 🔍' );
 			b.title = fmt( I18N.badgeTitle, [ info.r || '-' ] );
-			cell.appendChild( document.createElement( 'br' ) );
-			cell.appendChild( b );
+			badgeStrip( cell ).appendChild( b );
 		} );
 	}
 
@@ -432,13 +456,12 @@
 		Array.prototype.forEach.call( rows, function ( tr ) {
 			var cb = tr.querySelector( '.check-column input[type=checkbox]' );
 			if ( ! cb || ! cb.value || ! ids[ String( cb.value ) ] ) { return; }
-			var cell = tr.querySelector( 'td.column-order_number, td.order_number' ) || tr.querySelectorAll( 'td' )[0];
+			var cell = orderCell( tr );
 			if ( ! cell || cell.querySelector( '.ole-phone-badge' ) ) { return; }
 			var b = document.createElement( 'span' );
 			b.className = 'ole-phone-badge';
 			b.textContent = '⚠ ' + ( ( I18N && I18N.phoneBadge ) || 'phone?' );
-			cell.appendChild( document.createElement( 'br' ) );
-			cell.appendChild( b );
+			badgeStrip( cell ).appendChild( b );
 		} );
 	}
 
