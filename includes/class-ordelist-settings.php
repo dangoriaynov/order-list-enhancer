@@ -42,6 +42,7 @@ class ORDELIST_Settings {
 			'dup_guard_window_min'   => 5, // minutes window for "identical recent order"
 			'total_color_enabled' => 'no', // ring orders whose total reaches a threshold
 			'total_color_rules'   => array(), // [ ['threshold'=>float,'color'=>'#hex','label'=>''], ... ]
+			'filters_collapse_enabled' => 'no', // fold the orders-list search and filter row into a toggle
 			'seq_open_enabled'    => 'yes', // "open selected one-by-one" button on the orders list
 			'seq_open_interval'   => 7, // default seconds between opened tabs
 			'list_comments_enabled' => 'no', // show customer note + last admin note in the orders list

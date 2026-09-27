@@ -154,6 +154,7 @@ class ORDELIST_Plugin {
 		$total_color_active = ORDELIST_Settings::is_yes( $opts, 'total_color_enabled' );
 		$bulk_def    = ( 'list' === $context ) ? (string) $opts['bulk_default_action'] : '';
 		$seq_open    = ( 'list' === $context ) && ORDELIST_Settings::is_yes( $opts, 'seq_open_enabled' );
+		$fold_filters = ( 'list' === $context ) && ORDELIST_Settings::is_yes( $opts, 'filters_collapse_enabled' );
 
 		// На екрана за редакция: групата на текущата поръчка (за да отворим същия модал).
 		$edit_group = null;
@@ -191,6 +192,7 @@ class ORDELIST_Plugin {
 				'dupColor'   => $dup_color,
 				'dupBadge'   => $dup_badge,
 				'shipping'   => $ship_active,
+				'foldFilters' => $fold_filters,
 				'copy'       => array(
 					'name'  => ( $copy_name && 'edit' === $context ),
 					'phone' => ( $copy_phone && 'edit' === $context ),
@@ -239,6 +241,8 @@ class ORDELIST_Plugin {
 				'seqProgress' => __( 'Opening %1$s / %2$s…', 'ordelist' ),
 				/* translators: %s: number of orders opened. */
 				'seqDone'     => __( 'Done (%s)', 'ordelist' ),
+				'filters'     => __( 'Search and filters', 'ordelist' ),
+				'filtersOn'   => __( 'Search and filters (in use)', 'ordelist' ),
 				'seqNone'     => __( 'Select some orders first.', 'ordelist' ),
 				'seqBlocked'  => __( 'Pop-ups are blocked - allow them for this site, then try again.', 'ordelist' ),
 			),

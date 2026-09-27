@@ -55,7 +55,8 @@ jobs:
           node-version: '20'
       - name: Browser-side tests
         run: |
-          for f in tests/*/*.cjs tests/*/*.js; do
+          # tests/lib/ holds the shared fake DOM, not a suite.
+          for f in $(ls tests/*/*.cjs tests/*/*.js | grep -v '/lib/'); do
             echo "--- $f"
             node "$f" || exit 1
           done
