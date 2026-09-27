@@ -1418,6 +1418,22 @@ msgid_plural "%d batches already expired"
 msgstr[0] "%d партида вече е изтекла"
 msgstr[1] "%d партиди вече са изтекли"
 
+#: includes/class-ordelist-settings-page.php:409
+msgid "Fold search and filters"
+msgstr "Прибиране на търсенето и филтрите"
+
+#: includes/class-ordelist-settings-page.php:410
+msgid "Put the orders-list search box and the filter row behind one toggle. Every plugin that ships an orders filter adds it to the same line, and on a busy shop that line wraps over half the screen. The toggle opens by itself when a search or filter is actually in use, so nothing hides while you are looking at its results."
+msgstr "Прибира търсачката и реда с филтри на списъка с поръчки зад едно копче. Всеки плъгин със свой филтър за поръчки пише на същия ред и на зареден магазин той се пренася на половин екран. Копчето се отваря само, когато търсене или филтър наистина работи - за да не скрие нищо, докато гледаш резултата му."
+
+#: includes/class-ordelist-plugin.php:243
+msgid "Search and filters"
+msgstr "Търсене и филтри"
+
+#: includes/class-ordelist-plugin.php:244
+msgid "Search and filters (in use)"
+msgstr "Търсене и филтри (активни)"
+
 #~ msgid "Quarter"
 #~ msgstr "Тримесечие"
 

@@ -407,6 +407,13 @@ class ORDELIST_Settings_Page {
 		self::card_close();
 
 		self::card_open(
+			__( 'Fold search and filters', 'ordelist' ),
+			__( 'Put the orders-list search box and the filter row behind one toggle. Every plugin that ships an orders filter adds it to the same line, and on a busy shop that line wraps over half the screen. The toggle opens by itself when a search or filter is actually in use, so nothing hides while you are looking at its results.', 'ordelist' ),
+			array( 'name' => 'filters_collapse_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'filters_collapse_enabled' ) )
+		);
+		self::card_close();
+
+		self::card_open(
 			__( 'Open selected one-by-one', 'ordelist' ),
 			__( 'Add a button that opens each checkbox-selected order in its own tab, one at a time, waiting a configurable interval between tabs.', 'ordelist' ),
 			array( 'name' => 'seq_open_enabled', 'checked' => ORDELIST_Settings::is_yes( $o, 'seq_open_enabled' ) )
@@ -846,6 +853,7 @@ class ORDELIST_Settings_Page {
 			'bulk_default_action'    => $str( 'bulk_default_action' ),
 			'total_color_enabled'    => $bool( 'total_color_enabled' ),
 			'total_color_rules'      => $total_color_rules,
+			'filters_collapse_enabled' => $bool( 'filters_collapse_enabled' ),
 			'seq_open_enabled'       => $bool( 'seq_open_enabled' ),
 			'seq_open_interval'      => $int( 'seq_open_interval', 1, 300, 7 ),
 			'list_comments_enabled'  => $bool( 'list_comments_enabled' ),
