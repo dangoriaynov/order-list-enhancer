@@ -147,6 +147,79 @@
 		return strip;
 	}
 
+	// Every plugin that ships an orders filter puts it on the same line as WooCommerce's own, and the
+	// search box sits right above it: on a busy shop that is half a screen of controls above every
+	// list, wrapping over two or three rows. Folded away they are one button; the fold opens itself
+	// when a search or a filter is actually in use, so nothing hides while you look at its results.
+	function foldFilters() {
+		if ( ! FLAGS.foldFilters ) { return; }
+		var nav = document.querySelector( '.tablenav.top' );
+		if ( ! nav || nav.getAttribute( 'data-ole-fold' ) ) { return; }
+
+		var moving = [];
+		Array.prototype.forEach.call( nav.querySelectorAll( '.actions' ), function ( el ) {
+			// The bulk-actions block stays put: it acts on the checkboxes, not on what is listed.
+			if ( -1 === String( el.className ).indexOf( 'bulkactions' ) ) { moving.push( el ); }
+		} );
+		var search = document.querySelector( '.search-box' );
+		if ( search ) { moving.push( search ); }
+		if ( ! moving.length ) { return; }
+		nav.setAttribute( 'data-ole-fold', '1' );
+
+		// The box goes right under the toolbar and inside the same form - the filter and search
+		// buttons submit it by name, so they have to stay in it.
+		var box = document.createElement( 'div' );
+		box.className = 'ole-filters';
+		moving.forEach( function ( el ) { box.appendChild( el ); } );
+		if ( nav.parentNode ) { nav.parentNode.insertBefore( box, nav.nextSibling ); }
+
+		var inUse = filtersInUse();
+		var open  = inUse || '1' === storedFold();
+		var btn   = document.createElement( 'button' );
+		btn.type = 'button';
+		btn.className = 'button ole-filters-toggle' + ( inUse ? ' ole-filters-on' : '' );
+		btn.addEventListener( 'click', function () {
+			open = ! open;
+			try { window.localStorage.setItem( FOLD_KEY, open ? '1' : '0' ); } catch ( e ) {}
+			paint();
+		} );
+
+		function paint() {
+			box.style.display = open ? '' : 'none';
+			btn.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
+			btn.textContent = ( inUse ? ( I18N.filtersOn || 'Search and filters (in use)' )
+				: ( I18N.filters || 'Search and filters' ) ) + ( open ? ' \u25b2' : ' \u25bc' );
+		}
+		paint();
+
+		var pages = nav.querySelector( '.tablenav-pages' );
+		if ( pages ) { nav.insertBefore( btn, pages ); } else { nav.appendChild( btn ); }
+	}
+
+	var FOLD_KEY = 'ordelist-filters-open';
+
+	function storedFold() {
+		try { return window.localStorage.getItem( FOLD_KEY ); } catch ( e ) { return null; }
+	}
+
+	// Is anything filtered right now? Paging, sorting and the status tabs are not filters - they are
+	// where you are in the list, and folding them away hides nothing.
+	function filtersInUse() {
+		var neutral = { page: 1, post_type: 1, paged: 1, orderby: 1, order: 1, status: 1,
+			action: 1, action2: 1, filter_action: 1, _wpnonce: 1, _wp_http_referer: 1 };
+		var query = String( ( window.location && window.location.search ) || '' ).replace( /^\?/, '' );
+		var used  = false;
+		query.split( '&' ).forEach( function ( pair ) {
+			if ( ! pair ) { return; }
+			var bits  = pair.split( '=' );
+			var key   = decodeURIComponent( bits[ 0 ] || '' );
+			var value = decodeURIComponent( ( bits[ 1 ] || '' ).replace( /\+/g, ' ' ) );
+			if ( neutral[ key ] || '' === value || '-1' === value || '0' === value ) { return; }
+			used = true;
+		} );
+		return used;
+	}
+
 	function markDuplicates() {
 		if ( ! FLAGS.duplicates ) { return; }
 		var rows = document.querySelectorAll( '.wp-list-table tbody tr' );
@@ -611,6 +684,7 @@
 
 	function run() {
 		if ( 'edit' === CTX ) { normalizePhones(); colorEditAddress(); colorTotalRingEdit(); addCopyButtons(); addEditGroupBadge(); return; }
+		foldFilters();
 		colorShipping();
 		colorTotalRingsList();
 		markDuplicates();

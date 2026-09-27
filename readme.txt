@@ -4,7 +4,7 @@ Tags: woocommerce, orders, admin, duplicate orders, customers
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.78
+Stable tag: 1.0.79
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ No. It only reads orders in your admin and renders the UI locally.
 9. Print consumables: sticker and instruction-sheet stock, drawn down per order, with low-stock alerts.
 
 == Changelog ==
+
+= 1.0.79 =
+* New setting: fold the orders-list search box and filter row behind one toggle. Every plugin that ships an orders filter adds it to the same line, so on a busy shop that line wraps over half the screen above every list. The fold opens by itself when a search or a filter is actually in use - paging, sorting and the status tabs do not count - and remembers whether you left it open. Off by default.
 
 = 1.0.78 =
 * Repeat-customer and phone badges are placed correctly again. The orders list prints its order-number column as a row header (<th>), so a lookup that only accepted a <td> missed it and the badge fell back into the checkbox cell, where it overlapped the customer name. Badges now sit on their own line under the order number - two badges share that line instead of stacking - and order notes, which relied on the same lookup, reach the order-number cell again.

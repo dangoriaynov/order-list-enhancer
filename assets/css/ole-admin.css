@@ -3,6 +3,12 @@
 .wp-list-table tbody tr.ole-dup { outline: 2px solid var(--ole-bd); outline-offset: -2px; }
 .wp-list-table tbody tr.ole-dup > *:first-child { box-shadow: inset 5px 0 0 0 var(--ole-bd); }
 
+/* Folded search + filters: one toggle in the toolbar, the controls in a box under it. */
+.ole-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; clear: both; margin: 0 0 12px; padding: 10px 12px; background: #fff; border: 1px solid #dcdcde; border-radius: 6px; }
+.ole-filters .actions, .ole-filters .search-box { float: none; padding: 0; margin: 0; }
+.ole-filters-toggle { margin-left: 6px; }
+.ole-filters-toggle.ole-filters-on { border-color: #2271b1; color: #2271b1; font-weight: 600; }
+
 /* Badges live on their own line under the order number; the strip owns the spacing,
    so two badges sit side by side instead of each starting a line of its own. */
 .ole-badges { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 6px 0 2px; line-height: 1; }
