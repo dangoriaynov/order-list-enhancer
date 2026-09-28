@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ordelist 1.0.77\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-12 22:53+0300\n"
+"POT-Creation-Date: 2026-09-28 08:08+0000\n"
 "Language: bg_BG\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -101,25 +101,25 @@ msgid "OLE - extras converted to product lines:"
 msgstr "OLE - екстрите са преобразувани в продуктови редове:"
 
 #. translators: 1: the combo product name, 2: the price the combo line had, 3: the resulting lines with their prices.
-#: includes/class-ordelist-extras.php:460
+#: includes/class-ordelist-extras.php:472
 #, php-format
 msgid "Was: «%1$s» (%2$s) - split into: %3$s"
 msgstr "Беше: «%1$s» (%2$s) - разделено на: %3$s"
 
 #. translators: 1: the combo product name, 2: the share of the combo price this line took.
-#: includes/class-ordelist-extras.php:468
+#: includes/class-ordelist-extras.php:480
 #, php-format
 msgid "Split out of combo «%1$s» (%2$s)"
 msgstr "Отделено от комбо «%1$s» (%2$s)"
 
 #. translators: 1: the add-on extra label, 2: the price it was converted from.
-#: includes/class-ordelist-extras.php:476
+#: includes/class-ordelist-extras.php:488
 #, php-format
 msgid "Converted from extra: «%1$s» (was %2$s)"
 msgstr "Преобразувано от екстра: «%1$s» (беше %2$s)"
 
 #. translators: %s: the add-on extra label.
-#: includes/class-ordelist-extras.php:488
+#: includes/class-ordelist-extras.php:500
 #, php-format
 msgid "Extra «%s» moved to its own line"
 msgstr "Екстра «%s» е преместена на собствен ред"
@@ -127,7 +127,7 @@ msgstr "Екстра «%s» е преместена на собствен ред
 #: includes/class-ordelist-forecast-admin.php:28
 #: includes/class-ordelist-forecast-admin.php:29
 #: includes/class-ordelist-forecast-admin.php:190
-#: includes/class-ordelist-settings-page.php:676
+#: includes/class-ordelist-settings-page.php:683
 msgid "Purchase planning"
 msgstr "Планиране на закупките"
 
@@ -289,8 +289,8 @@ msgstr ""
 
 #: includes/class-ordelist-forecast-admin.php:194
 #: includes/class-ordelist-print-stock-admin.php:281
-#: includes/class-ordelist-settings-page.php:555
-#: includes/class-ordelist-settings-page.php:591
+#: includes/class-ordelist-settings-page.php:562
+#: includes/class-ordelist-settings-page.php:598
 #: includes/class-ordelist-warranty-admin.php:213
 msgid "Search for a product…"
 msgstr "Търсене на продукт…"
@@ -370,100 +370,108 @@ msgid "Phone may be invalid - please verify."
 msgstr "Телефонът може да е невалиден - моля, проверете."
 
 #. translators: %s: number of orders.
-#: includes/class-ordelist-plugin.php:216
+#: includes/class-ordelist-plugin.php:218
 #, php-format
 msgid "customer · %s orders"
 msgstr "клиент · %s поръчки"
 
 #. translators: %s: matching criteria (phone, name, etc.).
-#: includes/class-ordelist-plugin.php:218
+#: includes/class-ordelist-plugin.php:220
 #, php-format
 msgid "Show this customer's orders. Matches: %s"
 msgstr "Покажи поръчките на този клиент. Съвпада: %s"
 
 #. translators: %s: number of orders.
-#: includes/class-ordelist-plugin.php:220
+#: includes/class-ordelist-plugin.php:222
 #, php-format
 msgid "duplicate · %s orders"
 msgstr "дубликат · %s поръчки"
 
 #. translators: %s: number of orders.
-#: includes/class-ordelist-plugin.php:222
+#: includes/class-ordelist-plugin.php:224
 #, php-format
 msgid "%s orders"
 msgstr "%s поръчки"
 
 #. translators: %s: date of the first order.
-#: includes/class-ordelist-plugin.php:224
+#: includes/class-ordelist-plugin.php:226
 #, php-format
 msgid "first on %s"
 msgstr "първа на %s"
 
-#: includes/class-ordelist-plugin.php:225
+#: includes/class-ordelist-plugin.php:227
 msgid "Close"
 msgstr "Затвори"
 
-#: includes/class-ordelist-plugin.php:226
+#: includes/class-ordelist-plugin.php:228
 msgid "-"
 msgstr "-"
 
 #. translators: %s: delivery method label.
-#: includes/class-ordelist-plugin.php:228
+#: includes/class-ordelist-plugin.php:230
 #, php-format
 msgid "Delivery: %s"
 msgstr "Доставка: %s"
 
-#: includes/class-ordelist-plugin.php:229
+#: includes/class-ordelist-plugin.php:231
 msgid "Loading…"
 msgstr "Зареждане…"
 
-#: includes/class-ordelist-plugin.php:230
+#: includes/class-ordelist-plugin.php:232
 msgid "Failed to load."
 msgstr "Грешка при зареждане."
 
-#: includes/class-ordelist-plugin.php:231
+#: includes/class-ordelist-plugin.php:233
 msgid "Copy"
 msgstr "Копирай"
 
-#: includes/class-ordelist-plugin.php:232
+#: includes/class-ordelist-plugin.php:234
 msgid "Copied"
 msgstr "Копирано"
 
-#: includes/class-ordelist-plugin.php:233
+#: includes/class-ordelist-plugin.php:235
 msgid "invalid phone"
 msgstr "невалиден телефон"
 
 #. translators: %s: number of selected orders.
-#: includes/class-ordelist-plugin.php:235
+#: includes/class-ordelist-plugin.php:237
 #, php-format
 msgid "Open selected (%s)"
 msgstr "Отвори избраните (%s)"
 
-#: includes/class-ordelist-plugin.php:236
+#: includes/class-ordelist-plugin.php:238
 msgid "Stop"
 msgstr "Спри"
 
-#: includes/class-ordelist-plugin.php:237
+#: includes/class-ordelist-plugin.php:239
 msgid "sec"
 msgstr "сек"
 
 #. translators: %1$s: current number, %2$s: total.
-#: includes/class-ordelist-plugin.php:239
+#: includes/class-ordelist-plugin.php:241
 #, php-format
 msgid "Opening %1$s / %2$s…"
 msgstr "Отваряне %1$s / %2$s…"
 
 #. translators: %s: number of orders opened.
-#: includes/class-ordelist-plugin.php:241
+#: includes/class-ordelist-plugin.php:243
 #, php-format
 msgid "Done (%s)"
 msgstr "Готово (%s)"
 
-#: includes/class-ordelist-plugin.php:242
+#: includes/class-ordelist-plugin.php:244
+msgid "Search and filters"
+msgstr "Търсене и филтри"
+
+#: includes/class-ordelist-plugin.php:245
+msgid "Search and filters (in use)"
+msgstr "Търсене и филтри (активни)"
+
+#: includes/class-ordelist-plugin.php:246
 msgid "Select some orders first."
 msgstr "Първо изберете поръчки."
 
-#: includes/class-ordelist-plugin.php:243
+#: includes/class-ordelist-plugin.php:247
 msgid "Pop-ups are blocked - allow them for this site, then try again."
 msgstr ""
 "Изскачащите прозорци са блокирани - разрешете ги за този сайт и опитайте пак."
@@ -471,7 +479,7 @@ msgstr ""
 #: includes/class-ordelist-print-stock-admin.php:28
 #: includes/class-ordelist-print-stock-admin.php:29
 #: includes/class-ordelist-print-stock-admin.php:255
-#: includes/class-ordelist-settings-page.php:631
+#: includes/class-ordelist-settings-page.php:638
 msgid "Print consumables"
 msgstr "Консумативи за печат"
 
@@ -942,10 +950,28 @@ msgstr ""
 "ако изглежда празен."
 
 #: includes/class-ordelist-settings-page.php:410
+msgid "Fold search and filters"
+msgstr "Прибиране на търсенето и филтрите"
+
+#: includes/class-ordelist-settings-page.php:411
+msgid ""
+"Put the orders-list search box and the filter row behind one toggle. Every "
+"plugin that ships an orders filter adds it to the same line, and on a busy "
+"shop that line wraps over half the screen. The toggle opens by itself when a "
+"search or filter is actually in use, so nothing hides while you are looking "
+"at its results."
+msgstr ""
+"Прибира търсачката и реда с филтри на списъка с поръчки зад едно копче. "
+"Всеки плъгин със свой филтър за поръчки пише на същия ред и на зареден "
+"магазин той се пренася на половин екран. Копчето се отваря само, когато "
+"търсене или филтър наистина работи - за да не скрие нищо, докато гледаш "
+"резултата му."
+
+#: includes/class-ordelist-settings-page.php:417
 msgid "Open selected one-by-one"
 msgstr "Отваряй избраните една по една"
 
-#: includes/class-ordelist-settings-page.php:411
+#: includes/class-ordelist-settings-page.php:418
 msgid ""
 "Add a button that opens each checkbox-selected order in its own tab, one at "
 "a time, waiting a configurable interval between tabs."
@@ -953,11 +979,11 @@ msgstr ""
 "Добавя бутон, който отваря всяка избрана с чекбокс поръчка в собствен "
 "раздел, една по една, изчаквайки конфигурируем интервал между разделите."
 
-#: includes/class-ordelist-settings-page.php:417
+#: includes/class-ordelist-settings-page.php:424
 msgid "Default interval (seconds)"
 msgstr "Интервал по подразбиране (секунди)"
 
-#: includes/class-ordelist-settings-page.php:419
+#: includes/class-ordelist-settings-page.php:426
 msgid ""
 "Editable on the button too. Allowed range 1-300 seconds, default 7; empty or "
 "out-of-range values are clamped when saving. Your browser must allow pop-ups "
@@ -968,11 +994,11 @@ msgstr ""
 "запазване. Браузърът трябва да разрешава изскачащи прозорци за този сайт, "
 "иначе се отваря само първият раздел."
 
-#: includes/class-ordelist-settings-page.php:426
+#: includes/class-ordelist-settings-page.php:433
 msgid "Order comment in the list"
 msgstr "Коментар в списъка с поръчки"
 
-#: includes/class-ordelist-settings-page.php:427
+#: includes/class-ordelist-settings-page.php:434
 msgid ""
 "Show the customer note left at checkout and the most recent internal admin "
 "note right under the order number in the orders list, so you never miss "
@@ -982,11 +1008,11 @@ msgstr ""
 "бележка точно под номера на поръчката в списъка, за да не ги пропускаш. "
 "Кликни бележка, за да я разгънеш."
 
-#: includes/class-ordelist-settings-page.php:435
+#: includes/class-ordelist-settings-page.php:442
 msgid "Checkout phone validation"
 msgstr "Валидиране на телефон при плащане"
 
-#: includes/class-ordelist-settings-page.php:436
+#: includes/class-ordelist-settings-page.php:443
 msgid ""
 "Validate the billing phone (Bulgarian numbers) at checkout and flag invalid "
 "ones in admin. Country code comes from the Phone tab (default 359); orders "
@@ -996,23 +1022,23 @@ msgstr ""
 "невалидните в администрацията. Кодът на държавата идва от раздел „Телефон“ "
 "(по подразбиране 359); поръчките се маркират и при двата режима."
 
-#: includes/class-ordelist-settings-page.php:442
+#: includes/class-ordelist-settings-page.php:449
 msgid "When invalid"
 msgstr "При невалиден"
 
-#: includes/class-ordelist-settings-page.php:446
+#: includes/class-ordelist-settings-page.php:453
 msgid "Warn only (allow the order, flag it)"
 msgstr "Само предупреждение (разреши поръчката, маркирай я)"
 
-#: includes/class-ordelist-settings-page.php:447
+#: includes/class-ordelist-settings-page.php:454
 msgid "Block the order until fixed"
 msgstr "Блокирай поръчката до коригиране"
 
-#: includes/class-ordelist-settings-page.php:456
+#: includes/class-ordelist-settings-page.php:463
 msgid "Duplicate-order guard"
 msgstr "Защита от дублирани поръчки"
 
-#: includes/class-ordelist-settings-page.php:457
+#: includes/class-ordelist-settings-page.php:464
 msgid ""
 "Detect an identical recent order (same phone + cart) at checkout and confirm "
 "or block it; also disables the place-order button after the first tap."
@@ -1021,23 +1047,23 @@ msgstr ""
 "потвърждава или блокира; освен това деактивира бутона за поръчка след "
 "първото натискане."
 
-#: includes/class-ordelist-settings-page.php:463
+#: includes/class-ordelist-settings-page.php:470
 msgid "When a duplicate is found"
 msgstr "При открит дубликат"
 
-#: includes/class-ordelist-settings-page.php:467
+#: includes/class-ordelist-settings-page.php:474
 msgid "Ask the customer to confirm in a popup"
 msgstr "Питай клиента да потвърди в изскачащ прозорец"
 
-#: includes/class-ordelist-settings-page.php:468
+#: includes/class-ordelist-settings-page.php:475
 msgid "Block the duplicate order"
 msgstr "Блокирай дублиращата поръчка"
 
-#: includes/class-ordelist-settings-page.php:473
+#: includes/class-ordelist-settings-page.php:480
 msgid "Window (minutes)"
 msgstr "Прозорец (минути)"
 
-#: includes/class-ordelist-settings-page.php:476
+#: includes/class-ordelist-settings-page.php:483
 msgid ""
 "Same phone + same cart within this many minutes counts as a duplicate. "
 "Allowed range 1-120, default 5; empty or out-of-range values are clamped "
@@ -1047,11 +1073,11 @@ msgstr ""
 "дубликат. Допустим диапазон 1-120, по подразбиране 5; празни или извън "
 "диапазона стойности се ограничават при запазване."
 
-#: includes/class-ordelist-settings-page.php:484
+#: includes/class-ordelist-settings-page.php:491
 msgid "Delivery-date notice"
 msgstr "Бележка за датата на доставка"
 
-#: includes/class-ordelist-settings-page.php:485
+#: includes/class-ordelist-settings-page.php:492
 msgid ""
 "Show a highlighted note above the delivery-date field at checkout; optional "
 "vacation banner. Requires the Order Delivery Date plugin field on checkout; "
@@ -1061,28 +1087,28 @@ msgstr ""
 "незадължителен банер за отпуск. Изисква полето на плъгина Order Delivery "
 "Date на касата; не прави нищо, ако полето липсва."
 
-#: includes/class-ordelist-settings-page.php:499
+#: includes/class-ordelist-settings-page.php:506
 msgid "Notice title"
 msgstr "Заглавие на бележката"
 
-#: includes/class-ordelist-settings-page.php:501
+#: includes/class-ordelist-settings-page.php:508
 msgid "Bold first line. Leave empty for the default."
 msgstr "Удебелен първи ред. Оставете празно за стойността по подразбиране."
 
-#: includes/class-ordelist-settings-page.php:504
+#: includes/class-ordelist-settings-page.php:511
 msgid "Notice text"
 msgstr "Текст на бележката"
 
-#: includes/class-ordelist-settings-page.php:506
+#: includes/class-ordelist-settings-page.php:513
 msgid "Explanation under the title. Leave empty for the default."
 msgstr ""
 "Пояснение под заглавието. Оставете празно за стойността по подразбиране."
 
-#: includes/class-ordelist-settings-page.php:509
+#: includes/class-ordelist-settings-page.php:516
 msgid "Vacation banner"
 msgstr "Банер за отпуск"
 
-#: includes/class-ordelist-settings-page.php:510
+#: includes/class-ordelist-settings-page.php:517
 msgid ""
 "Also show a red \"we are away\" banner above the notice, until the date "
 "below."
@@ -1090,11 +1116,11 @@ msgstr ""
 "Показвай и червен банер „в отпуск сме“ над бележката, до посочената по-долу "
 "дата."
 
-#: includes/class-ordelist-settings-page.php:513
+#: includes/class-ordelist-settings-page.php:520
 msgid "Away until"
 msgstr "Отпуск до"
 
-#: includes/class-ordelist-settings-page.php:515
+#: includes/class-ordelist-settings-page.php:522
 msgid ""
 "The banner hides automatically after this date; with no date set it never "
 "shows."
@@ -1102,23 +1128,23 @@ msgstr ""
 "Банерът се скрива автоматично след тази дата; без зададена дата не се "
 "показва."
 
-#: includes/class-ordelist-settings-page.php:518
+#: includes/class-ordelist-settings-page.php:525
 msgid "Vacation text"
 msgstr "Текст за отпуск"
 
 #. translators: %s is a literal token the admin types into their text; it is not substituted here.
-#: includes/class-ordelist-settings-page.php:520
+#: includes/class-ordelist-settings-page.php:527
 #, php-format
 msgid "Use %s where the date should appear. Leave empty for the default."
 msgstr ""
 "Използвайте %s там, където трябва да се покаже датата. Оставете празно за "
 "стойността по подразбиране."
 
-#: includes/class-ordelist-settings-page.php:527
+#: includes/class-ordelist-settings-page.php:534
 msgid "Extras → products"
 msgstr "Екстри → продукти"
 
-#: includes/class-ordelist-settings-page.php:528
+#: includes/class-ordelist-settings-page.php:535
 msgid ""
 "At order creation, turn each mapped add-on extra into a real product line at "
 "the price paid; order total stays unchanged."
@@ -1126,30 +1152,30 @@ msgstr ""
 "При създаване на поръчка превръща всяка съпоставена екстра в истински "
 "продуктов ред на платената цена; сумата на поръчката остава непроменена."
 
-#: includes/class-ordelist-settings-page.php:534
+#: includes/class-ordelist-settings-page.php:541
 msgid "Mapping (extra → product)"
 msgstr "Съпоставяне (екстра → продукт)"
 
-#: includes/class-ordelist-settings-page.php:543
+#: includes/class-ordelist-settings-page.php:550
 msgid "Extra text (as shown on the order)"
 msgstr "Текст на екстрата (както се показва в поръчката)"
 
-#: includes/class-ordelist-settings-page.php:544
+#: includes/class-ordelist-settings-page.php:551
 #: includes/class-ordelist-warranty-admin.php:204
 msgid "Product"
 msgstr "Продукт"
 
-#: includes/class-ordelist-settings-page.php:568
-#: includes/class-ordelist-settings-page.php:619
+#: includes/class-ordelist-settings-page.php:575
+#: includes/class-ordelist-settings-page.php:626
 msgid "Add row"
 msgstr "Добави ред"
 
-#: includes/class-ordelist-settings-page.php:569
+#: includes/class-ordelist-settings-page.php:576
 msgid "Rows without both an extra text and a product are removed when saving."
 msgstr ""
 "Редове без текст на екстра и избран продукт се премахват при запазване."
 
-#: includes/class-ordelist-settings-page.php:570
+#: includes/class-ordelist-settings-page.php:577
 msgid ""
 "Match is the exact extra label as it appears on the order/checkout (Product "
 "Add-On label like \"+ 500 г …\", or the Checkout Add-On name)."
@@ -1158,42 +1184,49 @@ msgstr ""
 "плащането (етикет на Product Add-On като \"+ 500 г …\", или името на "
 "Checkout Add-On)."
 
-#: includes/class-ordelist-settings-page.php:574
+#: includes/class-ordelist-settings-page.php:581
 msgid "Combos (combo → base + component)"
 msgstr "Комбо (комбо → основен + компонент)"
 
-#: includes/class-ordelist-settings-page.php:603
+#: includes/class-ordelist-settings-page.php:610
 msgid "Combo product/variation sold"
 msgstr "Продаден комбо продукт/вариация"
 
-#: includes/class-ordelist-settings-page.php:604
+#: includes/class-ordelist-settings-page.php:611
 msgid "Base product (what the line becomes)"
 msgstr "Основен продукт (в какво се превръща редът)"
 
-#: includes/class-ordelist-settings-page.php:605
+#: includes/class-ordelist-settings-page.php:612
 msgid "Component to add"
 msgstr "Компонент за добавяне"
 
-#: includes/class-ordelist-settings-page.php:606
+#: includes/class-ordelist-settings-page.php:613
 msgid "Qty"
 msgstr "Бр."
 
-#: includes/class-ordelist-settings-page.php:620
+#: includes/class-ordelist-settings-page.php:627
 msgid ""
 "For a product whose variation already contains another product (for example "
 "\"Fitasio - 1 pc + cytokinin paste\"): the sold line becomes the base "
 "product and each component is added as its own line, so stock and cost are "
 "counted per product."
-msgstr "За продукт, чиято вариация вече съдържа друг продукт (например \"Фитасио - 1 бр + цитокининова паста\"): продаденият ред става основния продукт, а всеки компонент се добавя като отделен ред, така че наличността и себестойността се водят по продукт."
+msgstr ""
+"За продукт, чиято вариация вече съдържа друг продукт (например \"Фитасио - 1 "
+"бр + цитокининова паста\"): продаденият ред става основния продукт, а всеки "
+"компонент се добавя като отделен ред, така че наличността и себестойността "
+"се водят по продукт."
 
-#: includes/class-ordelist-settings-page.php:621
+#: includes/class-ordelist-settings-page.php:628
 msgid ""
 "The line price is split between them in proportion to their catalogue "
 "prices, so the order total never changes. Add one row per component; rows "
 "missing any of the three products are removed when saving."
-msgstr "Цената на реда се разпределя между тях пропорционално на каталожните им цени, така че сумата на поръчката не се променя. Добавете по един ред за всеки компонент; редове без някой от трите продукта се премахват при запис."
+msgstr ""
+"Цената на реда се разпределя между тях пропорционално на каталожните им "
+"цени, така че сумата на поръчката не се променя. Добавете по един ред за "
+"всеки компонент; редове без някой от трите продукта се премахват при запис."
 
-#: includes/class-ordelist-settings-page.php:632
+#: includes/class-ordelist-settings-page.php:639
 msgid ""
 "Track sticker & instruction-sheet stock, auto-decrement at order placement, "
 "and warn when low."
@@ -1201,11 +1234,11 @@ msgstr ""
 "Проследява наличността на стикери и листовки с инструкции, автоматично я "
 "намалява при създаване на поръчка и предупреждава при ниска наличност."
 
-#: includes/class-ordelist-settings-page.php:638
+#: includes/class-ordelist-settings-page.php:645
 msgid "Sticker low threshold"
 msgstr "Праг за стикери"
 
-#: includes/class-ordelist-settings-page.php:640
+#: includes/class-ordelist-settings-page.php:647
 msgid ""
 "Warn (\"time to print\") when a sticker stock drops to this or below. "
 "Allowed range 0-100000, default 20; empty or out-of-range values are clamped "
@@ -1215,11 +1248,11 @@ msgstr ""
 "тази стойност или под нея. Допустим диапазон 0-100000, по подразбиране 20; "
 "празни или извън диапазона стойности се ограничават при запазване."
 
-#: includes/class-ordelist-settings-page.php:643
+#: includes/class-ordelist-settings-page.php:650
 msgid "Instruction low threshold"
 msgstr "Праг за инструкции"
 
-#: includes/class-ordelist-settings-page.php:645
+#: includes/class-ordelist-settings-page.php:652
 msgid ""
 "Warn when an instruction sheet stock drops to this or below. Allowed range "
 "0-100000, default 5; empty or out-of-range values are clamped when saving."
@@ -1228,22 +1261,22 @@ msgstr ""
 "стойност или под нея. Допустим диапазон 0-100000, по подразбиране 5; празни "
 "или извън диапазона стойности се ограничават при запазване."
 
-#: includes/class-ordelist-settings-page.php:648
+#: includes/class-ordelist-settings-page.php:655
 msgid "Stock page"
 msgstr "Страница с наличности"
 
-#: includes/class-ordelist-settings-page.php:649
+#: includes/class-ordelist-settings-page.php:656
 msgid "Open consumables stock"
 msgstr "Отвори наличностите"
 
-#: includes/class-ordelist-settings-page.php:656
+#: includes/class-ordelist-settings-page.php:663
 #: includes/class-ordelist-warranty-admin.php:24
 #: includes/class-ordelist-warranty-admin.php:25
 #: includes/class-ordelist-warranty-admin.php:200
 msgid "Warranty dates"
 msgstr "Срокове на годност"
 
-#: includes/class-ordelist-settings-page.php:657
+#: includes/class-ordelist-settings-page.php:664
 msgid ""
 "Track stock batches with their \"valid until\" dates, auto-consume the "
 "oldest batch as orders come in, and get an email + admin banner before dates "
@@ -1252,11 +1285,11 @@ msgstr ""
 "Следи партиди стока с дата „валидно до“, изписва автоматично най-старата "
 "партида при нова поръчка и предупреждава с имейл + банер преди датата."
 
-#: includes/class-ordelist-settings-page.php:663
+#: includes/class-ordelist-settings-page.php:670
 msgid "Warn ahead, days"
 msgstr "Предупреждение, дни"
 
-#: includes/class-ordelist-settings-page.php:665
+#: includes/class-ordelist-settings-page.php:672
 msgid ""
 "Email + banner when a batch is within this many days of its date. Allowed "
 "range 1-365, default 30; empty or out-of-range values are clamped when "
@@ -1266,16 +1299,16 @@ msgstr ""
 "диапазон 1-365, по подразбиране 30; празни или извън диапазона стойности се "
 "ограничават при запис."
 
-#: includes/class-ordelist-settings-page.php:668
+#: includes/class-ordelist-settings-page.php:675
 msgid "Batches page"
 msgstr "Страница с партиди"
 
-#: includes/class-ordelist-settings-page.php:669
+#: includes/class-ordelist-settings-page.php:676
 #: includes/class-ordelist-warranty.php:247
 msgid "Open warranty dates"
 msgstr "Отвори сроковете на годност"
 
-#: includes/class-ordelist-settings-page.php:677
+#: includes/class-ordelist-settings-page.php:684
 msgid ""
 "Multi-year sales chart with a purchase recommendation for a chosen period. "
 "Uses WooCommerce sales history; subtracts warranty-batch stock when batches "
@@ -1285,11 +1318,11 @@ msgstr ""
 "период. Използва историята на продажбите на WooCommerce; приспада "
 "наличността от партидите, когато се водят."
 
-#: includes/class-ordelist-settings-page.php:683
+#: includes/class-ordelist-settings-page.php:690
 msgid "Safety margin, %"
 msgstr "Резерв за сигурност, %"
 
-#: includes/class-ordelist-settings-page.php:685
+#: includes/class-ordelist-settings-page.php:692
 msgid ""
 "Added on top of the forecast. Allowed range 0-100, default 20; empty or out-"
 "of-range values are clamped when saving. Adjustable on the page per "
@@ -1299,19 +1332,19 @@ msgstr ""
 "празни или извън диапазона стойности се ограничават при запис. Може да се "
 "променя на страницата при всяко изчисление."
 
-#: includes/class-ordelist-settings-page.php:688
+#: includes/class-ordelist-settings-page.php:695
 msgid "Planning page"
 msgstr "Страница за планиране"
 
-#: includes/class-ordelist-settings-page.php:689
+#: includes/class-ordelist-settings-page.php:696
 msgid "Open purchase planning"
 msgstr "Отвори планирането на закупките"
 
-#: includes/class-ordelist-settings-page.php:698
+#: includes/class-ordelist-settings-page.php:705
 msgid "Phone numbers"
 msgstr "Телефонни номера"
 
-#: includes/class-ordelist-settings-page.php:699
+#: includes/class-ordelist-settings-page.php:706
 msgid ""
 "Tidy phone numbers for display (leading 00 → +, add country code when "
 "missing). Never changes the database."
@@ -1319,11 +1352,11 @@ msgstr ""
 "Подрежда телефонните номера за показване (водещо 00 → +, добавя код на "
 "държавата, ако липсва). Никога не променя базата данни."
 
-#: includes/class-ordelist-settings-page.php:705
+#: includes/class-ordelist-settings-page.php:712
 msgid "Default country code"
 msgstr "Код на държавата по подразбиране"
 
-#: includes/class-ordelist-settings-page.php:707
+#: includes/class-ordelist-settings-page.php:714
 msgid ""
 "Digits only, e.g. 359 - anything else is stripped when saving. Added to "
 "numbers that have no country code."
@@ -1417,22 +1450,6 @@ msgid "%d batch already expired"
 msgid_plural "%d batches already expired"
 msgstr[0] "%d партида вече е изтекла"
 msgstr[1] "%d партиди вече са изтекли"
-
-#: includes/class-ordelist-settings-page.php:409
-msgid "Fold search and filters"
-msgstr "Прибиране на търсенето и филтрите"
-
-#: includes/class-ordelist-settings-page.php:410
-msgid "Put the orders-list search box and the filter row behind one toggle. Every plugin that ships an orders filter adds it to the same line, and on a busy shop that line wraps over half the screen. The toggle opens by itself when a search or filter is actually in use, so nothing hides while you are looking at its results."
-msgstr "Прибира търсачката и реда с филтри на списъка с поръчки зад едно копче. Всеки плъгин със свой филтър за поръчки пише на същия ред и на зареден магазин той се пренася на половин екран. Копчето се отваря само, когато търсене или филтър наистина работи - за да не скрие нищо, докато гледаш резултата му."
-
-#: includes/class-ordelist-plugin.php:243
-msgid "Search and filters"
-msgstr "Търсене и филтри"
-
-#: includes/class-ordelist-plugin.php:244
-msgid "Search and filters (in use)"
-msgstr "Търсене и филтри (активни)"
 
 #~ msgid "Quarter"
 #~ msgstr "Тримесечие"

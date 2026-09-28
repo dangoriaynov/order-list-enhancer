@@ -82,6 +82,10 @@ jobs:
       - name: Translations
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq gettext
+          # Does the catalogue cover the CODE? The .mo-vs-.po comparison below cannot answer that: a
+          # string added without an entry is missing from both files, so they agree with each other and
+          # the string ships in English. That is how a Bulgarian shop got an English orders screen.
+          bash bin/make-pot --check
           PO=languages/${SLUG}-bg_BG.po
           MO=languages/${SLUG}-bg_BG.mo
           msgfmt -o "${RUNNER_TEMP}/fresh.mo" "$PO"
