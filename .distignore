@@ -9,6 +9,8 @@
 /.claude
 /.wordpress-org
 /docs
+/bin
+/dist
 /tests
 /node_modules
 *.zip

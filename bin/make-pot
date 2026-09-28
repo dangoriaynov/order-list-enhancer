@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+# Rebuild languages/ordelist.pot from the source, then merge it into the Bulgarian catalogue.
+#
+# This exists because a shop reading its orders screen in English is a bug, and the check that was
+# here before could not see it: comparing the .mo against the .po answers "was the catalogue
+# compiled?", not "does the catalogue cover the code?". A string added without an entry is missing
+# from BOTH files, so they agree - and it ships in English (owner, 2026-09-28).
+#
+#   bin/make-pot            # regenerate the template and merge (new entries are left empty)
+#   bin/make-pot --check    # touch nothing; say whether the catalogue still covers the code
+#
+# Filling the empty Bulgarian entries is a human step; --check refuses a release until they are filled.
+# Needs gettext (xgettext/msgmerge/msgattrib). No gettext locally:
+#   docker run --rm -v "$PWD":/w -w /w php:8.1-cli bash -lc 'apt-get update -qq && apt-get install -y -qq gettext && bin/make-pot --check'
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+SLUG=ordelist
+POT="languages/${SLUG}.pot"
+PO="languages/${SLUG}-bg_BG.po"
+CHECK=0
+[ "${1:-}" = "--check" ] && CHECK=1
+
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+OUT="$POT"
+[ "$CHECK" = 1 ] && OUT="$TMP/check.pot"
+
+# tests/ and dist/ are not shipped; vendor/node_modules are not ours to translate.
+find . -name '*.php' \
+  -not -path './vendor/*' -not -path './node_modules/*' \
+  -not -path './tests/*' -not -path './dist/*' -not -path './.git/*' \
+  | sed 's|^\./||' | sort > "$TMP/files"
+
+# One keyword list, every time: the plural and context forms are easy to leave out, and a string the
+# template never saw is a string nobody is asked to translate.
+xgettext --from-code=UTF-8 --language=PHP \
+  -k__ -k_e -k_x:1,2c -k_ex:1,2c \
+  -kesc_html__ -kesc_html_e -kesc_html_x:1,2c \
+  -kesc_attr__ -kesc_attr_e -kesc_attr_x:1,2c \
+  -k_n:1,2 -k_nx:1,2,4c -k_n_noop:1,2 -k_nx_noop:1,2,3c \
+  --add-comments=translators \
+  --package-name="Ordelist - Order List Enhancer for WooCommerce" \
+  -o "$OUT" -f "$TMP/files"
+
+if [ "$CHECK" = 1 ]; then
+  # What the code offers and the catalogue has never seen. Merged without fuzzy guessing: whatever
+  # comes out untranslated is exactly that. A string the code DROPPED goes obsolete in the merge and
+  # is left out - a release must not be refused over a translation nobody needs any more.
+  msgmerge -q --no-fuzzy-matching -o "$TMP/merged.po" "$PO" "$OUT"
+  msgattrib --untranslated --no-obsolete -o "$TMP/missing.po" "$TMP/merged.po" || : > "$TMP/missing.po"
+  N="$(grep -c '^msgid "' "$TMP/missing.po" 2>/dev/null || true)"
+  # The header counts as one msgid whenever anything is listed at all.
+  if [ "${N:-0}" -gt 1 ]; then
+    echo "$((N - 1)) string(s) in the code have no Bulgarian in $PO:" >&2
+    grep '^msgid "' "$TMP/missing.po" | grep -v '^msgid ""$' | sed 's/^/  /' >&2
+    echo "  Run bin/make-pot, fill the Bulgarian, recompile the .mo." >&2
+    exit 1
+  fi
+  # Fuzzy is not translated: msgfmt leaves fuzzy entries out of the .mo, so the string ships in
+  # English while a check that only looks for EMPTY translations says all is well.
+  msgattrib --only-fuzzy --no-obsolete -o "$TMP/fuzzy.po" "$TMP/merged.po" || : > "$TMP/fuzzy.po"
+  F="$(grep -c '^msgid "' "$TMP/fuzzy.po" 2>/dev/null || true)"
+  if [ "${F:-0}" -gt 1 ]; then
+    echo "$((F - 1)) fuzzy string(s) in $PO - guessed, not translated, and left out of the .mo:" >&2
+    grep '^msgid "' "$TMP/fuzzy.po" | grep -v '^msgid ""$' | sed 's/^/  /' >&2
+    echo "  Check each guess (placeholders in particular), drop its '#, fuzzy' line, recompile." >&2
+    exit 1
+  fi
+  echo "the catalogue covers every translatable string in the code"
+  exit 0
+fi
+
+msgmerge --quiet --backup=none --update "$PO" "$POT"
+printf 'template: %s strings\n' "$(grep -c '^msgid ' "$POT")"
+printf 'untranslated: %s\n' "$(msgattrib --untranslated "$PO" | grep -c '^msgid "' || true)"
+FZ="$(msgattrib --only-fuzzy --no-obsolete "$PO" | grep -c '^msgid "' || true)"
+printf 'fuzzy (guessed - check each): %s\n' "$FZ"
+echo "Fill the empty entries, then: msgfmt -o ${PO%.po}.mo $PO"
